@@ -1,0 +1,1 @@
+{!! commentRender($comments) !!}

@@ -1,0 +1,72 @@
+.my-account{
+    padding-top: 40px;
+    background-color: #c5c5c5;
+}
+
+.my-account input:focus{
+    box-shadow: none;
+    border-color: #bebebe;
+}
+.my-account .form-row span.required{
+    position: absolute;
+    font-size: 1.5em;
+    top: -0.5em;
+    color: red;
+
+}
+.my-account .mail{
+    position: relative;
+}
+.my-account .mail .required{
+    position: absolute;
+    font-size: 1.5em;
+    top: -0.5em;
+    color: red;
+}
+.my-account .form-bg{
+    background-color: #a9a8a8;
+    padding: 20px;
+    border: 1px solid #948a8a;
+    position: relative;
+}
+.my-account .avatar span{
+    padding-top: 100px;
+}
+.my-account .avatar img{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    padding-top: 10px;
+    margin-left: 118px;
+}
+.my-account .bat button{
+    margin-left: 170px;
+    margin-top: 7px;
+    background-color: #e8e6e6;
+    border-color: #989898;
+    color: gray !important;
+    font-weight: 500;
+    border-radius: 0;
+}
+.my-account .bat button:focus{
+    box-shadow: none !important;
+}
+.my-account .bat button:active{
+    background-color: #e8e6e6 !important;
+    border-color: #989898 !important;
+}
+.my-account .log input{
+    color: #fff;
+    background: #f36557;
+    border-color: #f36557;
+    padding: 10px;
+    margin-bottom: 18px;
+}
+.my-account .change span{
+    position: absolute;
+    top: -23px;
+    left: 26px;
+    font-size: 25px;
+    color: #695f5f;
+}
