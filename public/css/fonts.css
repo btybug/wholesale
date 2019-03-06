@@ -1,0 +1,66 @@
+/*Montserrat*/
+@font-face {
+    font-family: 'Montserrat Light';
+    src: url('../fonts/Montserrat-Light.woff2') format('woff2'),
+    url('../fonts/Montserrat-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat Bold';
+    src: url('../fonts/Montserrat-Bold.woff2') format('woff2'),
+    url('../fonts/Montserrat-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat Regular';
+    src: url('../fonts/Montserrat-Regular.woff2') format('woff2'),
+    url('../fonts/Montserrat-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat Medium';
+    src: url('../fonts/Montserrat-Medium.woff2') format('woff2'),
+    url('../fonts/Montserrat-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+
+/*TwCenMT-Condensed*/
+@font-face {
+    font-family: 'TwCenMT-Condensed';
+    src: url('../fonts/TwCenMT-Condensed.woff') format('woff'),
+    url('../fonts/TwCenMT-Condensed.ttf') format('truetype'),
+    url('../fonts/TwCenMT-Condensed.svg#TwCenMT-Condensed') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+/*Invasion2000*/
+@font-face {
+    font-family: 'Invasion2000';
+    src: url('../fonts/Invasion2000.eot');
+    src: url('../fonts/Invasion2000.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/Invasion2000.woff2') format('woff2'),
+    url('../fonts/Invasion2000.woff') format('woff'),
+    url('../fonts/Invasion2000.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*Lucida*/
+@font-face {
+    font-family: 'Lucida Sans Italic';
+    src: url('../fonts/LucidaSans-Italic.eot');
+    src: url('../fonts/LucidaSans-Italic.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/LucidaSans-Italic.woff2') format('woff2'),
+    url('../fonts/LucidaSans-Italic.woff') format('woff'),
+    url('../fonts/LucidaSans-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+

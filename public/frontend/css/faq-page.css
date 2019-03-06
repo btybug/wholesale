@@ -1,0 +1,122 @@
+.faq-page section.novi-background {
+    background: rgb(49,77,92);
+    background: -moz-linear-gradient(-45deg, rgba(49,77,92,1) 1%, rgba(49,77,92,1) 1%, rgba(49,77,92,1) 34%, rgba(240,202,78,1) 90%, rgba(240,202,78,1) 100%);
+    background: -webkit-linear-gradient(-45deg, rgba(49,77,92,1) 1%,rgba(49,77,92,1) 1%,rgba(49,77,92,1) 34%,rgba(240,202,78,1) 90%,rgba(240,202,78,1) 100%);
+    background: linear-gradient(135deg, rgba(49,77,92,1) 1%,rgba(49,77,92,1) 1%,rgba(49,77,92,1) 34%,rgba(240,202,78,1) 90%,rgba(240,202,78,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#314d5c', endColorstr='#f0ca4e',GradientType=1 );
+    margin-bottom: 100px;
+    padding: 40px;
+    color: white;
+    position: relative;
+}
+.faq-page section span{
+    font-size: 50px;
+}
+.faq-page section ul{
+    font-size: 20px;
+}
+.faq-page section a{
+    color: white;
+}
+
+.faq-page section.novi-background:after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin: 0 auto;
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 20px solid #828359;
+}
+
+.faq-page .buttons {
+    line-height: 3.8;
+}
+
+.faq-page .buttons p {
+    line-height: 1.8;
+    font-size: 15px;
+}
+
+.faq-page .list-category .cat-link {
+    width: 100%;
+    border-radius: 0;
+    padding: 11px;
+    background-color: rgb(247, 247, 247);
+    border-color: gainsboro;
+    color: #5e5e5e;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.faq-page .buttons button:hover {
+    box-shadow: inset 2px 2px 2px white;
+    background-color: #e0e0e0;
+}
+
+.faq-page .buttons button:focus {
+    box-shadow: none !important;
+}
+
+.faq-page .buttons button:active {
+    box-shadow: inset 2px 2px 2px white !important;
+    background-color: #e0e0e0 !important;
+    border-color: gainsboro !important;
+    color: #5e5e5e !important;
+}
+
+.faq-page .accord .btn-link:hover {
+    text-decoration: none !important;
+    color: #007bff;
+}
+
+.faq-page .card-header {
+    background-color: rgba(25, 25, 25, 0.03);
+    border-bottom: 1px solid rgba(25, 25, 25, 0.125);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.card-accordion .card-header::after {
+    content: "\2212";
+    position: absolute;
+    top: 24px;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 24px;
+    font-weight: 400;
+    color: #9b9b9b;
+}
+
+.card-accordion .card-header.collapsed::after {
+    content: "\002B";
+}
+
+.faq-page .card-accordion {
+    border-radius: 0;
+}
+
+.faq-page .card-accordion a {
+    color: #5e5e5e;
+    text-decoration: none;
+}
+
+.faq-page h3, .faq-page h4 {
+    font-weight: 400;
+}
+.header-area{
+    margin-bottom:0;
+}
+.faq-page .list-category ul{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.faq-page .list-category .sub-list{
+    margin-left:15px;
+}
