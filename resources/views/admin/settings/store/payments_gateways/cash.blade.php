@@ -1,0 +1,63 @@
+@extends('layouts.admin')
+@section('content-header')
+
+@stop
+@section('content')
+    <div class="panel panel-default">
+        <div class="panel-heading"><h2 class="m-0">Cash Payment</h2></div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="panel-body">
+                        {!! Form::model($model,['class'=>''])!!}
+                        <div class="form-group row">
+                            <label for="text" class="control-label col-sm-3">Payment Name</label>
+                            <div class="col-sm-9">
+                                {!! Form::text('name',null,['class'=>'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="text" class="control-label col-sm-3">Description</label>
+                            <div class="col-sm-9">
+                                {!! Form::textarea('description',null,['class'=>'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="text" class="control-label col-sm-3">Image</label>
+                            <div class="col-sm-9">
+                                {{--{!! media_button('image',$model) !!}--}}
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="text1" class="control-label col-sm-3">Icon</label>
+                            <div class="col-sm-9">
+                                {!! Form::text('icon',null,['class'=>'form-control icon-picker']) !!}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12 text-right">
+                                <button type="submit" class="btn btn-info">Save</button>
+                            </div>
+                        </div>
+                        {!! Form::close() !!}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+@stop
+@section('css')
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css">
+    <link rel="stylesheet" href="https://farbelous.io/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css">
+    <link rel="stylesheet" href="{{asset('public/css/custom.css?v='.rand(111,999))}}">
+    @stop
+@section('js')
+    <script src="https://farbelous.io/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.js"></script>
+    <script>
+        $('.icon-picker').iconpicker();
+    </script>
+@stop

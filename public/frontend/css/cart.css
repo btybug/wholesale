@@ -1,0 +1,56 @@
+.section-cart-page .cart-area .back-update-btn{
+    background: none;
+    display: flex;
+    padding-left: 0;
+    padding-right: 0;
+    border-top: 3px solid #ced4da;
+}
+.section-cart-page .table .item .cart-product-detail ul{
+    list-style: none;
+}
+.section-cart-page .breadcum-area{
+    background-image: url(/public/frontend/img/bar_bg_en.jpg);
+}
+.section-cart-page .breadcum-area .breadcum-inner h3{
+    margin: 0;
+    line-height: 1;
+}
+.section-cart-page .breadcum-area .breadcum-inner .breadcrumb{
+    margin: 0;
+}
+.section-cart-page .table{
+    border-collapse: collapse !important;
+}
+.section-cart-page .table tbody + tbody{
+    /*border-top: 2px solid #f2f2f2;*/
+}
+.section-cart-page .table th, .table td {
+    /*padding: 0.75rem;*/
+    /*vertical-align: top;*/
+    /*border-top: 1px solid #f2f2f2;*/
+}
+/*new table*/
+.section-cart-page .cart-table tbody td:not(.table-product){
+    vertical-align: middle;
+}
+.section-cart-page .cart-table .image-name img{
+    height: 150px;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+.section-cart-page .cart-table .image-name .name{
+    padding:5px 10px;
+    font-size: 12px;
+    border: 2px solid #ccc;
+}
+.section-cart-page .cart-table .w-8{
+    width: 8%;
+}
+.section-cart-page .cart-table .Qty .input-group{
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.section-cart-page .cart-table .Qty .input-group .qty{
+    width: inherit;
+}

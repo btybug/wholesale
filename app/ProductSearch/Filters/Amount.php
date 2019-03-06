@@ -1,0 +1,34 @@
+<?php
+
+namespace App\ProductSearch\Filters;
+
+use App\Models\AttributeStickers;
+use App\ProductSearch\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
+
+class Amount implements Filter
+{
+
+    public static function apply(Builder $builder, $value)
+    {
+        $builder->where(function ($query) use ($value) {
+            $currencyCode = get_currency();
+            if($currencyCode != 'USD'){
+                $changed = (new \App\Models\SiteCurrencies())->where('code',get_currency())->first();
+                $value = explode(',', $value);
+                $value[0] = $value[0] / $changed->rate;
+                $value[1] = $value[1] / $changed->rate;
+            }else{
+                $value = explode(',', $value);
+            }
+
+            $query->whereBetween('stock_sales.price', $value)
+                ->orWhere(function ($query) use ($value) {
+                    $query->whereBetween('stock_variations.price', $value)
+                        ->whereNull('stock_sales.price');
+                });
+        });
+
+        return $builder;
+    }
+}

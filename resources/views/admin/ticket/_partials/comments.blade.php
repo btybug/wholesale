@@ -1,0 +1,1 @@
+{!! replyRender($data) !!}

@@ -1,0 +1,23 @@
+.dashboard_modal_add_widget{
+    position: fixed;
+    top: 50px;
+    bottom: 0;
+    width: 445px;
+    right: -445px;
+    z-index: 1020;
+    background: #303030;
+    color: #ffffff;
+    transition: right .2s linear;
+}
+.dashboard_modal_add_widget.active{
+right: 0;
+}
+.dashboard_modal_add_widget .modal_add_widget{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    margin: 0;
+}
