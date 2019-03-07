@@ -36,9 +36,6 @@
                         <div class="form-inline my-lg-0 h-100 align-self-lg-auto align-self-baseline pointer">
                                 <span class="d-inline-block">
                                     <a href="javascript:void(0);" class="text-sec-clr header-login-link"
-                                       data-toggle="modal" data-target="#loginModal">Login</a>
-                                    <span class="text-sec-clr">&nbsp;/&nbsp;</span>
-                                    <a href="javascript:void(0);" class="text-sec-clr header-login-link"
                                        data-toggle="modal" data-target="#registerModal">Register</a>
                                 </span>
                         </div>
@@ -202,10 +199,6 @@
     @include('frontend._partials.shopping_cart_options')
 </div>
 @if(!Auth::check())
-
-    <!--modal Login-->
-    @include("frontend._partials.login_modal")
-
     <!--modal Register-->
     @include("frontend._partials.register_modal")
 

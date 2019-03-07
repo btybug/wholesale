@@ -43,10 +43,7 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showLoginForm()
-    {
-        abort(404);
-    }
+
 
     /**
      * @param Request $request
@@ -62,7 +59,6 @@ class LoginController extends Controller
             }
         }
 
-        return response()->json(['success' => true, 'redirectPath' => $this->redirectPath()]);
     }
 
     protected function validateLogin(Request $request)

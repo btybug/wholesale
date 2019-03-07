@@ -3122,10 +3122,8 @@ $(document).ready(function () {
 })();
 
 (function () {
-    $('#login-form').on('submit', function (ev) {
+    $('.sign_in').on('click', function (ev) {
         var _this3 = this;
-
-        ev.preventDefault();
 
         var GOOGLE_RECAPTCHA_KEY = $('meta[name="google-recaptcha-key"]').attr("content");
         grecaptcha.ready(function () {
@@ -3157,31 +3155,7 @@ $(document).ready(function () {
                         change(fieldElement, fieldElementName);
                     });
                 };
-
-                $.ajax({
-                    type: "post",
-                    url: "/login",
-                    cache: false,
-                    datatype: "json",
-                    data: data,
-                    headers: {
-                        "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
-                    },
-                    success: function success(data) {
-                        if (!data.error) {
-                            location.href = data.redirectPath;
-                            console.log(data);
-                        } else {
-                            alert('error');
-                        }
-                    },
-                    error: function error(_error3) {
-                        var emailEl = $('#loginEmail');
-                        var passwordEl = $('#loginPass');
-                        errorHandler(emailEl, _error3.responseJSON.errors, _error3.responseJSON.errors.email, '#loginEmail');
-                        errorHandler(passwordEl, _error3.responseJSON.errors, _error3.responseJSON.errors.password, '#loginPass');
-                    }
-                });
+                $(_this3).closest('form').submit();
             });
         });
     });
@@ -3239,11 +3213,11 @@ $(document).ready(function () {
                             alert('error');
                         }
                     },
-                    error: function error(_error4) {
+                    error: function error(_error3) {
                         var emailEl = $('#loginEmail');
                         var passwordEl = $('#loginPass');
-                        errorHandler(emailEl, _error4.responseJSON.errors, _error4.responseJSON.errors.email, '#loginEmail');
-                        errorHandler(passwordEl, _error4.responseJSON.errors, _error4.responseJSON.errors.password, '#loginPass');
+                        errorHandler(emailEl, _error3.responseJSON.errors, _error3.responseJSON.errors.email, '#loginEmail');
+                        errorHandler(passwordEl, _error3.responseJSON.errors, _error3.responseJSON.errors.password, '#loginPass');
                     }
                 });
             });

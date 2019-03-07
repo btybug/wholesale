@@ -75,8 +75,10 @@
   </div>
   {!! Session::forget('alert') !!}
 @endif
-@yield('content')
 
+<main class="main-content">
+    @yield('content')
+</main>
 <div class="modal fade modal-request" id="msgModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
