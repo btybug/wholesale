@@ -6,11 +6,12 @@
                     <div class="d-flex align-items-center">
                         <button class="navbar-toggler" type="button" data-toggle="collapse"
                                 data-target="#navbarTogglerDemo01"
-                                aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                                aria-controls="navbarTogglerDemo01" aria-expanded="false"
+                                aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="logo-small-screens d-md-none d-flex align-items-center ml-3">
-                            <img src="{!! url('/public/img/logo-icon.png') !!}"  alt="" class="logo-small-screens_logo">
+                            <img src="{!! url('/public/img/logo-icon.png') !!}" alt="" class="logo-small-screens_logo">
                             <h1 class="font-14 font-sec-bold text-sec-clr text-uppercase ml-2 mb-0">The Vapors Hub</h1>
                         </div>
                     </div>
@@ -46,52 +47,33 @@
                             <li class="nav-item active">
                                 <a class="nav-link" href="{!! url('/') !!}">Home</a>
                             </li>
-                            <li class="nav-item align-items-center nav-item--has-dropdown">
-                                <a class="nav-link" href="javascript:void(0)">Products
-                                    <span class="ml-2 d-inline-block arrow main-transition pointer">
+                            @if(Auth::check())
+                                <li class="nav-item align-items-center nav-item--has-dropdown">
+                                    <a class="nav-link" href="javascript:void(0)">Products
+                                        <span class="ml-2 d-inline-block arrow main-transition pointer">
                             <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    width="9px" height="6px">
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="9px" height="6px">
 <path fill-rule="evenodd" fill="rgb(121, 121, 121)"
       d="M0.003,0.001 L8.998,0.001 L4.501,5.999 L0.003,0.001 Z"/>
 </svg>
                         </span>
-                                </a>
+                                    </a>
 
-                                <div class="nav-item--has-dropdown_dropdown">
-                                    <div class="products-menu-item row">
-                                        @include("frontend._partials.header_menu_products")
+                                    <div class="nav-item--has-dropdown_dropdown">
+                                        <div class="products-menu-item row">
+                                            @include("frontend._partials.header_menu_products")
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{!! route('product_sales') !!}">Sales</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{!! route('blog') !!}">News</a>
-                            </li>
-                            {{--<li class="nav-item nav-item--has-dropdown position-relative">--}}
-                                {{--<a class="nav-link" href="{!! route('blog') !!}">--}}
-                                    {{--Community--}}
-                                    {{--<span class="ml-2 d-inline-block arrow main-transition pointer">--}}
-                            {{--<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="9px" height="6px">--}}
-{{--<path fill-rule="evenodd" fill="rgb(121, 121, 121)" d="M0.003,0.001 L8.998,0.001 L4.501,5.999 L0.003,0.001 Z"></path>--}}
-{{--</svg>--}}
-                        {{--</span>--}}
-                                {{--</a>--}}
-                                {{--<ul class="nav-item--has-dropdown_dropdown list-unstyled p-0">--}}
-                                    {{--<li class="nav-item--has-dropdown_dropdown-item">--}}
-                                        {{--<a href="{!! route('blog') !!}" class="nav-item--has-dropdown_dropdown-link d-inline-block w-100 text-gray-clr font-15 main-transition">News</a>--}}
-                                    {{--</li>--}}
-                                    {{--<li class="nav-item--has-dropdown_dropdown-item">--}}
-                                        {{--<a href="#" class="nav-item--has-dropdown_dropdown-link d-inline-block w-100 text-gray-clr font-15 main-transition">Forums</a>--}}
-                                    {{--</li>--}}
-                                    {{--<li class="nav-item--has-dropdown_dropdown-item">--}}
-                                        {{--<a href="#" class="nav-item--has-dropdown_dropdown-link d-inline-block w-100 text-gray-clr font-15 main-transition">Social</a>--}}
-                                    {{--</li>--}}
-                                {{--</ul>--}}
-                            {{--</li>--}}
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{!! route('product_sales') !!}">Sales</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{!! route('blog') !!}">News</a>
+                                </li>
+                            @endif
                             <li class="nav-item">
                                 <a class="nav-link " href="{!! route('product_support') !!}">Support</a>
                             </li>
@@ -128,9 +110,9 @@
                                placeholder="Serach for anything">
                         <span class="position-absolute d-flex align-items-center">
                             <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    width="20px" height="20px">
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="20px" height="20px">
 <path fill-rule="evenodd" fill="rgb(121, 121, 121)"
       d="M19.996,18.987 L16.407,15.260 C19.498,11.614 19.327,6.153 15.881,2.715 C14.065,0.902 11.684,-0.004 9.303,-0.004 C6.922,-0.004 4.541,0.902 2.725,2.715 C-0.908,6.339 -0.908,12.216 2.725,15.841 C4.541,17.653 6.922,18.559 9.303,18.559 C11.469,18.559 13.630,17.800 15.371,16.300 L18.936,20.003 L19.996,18.987 ZM9.303,17.370 C7.136,17.370 5.099,16.528 3.567,15.000 C2.035,13.471 1.191,11.439 1.191,9.277 C1.191,7.116 2.035,5.084 3.567,3.555 C5.099,2.027 7.136,1.185 9.303,1.185 C11.469,1.185 13.507,2.027 15.039,3.555 C18.201,6.710 18.201,11.845 15.039,15.000 C13.507,16.528 11.469,17.370 9.303,17.370 Z"/>
 </svg>
@@ -140,10 +122,10 @@
                 <div class="favorite-add-cart d-flex align-items-center">
                     <span class="position-relative pointer add-links-wrap_icon search-mobile-icon">
                         <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                width="26px" height="22px" viewBox="0 0 29 22">
-<path fill-rule="evenodd"  fill="rgb(121, 121, 121)"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="26px" height="22px" viewBox="0 0 29 22">
+<path fill-rule="evenodd" fill="rgb(121, 121, 121)"
       d="M19.996,18.987 L16.406,15.260 C19.498,11.613 19.327,6.153 15.881,2.715 C14.065,0.902 11.684,-0.004 9.303,-0.004 C6.922,-0.004 4.541,0.902 2.724,2.715 C-0.909,6.339 -0.909,12.216 2.724,15.840 C4.541,17.653 6.922,18.559 9.303,18.559 C11.469,18.559 13.630,17.800 15.371,16.300 L18.936,20.002 L19.996,18.987 ZM9.303,17.370 C7.136,17.370 5.099,16.528 3.567,15.000 C2.035,13.471 1.191,11.439 1.191,9.277 C1.191,7.116 2.035,5.084 3.567,3.555 C5.099,2.026 7.136,1.185 9.303,1.185 C11.469,1.185 13.506,2.026 15.038,3.555 C18.201,6.710 18.201,11.844 15.038,15.000 C13.506,16.528 11.469,17.370 9.303,17.370 Z"/>
 </svg>
                     </span>
@@ -163,9 +145,10 @@
                         </svg>
                     </a>
                     <span id="headerShopCartBtn" class="d-inline-block position-relative pointer add-links-wrap_icon">
-                        <span class="d-inline-block position-absolute absolute-center add-cart-number cart-count">{{ cartCount() }}</span>
+                        <span
+                            class="d-inline-block position-absolute absolute-center add-cart-number cart-count">{{ cartCount() }}</span>
                     <svg
-                            width="25px" height="30px" viewBox="0 0 25 30">
+                        width="25px" height="30px" viewBox="0 0 25 30">
 <path fill-rule="evenodd" fill="rgb(121, 121, 121)"
       d="M19.867,4.943 L19.867,-0.003 L5.131,-0.003 L5.131,4.943 L-0.005,4.943 L-0.005,30.000 L25.003,30.000 L25.003,4.943 L19.867,4.943 ZM6.854,1.629 L18.143,1.629 L18.143,4.943 L6.854,4.943 L6.854,1.629 ZM23.279,28.368 L1.719,28.368 L1.719,6.575 L5.131,6.575 L5.131,9.857 L6.854,9.857 L6.854,6.575 L18.143,6.575 L18.143,9.857 L19.867,9.857 L19.867,6.575 L23.279,6.575 L23.279,28.368 Z"/>
 </svg>
@@ -189,7 +172,8 @@
         </div>
         @include('frontend.my_account._partials.left_bar')
         {!! Form::open(['url'=>route('logout'),'class' => 'mt-auto']) !!}
-        <button class="profile-sidebar_logout-btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-white pointer">
+        <button
+            class="profile-sidebar_logout-btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-white pointer">
             Logout
         </button>
         {!! Form::close() !!}
