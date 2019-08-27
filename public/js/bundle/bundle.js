@@ -6735,14 +6735,11 @@ function onRecaptchaLoadCallback() {
 })();
 
 (function () {
-    $('.sign_in').on('submit', function (ev) {
+    $('.sign_in').on('click', function (ev) {
         var _this5 = this;
-
-        ev.preventDefault();
 
         var GOOGLE_RECAPTCHA_KEY = $('meta[name="google-recaptcha-key"]').attr("content");
         grecaptcha.ready(function () {
-
             grecaptcha.execute(GOOGLE_RECAPTCHA_KEY, { action: 'action_name' }).then(function (token) {
                 $('.g-recaptcha-response').val(token);
             }).then(function () {
@@ -6771,31 +6768,7 @@ function onRecaptchaLoadCallback() {
                         change(fieldElement, fieldElementName);
                     });
                 };
-
-                $.ajax({
-                    type: "post",
-                    url: "/login",
-                    cache: false,
-                    datatype: "json",
-                    data: data,
-                    headers: {
-                        "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
-                    },
-                    success: function success(data) {
-                        if (!data.error) {
-                            location.href = data.redirectPath;
-                            console.log(data);
-                        } else {
-                            alert('error');
-                        }
-                    },
-                    error: function error(_error9) {
-                        var emailEl = $('#loginEmail');
-                        var passwordEl = $('#loginPass');
-                        errorHandler(emailEl, _error9.responseJSON.errors, _error9.responseJSON.errors.email, '#loginEmail');
-                        errorHandler(passwordEl, _error9.responseJSON.errors, _error9.responseJSON.errors.password, '#loginPass');
-                    }
-                });
+                $(_this5).closest('form').submit();
             });
         });
     });
@@ -6853,11 +6826,11 @@ function onRecaptchaLoadCallback() {
                             alert('error');
                         }
                     },
-                    error: function error(_error10) {
+                    error: function error(_error9) {
                         var emailEl = $('#loginEmail');
                         var passwordEl = $('#loginPass');
-                        errorHandler(emailEl, _error10.responseJSON.errors, _error10.responseJSON.errors.email, '#loginEmail');
-                        errorHandler(passwordEl, _error10.responseJSON.errors, _error10.responseJSON.errors.password, '#loginPass');
+                        errorHandler(emailEl, _error9.responseJSON.errors, _error9.responseJSON.errors.email, '#loginEmail');
+                        errorHandler(passwordEl, _error9.responseJSON.errors, _error9.responseJSON.errors.password, '#loginPass');
                     }
                 });
             });
