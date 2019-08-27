@@ -27,7 +27,7 @@
         <div class="d-flex">
             {{--@include('frontend._partials.left_bar')--}}
 
-            {{--acoount sidebar--}}
+            {{--profile sidebar--}}
             <div class="profile-sidebar profile-sidebar--inner-pages d-flex flex-column align-items-center">
                 @include('frontend.my_account._partials.left_bar')
                 <div class="mt-auto">
@@ -40,38 +40,27 @@
                     </div>
                     {!! Form::close() !!}
                 </div>
-
             </div>
 
             <div class="profile-inner-pg-right-cnt">
-                <div class="col-md-12">
-                    <div class="form-horizontal float-right">
-
-                        <div class="form-group row">
-                            <label class="col-md-6 control-label" for="customer_number">Your customer number</label>
-                            <div class="col-md-6">
-                                <input readonly id="customer_number" value="{!! $user->customer_number !!}"  type="text"  class="form-control input-md">
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="profile-inner-pg-right-cnt_inner h-100">
 
-                    <div class="col-md-9 clearfix">
-                        <div class="col-md-6 float-left">
-                            <h3>Referrals</h3>
-                        </div>
-                        <div class="col-md-6 float-right">
-                            <div class="notification-actions-bar d-none">
-                                <a href="javascript:void(0)"
-                                   class="btn btn-danger delete-selected-notifications">Delete</a>
-                                <a href="javascript:void(0)" class="btn btn-info mark-us-read">Mark us Read</a>
-                                <a href="javascript:void(0)" class="btn btn-warning mark-us-unread">Mark us Unread</a>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="col-lg-9">
+                        <div class="form-horizontal float-right">
+
+                            <div class="form-group row">
+                                <label class="col-md-6 control-label" for="customer_number">Your customer number</label>
+                                <div class="col-md-6">
+                                    <input readonly id="customer_number" value="{!! $user->customer_number !!}"  type="text"  class="form-control input-md">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="notification-actions-bar d-none">
+                            <a href="javascript:void(0)" class="btn btn-transp delete-selected-notifications mr-3">Delete</a>
+                            <a href="javascript:void(0)" class="btn btn-transp mark-us-read mr-3">Mark us <span class="text-uppercase">Read</span></a>
+                            <a href="javascript:void(0)" class="btn btn-transp mark-us-unread">Mark us <span class="text-uppercase">Unread</span></a>
+                        </div>
                         <table class="table table-bordered">
                             <thead>
                             <tr>

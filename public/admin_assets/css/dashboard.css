@@ -1,9 +1,9 @@
 .dashboard_modal_add_widget{
-    position: fixed;
+    position: absolute;
     top: 50px;
     bottom: 0;
-    width: 445px;
-    right: -445px;
+    width: 330px;
+    right: -330px;
     z-index: 1020;
     background: #303030;
     color: #ffffff;
@@ -18,6 +18,104 @@ right: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    overflow: auto;
+    overflow: hidden;
     margin: 0;
+}
+.dashboard_modal_add_widget .box-header{
+    background-color: #3c8dbc;
+    cursor: move;
+    color: #fff;
+    border-top: 1px solid #fff;
+}
+.dashboard_modal_add_widget .close-widget-modal{
+    border-radius: 0;
+}
+.dashboard_modal_add_widget .connectedSortable{
+    height: calc(100% - 34px);
+    overflow: auto;
+}
+.dashboard--panel .panel-heading{
+    display: flex;
+    justify-content: space-between;
+    background-color: #242a30;
+    color: #ffffff;
+}
+.dashboard--panel .panel-heading .panel-heading-btn a{
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 8px;
+}
+.dashboard--panel .panel-heading .panel-heading-btn a:not(:last-of-type){
+    margin-right: 5px;
+}
+.dashboard--panel .panel-heading .panel-heading-btn{
+    display: flex;
+}
+.dashboard--panel .panel-heading .panel-heading-btn a.btn-del{
+    color: #fff;
+    background: #ff5b57;
+    border-color: #ff5b57;
+}
+.dashboard--panel .panel-heading .panel-heading-btn a.btn-minus{
+
+    background: #f59c1a;
+    border-color: #f59c1a;
+}
+.dashboard--panel .panel-heading .panel-heading-btn a.btn-max{
+    color: #2e353c;
+    background: #f2f3f4;
+    border-color: #f2f3f4;
+}
+.dashboard--panel .panel-heading:after,.dashboard--panel .panel-heading:before{
+    display: none;
+}
+.dashboard--panel .panel-heading{
+    background-color: #242a30 !important;
+    align-items: center;
+}
+
+.dashboard--panel.fixed-widget {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 9999;
+    margin: 0;
+}
+body.overhidden{
+    overflow: hidden;
+}
+.dashboard--panel{
+    margin-bottom: 15px;
+}
+.dashboard--panel.fixed-widget .panel-body{
+    overflow: auto;
+    height: calc(100% - 38px);
+}
+
+.dashboard--panel .btn-max, .dashboard--panel .btn-minus, .dashboard--panel .btn-del {
+    cursor: pointer;
+}
+
+.dashboard--panel.fixed-widget .panel-heading {
+    cursor: default !important;
+}
+.dashboard--panel.fixed-widget .card-body{
+    padding: 15px;
+}
+.dashboard--panel .panel-heading .panel-title{
+    margin: 0;
+}
+.dashboard--panel .card-body{
+    padding: 5px;
+}
+.dashboard--panel .widget-view{
+    margin-bottom: 0;
 }

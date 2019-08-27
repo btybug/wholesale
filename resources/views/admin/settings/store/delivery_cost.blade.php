@@ -28,8 +28,8 @@
                    role="tab"
                    aria-controls="shipping" aria-selected="false">Gifts</a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" id="payment_gateways" href="{!! route('admin_settings_delivery') !!}"
+            <li class="nav-item">
+                <a class="nav-link active" id="payment_gateways" href="{!! route('admin_settings_delivery') !!}"
                    role="tab"
                    aria-controls="shipping" aria-selected="false">Delivery Cost</a>
             </li>

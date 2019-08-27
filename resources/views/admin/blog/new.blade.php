@@ -1,18 +1,18 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="m-0">Add / Edit Post</h2>
+    <div class="card panel panel-default">
+        <div class="card-header panel-heading">
+            <h2 class="m-0">{{ ($post) ? $post->title : "Add Post" }}</h2>
         </div>
-        <div class="panel-body">
+        <div class="card-body panel-body">
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#info">Info</a></li>
-                <li><a data-toggle="tab" href="#seo">SEO</a></li>
+                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#info">Info</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seo">SEO</a></li>
             </ul>
             {!! Form::model($post,['url' => route('admin_new_post'), 'id' => 'post_form','files' => true]) !!}
             <div class="tab-content tabs_content">
-                <div id="info" class="tab-pane tab_info fade in active">
+                <div id="info" class="tab-pane tab_info fade in active show">
 
                     {!! Form::hidden('id',null) !!}
                     <div class="text-right btn-save pt-25">
@@ -36,7 +36,7 @@
                                             @if(count(get_languages()))
                                                 <ul class="nav nav-tabs tab_lang_horizontal">
                                                     @foreach(get_languages() as $language)
-                                                        <li class="@if($loop->first) active @endif"><a data-toggle="tab"
+                                                        <li class="nav-item"><a class="nav-link @if($loop->first) active @endif" data-toggle="tab"
                                                                                                        href="#{{ strtolower($language->code) }}">
                                                                 <span class="flag-icon flag-icon-{{ strtolower($language->code) }}"></span> {{ $language->code }}
                                                             </a></li>
@@ -48,7 +48,7 @@
                                                 @if(count(get_languages()))
                                                     @foreach(get_languages() as $language)
                                                         <div id="{{ strtolower($language->code) }}"
-                                                             class="tab-pane fade  @if($loop->first) in active @endif">
+                                                             class="tab-pane fade  @if($loop->first) in active show @endif">
                                                             <div class="form-group">
                                                                 <label>Title</label>
                                                                 {!! Form::text('translatable['.strtolower($language->code).'][title]',get_translated($post,strtolower($language->code),'title'),['class'=>'form-control']) !!}
@@ -74,10 +74,12 @@
                                                     {{--{!! media_button('image',$post) !!}--}}
                                                 {{--</div>--}}
                                             {{--</div>--}}
-                                                <div class="panel panel-default">
-                                                    <div class="panel-heading clearfix">
-                                                        <p class="pull-left">Gallery images</p>
-                                                        <div class="pull-right">
+                                                <div class="card panel panel-default">
+                                                    <div class="card-header panel-heading clearfix">
+                                                        <p>Gallery images</p>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div>
                                                             {!! media_button('gallery',$post,true) !!}
                                                         </div>
                                                     </div>
@@ -90,14 +92,14 @@
                                             {{--</div>--}}
                                         </div>
 
-                                        <div class="panel panel-default mt-20 releted__products-panel">
-                                            <div class="panel-heading d-flex justify-content-between align-items-center">
+                                        <div class="card panel panel-default mt-20 releted__products-panel">
+                                            <div class="card-header panel-heading d-flex justify-content-between align-items-center">
                                         <span>
                                             Related Products
                                         </span>
-                                                <button type="button" class="btn btn-info select-products"><i class="fa fa-plus fa-sm mr-10"></i>Add Product</button>
+                                                <button type="button" class="btn btn-primary select-products"><i class="fa fa-plus fa-sm mr-10"></i>Add Product</button>
                                             </div>
-                                            <div class="panel-body product-body">
+                                            <div class="card-body panel-body product-body">
                                                 <ul class="get-all-attributes-tab row">
                                                     @if(isset($post) && count($post->stocks))
                                                         @foreach($post->stocks as $stock)
@@ -208,18 +210,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading clearfix">
+                            <div class="card panel panel-default">
+                                <div class="card-header panel-heading clearfix">
                                     <p class="pull-left mb-0">
                                         <b data-toggle="tooltip" title="" data-original-title="Change featured image">Featured image</b>
                                     </p>
-                                    <div class="pull-right text-right">
-                                            {!! media_button('image',$post,false,'drive',
+                                </div>
+                                <div class="card-body">
+                                    {!! media_button('image',$post,false,'drive',
                                            "<div class='edit-featured-img-outer'><img src='{img_path_for_media}' class='img img-responsive {data_id}' /></div>"
                                        ) !!}
-
-
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -230,9 +230,9 @@
                     <div class="text-right btn-save pt-25">
                         <button type="submit" class="btn btn-info">Save</button>
                     </div>
-                    <div class="panel panel-default mt-20">
-                        <div class="panel-heading">FB</div>
-                        <div class="panel-body">
+                    <div class="card panel panel-default mt-20">
+                        <div class="card-header panel-heading">FB</div>
+                        <div class="card-body panel-body">
                             <div class="form-group">
                                 <div class="row">
                                     <label for="seo-facebook-title" class="col-md-2 col-xs-12">Facebook Title</label>
@@ -261,9 +261,9 @@
                         </div>
                     </div>
 
-                    <div class="panel panel-default mt-20">
-                        <div class="panel-heading">Twitter</div>
-                        <div class="panel-body">
+                    <div class="card panel panel-default mt-20">
+                        <div class="card-header panel-heading">Twitter</div>
+                        <div class="card-body panel-body">
                             <div class="form-group">
                                 <div class="row">
                                     <label for="seo-twitter-title" class="col-md-2 col-xs-12">Twitter Title</label>
@@ -411,11 +411,17 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h4 class="modal-title">Select products</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Select products</h4>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="search-attr" class="col-sm-2 col-form-label">Search</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="search-attr" placeholder="Search">
+                        </div>
+                    </div>
                     <ul class="all-list">
 
                     </ul>
@@ -445,27 +451,27 @@
     <script src="/public/js/tinymce/tinymce.min.js"></script>
     <script>
         $(function () {
-            $("body").on('click', '.select-products', function () {
-                let arr = [];
-                $(".get-all-attributes-tab")
-                    .children()
-                    .each(function () {
-                        arr.push($(this).attr("data-id"));
-                    });
-                AjaxCall("/admin/get-stocks", {arr}, function (res) {
-                    if (!res.error) {
-                        $("#productsModal .modal-body .all-list").empty();
-                        res.data.forEach(item => {
-                            let html = `<li data-id="${item.id}" class="option-elm-modal"><div><a
+                $("body").on('click', '.select-products', function () {
+                    let arr = [];
+                    $(".get-all-attributes-tab")
+                        .children()
+                        .each(function () {
+                            arr.push($(this).attr("data-id"));
+                        });
+                    AjaxCall("/admin/get-stocks", {arr}, function (res) {
+                        if (!res.error) {
+                            $("#productsModal .modal-body .all-list").empty();
+                            res.data.forEach(item => {
+                                let html = `<li data-id="${item.id}" class="option-elm-modal"><div><a
                                                 href="#">${item.name}
                                                 </a> <a class="btn btn-primary add-attribute-event" data-name="${item.name}"
                                                 data-id="${item.id}">ADD</a></div></li>`;
-                        $("#productsModal .modal-body .all-list").append(html);
+                                $("#productsModal .modal-body .all-list").append(html);
+                            });
+                            $("#productsModal").modal();
+                        }
                     });
-                        $("#productsModal").modal();
-                    }
                 });
-            });
 
 
             $("body").on("click", ".add-attribute-event", function () {
@@ -584,16 +590,6 @@
          e.preventDefault()
          return false; // return false to cancel form action
          });*/
-    </script>
-    <script>
-
-
-    </script>
-    <script>
-        $(function () {
-            $(".sortable-panels").sortable();
-            $(".sortable-panels").disableSelection();
-        });
     </script>
     <script src="/public/admin_theme/blog_new.js"></script>
 

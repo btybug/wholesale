@@ -23,8 +23,8 @@
                    role="tab"
                    aria-controls="shipping" aria-selected="false">Courier </a>
             </li>
-            <li class="nav-item active ">
-                <a class="nav-link" id="payment_gateways" href="#"
+            <li class="nav-item">
+                <a class="nav-link active" id="payment_gateways" href="#"
                    role="tab"
                    aria-controls="shipping" aria-selected="false">Gifts</a>
             </li>

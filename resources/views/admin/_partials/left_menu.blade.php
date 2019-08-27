@@ -30,7 +30,18 @@
 
             {{--<li><a href="{{route('admin_passport')}}"><i class="fa  fa-user-secret"></i> <span>Passport</span></a></li>--}}
             @hasAccess('media')
-            <li><a href="{{route('admin_media')}}"><i class="fa fa-picture-o"></i> <span>Media</span></a></li>
+            <li class="treeview"><a href="javascript:void(0)"><i class="fa fa-picture-o"></i> <span>Media</span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="{{route('admin_media')}}"><i class="fa fa-circle-o"></i>Drive</a></li>
+                    <li><a href="{{route('admin_media','html')}}"><i class="fa fa-circle-o"></i>Html</a></li>
+                    <li><a href="{{route('admin_media','trash')}}"><i class="fa fa-circle-o"></i>Trash</a>
+                    </li>
+                </ul>
+            </li>
             @endHasAccess
 
             @hasAccess('user')
@@ -48,6 +59,9 @@
                     @endok
                     @ok('admin_customers')
                     <li><a href="{{route('admin_customers')}}"><i class="fa fa-circle-o"></i>Customers</a></li>
+                    @endok
+                    @ok('admin_wholesalers')
+                    <li><a href="{{route('admin_wholesalers')}}"><i class="fa fa-circle-o"></i>Wholesalers</a></li>
                     @endok
                     @ok('admin_role_membership')
                     <li><a href="{{route('admin_role_membership')}}"><i class="fa fa-circle-o"></i>Role/Membership</a>
@@ -80,12 +94,18 @@
                     @ok('admin_inventory_purchase')
                     <li><a href="{{route('admin_inventory_purchase')}}"><i class="fa fa-circle-o"></i> Purchase</a></li>
                     @endok
+                    @ok('admin_items_transfer')
+                    <li><a href="{{route('admin_items_transfer')}}"><i class="fa fa-circle-o"></i> Transfer Items</a></li>
+                    @endok
                     @ok('admin_suppliers')
                     <li><a href="{{route('admin_suppliers')}}"><i class="fa fa-circle-o"></i>Suppliers</a></li>
                     @endok
 
                     @ok('admin_inventory_other')
                     <li><a href="{{route('admin_inventory_other')}}"><i class="fa fa-circle-o"></i>Other</a></li>
+                    @endok
+                    @ok('admin_inventory_barcodes')
+                    <li><a href="{{route('admin_inventory_barcodes')}}"><i class="fa fa-circle-o"></i>Barcodes</a></li>
                     @endok
                 </ul>
             </li>
@@ -112,6 +132,7 @@
                     <li><a href="{{route('admin_store_transactions')}}"><i class="fa fa-circle-o"></i> Transactions</a></li>
                     @endok
                    @ok('admin_store_coupons') <li><a href="{{route('admin_store_coupons')}}"><i class="fa fa-circle-o"></i> Coupons</a></li>@endok
+                   <li><a href="{{route('admin_stock_promotions')}}"><i class="fa fa-circle-o"></i> Promotions</a></li>
                 </ul>
             </li>
             @endHasAccess
@@ -171,6 +192,7 @@
                     @ok('admin_stock_tags')
                     <li><a href="{{route('admin_stock_tags')}}"><i class="fa fa-circle-o"></i> Tags</a></li>
                     @endok
+                    <li><a href="{{route('admin_tools_filters')}}"><i class="fa fa-circle-o"></i>Filters</a></li>
                     @ok('admin_stock_statuses')
                     <li><a href="{{route('admin_stock_statuses')}}"><i class="fa fa-circle-o"></i> Statuses</a></li>
                     @endok
@@ -261,7 +283,26 @@
             <li><a href="{{route('import_index')}}"><i class="fa fa-download" aria-hidden="true"></i>
                     <span>Import</span></a></li>
             @endok
+
+            @hasAccess('admin_wholesallers')
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-handshake-o"></i>
+                    <span>Wholesallers</span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                   <li><a href="{{route('admin_wholesallers')}}"><i class="fa fa-circle-o"></i>Requests</a></li>
+                </ul>
+
+            </li>
+            @endHasAccess
         </ul>
     </section>
     <!-- /.sidebar -->
+    <section>
+
+    </section>
 </aside>

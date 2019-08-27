@@ -33,6 +33,10 @@ class CreateUsersTable extends Migration
             $table->string('verification_type',20)->nullable();
             $table->string('verification_image')->nullable();
             $table->string('customer_number')->unique();
+            $table->string('company_name')->nullable();
+            $table->string('company_number')->nullable();
+            $table->tinyInteger('wholesaler_status')->default(0);
+
             $table->rememberToken();
             $table->timestamps();
 

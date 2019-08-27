@@ -9,8 +9,8 @@
                 <a class="nav-link " id="general-tab" href="{!! route('admin_settings_store') !!}" role="tab"
                    aria-controls="general" aria-selected="true" aria-expanded="true">General</a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" id="shipping-tab" href="{!! route('admin_settings_shipping') !!}" role="tab"
+            <li class="nav-item">
+                <a class="nav-link active" id="shipping-tab" href="{!! route('admin_settings_shipping') !!}" role="tab"
                    aria-controls="shipping" aria-selected="false">Shipping</a>
             </li>
             <li class="nav-item ">
@@ -38,8 +38,8 @@
             </li>
         </ul>
         <div id="content">
-            <div class="panel panel-default">
-                <div class="panel-heading clearfix">
+            <div class="card panel panel-default mb-3">
+                <div class="card-header panel-heading clearfix">
                     <h2 class="pull-left m-0">Geo Zones</h2>
                     <div class="pull-right">
                         <a href="{!! route('admin_settings_geo_zones_new') !!}" class="btn btn-primary">
@@ -49,11 +49,11 @@
                 </div>
             </div>
 
-            <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-list"></i> Geo Zone List</h3>
+            <div class="card panel panel-default mb-3">
+                            <div class="card-header panel-heading">
+                                <h3 class="panel-title h5"><i class="fa fa-list"></i> Geo Zone List</h3>
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body panel-body">
                                 <table id="users-table" class="table table-style table-bordered" cellspacing="0" width="100%">
                                     <thead>
                                     <tr>
@@ -80,6 +80,10 @@
         $(function () {
             $('#users-table').DataTable({
                 ajax:  "{!! route('datatable_all_geo_zones') !!}",
+                dom: 'Bfrtip',
+                buttons: [
+                    'csv', 'excel', 'pdf', 'print'
+                ],
                 columns: [
                     {data: 'id',name: 'id'},
                     {data: 'name', name: 'name'},

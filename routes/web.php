@@ -18,9 +18,22 @@ Auth::routes();
 Auth::routes(['verify' => true]);
 //Route::get('/home', 'HomeController@index')->name('home');
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
-        return view('welcome');
-    })->name('home');
+    Route::get('/', 'Frontend\WholesalerController@index')->name('home');
+
+    Route::group(['prefix' => 'wholesaler'], function () {
+        Route::post('/add-to-cart', 'Frontend\WholesalerController@addToCart')->name('wholesaler_add_to_cart');
+        Route::get('/my-cart', 'Frontend\WholesalerController@getCart')->name('wholesaler_my_cart');
+        Route::get('/check-out', 'Frontend\WholesalerController@getCheckOut')->name('wholesaler_check_out');
+        Route::get('/payment/{token}', 'Frontend\WholesalerController@getPayment')->name('wholesaler_payment');
+        Route::post('/update-cart', 'Frontend\WholesalerController@postUpdateQty')->name('wholesaler_update_cart');
+        Route::post('/remove-from-cart', 'Frontend\WholesalerController@postRemoveFromCart')->name('wholesaler_remove_from_cart');
+        Route::post('/change-shipping-method', 'Frontend\WholesalerController@postChangeShippingMethod')->name('wholesaler_change_shipping_method');
+        Route::post('/get-payment-options', 'Frontend\WholesalerController@postPaymentOptions')->name('wholesaler_get_payment_options');
+        Route::post('/cash-order', 'Frontend\CashPaymentController@wholesalerOrder')->name('wholesaler_cash_order');
+        Route::get('/cash-order-success/{id}', 'Frontend\CashPaymentController@wholesalerSuccess')->name('wholesaler_cash_order_success');
+        Route::post('/apply-coupon', 'Frontend\WholesalerController@postApplyCoupon')->name('wholesaler_apply_coupon');
+        Route::post('/stripe-charge', 'Frontend\StripePaymentController@wholesalerStripeCharge');
+    });
 
     Route::post('/stripe-charge', 'Frontend\StripePaymentController@stripeCharge');
     Route::post('/get-comments', function (\Illuminate\Http\Request $request) {
@@ -38,19 +51,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/{post_id}', 'Frontend\BlogController@getSingle')->name('blog_post');
     });
     Route::post('/add-comment', 'Frontend\BlogController@addComment')->name('comment_create_post');
-
-
-    Route::group(['prefix' => 'products'], function () {
-        Route::post('/get-price', 'Frontend\ProductsController@getPrice')->name('product_get_price');
-        Route::post('/get-subtotal-price', 'Frontend\ProductsController@getSubtotalPrice')->name('product_get_subtotal_price');
-        Route::post('/get-product-variations', 'Frontend\ProductsController@getVariations')->name('product_get_variations');
-        Route::post('/add-to-favorites', 'Frontend\ProductsController@attachFavorite')->name('product_add_to_favorites');
-        Route::post('/remove-from-favorites', 'Frontend\ProductsController@detachFavorite')->name('product_remove_from_favorites');
-        Route::get('/{type?}', 'Frontend\ProductsController@index')->name('categories_front');
-        Route::group(['prefix' => '{type}'], function () {
-            Route::get('/{slug}', 'Frontend\ProductsController@getSingle')->name('product_single');
-        });
-    });
 
 //Route::group(['prefix' => 'categories'], function () {
 //    Route::get('/', 'Frontend\ProductsController@index')->name('categories_front');
@@ -106,6 +106,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/', 'Frontend\UserController@index')->name('my_account');
         Route::post('/', 'Frontend\UserController@saveMyAccount')->name('my_account_save_data');
         Route::post('/contact', 'Frontend\UserController@saveMyAccountContact')->name('my_account_save_contact_data');
+        Route::post('/profile-image', 'Frontend\UserController@postProfileImageUpload')->name('profile_image_upload');
+        Route::post('/delete-avatar', 'Frontend\UserController@postProfileImageDelete')->name('profile_image_delete');
 
         Route::get('/messages', 'Frontend\UserController@getNotifications')->name('messages');
         Route::post('/notifications', 'Frontend\UserController@getNotificationsContent')->name('notifications_content');

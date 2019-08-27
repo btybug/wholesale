@@ -30,18 +30,18 @@ class ManageApiController extends Controller
 
     public function postSettings(Request $request, Settings $settings)
     {
-        try{
+        try {
             $data = $request->only(['client_id', 'client_secret']);
             $settings->updateOrCreateSettings('manage_api_settings', $data);
             $service = new ManagerApiService;
             $service->getAccessToken()->save();
-        }catch (\Exception $exception){
-            return redirect()->back()->with(['alert'=>['message'=>$exception->getMessage(),'class'=>'danger']]);
+        } catch (\Exception $exception) {
+            return redirect()->back()->with(['alert' => ['message' => $exception->getMessage(), 'class' => 'danger']]);
         }
 
         return redirect()
             ->back()
-            ->with(['alert'=>['message'=>'New Connection made successfully!!!','class'=>'success']]);
+            ->with(['alert' => ['message' => 'New Connection made successfully!!!', 'class' => 'success']]);
     }
 
     public function getProducts()
@@ -57,9 +57,9 @@ class ManageApiController extends Controller
     public function postManage(Request $request, Settings $settings)
     {
         $data = $request->except('_token');
-        $data['customer_number']=1;
-        $data['id']=1;
-        $data['created_at']=1;
+        $data['customer_number'] = 1;
+        $data['id'] = 1;
+        $data['created_at'] = 1;
         $settings->updateOrCreateSettings('manage_api_export_users', $data);
         return redirect()->back();
     }

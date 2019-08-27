@@ -15,6 +15,7 @@ use App\Models\Roles;
 use App\Models\Stock;
 use App\Models\StockVariation;
 use App\Models\Ticket;
+use App\Models\UserNotes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -29,7 +30,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'last_name', 'username', 'email', 'password', 'phone', 'country', 'gender', 'status', 'referred_by', 'role_id', 'verification_type', 'verification_image', 'customer_number', 'dob'
+        'name', 'last_name', 'username', 'email', 'password', 'phone', 'country', 'gender', 'status', 'referred_by', 'role_id',
+        'verification_type', 'verification_image', 'customer_number', 'dob', 'company_name', 'company_number', 'wholesaler_status'
     ];
 
     protected $appends = [
@@ -78,7 +80,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function favorites()
     {
-        return $this->belongsToMany(StockVariation::class, 'favorites', 'user_id', 'variation_id');
+        return $this->belongsToMany(Stock::class, 'favorites', 'user_id', 'stock_id');
     }
 
     public function authorAttributes()
@@ -104,6 +106,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isAdministrator()
     {
         return ($this->role->type == 'backend') ? true : false;
+    }
+
+    public function isWholeseler()
+    {
+        return ($this->role->slug == 'wholesaler') ? true : false;
     }
 
     public function customEmails()
@@ -151,4 +158,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Dashboard::class, 'user_id');
     }
 
+    public function notes()
+    {
+        return $this->hasMany(UserNotes::class, 'user_id');
+    }
 }

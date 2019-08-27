@@ -11,7 +11,7 @@ namespace App\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-class Registered
+class        Registered
 {
     use SerializesModels;
 

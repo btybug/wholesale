@@ -29,7 +29,7 @@
 
             {{--acoount sidebar--}}
             <div class="profile-sidebar profile-sidebar--inner-pages d-flex flex-column align-items-center">
-                @include('frontend.my_account._partials.left_bar')
+                @include('frontend.my_account._partials.left_bar',['active'=>'my_account_orders'])
                 <div class="mt-auto">
                     {!! Form::open(['url'=>route('logout')]) !!}
                     <div class="text-center">
@@ -47,27 +47,27 @@
                                 <table class="table-ntfs table table-bordered table-striped order-table">
                                     <thead>
                                     <tr>
-                                        <th class="text-capitalize">order number</th>
+                                        <th class="text-capitalize">Order number</th>
                                         <th class="text-capitalize">Order date</th>
-                                        <th class="text-capitalize">number of products</th>
+                                        <th class="text-capitalize">Number of products</th>
                                         <th class="text-capitalize">Total amount</th>
-                                        <th class="text-capitalize">status</th>
-                                        <th class="text-capitalize">action</th>
+                                        <th class="text-capitalize">Type</th>
+                                        <th class="text-capitalize">Status</th>
+                                        <th class="text-capitalize">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($user->orders as $order)
-                                        {{--{{ dd($order->history->first()->status->name) }}--}}
-                                        {{--{{ dd($order->history->first()->toArray()) }}--}}
                                         <tr>
                                             <td>#{{ $order->order_number }}</td>
                                             <td>{!! BBgetDateFormat($order->created_at).' '.BBgetTimeFormat($order->created_at)  !!}</td>
                                             <td>{!! $order->items->count() !!}</td>
-                                            <td>@convert($order->amount)$</td>
+                                            <td>{!! convert_price($order->amount,get_currency()) !!}</td>
+                                            <td>{!! ($order->type) ? 'Wholesaler' : 'User' !!}</td>
                                             <td>
                                                 @if($order->history->first()['status']['name'])
                                                     <button type="button"
-                                                            class="btn order-table_btn order-table_btn--status text-sec-clr rounded-0" style="background: {!! $order->history->first()['status']['color'] !!}">
+                                                            class="btn order-table_btn order-table_btn--status text-sec-clr rounded-0"  style="background: {!! $order->history->first()['status']['color'] !!}">
                                                         {!! $order->history->first()->status->name !!}
                                                     </button>
                                                 @else

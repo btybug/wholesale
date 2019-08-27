@@ -697,7 +697,7 @@
   border: none;
 }
 
-.media-list li.active a {
+.media-list li a.active {
   background-color: #000 !important;
   color: white !important;
 }
@@ -1168,9 +1168,9 @@
 }
 
 .comments_wall .btn.reply {
-  color: #111;
-  background-color: #F0CA4D;
-  border-color: #F0CA4D;
+  color: #fff;
+  background-color: #59596d;
+  border-color: #222d32;
 }
 
 .comments_wall .admin_updated {
@@ -1475,7 +1475,6 @@ tr.notification-is_read {
   margin-bottom: 0 !important;
   flex: auto;
 }
-
 
 
 

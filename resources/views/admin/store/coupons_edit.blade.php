@@ -6,11 +6,11 @@
     <div class="row">
         <div class="col-md-8">
             <div class="coupons_new_page">
-                <div class="panel panel-default coupons_page-panel">
+                <div class="card panel panel-default coupons_page-panel">
 
-                    <div class="panel-heading">
+                    <div class="card-header panel-heading">
                         <div class="left-head">
-                            <h2 class="m-0 pull-left">View Coupon</h2>
+                            <h2 class="m-0 pull-left">{{ ($coupons) ? $coupons->name : "Add Coupon" }}</h2>
 
                         </div>
                         <div class="right-head d-flex">
@@ -28,7 +28,7 @@
                             {!! Form::hidden('id',null) !!}
                         </div>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body panel-body">
                         <div class="form-group row required">
                             <label class="col-sm-2 control-label" for="input-name">Coupon Name</label>
                             <div class="col-sm-7">
@@ -46,9 +46,9 @@
                             <div class="col-sm-3">
                             </div>
                         </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Application</div>
-                            <div class="panel-body">
+                        <div class="card panel panel-default mb-2">
+                            <div class="card-header panel-heading">Application</div>
+                            <div class="card-body panel-body">
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label" for="input-total"><span data-toggle="tooltip"
                                                                                                   title=""
@@ -114,9 +114,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Target</div>
-                            <div class="panel-body">
+                        <div class="card panel panel-default mb-2">
+                            <div class="card-header panel-heading">Target</div>
+                            <div class="card-body panel-body">
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label">Target</label>
                                     <div class="col-sm-10">
@@ -141,9 +141,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Validity</div>
-                            <div class="panel-body">
+                        <div class="card panel panel-default">
+                            <div class="card-header panel-heading">Validity</div>
+                            <div class="card-body panel-body">
                                 <div class="form-group row">
                                     <div class="col-md-6">
                                         <div class="form-group row">
@@ -240,7 +240,7 @@
 
         $("body").on('change', '.product-select', function () {
             $(".variations-box").html('');
-            AjaxCall("/admin/inventory/stock/get-variations-by-id", {id: $(this).val()}, function (res) {
+            AjaxCall("/admin/stock/get-variations-by-id", {id: $(this).val()}, function (res) {
                 if (!res.error) {
                     if (res.data.length) {
                         for (let i in res.data) {

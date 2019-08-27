@@ -1,6 +1,5 @@
-<div class="col-lg-3 col-xs-6">
     <!-- small box -->
-    <div class="small-box bg-green">
+    <div class="small-box bg-green widget-view" data-title="Bounce Rate">
         <div class="inner">
             <h3>53<sup style="font-size: 20px">%</sup></h3>
 
@@ -11,4 +10,3 @@
         </div>
         <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
     </div>
-</div>

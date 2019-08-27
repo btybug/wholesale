@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card panel panel-default">
+        <div class="card-header panel-heading">
             <h2 class="m-0">SEO</h2>
         </div>
-       <div class="panel-body">
+       <div class="card-body panel-body">
            <ul class="nav nav-tabs" id="myTab" role="tablist">
 
                @ok('admin_seo')
@@ -14,8 +14,8 @@
                </li>
                @endok
                @ok('admin_seo_stocks')
-               <li class="nav-item active">
-                   <a class="nav-link" id="payment_gateways" href="{!! route('admin_seo_stocks') !!}" role="tab"
+               <li class="nav-item">
+                   <a class="nav-link active" id="payment_gateways" href="{!! route('admin_seo_stocks') !!}" role="tab"
                       aria-controls="shipping" aria-selected="false">Stocks</a>
                </li>
                @endok
@@ -36,9 +36,9 @@
                    @endok
                    <div class="clearfix"></div>
                    <div class="seo-page-general">
-                       <div class="panel panel-default mt-20">
-                           <div class="panel-heading">General</div>
-                           <div class="panel-body">
+                       <div class="card panel panel-default mt-20">
+                           <div class="card-header panel-heading">General</div>
+                           <div class="card-body panel-body">
                                <div class="form-group">
                                    <div class="row">
                                        <label for="seo-title" class="col-md-2 col-xs-12">Title</label>
@@ -83,9 +83,9 @@
                            </div>
                        </div>
 
-                       <div class="panel panel-default mt-20">
-                           <div class="panel-heading">FB</div>
-                           <div class="panel-body">
+                       <div class="card panel panel-default mt-20">
+                           <div class="card-header panel-heading">FB</div>
+                           <div class="card-body panel-body">
                                <div class="form-group">
                                    <div class="row">
                                        <label for="seo-facebook-title" class="col-md-2 col-xs-12">Facebook Title</label>
@@ -112,9 +112,9 @@
                                </div>
                            </div>
                        </div>
-                       <div class="panel panel-default mt-20">
-                           <div class="panel-heading">Twitter</div>
-                           <div class="panel-body">
+                       <div class="card panel panel-default mt-20">
+                           <div class="card-header panel-heading">Twitter</div>
+                           <div class="card-body panel-body">
                                <div class="form-group">
                                    <div class="row">
                                        <label for="seo-twitter-title" class="col-md-2 col-xs-12">Twitter Title</label>
@@ -146,9 +146,9 @@
                </div>
                <div class="container">
                    <div class="seo-page-general">
-                       <div class="panel panel-default mt-20">
-                           <div class="panel-heading">Shortcodes</div>
-                           <div class="panel-body">
+                       <div class="card panel panel-default mt-20">
+                           <div class="card-header panel-heading">Shortcodes</div>
+                           <div class="card-body panel-body">
                                <table class="table table-bordered">
                                    <thead>
                                    <tr>

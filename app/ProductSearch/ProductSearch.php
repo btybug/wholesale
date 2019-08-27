@@ -91,11 +91,11 @@ class ProductSearch
                 $ordering = 'asc';
                 break;
             case "price_desc":
-                $defaultCol = 'price';
+                $defaultCol = 'stock_variations.price';
                 $ordering = 'desc';
                 break;
             case "price_asc":
-                $defaultCol = 'price';
+                $defaultCol = 'stock_variations.price';
                 $ordering = 'asc';
                 break;
             default:
@@ -108,11 +108,13 @@ class ProductSearch
 
     private static function createObject($category = null, $request)
     {
+//        $builder->whereIn('stock_categories.categories_id',$value);
+
         $query = Stock::leftJoin('stock_translations', 'stocks.id', '=', 'stock_translations.stock_id');
+        $query->leftJoin('stock_categories', 'stocks.id', '=', 'stock_categories.stock_id');
 
         if ($category) {
-            $query->leftJoin('stock_categories', 'stocks.id', '=', 'stock_categories.stock_id')
-                ->where('stock_categories.categories_id', $category->id);
+            $query->where('stock_categories.categories_id', $category->id);
         }
         $query->leftJoin('stock_variations', 'stocks.id', '=', 'stock_variations.stock_id')
             ->leftJoin('stock_variation_options', 'stock_variations.id', '=', 'stock_variation_options.variation_id')
@@ -125,10 +127,11 @@ class ProductSearch
                 );
             })
 
-            ->leftJoin('attributes_stickers', 'stock_variation_options.attribute_sticker_id', '=', 'attributes_stickers.id')
-            ->leftJoin('favorites', 'stock_variations.id', '=', 'favorites.variation_id')
+            ->leftJoin('stock_attributes', 'stocks.id', '=', 'stock_attributes.stock_id')
+            ->leftJoin('favorites', 'stocks.id', '=', 'favorites.stock_id')
             ->where('stock_translations.locale', app()->getLocale())
-            ->where('stocks.status', true);
+            ->where('stocks.status', true)
+            ->where('stocks.is_offer', false);
 
         return $query->select('stocks.*', 'stock_translations.name',
             'stock_translations.short_description', 'stock_variations.price', 'stock_variations.id as variation_id',

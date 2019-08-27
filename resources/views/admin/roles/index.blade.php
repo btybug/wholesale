@@ -3,17 +3,17 @@
 
 @stop
 @section('content')
-    <div class="panel panel-default">
+    <div class="card panel panel-default">
 
-        <div class="panel-heading clearfix">
+        <div class="card-header panel-heading clearfix">
             <div class="pull-left">
                 <h2 class="m-0">Roles</h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-warning pull-right" href="{!! route('admin_create_role') !!}">Create Role</a>
+                <a class="btn btn-warning pull-right text-white" href="{!! route('admin_create_role') !!}">Create Role</a>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body panel-body">
             <table id="users-table" class="table table-style table-bordered" cellspacing="0" width="100%">
                 <thead>
                 <tr>
@@ -38,6 +38,10 @@
                 "processing": true,
                 "serverSide": true,
                 "bPaginate": true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'csv', 'excel', 'pdf', 'print'
+                ],
                 columns: [
                     {data: 'id',name: 'id'},
                     {data: 'title', name: 'title'},

@@ -15,7 +15,9 @@
 
                         <label for="cash_paymant" class="title">Order</label>
                     </div>
-                    @ok('admin_stock_statuses_manage')<a href="{!! route('admin_stock_statuses_manage','order') !!}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                    @ok('admin_stock_statuses_manage')
+                    <a href="{!! route('admin_stock_statuses_manage','order') !!}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                    @endok
                 </li>
                 <li class="item">
                     <div class="chek-title">

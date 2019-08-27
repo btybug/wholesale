@@ -40,7 +40,7 @@ class PostController extends Controller
     public function create()
     {
         $post = null;
-        $categories = Category::with('children')->where('type','posts')->whereNull('parent_id')->get();
+        $categories = Category::with('children')->where('type', 'posts')->whereNull('parent_id')->get();
         $data = Category::recursiveItems($categories);
 
         $general = $this->settings->getEditableData('seo_posts')->toArray();
@@ -76,7 +76,7 @@ class PostController extends Controller
     {
         $post = Posts::findOrFail($id);
 
-        $categories = Category::with('children')->where('type','posts')->whereNull('parent_id')->get();
+        $categories = Category::with('children')->where('type', 'posts')->whereNull('parent_id')->get();
         $checkedCategories = $post->categories()->pluck('id')->all();
         $data = Category::recursiveItems($categories, 0, [], $checkedCategories);
 
@@ -118,11 +118,11 @@ class PostController extends Controller
         $types = $request->only(['fb', 'general', 'twitter', 'robot']);
         foreach ($types as $type => $data) {
             foreach ($data as $name => $value) {
-                   $seo= SeoPosts::firstOrNew(['post_id' => $post_id, 'name' => $name,'type' => $type]);
+                $seo = SeoPosts::firstOrNew(['post_id' => $post_id, 'name' => $name, 'type' => $type]);
                 if ($value) {
-                   $seo->content=$value;
+                    $seo->content = $value;
                     $seo->save();
-                }else{
+                } else {
                     $seo->delete();
                 }
             }

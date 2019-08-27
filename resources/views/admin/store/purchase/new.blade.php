@@ -3,11 +3,11 @@
 
 @stop
 @section('content')
-    <div class="coupons_new_page panel panel-default">
-        <div class="panel-heading">
+    <div class="coupons_new_page card panel panel-default">
+        <div class="card-header panel-heading">
             <h3 class="m-0">Purchase Form</h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body panel-body">
 
             <div class="col-md-8">
                 {!! Form::model($model,['url' => route('admin_inventory_purchase_save'),'id' => 'form-coupon','class' => '']) !!}
@@ -16,15 +16,37 @@
                     <label class="col-sm-2 control-label" for="input-code">
                         <span data-toggle="tooltip" title="" data-original-title="">Item</span></label>
                     <div class="col-sm-10">
-                        {!! Form::select('item_id',$items,null,[ 'class'=> 'form-control select-sku']) !!}
+                        {!! Form::select('item_id',[null => 'Select'] + $items,null,[ 'class'=> 'form-control select-item']) !!}
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label class="col-sm-2 control-label" for="input-discount">Quantity</label>
-                    <div class="col-sm-10">
-                        {!! Form::number('qty',null,['placeholder' => 'Purchase quantity','class'=> 'form-control']) !!}
-                    </div>
+                <div class="form-group">
+                    <table class="table table--store-settings">
+                        <thead>
+                        <tr class="bg-my-light-pink">
+                            <th>Warehouse</th>
+                            <th>Rack</th>
+                            <th>Shelve</th>
+                            <th>QTY</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="v-options-list-locations">
+                            @include('admin.store.purchase.locations')
+                        </tbody>
+
+                        <tfoot>
+                        <tr class="add-new-ship-filed-container">
+                            <td colspan="5" class="text-right">
+                                <button type="button" class="btn btn-primary add-location"><i
+                                        class="fa fa-plus-circle "></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
                 </div>
+                
                 <div class="form-group row">
                     <label class="col-sm-2 control-label" for="input-discount">Price</label>
                     <div class="col-sm-10">
@@ -111,5 +133,82 @@
                 }
             });
         }
+
+        $("body").on('click', '.add-location', function () {
+            AjaxCall(
+                "{{ route('admin_item_locations') }}",
+                {},
+                function (res) {
+                    if (!res.error) {
+                        $('.v-options-list-locations').append(res.html)
+                    }
+                }
+            );
+        });
+
+        $("body").on('click', '.delete-v-option_button', function () {
+            $(this).closest('tr').remove();
+        });
+
+        $("body").on('change','.warehouse',function () {
+            let w_id = $(this).val();
+            let parent = $(this).closest(".location-item");
+            render_racks(w_id,parent)
+        })
+
+        $("body").on('change','.rack',function () {
+            let r_id = $(this).val();
+            let parent = $(this).closest(".location-item");
+
+            render_shelves(r_id,parent)
+        })
+
+        function render_racks(w_id,parent){
+            parent.find(".rack").html('<option value="0">Select Rack</option>');
+            parent.find(".shelve").html('<option value="0">Select Shelve</option>');
+            if(w_id){
+                AjaxCall("{{ route('admin_warehouses_rack_by_warehouse') }}", {w_id: w_id}, function (res) {
+                    if (!res.error) {
+                        parent.find(".rack").empty();
+                        var html = '<option value="0">Select Rack</option>';
+                        for (var prop in res.data) {
+                            html += '<option value="'+res.data[prop].id+'">'+res.data[prop].name+'</option>';
+                        }
+
+                        parent.find(".rack").append(html);
+                    }
+                });
+            }
+
+        }
+
+        function render_shelves(r_id,parent){
+            parent.find(".shelve").html('<option value="0">Select Shelve</option>');
+            if(r_id){
+                AjaxCall("{{ route('admin_warehouses_shelve_by_rack') }}", {r_id: r_id}, function (res) {
+                    if (!res.error) {
+                        parent.find(".shelve").empty();
+
+                        var html = '<option value="0">Select Shelve</option>';
+                        for (var prop in res.data) {
+                            html += '<option value="'+res.data[prop].id+'">'+res.data[prop].name+'</option>';
+                        }
+
+                        parent.find(".shelve").append(html);
+                    }
+                });
+            }
+        }
+
+        {{--$("body").on('change','.select-item',function () {--}}
+            {{--let item_id = $(this).val();--}}
+            {{--$(".locations").html('');--}}
+            {{--AjaxCall("{{ route('admin_item_locations') }}", {item_id: item_id}, function (res) {--}}
+                {{--if (!res.error) {--}}
+                    {{--$(".locations").append(res.html);--}}
+                {{--}--}}
+            {{--});--}}
+        {{--})--}}
+
     </script>
 @stop

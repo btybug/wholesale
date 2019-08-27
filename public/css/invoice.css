@@ -1,0 +1,320 @@
+
+.invoice__wrapper .clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.invoice__wrapper .invoice__table-wrap .table-bordered td, .invoice__table-wrap .table-bordered th {
+    border: 1px solid #d7d7d7;
+}
+.invoice__wrapper .text-center{
+    text-align: center;
+}
+.invoice__wrapper .table thead th {
+    vertical-align: bottom;
+    border-bottom: 1px solid #d7d7d7;
+}
+.invoice__wrapper .table td,.invoice__wrapper  .table th {
+    padding: .75rem;
+    vertical-align: top;
+}
+
+.invoice__wrapper table{
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+.invoice__content-info-left{
+    float: left;
+}
+.invoice__content-info-right{
+    float: right;
+}
+.invoice__content-info:after{
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.invoice__wrapper{
+    width: 100%;
+    font-family: 'Roboto-Regular', sans-serif;
+}
+.invoice__wrapper .invoice__wrapper-header{
+    height: 72px;
+    background-color: #f0f0f0;
+    border-bottom: 20px solid #383838;
+}
+.invoice__wrapper .invoice__wrapper-main-content{
+    background-color: #fff;
+    padding-left: 172px;
+    padding-right: 188px;
+    margin-bottom: 745px;
+}
+.invoice__wrapper .invoice__content-logo{
+    margin-top: 35px;
+    margin-bottom: 135px;
+    text-align: right;
+}
+.invoice__wrapper .invoice__content-logo .icon{
+    display: inline-block;
+    margin-right: 186px;
+    float: right;
+}
+.invoice__wrapper .invoice__content-info{
+    color: #383838;
+    font-size: 41px;
+}
+.invoice__wrapper .invoice__content-info p{
+    line-height: 1;
+    margin-bottom: 20px;
+}
+.invoice__wrapper .invoice__content-info .title{
+    margin-bottom: 80px;
+}
+.invoice__wrapper .bold-title{
+    font-family: 'Roboto-Medium', sans-serif;
+}
+.invoice__wrapper .main-title{
+    margin-top: 40px;
+    margin-bottom: 80px;
+    font-family: 'Oswald-Regular', sans-serif;
+    line-height: 1;
+    color: #6383e1;
+    font-size: 147px;
+}
+.invoice__wrapper .invoice__table-wrap thead th{
+    font-size: 33px;
+    line-height: 1;
+}
+.invoice__wrapper .invoice__table-wrap tbody td{
+    font-size: 31px;
+}
+.invoice__wrapper .invoice__table-wrap .price{
+    font-family: 'Roboto-Medium', sans-serif;
+}
+.invoice__wrapper .invoice__table-wrap .desc-td{
+    width: 200px;
+}
+.invoice__wrapper .invoice__table-wrap .single-item{
+    margin-bottom: 35px;
+    display: table;
+    width: 100%;
+}
+.invoice__wrapper .invoice__table-wrap .single-item:after{
+    /*content: "";*/
+    /*display: table;*/
+    /*clear: both;*/
+}
+.invoice__wrapper .invoice__table-wrap .single-item .single-item-name{
+    display: table-cell;
+    width: 70%;
+}
+.invoice__wrapper .invoice__table-wrap .single-item .single-item-price{
+    display: table-cell;
+    text-align: right;
+    width: 35%;
+}
+
+.invoice__wrapper .invoice__table-wrap .table-bordered td,.invoice__table-wrap .table-bordered th{
+    border:1px solid #d7d7d7;
+}
+.invoice__wrapper .invoice__table-wrap tbody td.vat-td,.invoice__wrapper .invoice__table-wrap tbody td.total-td,
+.invoice__wrapper .invoice__table-wrap tbody td.qty-td,.invoice__wrapper .invoice__table-wrap tbody td.desc-td{
+    border-left: 2px solid transparent !important;;
+}
+.invoice__table-wrap .table-bordered th{
+    border-left: 2px solid transparent !important;
+}
+
+.invoice__table-wrap .table-bordered th.product-th{
+    border-left: 1px solid #d7d7d7!important;
+}
+.invoice__wrapper .invoice__content-price{
+    width: 1027px;
+    background-color: #f0f0f0;
+    padding: 35px 130px 0 140px;
+    float: right;
+    display: table-cell;
+}
+.invoice__wrapper .invoice__content-price .name{
+font-size: 26px;
+    /*float: left;*/
+    display: inline-block;
+}
+.invoice__wrapper .invoice__content-price .price{
+    font-size: 40px;
+    font-weight: bold;
+    float: right;
+    display: inline-block;
+}
+.invoice__wrapper .invoice__content-price .invoice__content-price-item{
+    margin-bottom: 35px;
+    line-height: 1;
+}
+.invoice__wrapper .invoice__content-price .name.total-name{
+    font-weight: bold;
+    vertical-align: middle;
+    display: table-cell;
+    width: 50%;
+}
+.invoice__wrapper .total-amount-wall{
+    vertical-align: middle;
+    display: table;
+    width: 100%;
+}
+.invoice__wrapper .invoice__content-price .price.total-price{
+    font-size: 61px;
+    color: #5184e5;
+    letter-spacing: -2px;
+    line-height: 1;
+    vertical-align: middle;
+    display: table-cell;
+    width: 50%;
+    float: none;
+    text-align: right;
+}
+.invoice__wrapper .invoice__content-price .price.total-price .sec-price{
+    font-size: 49px;
+    vertical-align: top;
+}
+.invoice__wrapper .invoice__content-paid{
+    margin-right: 104px;
+    width: 493px;
+    float: left;
+}
+.invoice__wrapper .invoice__content-paid img{
+    width: 100%;
+}
+.invoice__wrapper .invoice__wrapper-footer{
+    color: #383838;
+    background-color: #f0f0f0;
+    font-size: 33px;
+    padding: 54px 219px 113px 196px;
+    line-height: 1;
+    border-top: 20px solid #383838;
+}
+.invoice__wrapper .invoice__wrapper-footer .left-list{
+    float: left;
+}
+.invoice__wrapper .invoice__wrapper-footer .right-list{
+float: right;
+}
+.invoice__wrapper .invoice__wrapper-footer ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.invoice__wrapper .invoice__wrapper-footer ul li{
+    margin-bottom: 30px;
+    opacity: .9;
+}
+.invoice__wrapper .invoice__table-wrap table{
+    margin-bottom: 55px;
+}
+.invoice__wrapper .invoice__content-paid-price{
+    float: right;
+    width: 510px;
+    display: table;
+
+}
+.invoice__wrapper .invoice__content-paid{
+    float: left;
+    display: table-cell;
+    vertical-align: middle;
+}
+.invoice__wrapper .invoice__table-wrap .product-td{
+    max-width: 400px;
+}
+
+@media (max-width:1920px) {
+    .invoice__wrapper .invoice__content-logo svg{
+        width: 275px;
+        height: 100%;
+    }
+    .invoice__wrapper .invoice__content-logo .icon {
+        margin-right: 58px;
+    }
+    .invoice__wrapper .invoice__content-logo .icon img{
+        width: 276px;
+    }
+    .invoice__wrapper .invoice__wrapper-main-content {
+        padding-left: 60px;
+        padding-right: 60px;
+        margin-bottom: 180px;
+    }
+    .invoice__wrapper .invoice__content-info .title {
+        margin-bottom: 24px;
+    }
+    .invoice__wrapper .invoice__content-info {
+        font-size: 14px;
+    }
+    .invoice__wrapper .invoice__content-logo {
+        margin-top: 15px;
+        margin-bottom: 42px;
+    }
+    .invoice__wrapper .main-title {
+        margin-top: 23px;
+        margin-bottom: 47px;
+        font-size: 45px;
+    }
+    .invoice__wrapper .invoice__table-wrap table{
+        margin-bottom: 20px;
+    }
+    .invoice__wrapper .invoice__table-wrap thead th {
+        font-size: 16px;
+    }
+    .invoice__wrapper .invoice__table-wrap tbody td {
+        font-size: 14px;
+    }
+    .invoice__wrapper .invoice__table-wrap .single-item {
+        margin-bottom: 15px;
+    }
+    .invoice__wrapper .invoice__table-wrap .single-item .single-item-name{
+        margin-right: 15px;
+    }
+    .invoice__wrapper .invoice__content-paid {
+        margin-right: 32px;
+        width: 150px;
+    }
+    .invoice__wrapper .invoice__content-price {
+        width: 280px;
+        padding: 20px 25px 0 25px;
+    }
+    .invoice__wrapper .invoice__content-price .invoice__content-price-item {
+        margin-bottom: 14px;
+    }
+    .invoice__wrapper .invoice__content-price .name {
+        font-size: 14px;
+    }
+    .invoice__wrapper .invoice__content-price .price {
+        font-size: 18px;
+    }
+    .invoice__wrapper .invoice__content-price .price.total-price {
+        font-size: 28px;
+    }
+    .invoice__wrapper .invoice__content-price .price.total-price .sec-price {
+        font-size: 22px;
+    }
+    .invoice__wrapper .invoice__wrapper-footer {
+        font-size: 16px;
+        padding: 20px 60px 50px 60px;
+        border-top: 8px solid #383838;
+    }
+    .invoice__wrapper .invoice__wrapper-footer ul li {
+        margin-bottom: 14px;
+    }
+    .invoice__wrapper .invoice__wrapper-header {
+        height: 24px;
+        border-bottom: 8px solid #383838;
+    }
+    .invoice__wrapper .invoice__table-wrap .product-td{
+        max-width: 150px;
+    }
+    .invoice__wrapper .invoice__content-info-right{
+        margin-right: 30px;
+    }
+    .invoice__wrapper .invoice__content-info p{
+        margin-bottom: 10px;
+    }
+}

@@ -1,95 +1,87 @@
 @extends('layouts.admin')
 @section('content')
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="m-0">Add new item</h2>
+    <div class="card panel panel-default">
+        <div class="card-header panel-heading">
+            <h2 class="m-0">Warehouse</h2>
         </div>
-        <div class="panel-body">
+        <div class="card-body panel-body">
             <div class="content main-content">
-                <ul class="nav nav-tabs admin-profile-left">
-                    <li class="active"><a data-toggle="tab" href="#info">Info</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div id="info" class="tab-pane fade in active media-new-tab basic-details-tab">
-                        {!! Form::model($model,['class'=>'form-horizontal','url' => route('post_admin_items_new')]) !!}
-                        {!! Form::hidden('id', null) !!}
-                        <div class="row">
-                            <label for="feature_image" class="control-label col-sm-4"></label>
-                            <div class="col-sm-8 text-right pt-25 mb-25">
-                                <button class="btn btn-info" type="submit">Save</button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="basic-left basic-wall h-100">
-                                    <div class="all-list">
-                                        <ul class="nav nav-tabs media-list">
-                                            <li class="active"><a data-toggle="tab" href="#location">Location</a></li>
-                                            <li><a data-toggle="tab" href="#structure">Structure</a>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-9">
-                                <div class="basic-center basic-wall">
-                                    <div class="tab-content media-list-tab-content">
-                                        <div id="location" class="tab-pane fade in active">
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <label for="text" class="control-label col-sm-4">1st Line address</label>
-                                                    <div class="col-sm-8">
-                                                        {!! Form::text('first_line_address',null,['class'=>'form-control']) !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <label for="text" class="control-label col-sm-4">2nd line address</label>
-                                                    <div class="col-sm-8">
-                                                        {!! Form::text('second_line_address',null,['class'=>'form-control']) !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <label for="text" class="control-label col-sm-4">Country</label>
-                                                    <div class="col-sm-8">
-                                                        {!! Form::select('country',$countries,null,['class'=>'form-control','id' => 'geo_country']) !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group hide">
-                                                <div class="row">
-                                                    <label for="text" class="control-label col-sm-4">City</label>
-                                                    <div class="col-sm-8">
-                                                        {!! Form::text('city',null,['class'=>'form-control']) !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <label for="text" class="control-label col-sm-4">Post Code</label>
-                                                    <div class="col-sm-8">
-                                                        {!! Form::text('post_code',null,['class'=>'form-control']) !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-
+                {!! Form::model($model,['url' => route('admin_warehouses_save'),'class' => 'form-horizontal']) !!}
+                {!! Form::hidden('id',null) !!}
+                <div class="row">
+                    @if(count(get_languages()))
+                        <ul class="nav nav-tabs">
+                            @foreach(get_languages() as $language)
+                                <li class="nav-item"><a
+                                        class="nav-link @if($loop->first) active @endif"
+                                        data-toggle="tab"
+                                        href="#{{ strtolower($language->code) }}">
+                                                                            <span
+                                                                                class="flag-icon flag-icon-{{ strtolower($language->code) }}"></span> {{ $language->code }}
+                                    </a></li>
+                            @endforeach
+                        </ul>
+                    @endif
+                    <div class="tab-content mt-20">
+                        @if(count(get_languages()))
+                            @foreach(get_languages() as $language)
+                                <div id="{{ strtolower($language->code) }}"
+                                     class="tab-pane fade  @if($loop->first) in active show @endif">
+                                    <div class="form-group row">
+                                        <label
+                                            class="col-sm-2 control-label col-form-label text-right"><span
+                                                data-toggle="tooltip"
+                                                title=""
+                                                data-original-title="Attribute Name Title">Product Name</span></label>
+                                        <div class="col-sm-10">
+                                            {!! Form::text('translatable['.strtolower($language->code).'][name]',get_translated($model,strtolower($language->code),'name'),['class'=>'form-control']) !!}
                                         </div>
-                                        <div id="structure" class="tab-pane fade">
-                                            structure
+                                    </div>
+                                    <div class="form-group row">
+                                        <label
+                                            class="col-sm-2 control-label col-form-label text-right"><span
+                                                data-toggle="tooltip"
+                                                title=""
+                                                data-original-title="Short Description">Description</span></label>
+                                        <div class="col-sm-10">
+                                            {!! Form::textarea('translatable['.strtolower($language->code).'][description]',get_translated($model,strtolower($language->code),'description'),['class'=>'form-control','cols'=>30,'rows'=>2]) !!}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label
+                                            class="col-sm-2 control-label col-form-label text-right"><span
+                                                data-toggle="tooltip"
+                                                title=""
+                                                data-original-title="Attribute Name Title">Address</span></label>
+                                        <div class="col-sm-10">
+                                            {!! Form::text('translatable['.strtolower($language->code).'][address]',get_translated($model,strtolower($language->code),'address'),['class'=>'form-control']) !!}
                                         </div>
                                     </div>
                                 </div>
+                            @endforeach
+                        @endif
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label for="feature_image"
+                                   class="control-label col-sm-4 control-label col-form-label text-right">Image</label>
+                            <div class="col-sm-8">
+                                {!! media_button('image',$model) !!}
                             </div>
-
                         </div>
+                    </div>
 
-                        {!! Form::close() !!}
+                    <div class="form-group">
+                        <div class="row">
+
+                            <div class="col-sm-8">
+                                {!! Form::submit('Save',['class' => 'btn btn-primary']) !!}
+                            </div>
+                        </div>
                     </div>
                 </div>
+                {!! Form::close() !!}
             </div>
         </div>
     </div>
@@ -104,7 +96,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script>
         $(function () {
-            $("#geo_country").select2({ width: '100%' });
         })
 
     </script>

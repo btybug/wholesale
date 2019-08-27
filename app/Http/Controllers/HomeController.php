@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Settings;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -11,9 +13,11 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public $settings;
+
+    public function __construct(Settings $settings)
     {
-        $this->middleware(['auth', 'verified']);
+        $this->settings = $settings;
     }
 
     /**
@@ -23,11 +27,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $banners = $this->settings->getEditableData('banners');
+        $banners = ($banners->data) ? json_decode($banners->data, true) : [];
+        $categories = Category::where('type', 'stocks')->whereNull('parent_id')->get();
+
+        return view('welcome', compact(['banners','categories']));
     }
 
     public function getFaq()
     {
         return view('faq');
+    }
+
+    public function verifyWholesaler(){
+        return view('auth.verify_wholesaler');
     }
 }

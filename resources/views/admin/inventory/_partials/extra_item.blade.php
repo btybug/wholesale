@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <button type="button" class="btn btn-primary save-extra-variations pull-right " data-type="normal">
+                    <button type="button" class="btn btn-info save-extra-variations pull-right " data-type="normal">
                         Save
                     </button>
                 </div>
@@ -62,7 +62,7 @@
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <button type="button" class="btn btn-primary save-extra-variations pull-right " data-type="normal">
+                    <button type="button" class="btn btn-info save-extra-variations pull-right " data-type="normal">
                         Save
                     </button>
                 </div>
@@ -136,7 +136,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <button type="button" class="btn btn-primary save-extra-variations pull-right " data-type="normal">
+                    <button type="button" class="btn btn-info save-extra-variations pull-right " data-type="normal">
                         Save
                     </button>
                 </div>

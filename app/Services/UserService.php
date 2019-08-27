@@ -75,20 +75,40 @@ class UserService
     public function avatarUpload($data)
     {
         $user=\Auth::user();
-        $uniqId = md5($user->id.$user->username);
+        $uniqId=md5($user->id.$user->name.uniqid());
         try{
+            if(! \File::isDirectory(storage_path("app".DS."images"))){
+                \File::makeDirectory(storage_path("app".DS."images"));
+            }
+            if(! \File::isDirectory(storage_path("app".DS."images".DS."$user->email"))){
+                \File::makeDirectory(storage_path("app".DS."images".DS."$user->email"));
+            }
             $image=\Image::make($data['data']);
             $imgName="$uniqId.jpg";
-            if(! \File::isDirectory(public_path("images".DS."users"))){
-                \File::makeDirectory(public_path("images".DS."users"));
-            }
-            $image->save(public_path("images".DS."users".DS.$imgName));
+            $path = storage_path("app".DS."images".DS."$user->email".DS.$imgName);
+            $image->save($path);
+            $this->avatarDelete();
             $user->avatar=$imgName;
             $user->save();
         }catch (\Exception $exception){
             return ['error'=>true];
         }
-        return ['error'=>false,'status'=>'success','url'=>url('images/users',$imgName)];
+        return ['error'=>false,'status'=>'success','url'=>url('images/users/'.$user->email,$imgName)];
+    }
+    public function avatarDelete()
+    {
+        try{
+            $user = \Auth::user();
+            $path = storage_path("app".DS."images".DS.$user->email.DS.$user->avatar);
+            if(\File::exists($path)){
+                \File::delete($path);
+            }
+            $user->avatar=null;
+            $user->save();
+        }catch (\Exception $exception){
+            return ['error'=>true];
+        }
 
+        return ['error'=>false,'status'=>'success'];
     }
 }

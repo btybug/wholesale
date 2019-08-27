@@ -5,7 +5,7 @@
                 <p class="voucher-card_left_title text-uppercase mb-0">gift</p>
                 <p class="voucher-card_left_subtitle text-uppercase">voucher</p>
                 <a href="{!! url('/') !!}" class="d-block voucher-card_left-logo-holder">
-                    <img src="{!! url('/public/img/vapors-logo.png') !!}" alt="logo">
+                    <img src="{!! get_site_logo() !!}" alt="{{ get_site_name() }}">
                 </a>
             </div>
         </div>

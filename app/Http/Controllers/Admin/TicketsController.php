@@ -52,23 +52,28 @@ class TicketsController extends Controller
         return $this->view('index');
     }
 
-    public function getNew ()
+    public function getNew()
     {
         $model = null;
-        $statuses = $this->statuses->where('type','tickets')->get()->pluck('name','id')->all();
-        $priorities = $this->statuses->where('type','ticket_priority')->get()->pluck('name','id')->all();
-        $categories = $this->category->where('type','tickets')->get()->pluck('name','id')->all();
-        $staff = $this->user->pluck('name','id')->all();
+        $statuses = $this->statuses->where('type', 'tickets')->get()->pluck('name', 'id')->all();
+        $priorities = $this->statuses->where('type', 'ticket_priority')->get()->pluck('name', 'id')->all();
+        $categories = $this->category->where('type', 'tickets')->get()->pluck('name', 'id')->all();
+        $staff = User::leftJoin('roles', 'users.role_id', '=', 'roles.id')
+            ->whereNotNull('role_id')
+            ->orWhere('roles.type', 'backend')->select('users.*')->get()->pluck('name','id')->all();
+        $users = User::leftJoin('roles', 'users.role_id', '=', 'roles.id')
+            ->whereNull('role_id')
+            ->orWhere('roles.type', 'frontend')->select('users.*')->get()->pluck('name','id')->all();
 
-        return $this->view('new',compact(['model','statuses','priorities','categories','staff']));
+        return $this->view('new', compact(['model', 'statuses', 'priorities', 'categories', 'staff','users']));
     }
 
-    public function postNew (Request $request)
+    public function postNew(Request $request)
     {
-        $data = $request->except('_token','attachments');
+        $data = $request->except('_token', 'attachments');
 
         $max_size = (int)ini_get('upload_max_filesize') * 1000;
-        $all_ext = implode(',',  $this->fileService->allExtensions());
+        $all_ext = implode(',', $this->fileService->allExtensions());
 
         $validate = $this->fileService->validate($request->all(), [
             'subject' => 'required',
@@ -76,15 +81,15 @@ class TicketsController extends Controller
             'attachments.*' => 'sometimes|file|mimes:' . $all_ext . '|max:' . $max_size
         ]);
 
-        if($validate) return redirect()->back()->withErrors($validate);
+        if ($validate) return redirect()->back()->withErrors($validate);
 
-        $data['user_id'] = \Auth::id();
+        $data['author_id'] = \Auth::id();
         $ticket = Ticket::create($data);
 
-        if($ticket){
-            if($request->hasfile('attachments')){
-                foreach($request->file('attachments') as $file){
-                    $this->fileService->saveFiles($ticket->attachments(),$file);
+        if ($ticket) {
+            if ($request->hasfile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $this->fileService->saveFiles($ticket->attachments(), $file);
                 }
             }
         }
@@ -92,20 +97,26 @@ class TicketsController extends Controller
         return redirect()->route('admin_tickets');
     }
 
-    public function getEdit ($id)
+    public function getEdit($id)
     {
         $model = Ticket::findOrFail($id);
-        $statuses = $this->statuses->where('type','tickets')->get()->pluck('name','id')->all();
-        $priorities = $this->statuses->where('type','ticket_priority')->get()->pluck('name','id')->all();
-        $categories = $this->category->where('type','tickets')->get()->pluck('name','id')->all();
-        $staff = $this->user->pluck('name','id')->all();
-        $replies = $model->replies()->main()->get();
-        $data = mergeCollections($replies,$model->history);
-        return $this->view('edit',compact(['model','statuses','priorities','categories','staff','data']));
+        $statuses = $this->statuses->where('type', 'tickets')->get()->pluck('name', 'id')->all();
+        $priorities = $this->statuses->where('type', 'ticket_priority')->get()->pluck('name', 'id')->all();
+        $categories = $this->category->where('type', 'tickets')->get()->pluck('name', 'id')->all();
+        $staff = User::leftJoin('roles', 'users.role_id', '=', 'roles.id')
+            ->whereNotNull('role_id')
+            ->orWhere('roles.type', 'backend')->select('users.*')->get()->pluck('name','id')->all();
+        $users = User::leftJoin('roles', 'users.role_id', '=', 'roles.id')
+            ->whereNull('role_id')
+            ->orWhere('roles.type', 'frontend')->select('users.*')->get()->pluck('name','id')->all();
+        $replies = $model->replies()->main()->oldest()->get();
+
+        $data = mergeCollections($replies, $model->history()->oldest()->get());
+        return $this->view('edit', compact(['model', 'statuses', 'priorities', 'categories', 'staff', 'data','users']));
 
     }
 
-    public function postEdit (Request $request,$id)
+    public function postEdit(Request $request, $id)
     {
         $model = Ticket::findOrFail($id);
 
@@ -117,9 +128,13 @@ class TicketsController extends Controller
     public function reply(Request $request)
     {
         $data = $request->all();
+        $max_size = (int)ini_get('upload_max_filesize') * 1000;
+        $all_ext = implode(',', $this->fileService->allExtensions());
+
         $rules = [
             'ticket_id' => 'required|exists:tickets,id',
-            'reply' => 'required|min:2|max:1000'
+            'reply' => 'required|min:2|max:1000',
+            'attachments.*' => 'sometimes|file|mimes:' . $all_ext . '|max:' . $max_size
         ];
 
         $result = [
@@ -132,28 +147,35 @@ class TicketsController extends Controller
         $validator = \Validator::make($data, $rules);
 
         if ($validator->fails()) {
-            return \Response::json(['errors' => $validator->messages(),'success' => false]);
+            return \Response::json(['errors' => $validator->messages(), 'success' => false]);
         }
 
         $reply = new Reply();
         $reply->create($result);
         $ticket = Ticket::find($data['ticket_id']);
-        $replies = $ticket->replies()->main()->get();
-        $data = mergeCollections($replies,$ticket->history);
-        $html = \View::make('admin.ticket._partials.comments',compact('data'))->render();
+        if ($request->hasfile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $this->fileService->saveFiles($ticket->attachments(), $file);
+            }
+        }
 
-        return \Response::json(['success' => true,'message' => 'Success','html' => $html]);
+        $replies = $ticket->replies()->main()->get();
+        $data = mergeCollections($replies, $ticket->history);
+        $html = \View::make('admin.ticket._partials.comments', compact('data'))->render();
+        $attachments = \View::make("admin.ticket._partials.attachments", compact('ticket'))->render();
+
+        return \Response::json(['success' => true, 'message' => 'Success', 'html' => $html,'attachments' =>$attachments]);
     }
 
-    public function getSettings ()
+    public function getSettings()
     {
-        $statuses = $this->statuses->where('type','tickets')->get()->pluck('name','id')->all();
+        $statuses = $this->statuses->where('type', 'tickets')->get()->pluck('name', 'id')->all();
         $settings = $this->settings->getEditableData('tickets');
 
-        return $this->view('settings',compact(['settings','statuses']));
+        return $this->view('settings', compact(['settings', 'statuses']));
     }
 
-    public function postSettings (Request $request)
+    public function postSettings(Request $request)
     {
         $data = $request->except('_token');
 
@@ -162,13 +184,13 @@ class TicketsController extends Controller
         return redirect()->back();
     }
 
-    public function getClose (Request $request,$id)
+    public function getClose(Request $request, $id)
     {
         $ticket = Ticket::findOrFail($id);
         $status = $this->settings->getData('tickets', 'completed');
 
-        if(! $status) abort(404);
-        $ticket->update(['status_id'=>$status->val]);
+        if (!$status) abort(404);
+        $ticket->update(['status_id' => $status->val]);
 
         return redirect()->route('admin_tickets');
     }

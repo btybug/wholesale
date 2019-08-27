@@ -2,16 +2,20 @@
 @section('content')
     <section class="settings_lang">
 
-        <div class="panel panel-default">
-            <div class="panel-heading clearfix">
-                <h3 class="mt-0 pull-left">Language Manager {{ __("home") }} {{ app()->getLocale() }}</h3>
-                <a href="{{ route('admin_settings_languages') }}" class="mt-0 pull-left">Listing All Languages </a>
-                <div class="box-tools pull-right">
-                </div>
+        <div class="card panel panel-default">
+            <div class="card-header panel-heading setting_lang_panel_head">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('admin_settings_languages') }}">Listing All Languages </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:void(0);">Language Manager {{ __("home") }} {{ app()->getLocale() }}</a>
+                    </li>
+                </ul>
             </div>
-                <div class="panel-body">
+                <div class="card-body panel-body">
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-sm-12">
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
@@ -41,8 +45,11 @@
                                             </td>
                                         @endforeach
                                         <td>
-                                            <a href="#" data-toggle="tooltip" data-placement="bottom"  title="{!! $language->name !!}"  class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="{!! $language->name !!}" class="btn btn-xs bg-red"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                            <div class="d-flex">
+                                                <a href="#" data-toggle="tooltip" data-placement="bottom"  title="{!! $language->name !!}"  class="btn btn-sm btn-warning mr-1"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                <a href="#" data-toggle="tooltip" data-placement="bottom" title="{!! $language->name !!}" class="btn btn-sm bg-red"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                            </div>
+
                                         </td>
                                     </tr>
                                 @endforeach

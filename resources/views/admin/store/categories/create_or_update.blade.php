@@ -13,7 +13,7 @@
 @if(count(get_languages()))
     <ul class="nav nav-tabs">
     @foreach(get_languages() as $language)
-            <li class="@if($loop->first) active @endif"><a data-toggle="tab" href="#{{ strtolower($language->code) }}">
+            <li class="nav-item"><a class="nav-link @if($loop->first) active @endif" data-toggle="tab" href="#{{ strtolower($language->code) }}">
                     <span class="flag-icon flag-icon-{{ strtolower($language->code) }}"></span> {{ $language->code }}</a></li>
     @endforeach
     </ul>
@@ -23,7 +23,7 @@
 <div class="tab-content">
     @if(count(get_languages()))
         @foreach(get_languages() as $language)
-            <div id="{{ strtolower($language->code) }}" class="tab-pane fade  @if($loop->first) in active @endif">
+            <div id="{{ strtolower($language->code) }}" class="tab-pane fade  @if($loop->first) in active show @endif">
                 <div class="form-group">
                     <label>Category Name</label>
                     {!! Form::text('translatable['.strtolower($language->code).'][name]',get_translated($model,strtolower($language->code),'name'),['class'=>'form-control','required'=>true]) !!}
@@ -66,63 +66,8 @@
 {!! Form::close() !!}
 
 @if(is_enabled_media_modal())
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="{!! url('public/admin_theme/media/js/lightbox.js') !!}"></script>
     <script src="{!! url('public/admin_theme/media/js/jstree.min.js') !!}"></script>
     <script src="{!! url('public/admin_theme/media/js/custom.js') !!}"></script>
     <script src="{!! url('public/admin_theme/fileinput/js/fileinput.min.js') !!}"></script>
-    <script>
-        // $("#input-ru").fileinput({
-        //     language: "ru",
-        //     uploadUrl: "/api/api-media/upload",
-        //     allowedFileExtensions: ["jpg", "png", "gif"]
-        // });
-//        $(function(){
-//       $("#item").fileinput({
-//           maxFileCount: 5,
-//           uploadUrl: "/api/api-media/upload",
-//            allowedFileExtensions: ["jpg", "png", "gif"],
-//            uploadExtraData: function(){
-//            return {'_token':$("meta[name='csrf-token']").attr('content'), "folder_id": _global_folder_id }
-//           }
-//       })
-//    }).on('fileuploaded', function(event, data, id, index) {
-//        // toggleUploadDivs()
-//        $(".jstree-clicked").click();
-//        $("#jstree_html").jstree('destroy');
-//        $("#jstree_html").jstree({
-//        core: {
-//            data: {
-//                type: "POST",
-//                url: "/api/api-media/jstree",
-//                dataType: "json", // needed only if you do not supply JSON headers
-//                data: { folder_id: 1 },
-//                headers: {
-//                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
-//                },
-//                success: function(data) {
-//                    $(".media-modal-main-content").empty();
-//                    listFolders(data.children);
-//                    listFiles(data.items);
-//                }
-//            }
-//        }
-//    });
-//
-//
-//        function toggleUploadDivs(){
-//        $("body").find(".media-modal-main-content").show()
-//        $("body").find(".media-modal-content-upload").hide()
-//    }
-//    $("body").on("click", ".fileinput-remove", function(){
-//        retryDrawing()
-//
-//        toggleUploadDivs()
-//    })
-//    $("body").on("click", ".file-drop-zone", function() {
-//    $(".btn.btn-file>input[type='file']").click();
-//});
-
-    </script>
 @endif

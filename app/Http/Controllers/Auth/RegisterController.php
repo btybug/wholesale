@@ -61,7 +61,17 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
+        $comapyData = [];
+        $wholesaler = $data['wholesaler'];
+        if($wholesaler){
+            $comapyData = [
+                'company_name' => 'required',
+                'company_number' => 'required',
+            ];
+
+        }
+
+        return Validator::make($data, $comapyData+[
             'terms_conditions' => 'required|in:1',
             'name' => 'required|string|min:2|max:255',
             'last_name' => 'required|string|min:2|max:255',
@@ -83,7 +93,10 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $customer_number = get_customer_number();
+        $wholesaler = $data['wholesaler'];
         return User::create([
+            'company_name' => ($wholesaler)? $data['company_name']: null,
+            'company_number' => ($wholesaler)? $data['company_number']: null,
             'name' => $data['name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
@@ -91,7 +104,7 @@ class RegisterController extends Controller
             'country' => $data['country'],
             'gender' => $data['gender'],
             'status' => 0,
-            'role_id' => Roles::where('slug', 'customer')->first()->id,
+            'role_id' => ($wholesaler) ? Roles::where('slug', 'wholesaler')->first()->id : Roles::where('slug', 'customer')->first()->id,
             'customer_number' => $customer_number,
             'password' => Hash::make($data['password']),
         ]);
@@ -102,8 +115,11 @@ class RegisterController extends Controller
         $this->validator($request->all())->validate();
 
         event(new Registered($user = $this->create($request->all())));
-
         $this->guard()->login($user);
+
+        if($request->wholesaler){
+            $this->redirectTo = "/wholesaler";
+        }
 
         return response()->json(['success' => true, 'redirectPath' => $this->redirectPath()]);
     }

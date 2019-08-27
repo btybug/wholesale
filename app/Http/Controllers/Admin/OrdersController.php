@@ -14,8 +14,7 @@ use App\Http\Controllers\Admin\Requests\OrderHistoryRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Addresses;
 use App\Models\Coupons;
-use App\Models\OrderHistory;
-use App\Models\OrderItem;
+use App\Models\Items;
 use App\Models\Orders;
 use App\Models\OrdersJob;
 use App\Models\Statuses;
@@ -25,7 +24,7 @@ use App\Models\StockVariation;
 use App\Models\StripePayments;
 use App\Models\ZoneCountries;
 use App\Services\CartService;
-use App\Services\ManagerApiRequest;
+use App\Services\OrdersService;
 use App\User;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use PragmaRX\Countries\Package\Countries;
@@ -75,11 +74,15 @@ class OrdersController extends Controller
         if (!$order) abort(404);
         $hidden = [];
         $model = $settings->getEditableData('orders_statuses');
+        $settings = $settings->getEditableData('admin_general_settings');
+
         $hidden[] = $model->submitted;
         $hidden[] = $model->partially_collected;
         $hidden[] = $model->collected;
-        $statuses = $this->statuses->where('type', 'order')->whereNotIn('id', $hidden)->get()->pluck('name', 'id');
-        return $this->view('manage', compact('order', 'statuses'));
+
+        $statuses = $this->statuses->where('type', 'order')->get()->pluck('name', 'id');
+//        dd($statuses,$model,$hidden);
+        return $this->view('manage', compact('order', 'statuses','settings'));
     }
 
     public function getNew()
@@ -103,19 +106,22 @@ class OrdersController extends Controller
         return $this->view('new', compact('statuses', 'products', 'users', 'user', 'countries', 'countriesShipping'));
     }
 
-    public function addNote(OrderHistoryRequest $request)
+    public function addNote(OrderHistoryRequest $request, OrdersService $ordersService)
     {
         $order = Orders::findOrFail($request->id);
-
+        $status_id = $request->get('status_id', null);
         $order->history()->create([
             'status_id' => $request->get('status_id', null),
             'note' => $request->note,
         ]);
-
+        $ordersService->changeStatus($order, $status_id);
         $histories = $order->history()->orderBy('created_at', 'desc')->get();
-        $html = \View('admin.orders._partials.timeline_item', compact(['histories']))->render();
+        $statuses = $this->statuses->where('type', 'order')->get()->pluck('name', 'id');
 
-        return \Response::json(['error' => false, 'html' => $html]);
+        $html = \View('admin.orders._partials.timeline_item', compact(['histories']))->render();
+        $statusHtml = \View('admin.orders._partials.order_status', compact(['order','statuses']))->render();
+
+        return \Response::json(['error' => false, 'html' => $html,'statusHtml' => $statusHtml]);
     }
 
     public function getSettings()
@@ -135,15 +141,11 @@ class OrdersController extends Controller
         return redirect()->back();
     }
 
-    public function getProduct(Request $request)
+    public function getItem(Request $request)
     {
-        $vape = Stock::with(['variations', 'stockAttrs'])->where('id', $request->id)->first();
-
-        if (!$vape) abort(404);
-
-        $variations = $vape->variations()->with('options')->get();
-
-        $html = $this->view('_partials.product', compact(['vape', 'variations']))->render();
+        $vape = Stock::findOrFail($request->id);
+        $currency = get_currency();
+        $html = $this->view('_partials.product', compact(['vape','currency']))->render();
 
         return \Response::json(['error' => false, 'html' => $html]);
     }
@@ -160,20 +162,24 @@ class OrdersController extends Controller
     public function postCollecting($id, Request $request)
     {
         $order = Orders::findOrfail($id);
+//        dd($request->all());
         $error = true;
-        $item = $order->items()->where('order_items.id', $request->item_id)->first();
         $message = '';
-        if ($item) {
+        $success = false;
+        if($request->unique_id){
             $error = false;
-            $item->update(['collected' => $request->value]);
+
+            $collect = $order->collections()->create([
+                'unique_id' => $request->unique_id
+            ]);
+
             $settings = $this->settings->getEditableData('orders_statuses');
 
-            $count = $order->items()->count();
-            $collected = $order->items()->where('collected', true)->count();
+            $count = $request->count;
+            $collected = $order->collections->count();
             $itemsNeedCollect = $count - $collected;
             if ($count == $collected) {
-                $message = "All collected, Congratulations !!!";
-
+                $success = true;
                 if ($settings && isset($settings['collected'])) {
                     $historyData['user_id'] = \Auth::id();
                     $historyData['status_id'] = $settings['collected'];
@@ -190,7 +196,15 @@ class OrdersController extends Controller
             }
         }
 
-        return \Response::json(['error' => $error, 'message' => $message]);
+
+        return \Response::json(['error' => $error, 'message' => $message,'success' => $success]);
+    }
+
+    public function ItemById(Request $request)
+    {
+        $model = Stock::findOrFail($request->id);
+
+        return \Response::json(['error' => false, 'data' => $model]);
     }
 
     public function postAddUser(Request $request)
@@ -224,57 +238,61 @@ class OrdersController extends Controller
 
     public function postAddToCart(Request $request)
     {
-        $variation = StockVariation::find($request->uid);
-        $user = User::find($request->user_id);
-        if ($variation && $user) {
-            $delivery = null;
-            Cart::session(Orders::ORDER_NEW_SESSION_ID)->add($variation->id, $variation->id, $variation->price, 1,
-                ['variation' => $variation, 'requiredItems' => $request->get('requiredItems')]);
+        $product = Stock::find($request->product_id);
+        $user = User::where('id',$request->user_id)->first();
+        $default_shipping = null;
+        $shipping = null;
+        $geoZone = null;
 
-            $optionalItems = $request->get('optionalItems');
-            if ($optionalItems && count($optionalItems)) {
-                foreach ($optionalItems as $opv) {
-                    $optpVariation = StockVariation::find($opv);
-                    if ($optpVariation) {
-                        Cart::session(Orders::ORDER_NEW_SESSION_ID)->add($optpVariation->id, $variation->id, $optpVariation->price, 1,
-                            ['variation' => $optpVariation]);
+        if ($product) {
+            $error = $this->cartService->validateProduct($product, $request->variations);
+
+            if (!$error) {
+                $cart_id = uniqid();
+                Cart::session(Orders::ORDER_NEW_SESSION_ID)->add($cart_id, $product->id, $this->cartService->price,
+                    $request->product_qty, ['variations' => $this->cartService->variations, 'product' => $product]);
+
+                if ($user) {
+                    $default_shipping = $user->addresses()->where('type', 'default_shipping')->first();
+                    $zone = ($default_shipping) ? ZoneCountries::find($default_shipping->country) : null;
+                    $geoZone = ($zone) ? $zone->geoZone : null;
+                    if ($geoZone && count($geoZone->deliveries)) {
+                        $subtotal = Cart::session(Orders::ORDER_NEW_SESSION_ID)->getSubTotal();
+                        $shipping = Cart::session(Orders::ORDER_NEW_SESSION_ID)->getCondition($geoZone->name);
+                        $delivery = $geoZone->deliveries()->where('min', '<=', $subtotal)->where('max', '>=', $subtotal)->first();
+
+                        if(! $shipping){
+                            Cart::session(Orders::ORDER_NEW_SESSION_ID)->removeConditionsByType('shipping');
+
+                            if ($delivery && count($delivery->options)) {
+                                $shippingDefaultOption = $delivery->options->first();
+                                $condition2 = new \Darryldecode\Cart\CartCondition(array(
+                                    'name' => $geoZone->name,
+                                    'type' => 'shipping',
+                                    'target' => 'total',
+                                    'value' => $shippingDefaultOption->cost,
+                                    'order' => 1,
+                                    'attributes' => $shippingDefaultOption
+                                ));
+                                Cart::session(Orders::ORDER_NEW_SESSION_ID)->condition($condition2);
+                                $shipping = Cart::session(Orders::ORDER_NEW_SESSION_ID)->getCondition($geoZone->name);
+                            }
+                        }
                     }
                 }
+
+                $items = $this->cartService->getCartItems(true);
+                $html = $this->view('_partials.cart', compact(['items', 'default_shipping', 'shipping', 'geoZone']))->render();
+                $shippingHtml = $this->view("_partials.shipping_payment", compact('user', 'delivery', 'geoZone'))->render();
+                $orderSummary = $this->view("_partials.order_summary", compact('user', 'geoZone'))->render();
+
+                return \Response::json(['error' => false, 'message' => 'added',
+                    'count' => $this->cartService->getCount(), 'html' => $html,
+                    'shippingHtml' => $shippingHtml, 'summaryHtml' => $orderSummary
+                ]);
             }
 
-            $default_shipping = $user->addresses()->where('type', 'default_shipping')->first();
-            $zone = ($default_shipping) ? ZoneCountries::find($default_shipping->country) : null;
-            $geoZone = ($zone) ? $zone->geoZone : null;
-            if ($geoZone && count($geoZone->deliveries)) {
-                $subtotal = Cart::session(Orders::ORDER_NEW_SESSION_ID)->getSubTotal();
-                Cart::session(Orders::ORDER_NEW_SESSION_ID)->removeConditionsByType('shipping');
-                $delivery = $geoZone->deliveries()->where('min', '<=', $subtotal)->where('max', '>=', $subtotal)->first();
-                if ($delivery && count($delivery->options)) {
-                    $shippingDefaultOption = $delivery->options->first();
-                    $condition2 = new \Darryldecode\Cart\CartCondition(array(
-                        'name' => $geoZone->name,
-                        'type' => 'shipping',
-                        'target' => 'total',
-                        'value' => $shippingDefaultOption->cost,
-                        'order' => 1,
-                        'attributes' => $shippingDefaultOption
-                    ));
-                    Cart::session(Orders::ORDER_NEW_SESSION_ID)->condition($condition2);
-                }
-                $shipping = Cart::session(Orders::ORDER_NEW_SESSION_ID)->getCondition($geoZone->name);
-            }
-
-
-            $items = $this->cartService->getCartItems(true);
-
-            $html = $this->view('_partials.cart', compact(['items', 'default_shipping', 'shipping', 'geoZone']))->render();
-            $shippingHtml = $this->view("_partials.shipping_payment", compact('user', 'delivery', 'geoZone'))->render();
-            $orderSummary = $this->view("_partials.order_summary", compact('user', 'geoZone'))->render();
-
-            return \Response::json(['error' => false, 'message' => 'added',
-                'count' => $this->cartService->getCount(), 'html' => $html,
-                'shippingHtml' => $shippingHtml, 'summaryHtml' => $orderSummary
-            ]);
+            return \Response::json(['error' => true, 'message' => $error]);
         }
 
         return \Response::json(['error' => true, 'message' => 'try again']);
@@ -633,5 +651,25 @@ class OrdersController extends Controller
 
         return \Response::json(['error' => false]);
 
+    }
+
+    public function printPdf(Request $request,$id,Settings $settings)
+    {
+// This  $data array will be passed to our PDF blade
+        $settings = $settings->getEditableData('admin_general_settings');
+        $order = Orders::findOrFail($id);
+        $data = [
+            'order' => $order,
+            'settings' => $settings,
+            'title' => 'First PDF for Medium',
+            'heading' => 'Hello from 99Points.info',
+            'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry
+            s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.'
+        ];
+
+        $pdf = \PDF::loadView('admin.pdf.invoice', $data);
+
+        return $pdf->download('invoice.pdf');
     }
 }

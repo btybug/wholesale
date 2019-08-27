@@ -33,13 +33,15 @@ class SendEmailVerificationNotification
                     'template_id' => $mailTemplate->id,
                     'must_be_done' => now(),
                     'to' => $event->user->email,
+                    'additional_data' => ['user'=>$event->user]
                 ]);
                 if (MailTemplates::where('slug', 'admin_' . $mailTemplate->slug)->exists()) {
                     $adminMailTemplate = MailTemplates::where('slug', 'admin_' . $mailTemplate->slug)
                         ->first();
                     MailJob::create([
                         'template_id' => $adminMailTemplate->id,
-                        'must_be_done' => now()
+                        'must_be_done' => now(),
+                        'additional_data' => ['user'=>$event->user]
                     ]);
                 }
             }

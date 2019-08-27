@@ -5,6 +5,9 @@ namespace App\Http;
 use App\Http\Middleware\ActivityMiddleware;
 use App\Http\Middleware\CurrencyMiddleware;
 use App\Http\Middleware\UserCan;
+use App\Http\Middleware\WholesalerIsVerifiedMiddleware;
+use App\Http\Middleware\WholesalerMiddleware;
+use App\Http\Middleware\WholesalerNotVerifiedMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -51,7 +54,8 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\AdminMiddleware::class,
             UserCan::class,
-            ActivityMiddleware::class
+            ActivityMiddleware::class,
+            CurrencyMiddleware::class,
         ],
 
         'api' => [
@@ -79,6 +83,9 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'cros' => \App\Http\Middleware\CorsMiddlewaer::class,
         'hasAccess' => UserCan::class,
+        'wholesaler' => WholesalerMiddleware::class,
+        'is_not_verifyed_wholesaler' => WholesalerNotVerifiedMiddleware::class,
+        'verifyed_wholesaler' => WholesalerIsVerifiedMiddleware::class,
     ];
 
     /**

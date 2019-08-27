@@ -7,17 +7,17 @@
     <div class="stock-page">
         {!! Form::model($model,['url' => route('admin_tickets_new_save'), 'id' => 'ticket_form','files' => true]) !!}
         {!! Form::hidden('id',null) !!}
-       <div class="panel panel-default">
+       <div class="card panel panel-default">
 
-           <div class="panel-heading clearfix">
+           <div class="card-header panel-heading clearfix">
                <h2 class="mt-0 pull-left">New ticket</h2>
 
                <div class="pull-right btn-save">
-                   {!! Form::submit('Save',['class' => 'btn btn-info']) !!}
+                   {!! Form::submit('Save',['class' => 'btn btn-primary']) !!}
                </div>
            </div>
 
-           <div class="panel-body">
+           <div class="card-body panel-body">
 
                <div class="row sortable-panels">
                    <div class="col-md-7 ">
@@ -48,15 +48,24 @@
                    </div>
                    <div class="col-md-5 ">
                        <div class="view-product-wall list-group">
-                           <div class="author-wall wall list-group-item">
+                           <div class="author-wall wall ">
                                <div class="row">
                                    {{Form::label('author', 'Author',['class' => 'col-sm-3'])}}
                                    <div class="col-sm-9">
-                                       Username
+                                       {{ Auth::user()->name }}
                                    </div>
                                </div>
                            </div>
-                           <div class="status-wall wall list-group-item">
+                           <div class="status-wall wall ">
+                               <div class="row">
+                                   {{Form::label('user', 'User',['class' => 'col-sm-3'])}}
+                                   <div class="col-sm-9">
+                                       {!! Form::select('user_id',$users,null,
+                                                   ['class' => 'form-control','id'=> 'user']) !!}
+                                   </div>
+                               </div>
+                           </div>
+                           <div class="status-wall wall ">
                                <div class="row">
                                    {{Form::label('status', 'Status',['class' => 'col-sm-3'])}}
                                    <div class="col-sm-9">
@@ -65,7 +74,7 @@
                                    </div>
                                </div>
                            </div>
-                           <div class="tag-wall wall list-group-item">
+                           <div class="tag-wall wall ">
                                <div class="row">
                                    <label class="col-sm-3 control-label" for="input-category"><span
                                                data-toggle="tooltip" title=""
@@ -93,16 +102,19 @@
                                    </div>
                                </div>
                            </div>
-                           <div class="status-wall wall list-group-item">
+                           <div class="status-wall wall ">
                                <div class="row">
                                    {{Form::label('category_id', 'Category',['class' => 'col-sm-3'])}}
                                    <div class="col-sm-9">
-                                       {!! Form::select('category_id',$categories,null,
+                                       {!! Form::select('category_id',['' => 'Select'] + $categories,null,
                                                    ['class' => 'form-control','id'=> 'category']) !!}
                                    </div>
                                </div>
                            </div>
-                           <div class="status-wall wall list-group-item">
+                           <div id="category-related">
+
+                           </div>
+                           <div class="status-wall wall ">
                                <div class="row">
                                    {{Form::label('priority_id', 'Priority',['class' => 'col-sm-3'])}}
                                    <div class="col-sm-9">
@@ -111,7 +123,7 @@
                                    </div>
                                </div>
                            </div>
-                           <div class="status-wall wall list-group-item">
+                           <div class="status-wall wall ">
                                <div class="row">
                                    {{Form::label('staff', 'Responsible staff',['class' => 'col-sm-3'])}}
                                    <div class="col-sm-9">
@@ -145,6 +157,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 
     <script src="/public/js/tinymce/tinymce.min.js"></script>
+    <script src="/public/js/tiket.js"></script>
+
     <script>
 
         function render_categories_tree() {
@@ -247,12 +261,7 @@
 
 
     </script>
-    <script>
-        $(function () {
-            $(".sortable-panels").sortable();
-            $(".sortable-panels").disableSelection();
-        });
-    </script>
+
     <script src="/public/admin_theme/blog_new.js"></script>
 
 @stop

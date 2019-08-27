@@ -2,6 +2,8 @@
 
 namespace App\Mail;
 
+use App\Models\MailTemplates;
+use App\Services\ShortCodes;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -11,16 +13,17 @@ class ContactUs extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private $data;
-    private $files;
+    private $mailTemplates;
+    private $contactUs;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct(MailTemplates $mailTemplates,\App\Models\ContactUs $contactUs)
     {
-        $this->data = $data;
+        $this->mailTemplates = $mailTemplates;
+        $this->contactUs = $contactUs;
     }
 
     /**
@@ -31,7 +34,10 @@ class ContactUs extends Mailable
     public function build()
     {
         $message = $this->view('email.contact')
-            ->with('data',$this->data)->subject($this->data['uniq_id']);
+            ->with('mailTemplates',$this->mailTemplates)
+            ->with('Shortcodes',new ShortCodes())
+            ->with('contactUs',$this->contactUs)
+            ->subject($this->mailTemplates->subject);
         return $message;
     }
 }

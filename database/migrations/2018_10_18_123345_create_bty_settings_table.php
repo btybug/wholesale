@@ -15,6 +15,7 @@ class CreateBtySettingsTable extends Migration
     {
         Schema::create('bty_settings', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('sub_id')->nullable();
             $table->string('section');
             $table->string('key');
             $table->text('val')->nullable();

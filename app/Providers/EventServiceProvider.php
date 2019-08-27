@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\ClaimReferralBonus;
+use App\Events\ContactUs;
 use App\Events\NewReferral;
 use App\Events\OrderCanceled;
 use App\Events\OrderCompleted;
@@ -15,6 +16,7 @@ use App\Events\Tickets;
 use App\Listeners\ClaimReferralBonusListener;
 use App\Listeners\NewReferralListener;
 use App\Listeners\ReferralBonusListener;
+use App\Listeners\SendContactUs;
 use App\Listeners\SendEmailOrderCanceled;
 use App\Listeners\SendEmailOrderCompleted;
 use App\Listeners\SendEmailOrderCompletelyCollected;
@@ -62,6 +64,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         ClaimReferralBonus::class=>[
             ClaimReferralBonusListener::class
+        ],
+        ContactUs::class=>[
+            SendContactUs::class
         ]
     ];
 

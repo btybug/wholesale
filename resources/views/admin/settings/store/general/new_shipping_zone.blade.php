@@ -6,8 +6,8 @@
     <div id="content" class="geo-zone-page">
         <div class="alert alert-danger error-place" style="display: none"></div>
         {!! Form::model($geo_zone,['url'=> route('admin_settings_geo_zone_save',($geo_zone)?$geo_zone->id:null),'class' => '','files' => true, 'id' => 'geo-zones-form' ]) !!}
-        <div class="panel panel-default">
-                <div class="panel-heading clearfix">
+        <div class="card panel panel-default">
+                <div class="card-header panel-heading clearfix">
                     <h2 class="pull-left m-0">Geo Zones</h2>
                     <div class="pull-right">
                         <button type="submit" class="btn btn-primary geo-zones-submit" data-original-title="Save"><i
@@ -19,10 +19,10 @@
                 </div>
             <div class="row">
                 <div class="col-md-9">
-                    <div class="panel-body">
+                    <div class="card-body panel-body">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item active">
-                                <a class="nav-link" id="tab-geo-zone" data-toggle="tab" href="#geo-zone" role="tab"
+                            <li class="nav-item">
+                                <a class="nav-link active" id="tab-geo-zone" data-toggle="tab" href="#geo-zone" role="tab"
                                    aria-controls="geo-zone" aria-selected="true" aria-expanded="true"> Add Geo Zone</a>
                             </li>
                             <li class="nav-item">
@@ -31,8 +31,8 @@
                             </li>
                         </ul>
                         <div class="tab-content">
-                            <div class="tab-pane fade active in" id="geo-zone" role="tabpanel" aria-labelledby="delivery-cost">
-                                <div class="panel-body panel-body--new-shipping-zone">
+                            <div class="tab-pane fade active in show" id="geo-zone" role="tabpanel" aria-labelledby="delivery-cost">
+                                <div class="card-body panel-body panel-body--new-shipping-zone">
                                     <div class="form-group required">
                                         <div class="row">
                                             <label class="col-sm-3" for="input-name">Geo Zone Name</label>
@@ -68,9 +68,9 @@
                                                         </div>
                                                     @endforeach
                                                 @else
-                                                    <div class="payment-option-container d-flex">
+                                                    <div class="payment-option-container mb-2 d-flex">
                                                         {!! Form::select('payment_options[]',["paypal"=>"paypal", "stripe"=>"stripe", "cash"=>"cash"],null,['class' => 'form-control','id'=>'payment_options']) !!}
-                                                        <button type="button" class="btn btn-primary add-new-payment-option"><i class="fa fa-plus"></i></button>
+                                                        <button type="button" class="btn btn-primary add-new-payment-option ml-5"><i class="fa fa-plus"></i></button>
                                                     </div>
                                                 @endif
                                             </div>
@@ -179,9 +179,11 @@
                                                         <div class="form-group mb-0 required">
                                                             <div class="row">
                                                                 <div class="col-md-7">
-                                                                    <label class="col-sm-2" for="input-name"> Delivery cost</label>
-                                                                    <div class="col-sm-10">
-                                                                        {!! Form::select('delivery_cost_types_id',$delivery_types,$delivery->delivery_cost_types_id,['id' => 'input-name','class' => 'form-control']) !!}
+                                                                    <div class="row">
+                                                                        <label class="col-sm-2" for="input-name"> Delivery cost</label>
+                                                                        <div class="col-sm-10">
+                                                                            {!! Form::select('delivery_cost_types_id',$delivery_types,$delivery->delivery_cost_types_id,['id' => 'input-name','class' => 'form-control']) !!}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>

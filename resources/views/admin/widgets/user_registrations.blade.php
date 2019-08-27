@@ -1,7 +1,6 @@
 @inject('widget','App\Services\Widgets')
-<div class="col-lg-3 col-xs-6">
     <!-- small box -->
-    <div class="small-box bg-yellow">
+    <div class="small-box bg-yellow widget-view" data-title="New Registered Users">
         <div class="inner">
             <h3>{!! $widget->userRegistrations() !!}</h3>
 
@@ -11,5 +10,11 @@
             <i class="ion ion-person-add"></i>
         </div>
         <a href="{!! route('admin_customers') !!}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            console.log(document.querySelector('.main-content [data-id="New Registered Users"]'), 'log------------')
+//            document.querySelectorAll('.main-content [data-id="New Registered Users"]') && alert('New Registered Users')
+            console.log(gapi);
+          })
+        </script>
     </div>
-</div>

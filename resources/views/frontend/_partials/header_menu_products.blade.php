@@ -3,7 +3,6 @@
 use App\Models\Category;
 
 $categories = Category::where('type', 'stocks')->whereNull('parent_id')->get();
-
 @endphp
 
 @foreach($categories as $category)

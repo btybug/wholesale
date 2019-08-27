@@ -8,9 +8,9 @@
                 <div class="d-flex align-items-center position-relative">
                     @include('frontend._partials.individual_left_bar',['type' => 'news'])
 
-                    <button class="btn d-md-none toggler ml-auto pointer bg-transparent" data-toggle="collapse" data-target="#sortBySelects">Sort By:</button>
+                    <div class="btn d-md-none toggler ml-auto pointer bg-transparent pointer" data-toggle="collapse" data-target="#sortBySelects">Sort By:</div>
 
-                    <div  id="sortBySelects" class="sort-by-selects collapse d-md-flex align-items-center ml-sm-auto">
+                    <div  id="sortBySelects" class="sort-by-selects news_sort_by_select collapse d-md-flex align-items-center ml-sm-auto">
                         <div class="product-grid-list d-flex align-self-center">
                             <span id="dispGrid" class="d-inline-block pointer display-icon active">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" idth="15px" height="15px" viewBox="0 0 15 15">
@@ -30,7 +30,7 @@
                             <label for="sortByLimit" class="text-main-clr mb-0 text-uppercase">LIMIT: </label>
                             <div class="select-wall">
                                 {!! Form::select('per-page',[
-                                    '' => "Select",
+                                    '8' => "Select",
                                     '5' =>'5 per page',
                                     '10' =>'10 per page',
                                     '15' =>'15 per page',
@@ -67,12 +67,11 @@
             <div class="container main-max-width">
                 <div class="row justify-content-md-start justify-content-center">
                     @foreach($posts as $post)
-
                         <a href="{!! post_url($post) !!}" class="news-wrap_col">
                             <span class="news-card main-transition position-relative">
                                 <span class="news-card_view d-block position-relative">
                                     <!--news main image-->
-                                        <img class="card-img-top"  src="{!! ($post->image)?$post->image:'http://demo.laravelcommerce.com/resources/assets/images/news_images/1504015363.about_contact_pages.svg' !!}" alt="{!! ($post->image)?getImage($post->image)->seo_alt:'' !!}">
+                                        <img class="card-img-top"  src="{!! ($post->image)?$post->image:'http://demo.laravelcommerce.com/resources/assets/images/news_images/1504015363.about_contact_pages.svg' !!}" alt="{!! ($post->image && getImage($post->image))? getImage($post->image)->seo_alt:'' !!}">
                                     <!--share icon-->
                                     <span class="like-icon news-card_share-icon d-inline-block pointer main-transition position-absolute">
                                     <svg iewBox="0 0 20 21" width="20px" height="21px">
@@ -83,9 +82,9 @@
                                 </span>
                                 <span class="news-card_body">
                                     <span class="news-card_body-text d-block">
-                                        <span class="d-inline-block card-title font-21 font-sec-bold text-main-clr underlined-on-hover">{!! $post->title !!}</span>
-                                        <span class="card-text d-block font-main-light font-15 text-light-clr">
-                                            {!! $post->short_description !!}
+                                        <span class="d-inline-block card-title font-21 font-sec-bold text-main-clr underlined-on-hover" title="{{ $post->title }}">{!! str_limit($post->title,30) !!}</span>
+                                        <span class="card-text d-block font-main-light font-15 text-light-clr" title="{{ $post->short_description }}">
+                                            {!! str_limit($post->short_description,60) !!}
                                         </span>
                                     </span>
                                     <span class="news-card_footer d-flex align-items-center">
@@ -113,19 +112,9 @@
                         </a>
 
 
-                    {{--                        <strong>{!! BBgetDateFormat($post->created_at,'d') !!}</strong>{!! BBgetDateFormat($post->created_at,'M') !!}--}}
-
+                    {{--<strong>{!! BBgetDateFormat($post->created_at,'d') !!}</strong>{!! BBgetDateFormat($post->created_at,'M') !!}--}}
                     @endforeach
-
-
-
-
-
                     <!-- The END -->
-
-
-
-
                 </div>
             </div>
         </div>
@@ -166,16 +155,23 @@
 @section("js")
 
 <script>
-    $("body").on("click", ".change-view-blog", function (e) {
-        e.preventDefault()
-        $(".change-view-blog").removeClass("active")
-        $(this).addClass("active")
-        if($(this).attr("id") === "list_news"){
-            $(".blogs").addClass("blogs-list")
-        }else {
-            $(".blogs").removeClass("blogs-list")
-        }
-    })
+    // $("body").on("click", ".change-view-blog", function (e) {
+    //     e.preventDefault()
+    //     $(".change-view-blog").removeClass("active")
+    //     $(this).addClass("active")
+    //     if($(this).attr("id") === "list_news"){
+    //         localStorage.setItem('testObject',"list_news");
+    //         $(".blogs").addClass("blogs-list")
+    //     }else {
+    //         localStorage.setItem('testObject',"cube");
+    //         $(".blogs").removeClass("blogs-list")
+    //     }
+    // })
+
+    // localStorage.setItem('testObject', JSON.stringify(testObject));
+
+    // Retrieve the object from storage
+    // var retrievedObject = localStorage.getItem('testObject');
 
     $(document).ready(function(){
         $("body").on('change','.select-filter',function () {

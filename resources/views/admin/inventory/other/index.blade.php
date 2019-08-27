@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="panel panel-default">
-        <div class="panel-heading clearfix">
+    <div class="card panel panel-default">
+        <div class="card-header panel-heading clearfix">
             <h2 class="m-0 pull-left">Others</h2>
             @ok('admin_inventory_others_new')<div class="pull-right"><a class="btn btn-primary pull-right" href="{!! route('admin_inventory_others_new') !!}">Add new</a></div>@endok
         </div>
-        <div class="panel-body">
+        <div class="card-body panel-body">
             <table id="stocks-table" class="table table-style table-bordered" cellspacing="0" width="100%">
                 <thead>
                 <tr>
@@ -31,6 +31,10 @@
                 "processing": true,
                 "serverSide": true,
                 "bPaginate": true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'csv', 'excel', 'pdf', 'print'
+                ],
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'item_id', name: 'item_id'},

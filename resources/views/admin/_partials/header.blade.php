@@ -2,9 +2,9 @@
     <!-- Logo -->
     <a href="{{route('admin_dashboard')}}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>B</b>TR</span>
+        <span class="logo-mini"><b>E-</b>CIGAR</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>E-</b>CIGAR</span>
+        <span class="logo-lg"><img src="{!! get_site_logo() !!}" alt="{{ get_site_name() }}" class="logo-img"></span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -12,6 +12,25 @@
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
             <span class="sr-only">Toggle navigation</span>
         </a>
+        <div class="main-header_nav-middle">
+            <ul class="d-flex flex-wrap list-unstyled main-header_nav-middle-list">
+                <li class="find-link"><a href="{{ route('admin_find') }}" class="btn btn-primary text-white">
+                        <span class="mr-1">Find</span>
+                        <i class="fa fa-search"></i></a>
+                </li>
+                <li class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus mr-10"></i>Create new</button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="{!! route('admin_staff_new') !!}" class="dropdown-item">Staff</a>
+                        <a href="#" class="dropdown-item">Customer</a>
+                        <a href="{!! route('admin_stock_new') !!}" class="dropdown-item">Product</a>
+                        <a href="http://e-cigar.com/admin/tools/attributes/new" class="dropdown-item">Item</a>
+                        <a href="{!! route('admin_blog_create') !!}" class="dropdown-item">Post</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
 
         <div class="navbar-custom-menu">
             {{--<div>--}}
@@ -249,7 +268,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">testProfile</a>
+                                <a href="{{ route('admin_staff') }}" class="btn btn-default btn-flat">Staff</a>
                             </div>
                             <div class="pull-right">
                                 {!! Form::open(['url'=>route('logout')]) !!}

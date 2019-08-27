@@ -3,9 +3,9 @@
 
 @stop
 @section('content')
-    <div class="panel panel-default">
-        <div class="panel-heading"><h2 class="m-0">Cash Payment</h2></div>
-        <div class="panel-body">
+    <div class="card panel panel-default">
+        <div class="card-header panel-heading"><h2 class="m-0">Cash Payment</h2></div>
+        <div class="card-body panel-body">
             <div class="row">
                 <div class="col-md-9">
                     <div class="panel-body">
@@ -25,7 +25,7 @@
                         <div class="form-group row">
                             <label for="text" class="control-label col-sm-3">Image</label>
                             <div class="col-sm-9">
-                                {{--{!! media_button('image',$model) !!}--}}
+                                {!! media_button('image',$model) !!}
                             </div>
                         </div>
 

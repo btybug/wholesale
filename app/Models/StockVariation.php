@@ -14,9 +14,19 @@ class StockVariation extends Model
 {
     protected $table = 'stock_variations';
 
-    protected $fillable = ['stock_id','variation_id','image','qty','name','price'];
+    protected $guarded = ['id'];
 
     protected $dates = ['created_at','updated_at'];
+
+    public function scopeRequired($query)
+    {
+        return $query->where('is_required', 1);
+    }
+
+    public function scopeExtra($query)
+    {
+        return $query->where('is_required', 0);
+    }
 
     public function stock()
     {
@@ -28,8 +38,23 @@ class StockVariation extends Model
         return $this->hasMany(StockVariationOption::class, 'variation_id');
     }
 
+    public function discounts()
+    {
+        return $this->hasMany(StockVariationDiscount::class, 'variation_id');
+    }
+
     public function sale()
     {
         return $this->hasOne(StockSales::class, 'variation_id');
+    }
+
+    public function filter()
+    {
+        return $this->hasOne(Category::class, 'id','filter_category_id');
+    }
+
+    public function item()
+    {
+        return $this->belongsTo(Items::class, 'item_id');
     }
 }

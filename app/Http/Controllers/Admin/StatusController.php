@@ -44,7 +44,8 @@ class StatusController extends Controller
     public function postStatusesManage(Request $request)
     {
         $data=$request->except(['_token','translatable'],[]);
-        Statuses::updateOrCreate($request->id,$data);
+        $status = Statuses::updateOrCreate($request->id,$data,$request->get('translatable',[]));
+
         return redirect()->back();
     }
 
@@ -57,7 +58,7 @@ class StatusController extends Controller
     {
         $model=Statuses::findOrFail($request->get('id'));
         $path=$this->view.'._patrials.status_form';
-        $html=\View::make($path)->with(['model'=>$model])->render();
+        $html=\View::make($path)->with(['model'=>$model,'type' => $model->type])->render();
         return \Response::json(['error'=>false,'html'=>$html]);
     }
 

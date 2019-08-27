@@ -3,12 +3,10 @@
 
 @stop
 @section('content')
-    <div class="row">
+    <div>
     {!! Form::open() !!}
-
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card panel panel-default">
+                <div class="card-header panel-heading">
                     <h2 class="m-0">Create Role</h2>
                 </div>
 
@@ -18,27 +16,27 @@
                         <button id="singlebutton" class="btn btn-info save-role">Save</button>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="card-body panel-body">
 
                     <div class="col-md-4">
-                        <div class="row">
+                        <div class="row flex-column">
                             <!-- Password input-->
                             <div class="form-group row">
-                                <label class="col-md-2" for="passwordinput">Title</label>
-                                <div class="col-md-10">
+                                <label class="col-md-3" for="passwordinput">Title</label>
+                                <div class="col-md-9">
                                     {!! Form::text('title',null,['class'=>'form-control input-md']) !!}
                                 </div>
                             </div>
                             <!-- Password input-->
                             <div class="form-group row">
-                                <label class="col-md-2" for="passwordinput">Type</label>
-                                <div class="col-md-10">
+                                <label class="col-md-3" for="passwordinput">Type</label>
+                                <div class="col-md-9">
                                     {!! Form::select('type',['backend'=>'Admin Panel','frontend'=>'Front Site'],null,['class'=>'form-control input-md']) !!}
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-2" for="passwordinput">Description</label>
-                                <div class="col-md-10">
+                                <label class="col-md-3" for="passwordinput">Description</label>
+                                <div class="col-md-9">
                                     {!! Form::textarea('description',null,['class'=>'form-control input-md']) !!}
                                 </div>
                             </div>
@@ -48,17 +46,17 @@
                 </div>
 
             </div>
-            <div class="panel panel-default">
+            <div class="card panel panel-default">
 
-               <div class="panel-heading">
+               <div class="card-header panel-heading">
                    <ul class="nav nav-tabs">
-                       <li class="active"><a data-toggle="tab" href="#tabPages">Pages</a></li>
-                       <li><a data-toggle="tab" href="#tabWidgets">Widgets</a></li>
+                       <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tabPages">Pages</a></li>
+                       <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tabWidgets">Widgets</a></li>
                    </ul>
                </div>
-                <div class="panel-body">
+                <div class="card-body panel-body">
                     <div class="tab-content tabs_content">
-                            <div id="tabPages" class="tab-pane tab_info fade in active">
+                            <div id="tabPages" class="tab-pane tab_info fade in active show">
                                 <div class="panel-body">
                                     @include('admin.roles._partials.tree')
                                 </div>
@@ -69,7 +67,6 @@
                     </div>
                 </div>
             </div>
-        </div>
     {!! Form::close() !!}
     </div>
 @stop

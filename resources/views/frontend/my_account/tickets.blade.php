@@ -26,7 +26,7 @@
         </div>
         <div class="d-flex">
             <div class="profile-sidebar profile-sidebar--inner-pages d-flex flex-column align-items-center">
-                @include('frontend.my_account._partials.left_bar')
+                @include('frontend.my_account._partials.left_bar',['active'=>'my_account_tickets'])
                 <div class="mt-auto">
                     {!! Form::open(['url'=>route('logout')]) !!}
                     <div class="text-center">
@@ -45,42 +45,46 @@
                    <div class="mb-4">
                        <a class="btn ntfs-btn rounded-0" href="{!! route('my_account_tickets_new') !!}">Open ticket</a>
                    </div>
-                   <table class="table table-ntfs table-bordered table-striped table-responsive-lg order-table">
-                       <thead>
-                       <tr>
-                           <th class="text-capitalize">ticket ID</th>
-                           <th class="text-capitalize">submited</th>
-                           <th class="text-capitalize">updated on</th>
-                           <th class="text-capitalize">status</th>
-                           <th class="text-capitalize">action</th>
-                       </tr>
-                       </thead>
-                       <tbody>
-                       @if(count($tickets))
-                           @foreach($tickets as $ticket)
-                               <tr>
-                                   <td>#{{ $ticket->id }}</td>
-                                   <td>{!! BBgetDateFormat($ticket->created_at) . ' ' . BBgetTimeFormat($ticket->created_at); !!}</td>
-                                   <td>{!! BBgetDateFormat($ticket->updated_at) . ' ' . BBgetTimeFormat($ticket->updated_at); !!}</td>
-                                   <td>
+                   <div class="table-responsive">
+                       <table class="table table-ntfs table-bordered table-striped order-table">
+                           <thead>
+                           <tr>
+                               <th class="text-capitalize">ticket ID</th>
+                               <th class="text-capitalize">subject</th>
+                               <th class="text-capitalize">submited</th>
+                               <th class="text-capitalize">updated on</th>
+                               <th class="text-capitalize">status</th>
+                               <th class="text-capitalize">action</th>
+                           </tr>
+                           </thead>
+                           <tbody>
+                           @if(count($tickets))
+                               @foreach($tickets as $ticket)
+                                   <tr>
+                                       <td>#{{ $ticket->id }}</td>
+                                       <td>#{{ $ticket->subject }}</td>
+                                       <td>{!! BBgetDateFormat($ticket->created_at) . ' ' . BBgetTimeFormat($ticket->created_at); !!}</td>
+                                       <td>{!! BBgetDateFormat($ticket->updated_at) . ' ' . BBgetTimeFormat($ticket->updated_at); !!}</td>
+                                       <td>
                                 <span style="background: {{ ($ticket->status->color)??'cornflowerblue' }}"
                                       class="btn order-table_btn order-table_btn--status rounded-0">{!! $ticket->status->name !!} </span>
-                                   </td>
-                                   <td>
-                                       <div class="mb-2">
-                                           <a href="{!! route('my_account_tickets_view',$ticket->id) !!}"
-                                              class="btn ntfs-btn order-table_btn rounded-0">View</a>
-                                       </div>
-                                   </td>
+                                       </td>
+                                       <td>
+                                           <div class="mb-2">
+                                               <a href="{!! route('my_account_tickets_view',$ticket->id) !!}"
+                                                  class="btn ntfs-btn order-table_btn rounded-0">View</a>
+                                           </div>
+                                       </td>
+                                   </tr>
+                               @endforeach
+                           @else
+                               <tr>
+                                   <td colspan="5">No Tickets</td>
                                </tr>
-                           @endforeach
-                       @else
-                           <tr>
-                               <td colspan="5">No Tickets</td>
-                           </tr>
-                       @endif
-                       </tbody>
-                   </table>
+                           @endif
+                           </tbody>
+                       </table>
+                   </div>
                    <div class="col-md-12 my-4">
                        {!! $tickets->links('vendor.pagination.default') !!}
                    </div>

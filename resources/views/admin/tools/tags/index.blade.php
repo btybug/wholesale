@@ -5,24 +5,25 @@
 @section('content')
     <div class="inventory_tags">
            <form id="form-tags" class="form-horizontal">
-               <div class="panel panel-default">
+               <div class="card panel panel-default">
                    @ok('admin_stock_tags_save')
-                   <div class="panel-heading text-right">
+                   <div class="card-header panel-heading text-right">
                        <button type="submit" class="btn btn-submit btn-primary">Add new Tag</button>
                    </div>
                    @endok
-                   <div class="panel-body">
-                       <div class="col-md-7">
-                           @ok('admin_stock_tags_save')
-                           <div class="form-group">
-                               <input type="text" id="add-new-tags" class="form-control " placeholder="Add new tags" required>
-                           </div>
-                           @endok
-                           <div class="tags">
+                   <div class="card-body panel-body">
+                       <div class="row">
+                           <div class="col-md-7">
+                               @ok('admin_stock_tags_save')
+                               <div class="form-group">
+                                   <input type="text" id="add-new-tags" class="form-control " placeholder="Add new tags" required>
+                               </div>
+                               @endok
+                               <div class="tags">
 
+                               </div>
                            </div>
                        </div>
-
                    </div>
 
                </div>

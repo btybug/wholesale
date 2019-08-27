@@ -14,12 +14,10 @@ class BlogController extends Controller
 
     public function index(Request $request)
     {
-        $per_page = $request->get('per-page',15);
+        $per_page = $request->get('per-page',8);
         $sort = $request->get('sort',"desc");
-
-
         $posts = Posts::active()->orderby('created_at',$sort)->paginate($per_page);
-//        dd($posts->toArray());
+
         return $this->view('index',compact('posts'))->with('filterModel',$request->all());
     }
 

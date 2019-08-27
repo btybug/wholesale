@@ -29,6 +29,11 @@ class Stickers extends Translatable
         return $this->belongsToMany(Category::class, 'category_stickers', 'sticker_id', 'categories_id');
     }
 
+    public function products()
+    {
+        return $this->belongsToMany(Stock::class, 'stock_stickers', 'sticker_id', 'stock_id');
+    }
+
     public static function getById($id,$col = 'name')
     {
         $attribute = self::find($id);

@@ -17,6 +17,6 @@ class Name implements Filter
      */
     public static function apply(Builder $builder, $value)
     {
-        return $builder->where('name','LIKE' ,"%".$value."%");
+        return $builder->where('stock_translations.name','LIKE' ,"%".$value."%");
     }
 }

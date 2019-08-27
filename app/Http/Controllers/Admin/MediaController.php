@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 class MediaController extends Controller
 {
     protected $view = 'admin.media';
+
     public function index()
     {
         return $this->view('index');

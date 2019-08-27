@@ -3,9 +3,9 @@
 
 @stop
 @section('content')
-    <div class="panel panel-default">
-        <div class="panel-heading"><h2 class="m-0">Stripe</h2></div>
-        <div class="panel-body">
+    <div class="card panel panel-default">
+        <div class="card-header panel-heading"><h2 class="m-0">Stripe</h2></div>
+        <div class="card-body panel-body">
             <div class="row">
                 <div class="col-md-9">
                     {!! Form::model($model,['class'=>''])!!}

@@ -5,12 +5,12 @@
 @section('content')
     {!! Form::model($model,['class'=>'']) !!}
     <div class="inventory_attributes container-fluid">
-        <div class="row">
-            <div class="panel panel-default mb-0">
-                <div class="panel-heading clearfix">
-                    <h2 class="m-0 pull-left">Add / Edit Attribute</h2>
+        <div class="row flex-column">
+            <div class="card panel panel-default mb-3">
+                <div class="card-header panel-heading clearfix">
+                    <h2 class="m-0 pull-left">{{ ($model) ? $model->name : "Add Attribute" }}</h2>
                     <div class="button-save pull-right">
-                        {!! Form::submit('Save',['class' => 'btn btn-info']) !!}
+                        {!! Form::submit('Save',['class' => 'btn btn-primary']) !!}
                         <a class="btn btn-default"
                            href="{!! route('admin_store_attributes') !!}">Back</a>
                     </div>
@@ -25,14 +25,14 @@
                     </div>
                 @endif
 
-                <div class="panel-body basic-details-tab">
+                <div class="card-body panel-body basic-details-tab">
                        <div class="row">
                            <div class="col-md-8">
                                <div class="basic-wall">
                                    @if(count(get_languages()))
                                        <ul class="nav nav-tabs">
                                            @foreach(get_languages() as $language)
-                                               <li class="@if($loop->first) active @endif"><a data-toggle="tab"
+                                               <li class="nav-item "><a class="nav-link @if($loop->first) active @endif" data-toggle="tab"
                                                                                               href="#{{ strtolower($language->code) }}">
                                                        <span class="flag-icon flag-icon-{{ strtolower($language->code) }}"></span> {{ $language->code }}
                                                    </a></li>
@@ -43,13 +43,21 @@
                                        @if(count(get_languages()))
                                            @foreach(get_languages() as $language)
                                                <div id="{{ strtolower($language->code) }}"
-                                                    class="tab-pane fade  @if($loop->first) in active @endif">
+                                                    class="tab-pane fade  @if($loop->first) in active show @endif">
                                                    <div class="form-group row">
                                                        <label class="col-md-2 control-label"><span data-toggle="tooltip"
                                                                                                    title=""
                                                                                                    data-original-title="Attribute Name Title">Attribute Name</span></label>
                                                        <div class="col-md-10">
                                                            {!! Form::text('translatable['.strtolower($language->code).'][name]',get_translated($model,strtolower($language->code),'name'),['class'=>'form-control']) !!}
+                                                       </div>
+                                                   </div>
+                                                   <div class="form-group row">
+                                                       <label class="col-md-2 control-label"><span data-toggle="tooltip"
+                                                                                                   title=""
+                                                                                                   data-original-title="Attribute description">Attribute Description</span></label>
+                                                       <div class="col-md-10">
+                                                           {!! Form::textarea('translatable['.strtolower($language->code).'][description]',get_translated($model,strtolower($language->code),'description'),['class'=>'form-control']) !!}
                                                        </div>
                                                    </div>
                                                </div>
@@ -67,14 +75,6 @@
                                            <i id="font-show-area"></i>
                                        </div>
                                    </div>
-                                   <div class="form-group row">
-                                       <label class="col-md-2 control-label" for="input-total"><span data-toggle="tooltip"
-                                                                                                     title=""
-                                                                                                     data-original-title="Available for blog Desc">Available for blog</span></label>
-                                       <div class="col-md-10">
-                                           {!! Form::select("name",['Blog','Tickets','Products','Stock'],null,['class'=>'form-control']) !!}
-                                       </div>
-                                   </div>
 
                                    <div class="form-group row">
                                        <label class="col-md-2 control-label" for="input-total"><span data-toggle="tooltip"
@@ -90,7 +90,7 @@
                            </div>
 
                            <div class="col-md-4">
-                               <div class="basic-wall">
+                               <div class="basic-wall mb-3">
                                    <div class="right_col">
                                        <div class="form-group row">
                                            <label class="col-md-2 control-label" for="input-total">
@@ -100,8 +100,8 @@
                                                NO {!! Form::radio('filter',0,null) !!}
                                            </div>
                                        </div>
-                                       <div class="panel panel-default panel-display-as">
-                                           <div class="panel-heading">
+                                       <div class="card panel panel-default panel-display-as">
+                                           <div class="card-header panel-heading">
                                                <div class="row">
                                                    <div class="col-sm-7 pl-0">
                                                        Display as
@@ -120,7 +120,7 @@
                                                </div>
                                            </div>
 
-                                           <div class="panel-body">
+                                           <div class="card-body panel-body">
                                                <div class="right-main-content">
                                                    <div class="display-as-wall d-none" data-displayas="radio">
                                                        @if($model && count($model->children))
@@ -207,6 +207,14 @@
                                    </div>
 
                                </div>
+                               <div class="basic-wall">
+                                   <div class="form-group">
+                                       <label class="col-sm-2 control-label pl-sm-0">Categories</label>
+                                       {!! Form::hidden('categories',(isset($checkedCategories))
+                                       ? json_encode($checkedCategories) : null,['id' => 'categories_tree']) !!}
+                                       <div id="treeview_json"></div>
+                                   </div>
+                               </div>
                            </div>
                        </div>
 
@@ -214,15 +222,15 @@
 
 
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading clearfix">
+            <div class="card panel panel-default">
+                <div class="card-header panel-heading clearfix">
                     {{--<h2>Options {{ $model->name }} </h2>--}}
                     <h2 class="m-0 pull-left">Attributes</h2>
                     <div class="pull-right">
                         <button type="button" class="btn btn-primary pull-right select-stickers"><i class="fa fa-plus fa-sm mr-10"></i>Add attribute</button>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="card-body panel-body">
                     <div class="d-flex get-all-stickers-tab">
                         @if(isset($model) && count($model->stickers))
                             @foreach($model->stickers as $sticker)
@@ -243,22 +251,26 @@
 
 
     <div class="modal fade" id="stickerModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h4 class="modal-title">Select Stickers</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Select Stickers</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="all-list">
-                        <ul>
-
-                        </ul>
+                    <div class="form-group row">
+                        <label for="search-attr" class="col-sm-2 col-form-label">Search</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control search-attr"  placeholder="Search">
+                        </div>
                     </div>
+                    <ul class="all-list modal-stickers--list">
+
+                    </ul>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Done</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -266,6 +278,9 @@
 @stop
 @section('js')
     <script src="https://farbelous.io/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
     <script>
         $('.filter--display input:radio[name="filter"]').change(function() {
             var filter = $(this).filter(':checked').val();
@@ -357,10 +372,65 @@
         });
 
     </script>
+    <script>
+        $(document).ready(function () {
+            function render_categories_tree() {
+                $("#treeview_json").jstree({
+                    "checkbox": {
+                        "three_state": false,
+                        "cascade": 'undetermined',
+                        "keep_selected_style": false
+                    },
+                    plugins: ["wholerow", "checkbox", "types"],
+                    core: {
+                        themes: {
+                            responsive: !1
+                        },
+                        data: {!! json_encode($data) !!}
+                    },
+                    types: {
+                        "default": {
+                            icon: "fa fa-folder text-primary fa-lg"
+                        },
+                        file: {
+                            icon: "fa fa-file text-success fa-lg"
+                        }
+                    }
+                })
+            }
+            $('#treeview_json').on("changed.jstree", function (e, data) {
+                if (data.node) {
+                    var selectedNode = $('#treeview_json').jstree(true).get_selected(true)
+                    var dataArr = [];
+                    for (var i = 0, j = selectedNode.length; i < j; i++) {
+                        dataArr.push(selectedNode[i].id);
+                        dataArr.push(selectedNode[i].parent);
+                    }
+
+                    var uniqueNames = [];
+
+                    if (dataArr.length > 0) {
+                        $.each(dataArr, function (i, el) {
+                            if ($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+                        });
+                    }
+
+                    var index = uniqueNames.indexOf("#");
+                    if (index > -1) {
+                        uniqueNames.splice(index, 1);
+                    }
+
+                    $("#categories_tree").val(JSON.stringify(uniqueNames));
+                }
+            });
+            render_categories_tree()
+        })
+    </script>
 @stop
 @section("css")
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css">
     <link rel="stylesheet" href="https://farbelous.io/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css"/>
     <link rel="stylesheet" href="{{asset('public/css/custom.css?v='.rand(111,999))}}">
     <style>
         #font-show-area {

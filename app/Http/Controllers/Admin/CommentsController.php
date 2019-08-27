@@ -28,7 +28,7 @@ class CommentsController extends Controller
     public function unapprove($id)
     {
         $comment = $this->comment->findOrFail($id);
-        $comment->update(['status'=>0]);
+        $comment->update(['status' => 0]);
 
         return redirect()->back()->with("message", "Comment Successfully unapproved");
     }
@@ -36,7 +36,7 @@ class CommentsController extends Controller
     public function approve($id)
     {
         $comment = $this->comment->findOrFail($id);
-        $comment->update(['status'=>1]);
+        $comment->update(['status' => 1]);
 
         return redirect()->back()->with("message", "Comment Successfully approved");
     }
@@ -45,10 +45,10 @@ class CommentsController extends Controller
     {
         $comment = $this->comment->findOrFail($id);
 
-        return $this->view('edit',compact(['comment']));
+        return $this->view('edit', compact(['comment']));
     }
 
-    public function postEdit(Request $request,$id)
+    public function postEdit(Request $request, $id)
     {
         $comment = $this->comment->findOrFail($id);
         $comment->update($request->except('_token'));
@@ -60,13 +60,13 @@ class CommentsController extends Controller
     {
         $comment = $this->comment->findOrFail($id);
 
-        return $this->view('reply',compact(['comment']));
+        return $this->view('reply', compact(['comment']));
     }
 
-    public function postReply(Request $request,$id)
+    public function postReply(Request $request, $id)
     {
         $comment = $this->comment->findOrFail($id);
-        $this->comment->create(['author_id' => \Auth::id(),'comment' => $request->comment,'parent_id' => $id,'post_id' => $comment->post_id,'status' => 1]);
+        $this->comment->create(['author_id' => \Auth::id(), 'comment' => $request->comment, 'parent_id' => $id, 'post_id' => $comment->post_id, 'status' => 1]);
 
         return redirect()->route('show_comments')->with("message", "Comment Successfully replied");
     }

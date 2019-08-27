@@ -5,7 +5,15 @@
  * Date: 08.02.2018
  * Time: 10:39
  */
+
+
+use App\Models\Media\Folders;
+
 $_MEDIA_BUTTON = false;
+$_MEDIA_SLUG = null;
+$_MEDIA_FOLDER = null;
+$_FILTER_BUTTON = false;
+$_FILTER_HTML = '';
 global $_MODEL_BOOTED;
 function getAlertIconByClass($class = 'success')
 {
@@ -41,24 +49,83 @@ function is_enabled_media_modal()
 
 }
 
-function enableMedia()
+function is_enabled_filter_modal()
+{
+    global $_FILTER_BUTTON;
+    return $_FILTER_BUTTON;
+
+}
+
+function enableMedia($slug=null)
 {
     global $_MEDIA_BUTTON;
+    if($slug){
+        global $_MEDIA_SLUG;
+        $_MEDIA_SLUG=$slug;
+    }
     $_MEDIA_BUTTON = true;
 }
 
-function media_button(string $name, $model = null, bool $multiple = false, $slug = 'drive',$html = null)
+function enableFilter()
 {
+    global $_FILTER_BUTTON;
+    global $_FILTER_HTML;
+    $_FILTER_HTML = View::make('filters.filter_modal')->render();
+    $_FILTER_BUTTON = true;
+}
+
+function media_button(string $name, $model = null, bool $multiple = false, $slug = 'drive', $html = null)
+{
+    $folder = App\Models\Media\Folders::where('name', $slug)->where('parent_id', 0)->first(['id', 'name']);
+
     enableMedia();
+    $id = $folder->id;
+    global $_MEDIA_FOLDER;
+    $_MEDIA_FOLDER = $folder;
     $uniqId = uniqid('media_');
-    return view('media.button', compact(['multiple', 'slug', 'name', 'model', 'uniqId','html']));
+    return view('media.button', compact(['multiple', 'slug', 'name', 'model', 'uniqId', 'html', 'id']));
+}
+
+function get_media_folder()
+{
+    global $_MEDIA_FOLDER;
+    global $_MEDIA_SLUG;
+    if(!$_MEDIA_FOLDER && $_MEDIA_SLUG){
+        $_MEDIA_FOLDER = App\Models\Media\Folders::where('name', $_MEDIA_SLUG)->where('parent_id', 0)->first(['id', 'name']);
+    }
+    return $_MEDIA_FOLDER;
+}
+
+function filter_button($category, $group = null, $text = 'Filter', $name = null, $is_multiple = true, $type = 'filter_popup')
+{
+    global $_FILTER_HTML;
+    $uniqId = uniqid('filter_');
+    $category = \App\Models\Category::where('type', 'filter')->where('slug', $category)->first();
+
+    switch ($type) {
+        case'filter_popup':
+            enableFilter();
+            $_FILTER_HTML = View::make('filters.filter_modal', compact('category'))->render();
+            $view = 'button';
+            break;
+        case'select_filter':
+            $view = 'filter_select';
+            break;
+    }
+    return ($category && isset($view)) ? view('filters.' . $view, compact('category', 'text', 'group', 'name', 'is_multiple', 'uniqId', 'type')) : 'Shnorhavor Amanor Yev Surb &nund';
+}
+
+function filter_modal_html()
+{
+    global $_FILTER_HTML;
+    return $_FILTER_HTML;
 }
 
 function get_site_logo()
 {
     $settings = new \App\Models\Settings();
     $logo = $settings->getData('admin_general_settings', 'siteLogo');
-    return ($logo) ? $logo->val : '';
+    return ($logo && $logo->val) ? $logo->val : '/public/images/no_image.png';
 }
 
 function get_site_name()
@@ -97,9 +164,13 @@ function BBgetDateFormat($date, $format = null)
  * @param $time
  * @return bool|string
  */
-function BBgetTimeFormat($time)
+function BBgetTimeFormat($time,$format = null)
 {
     if (!$time) null;
+
+    if($format){
+        return date($format, strtotime($time));
+    }
 
     $model = new \App\Models\Settings();
     $settings = $model->getData('admin_general_settings', 'date_format');
@@ -315,7 +386,6 @@ function receiver_name($user)
 {
     return $user->name;
 }
-
 function receiver_last_name($user)
 {
     return $user->last_name;
@@ -400,6 +470,13 @@ function cartCount()
     $cartService = new \App\Services\CartService();
 
     return $cartService->getCount();
+}
+
+
+function cartCountItems()
+{
+    $cart = \Cart::session('wholesaler')->getContent();
+    return count($cart);
 }
 
 function getRegions($country, $all = false)
@@ -487,7 +564,7 @@ function commentRender($comments, $i = 0, $parent = false)
         echo '<div class="d-flex wrap-wall w-100">';
         echo '<div class="left-photo hidden-xsd-none d-sm-block">';
         echo '<figure class="thumbnail">';
-        echo '<img class="img-fluid" src="'.user_avatar($comment->author->id).'">';
+        echo '<img class="img-fluid" src="' . user_avatar($comment->author->id) . '">';
         echo '</figure>';
         echo '</div>';
 
@@ -512,7 +589,10 @@ function commentRender($comments, $i = 0, $parent = false)
         echo '<p>' . $comment->comment . '</p>';
         echo '</div>';
         echo '</div>';
-        echo '<div class="text-right reply-wrapper"><a href="#" data-id="' . $comment->id . '" class="btn btn-secondary btn-sm reply">Reply</a></div>';
+        if (Auth::check()) {
+            echo '<div class="text-right reply-wrapper"><a href="#" data-id="' . $comment->id . '" class="btn btn-secondary btn-sm reply">Reply</a></div>';
+        }
+
         echo '</div>';
         echo '</div>';
         echo '</div>';
@@ -592,7 +672,7 @@ function replyRender($replies, $i = 0, $parent = false)
 
         if ($reply->getTable() == 'history') {
             echo '<div class="admin_updated">
-<div class="image label label-default"><img src="'.user_avatar($reply->user->id).'" alt="img"></div>
+<div class="image label label-default"><img src="' . user_avatar($reply->user->id) . '" alt="img"></div>
 <p class="font-18 text-gray-clr mb-0"><span class="label label-default">' . $reply->user->name . ' has ' . $reply->body . '</span></p>
 </div>';
         } else {
@@ -605,7 +685,7 @@ function replyRender($replies, $i = 0, $parent = false)
 
             echo '<div class="col-lg-2 col-md-2 hidden-xsd-none d-sm-block">';
             echo '<figure class="thumbnail">';
-            echo '<img class="img-fluid" src="'.user_avatar($reply->author->id).'">';
+            echo '<img class="img-fluid" src="' . user_avatar($reply->author->id) . '">';
             if ($reply->author) {
                 if ($reply->author->isAdministrator()) {
                     echo '<figcaption class="text-center">Admin</figcaption>';
@@ -708,6 +788,19 @@ function time_ago($datetime, $full = false)
     return $string ? implode(', ', $string) . ' ago' : 'just now';
 }
 
+function stockSeo($stock)
+{
+    $seoes = $stock->seo;
+    $HTML = '';
+    if ($stock->image) {
+        $HTML .= Html::meta('og:image', url($stock->image))->toHtml() . "\n\r";
+    }
+    foreach ($seoes as $seo) {
+        $HTML .= Html::meta($seo->name, $seo->content)->toHtml() . "\n\r";
+    }
+    return $HTML;
+}
+
 function meta($object, $type = 'seo_posts')
 {
 
@@ -758,7 +851,7 @@ function mergeCollections($collection1, $collection2)
         $collection->push($col1);
     foreach ($collection2 as $col2)
         $collection->push($col2);
-    $data = $collection->sortByDesc('created_at');
+    $data = $collection->sortBy('created_at');
     return $data->merge([]);
 }
 
@@ -996,11 +1089,14 @@ function site_default_currency()
     return (new \App\Models\SiteCurrencies())->where('is_default', true)->first();
 }
 
-function convert_price($price, $currency, $number_format = true, $withoutSymbol = false)
+function convert_price($price, $currency, $number_format = true, $withoutSymbol = false, $round_thousand = false)
 {
     $default = site_default_currency();
     if ($default) {
         if ($default->code == $currency) {
+            if ($round_thousand) {
+                $price = round($price, -3);
+            }
             if ($number_format) {
                 $price = number_format($price);
             }
@@ -1009,6 +1105,9 @@ function convert_price($price, $currency, $number_format = true, $withoutSymbol 
             $changed = (new \App\Models\SiteCurrencies())->where('code', $currency)->first();
             if ($changed) {
                 $price = $price * $changed->rate;
+                if ($round_thousand) {
+                    $price = round($price, -3);
+                }
                 if ($number_format) {
                     $price = number_format($price);
                 }
@@ -1026,6 +1125,15 @@ function get_currency()
 
     return (\Cookie::get('currency')) ? \Cookie::get('currency')
         : (($default) ? $default->code : null);
+}
+
+function get_symbol()
+{
+    $default = site_default_currency();
+    $code = (\Cookie::get('currency')) ? \Cookie::get('currency')
+        : (($default) ? $default->code : null);
+
+    return (new \App\Models\SiteCurrencies())->where('code', $code)->value('symbol');
 }
 
 [['code' => 'referral_name', 'description' => 'Invited user name'],
@@ -1102,7 +1210,7 @@ function media_image_tmb($path)
 {
     $e = explode('/', $path);
     $image = 'public/media/tmp/' . end($e);
-    return (File::exists(base_path($image))) ? url($image) : no_image();
+    return (File::exists(base_path($image)) && !File::isDirectory(base_path($image))) ? url($image) : no_image();
 
 }
 
@@ -1113,13 +1221,13 @@ function user_avatar($id = null)
         $user = $userRepo->find($id);
         if ($user) {
             if ($user->avatar) {
-                return "/public/images/users/" . $user->avatar;
+                return "/storage/app/images/$user->email/" . $user->avatar;
             }
         }
     } else {
         if (Auth::check()) {
             if (Auth::user()->avatar) {
-                return "/public/images/users/" . Auth::user()->avatar;
+                return "/storage/app/images/".Auth::user()->email . "/" . Auth::user()->avatar;
             }
         }
     }
@@ -1145,11 +1253,29 @@ function render_widgets($placeholder)
     foreach ($widgets as $widget) {
         if (has_permission(Auth::user()->role, $widget->widget) && isset($permissions[$widget->widget])) {
             $content = view($permissions[$widget->widget]['view'])->render();
-            $html .= ' <div id="' . $widget->widget . '" style="position: relative">
-                <a class="delete-widget btn btn-warning" style="position: absolute;right:0;top:0;z-index: 99;">DELETE</a>
-                <div class="ui-sortable-handle">
+            $html .= '
+      
+            <div id="' . $widget->widget . '" style="position: relative" class="box--wall">
+                      <div class="card panel panel-default dashboard--panel">
+  <div class="card-header panel-heading box-header">
+  <h4 class="panel-title">' . $widget->widget . '</h4>
+  <div class="panel-heading-btn">
+  <a class="max--widget btn btn-max">
+  <i class="fa fa-expand" aria-hidden="true"></i>
+  </a>
+  <a class="min--widget btn btn-minus">
+  <i class="fa fa-minus" aria-hidden="true"></i>
+  </a>
+  <a class="delete-widget btn btn-del">
+  <i class="fa fa-times" aria-hidden="true"></i>
+  </a>
+  </div>
+    </div>
+  <div class="card-body panel-body"><div class="ui-sortable-handle">
                   ' . $content . '
-                </div>
+                </div></div>
+</div>
+                
             </div>';
         }
 
@@ -1157,3 +1283,110 @@ function render_widgets($placeholder)
 
     return $html;
 }
+
+function getItemStockVariations($group, array $items = [])
+{
+    return \App\Models\StockVariation::where('variation_id', $group)->whereIn('item_id', $items)->get();
+}
+
+
+function out_of_stock($item)
+{
+    if ($item) {
+        $qty = $item->item->qty;
+        $settings = new \App\Models\Settings();
+        $model = $settings->getEditableData('store_out_of_stock');
+
+        if ($qty <= 0 && $model->out_of_stock_status == 0) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+function out_of_stock_msg($item)
+{
+    if ($item) {
+        $qty = $item->item->qty;
+        $settings = new \App\Models\Settings();
+        $model = $settings->getEditableData('store_out_of_stock');
+
+        if ($qty <= 0) {
+            if ($model->out_of_stock_status == 0) {
+                return "(Out of stock)";
+            } else {
+                return "(Back order)";
+            }
+        }
+    }
+
+    return null;
+}
+
+function get_breadcrumb_previous_url($breadcrumbs)
+{
+    $length = count($breadcrumbs);
+    return $breadcrumbs[$length - 2]->url;
+}
+
+function getClient()
+{
+    $client = new Google_Client();
+    $client->setClientId(env('GOOGLE_CLIENT_ID', 'client_id'));
+    $client->setClientSecret(env('GOOGLE_CLIENT_SECRET', 'client_secret'));
+    $client->setRedirectUri(url(env('GOOGLE_REDIRECT_URI')));
+    $client->setApplicationName('Google Classroom API PHP Quickstart');
+    $client->setScopes(Google_Service_Classroom::CLASSROOM_COURSES_READONLY);
+
+    $client->setAccessType('offline');
+    $client->setPrompt('select_account consent');
+    foreach (config('gmail.scopes') as $scopes) {
+        $client->addScope($scopes);
+    }
+    foreach (config('gmail.additional_scopes') as $scopes) {
+        $client->addScope($scopes);
+    }
+    $client->addScope(Google_Service_Oauth2::USERINFO_EMAIL);
+    $client->addScope(Google_Service_Directory::ADMIN_DIRECTORY_GROUP);
+    $client->addScope(Google_Service_Directory::ADMIN_DIRECTORY_USER_ALIAS);
+    $client->addScope(Google_Service_Directory::ADMIN_DIRECTORY_CUSTOMER);
+    $accessToken = Gmail::refreshToken();
+    if (is_array($accessToken)) {
+        $client->setAccessToken($accessToken);
+    }
+    return $client;
+}
+
+function getGoogleAlians()
+{
+    // Get the API client and construct the service object.
+    if (!\App\Models\Gmail::check()) return collect([]);
+    $client = getClient();
+    $service = new Google_Service_Directory($client);
+
+// Print the first 10 users in the domain.
+    $optParams = array(
+        'customer' => 'my_customer',
+        'maxResults' => 10,
+        'orderBy' => 'email',
+    );
+    $results = $service->users->listUsers($optParams);
+    $users = [];
+    $emails = [];
+    if (count($results->getUsers()) == 0) {
+        return [];
+    } else {
+        foreach ($results->getUsers() as $user) {
+            $users[$user->getPrimaryEmail()] = $user->aliases;
+        }
+        if (is_array($users[Gmail::user()])) {
+
+            foreach ($users[Gmail::user()] as $email) {
+                $emails[$email] = $email;
+            }
+        }
+        return collect($emails);
+    }
+}
+

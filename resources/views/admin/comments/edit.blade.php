@@ -5,15 +5,15 @@
 @section('content')
     {{ Form::model($comment,['url' => route('edit_comment_post',$comment->id), 'class' => '']) }}
 
-    <div class="panel panel-default">
-        <div class="panel-heading clearfix">
+    <div class="card panel panel-default">
+        <div class="card-header panel-heading clearfix">
             <h2 class="m-0 pull-left">Edit Comment</h2>
             <div class="pull-right">
-                <a href="{{route('show_comments')}}" class="btn btn-default mr-10">{!! trans('admin.cancel') !!}</a>
-                {{ Form::submit(trans('admin.save'), ['class' => 'btn btn-info pull-right']) }}
+                <a href="{{route('show_comments')}}" class="btn btn-danger mr-10">{!! trans('admin.cancel') !!}</a>
+                {{ Form::submit(trans('admin.save'), ['class' => 'btn btn-primary pull-right']) }}
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body panel-body">
             @if(! $comment->author)
                 <div class="form-group row">
                     {{Form::label('guest_name', trans('admin.guest_name'),['class' => 'col-sm-2 control-label'])}}

@@ -18,6 +18,7 @@ class CreateAttributesTranslations extends Migration
             $table->integer('attributes_id')->unsigned();
             $table->string('locale')->index();
             $table->string('name');
+            $table->text('description')->nullable();
 
             $table->unique(['attributes_id','locale']);
             $table->foreign('attributes_id')->references('id')->on('attributes')->onDelete('cascade');

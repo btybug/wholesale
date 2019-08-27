@@ -11,7 +11,7 @@
 @stop
 @section('content')
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-sm-12">
 
             <div class="profile-header">
 
@@ -37,23 +37,12 @@
                     </li>
                     <li class="nav-item"><a href="{{ route('admin_dashboard_profile') }}" class="nav-link ">Profile</a>
                     </li>
-                    <li class="dropdown pull-right">
-                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus mr-10"></i>Create new</button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="{!! route('admin_staff_new') !!}">Staff</a>
-                                <a href="#">Customer</a>
-                                <a href="{!! route('admin_stock_new') !!}">Product</a>
-                                <a href="http://e-cigar.com/admin/tools/attributes/new">Item</a>
-                                <a href="{!! route('admin_blog_create') !!}">Post</a>
-                            </li>
-                        </ul>
-                    </li>
+
                 </ul>
 
             </div>
 
-            <div class="clearfix">
+            <div class="clearfix mt-5">
                 <aside class="Header-auth main-header-auth pull-left" id="header-auth">
                     <div class="Header-embedApi" id="embed-api-auth-container" ga-on="click" ga-event-category="User"
                          ga-event-label="auth" ga-event-action="signin">
@@ -73,8 +62,10 @@
     <div id="sortable-9">
 
     </div>
-    <div class="connectedSortable" data-placement="top">
-        {!! render_widgets('top') !!}
+    <div class="row">
+        <div class="col-sm-12 connectedSortable" data-placement="top">
+            {!! render_widgets('top') !!}
+        </div>
     </div>
     <div class="row">
         <div class="col-md-3  connectedSortable" data-placement="small_left">
@@ -102,17 +93,19 @@
         </section>
         <!-- right col -->
     </div>
+
     <!-- /.row (main row) -->
     <div class="dashboard_modal_add_widget">
         @php
             $permissions=config('widgets');
         @endphp
         <div class="modal_add_widget">
-            <div class="connectedSortable">
+            <button class="btn btn-danger btn-block close-widget-modal">CLOSE</button>
+            <div class="connectedSortable" id="connectedSortable">
                 @foreach($permissions as $key => $item)
                     @if(! in_array($key,$widgets))
                         <div id="{{ $key }}">
-                            <div class="box-header" style="background-color: red;">
+                            <div class="box-header">
                                {!! $item['name'] !!}
                             </div>
                             <div class="widget-html hide">
@@ -122,7 +115,7 @@
                     @endif
                 @endforeach
             </div>
-            <button class="btn btn-warning close-widget-modal">CLOSE</button>
+
         </div>
 
 
@@ -144,30 +137,8 @@
 
     <!-- Include the ViewSelector2 component script. -->
 
-
-
     <script>
-        {{--open new widget sidebar--}}
-        $('.open_dashboard_widget').on('click', function () {
-            $('.dashboard_modal_add_widget').toggleClass('active');
-        });
 
-        $('body').on('click', function (e) {
-            if (e.target !==  $('.open_dashboard_widget')[0] &&
-                $('.dashboard_modal_add_widget').hasClass('active') &&
-                e.target !== $('.modal_add_widget')[0]) {
-                $('.dashboard_modal_add_widget').removeClass('active');
-            }
-        });
-
-        $('.close-widget-modal').on('click', function () {
-            $('.dashboard_modal_add_widget').removeClass('active');
-        });
-
-        {{--inner widget btn--}}
-        $('.btn-for-widget').on('click', function () {
-            $(this).find('i').toggleClass('fa-plus fa-minus');
-        });
     </script>
     <script>
         (function (w, d, s, g, js, fs) {

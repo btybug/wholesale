@@ -39,7 +39,8 @@
 
                 {{--acoount sidebar--}}
                 <div class="profile-sidebar profile-sidebar--inner-pages d-flex flex-column align-items-center">
-                    @include('frontend.my_account._partials.left_bar')
+                    @include('frontend.my_account._partials.left_bar',['active'=>'my_account_address'])
+                    {{--@include('frontend.my_account._partials.left_bar')--}}
                     <div class="mt-auto">
                         {!! Form::open(['url'=>route('logout')]) !!}
                         <div class="text-center">
@@ -154,26 +155,24 @@
 
                                        <div>
 
-                                           <div class="form-group row mb-5">
-                                               <div class="col-md-5">
-                                                   <h5>
-                                                       <label for="selectAddress" class="control-label text-muted">Default Shipping Address</label>
-                                                   </h5>
-                                               </div>
-                                               <div class="col-md-7 d-flex">
-                                                   {!! Form::select('address_book',$address,($default_shipping)?$default_shipping->id:null,['class' => 'form-control edit-address']) !!}
-                                                   <button type="button"
-                                                           class="nav-link nav-link--new-address btn ntfs-btn address-book-new rounded-0">
-                                                       + Add New
-                                                   </button>
+                                           <div class="form-group mb-5">
+                                               <label for="selectAddress" class="control-label text-muted font-22">Default Shipping Address</label>
+                                               <div class="row">
+                                                   <div class="col-md-5 d-flex">
+                                                       {!! Form::select('address_book',$address,($default_shipping)?$default_shipping->id:null,['class' => 'form-control select-2 select-2--no-search main-select main-select-2arrows checkout-form_select edit-address']) !!}
+                                                       <button type="button"
+                                                               class="nav-link nav-link--new-address btn ntfs-btn address-book-new rounded-0 ml-4">
+                                                           + Add New
+                                                       </button>
+                                                   </div>
                                                </div>
                                            </div>
                                            <div class="border py-3 px-4">
-                                               <div class="selected-form">
+                                               <div class="selected-form mb-3">
                                                    @include("frontend.my_account._partials.new_address",['address_book'=>$default_shipping,'default' => true])
                                                </div>
                                                {{--<button type="submit" class="btn btn-primary edit-address">Edit</button>--}}
-                                               <div class="text-right">
+                                               <div class="col-md-9 offset-md-3 text-right">
                                                    <button type="button" class="btn btn-transp edit-address rounded-0">Delete</button>
                                                </div>
                                            </div>
@@ -196,7 +195,7 @@
 
     <div class="modal fade" id="newAddressModal" tabindex="-1" role="dialog"
          aria-labelledby="newAddressModal" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Address Book</h5>
@@ -236,7 +235,7 @@
                 !res.error
                 )
                 {
-                    window.location.reload();
+                    // window.location.reload();
                 }
             },
                 error =>

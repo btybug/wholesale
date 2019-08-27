@@ -3,15 +3,15 @@
 if(!isset($role))$role=null;
 @endphp
 @foreach($permissions as $key=>$permission)
-    <div class="panel panel-default panel-create-role">
-        <div class="panel-heading">
+    <div class="card panel panel-default panel-create-role mb-2">
+        <div class="card-header panel-heading">
             <div class="user">{!! $key !!}</div>
             <div>
                 <input name="has_access[]" value="{!! $key !!}" @if(has_permission($role,$key))checked @endif type="checkbox">
                 <label for="has-access">Has access</label>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body panel-body">
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>

@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row widget-view" data-title="Most Visited Pages">
     <div class="col-md-12">
         <div class="box box-primary">
             <aside class="Header-auth" id="header-auth">
@@ -6,7 +6,7 @@
                 </div>
             </aside>
             <div class="panel panel-default">
-                <div class="box-header panel-heading clearfix">
+                <div class="panel-heading clearfix">
                     <h3 class="pull-left m-0 lh-1">Most visited pages</h3>
                     <div class="pull-right">
                         <button type="button" class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip" title="" data-original-title="Date range">

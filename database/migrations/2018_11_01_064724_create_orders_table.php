@@ -27,6 +27,7 @@ class CreateOrdersTable extends Migration
             $table->string('coupon_code')->nullable();
             $table->string('order_number')->unique();
             $table->longText('customer_notes')->nullable();
+            $table->tinyInteger('type')->default('0');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

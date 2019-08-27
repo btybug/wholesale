@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactUsRequest;
-use App\Mail\ContactUs;
 use App\Models\Category;
-use App\Models\Faq;
+use App\Models\Common;
+use App\Models\ContactUs;
 use App\Models\GeoZones;
-use App\Models\Gmail;
+use App\Models\Settings;
 use App\Models\ZoneCountries;
-use Dacastro4\LaravelGmail\Services\Message\Mail;
+use App\Services\ShortCodes;
 use Illuminate\Http\Request;
 use PragmaRX\Countries\Package\Countries;
 
@@ -23,10 +23,12 @@ class GuestController extends Controller
      * @return void
      */
     private $countries;
+    private $settings;
 
-    public function __construct(Countries $countries)
+    public function __construct(Countries $countries,Settings $settings)
     {
         $this->countries = $countries;
+        $this->settings = $settings;
     }
 
 
@@ -126,7 +128,9 @@ class GuestController extends Controller
 
     public function getContactUs()
     {
-        return $this->view('contact_us');
+        $settings = $this->settings->getEditableData('admin_general_settings');
+
+        return $this->view('contact_us',compact(['settings']));
     }
 
     public function postContactUs(ContactUsRequest $request)
@@ -143,15 +147,16 @@ class GuestController extends Controller
             'message' => trim(htmlspecialchars($data['message'])),
         ];
 //            $mail=Gmail::message()->subject('about_team_5c4ef6c1e44b1')->preload()->all();
-//        dd($mail);
 
-        $email = new ContactUs($result);
-        \Config::set('mail.from.address',$data['email']);
-        \Config::set('mail.from.name',$data['name']);
-        \Mail::to(Gmail::user())->send($email);
-        $result['message']=Gmail::getEncodedBody($result['message']);
-        $contact_us=\App\Models\ContactUs::create($result);
-        $contact_us->recipients()->create(['name'=>env('APP_NAME'),'email'=>Gmail::user()]);
+        $email =  $contact_us=\App\Models\ContactUs::create($result);
+        event(new \App\Events\ContactUs($email));
+        $email->save();
+//        \Config::set('mail.from.address',$data['email']);
+//        \Mail::to(Gmail::user())->send($email);
+//        \Mail::to('hakobyan.sahak88@gmail.com')->send($email);
+//        $result['message']=Gmail::getEncodedBody($result['message']);
+//        $contact_us=\App\Models\ContactUs::create($result);
+//        $contact_us->recipients()->create(['name'=>env('APP_NAME'),'email'=>Gmail::user()]);
 //        }catch (\Exception $exception){
 //            \Log::emergency("message: " . $exception->getMessage(). "  --file-  line : " . $exception->getFile(). ' - ' .$exception->getLine());
 //        }

@@ -25,8 +25,8 @@
             </li>
             @endok
             @ok('admin_settings_couriers')
-            <li class="nav-item active">
-                <a class="nav-link" id="payment_gateways" href="{!! route('admin_settings_couriers') !!}"
+            <li class="nav-item">
+                <a class="nav-link active" id="payment_gateways" href="{!! route('admin_settings_couriers') !!}"
                    role="tab"
                    aria-controls="shipping" aria-selected="false">Courier </a>
             </li>
@@ -70,6 +70,9 @@
                             </li>
                         @endforeach
                     </ul>
+                    <div class="text-right">
+                        <a href="{!! route('admin_settings_courier_create') !!}" class="btn btn-primary">Create new</a>
+                    </div>
                 </div>
             </div>
         </div>

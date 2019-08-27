@@ -8,14 +8,13 @@
 
 namespace App\Listeners;
 
-use App\Events\OrderCanceled;
 use App\Events\OrderCompleted;
 use App\Models\MailJob;
 use App\Models\MailTemplates;
 
 class SendEmailOrderCompleted
 {
-    public function handle(OrderCompletedted $event)
+    public function handle(OrderCompleted $event)
     {
         $mailTemplate = MailTemplates::where('slug', 'order_is_completed')
             ->where('is_active', '1')
@@ -32,7 +31,8 @@ class SendEmailOrderCompleted
                     ->first();
                 MailJob::create([
                     'template_id' => $adminMailTemplate->id,
-                    'must_be_done' => now()
+                    'must_be_done' => now(),
+                    'additional_data' => $event->order
                 ]);
             }
         }

@@ -16,6 +16,7 @@ class CreateTicketsTable extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
+            $table->unsignedInteger('author_id');
             $table->unsignedInteger('status_id');
             $table->unsignedInteger('category_id');
             $table->unsignedInteger('priority_id');
@@ -28,6 +29,7 @@ class CreateTicketsTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('author_id')->references('id')->on('users');
             $table->foreign('status_id')->references('id')->on('statuses');
             $table->foreign('priority_id')->references('id')->on('statuses');
             $table->foreign('category_id')->references('id')->on('categories');

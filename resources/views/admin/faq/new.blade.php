@@ -2,18 +2,18 @@
 
 
 @section('content')
-    <div class="panel panel-default">
-        <div class="panel-heading clearfix">
-            <h2 class="m-0 pull-left">Add / Edit Question</h2>
+    <div class="card panel panel-default">
+        <div class="card-header panel-heading clearfix">
+            <h2 class="m-0 pull-left">{{ ($model) ? $model->question : "Add Question" }}</h2>
         </div>
-        <div class="panel-body">
+        <div class="card-body panel-body">
             <ul class="nav nav-tabs w-100">
-                <li class="active"><a data-toggle="tab" href="#info">Info</a></li>
-                <li><a data-toggle="tab" href="#seo">SEO</a></li>
+                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#info">Info</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seo">SEO</a></li>
             </ul>
             {!! Form::model($model,['url' => route('admin_faq_new'), 'id' => 'post_form','files' => true]) !!}
             <div class="tab-content tabs_content">
-                <div id="info" class="tab-pane tab_info fade in active">
+                <div id="info" class="tab-pane tab_info fade in active show">
 
                     {!! Form::hidden('id',null) !!}
                     <div class="text-right btn-save pt-25">
@@ -28,7 +28,7 @@
                                             @if(count(get_languages()))
                                                 <ul class="nav nav-tabs tab_lang_horizontal">
                                                     @foreach(get_languages() as $language)
-                                                        <li class="@if($loop->first) active @endif"><a data-toggle="tab"
+                                                        <li class="nav-item"><a class="nav-link @if($loop->first) active @endif" data-toggle="tab"
                                                                                                        href="#{{ strtolower($language->code) }}">
                                                                 <span class="flag-icon flag-icon-{{ strtolower($language->code) }}"></span> {{ $language->code }}
                                                             </a></li>
@@ -40,7 +40,7 @@
                                                 @if(count(get_languages()))
                                                     @foreach(get_languages() as $language)
                                                         <div id="{{ strtolower($language->code) }}"
-                                                             class="tab-pane fade  @if($loop->first) in active @endif">
+                                                             class="tab-pane fade  @if($loop->first) in active show @endif">
                                                             <div class="form-group">
                                                                 <label>To Question</label>
                                                                 {!! Form::text('translatable['.strtolower($language->code).'][question]',get_translated($model,strtolower($language->code),'question'),['class'=>'form-control']) !!}
@@ -65,14 +65,14 @@
                                             </div>
                                         </div>
 
-                                        <div class="panel panel-default mt-20">
-                                            <div class="panel-heading d-flex justify-content-between align-items-center">
+                                        <div class="card panel panel-default mt-20">
+                                            <div class="card-header panel-heading d-flex justify-content-between align-items-center">
                                         <span>
                                             Related Products
                                         </span>
-                                                <button type="button" class="btn btn-info select-products">Select</button>
+                                                <button type="button" class="btn btn-primary select-products">Select</button>
                                             </div>
-                                            <div class="panel-body product-body">
+                                            <div class="card-body panel-body product-body">
                                                 <ul class="get-all-attributes-tab stickers--all--lists">
                                                     {{--TODO: make stocks--}}
                                                     @if($model && count($model->stocks))
@@ -163,9 +163,9 @@
                     <div class="text-right btn-save pt-25">
                         <button type="submit" class="btn btn-info">Save</button>
                     </div>
-                    <div class="panel panel-default mt-20">
-                        <div class="panel-heading">FB</div>
-                        <div class="panel-body">
+                    <div class="card panel panel-default mt-20">
+                        <div class="card-header panel-heading">FB</div>
+                        <div class="card-body panel-body">
                             <div class="form-group">
                                 <div class="row">
                                     <label for="seo-facebook-title" class="col-md-2 col-xs-12">Facebook Title</label>
@@ -194,9 +194,9 @@
                         </div>
                     </div>
 
-                    <div class="panel panel-default mt-20">
-                        <div class="panel-heading">Twitter</div>
-                        <div class="panel-body">
+                    <div class="card panel panel-default mt-20">
+                        <div class="card-header panel-heading">Twitter</div>
+                        <div class="card-body panel-body">
                             <div class="form-group">
                                 <div class="row">
                                     <label for="seo-twitter-title" class="col-md-2 col-xs-12">Twitter Title</label>
@@ -339,22 +339,26 @@
     </div>
 
     <div class="modal fade" id="productsModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h4 class="modal-title">Select products</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Select products</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="all-list list-group faq-select-modal">
-                        <ul>
-
-                        </ul>
+                    <div class="form-group row">
+                        <label for="search-attr" class="col-sm-2 col-form-label">Search</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control search-attr"  placeholder="Search">
+                        </div>
                     </div>
+                    <ul class="all-list list-group faq-select-modal-list modal-stickers--list">
+
+                    </ul>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Done</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -517,12 +521,6 @@
     <script>
 
 
-    </script>
-    <script>
-        $(function () {
-            $(".sortable-panels").sortable();
-            $(".sortable-panels").disableSelection();
-        });
     </script>
     <script src="/public/admin_theme/blog_new.js"></script>
 

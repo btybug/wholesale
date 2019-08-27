@@ -10,8 +10,8 @@
     </ol>
 @stop
 @section('content')
-    <div class="row">
-        <div class="col-xs-12">
+    <div class="row mb-4">
+        <div class="col-sm-12">
 
             <div class="profile-header">
 
@@ -54,52 +54,52 @@
 
 
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-sm-12">
             <div class="tab-content">
-                <div id="users_profile" class="tab-pane fade in active">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
+                <div id="users_profile" class="tab-pane fade in active show">
+                    <div class="card panel panel-default">
+                        <div class="card-header panel-heading">
                             <h3 class="m-0">Profile</h3>
                         </div>
-                        <div class="panel-body">
+                        <div class="card-body panel-body">
                             <!-- The timeline -->
                             {!! Form::model($user,['multiple'=>true]) !!}
                             {!! Form::hidden('id') !!}
 
                             <div class="form-group row">
-                                <label for="inputName" class="col-sm-2 control-label">First Name</label>
+                                <label for="inputName" class="col-sm-2 control-label col-form-label">First Name</label>
 
                                 <div class="col-sm-10">
                                     {!! Form::text('name',null,['class'=>'form-control']) !!}
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputEmail" class="col-sm-2 control-label">Last Name</label>
+                                <label for="inputEmail" class="col-sm-2 control-label col-form-label">Last Name</label>
                                 <div class="col-sm-10">
                                     {!! Form::text('last_name',null,['class'=>'form-control']) !!}
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="email" class="col-sm-2 control-label">E-mail </label>
+                                <label for="email" class="col-sm-2 control-label col-form-label">E-mail </label>
 
                                 <div class="col-sm-10">
                                     {!! Form::text('email',null,['class'=>'form-control']) !!}
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputExperience" class="col-sm-2 control-label">Phone</label>
+                                <label for="inputExperience" class="col-sm-2 control-label col-form-label">Phone</label>
                                 <div class="col-sm-10">
                                     {!! Form::text('phone',null,['class'=>'form-control']) !!}
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputSkills" class="col-sm-2 control-label">Country</label>
+                                <label for="inputSkills" class="col-sm-2 control-label col-form-label">Country</label>
                                 <div class="col-sm-10">
                                     {!! Form::select('country',$countries,null,['class'=>'form-control']) !!}
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputExperience" class="col-sm-2 control-label">Gender</label>
+                                <label for="inputExperience" class="col-sm-2 control-label col-form-label">Gender</label>
                                 <div class="col-sm-10">
                                     {!! Form::select('gender',['male'=>'Male','female'=>'Female'],null,['class'=>'form-control']) !!}
 
@@ -107,7 +107,7 @@
                             </div>
 
                             <div class="form-group row">
-                                <div class="col-sm-offset-2 col-sm-10 text-right">
+                                <div class="col-sm-12 text-right">
                                     <button type="submit" class="btn btn-success">Update</button>
                                 </div>
                             </div>

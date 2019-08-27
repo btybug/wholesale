@@ -29,15 +29,19 @@ class AttributesController extends Controller
     public function getAttributesCreate()
     {
         $model = null;
-        return $this->view('create_edit_form', compact(['model']));
+        $categories = Category::with('children')->where('type', 'stocks')->whereNull('parent_id')->get();
+        $data = Category::recursiveItems($categories, 0, [], []);
+
+        return $this->view('create_edit_form', compact(['model','categories','data']));
     }
 
     public function postAttributesCreate(Request $request)
     {
-        $data = $request->except('_token', 'translatable', 'stickers');
+        $data = $request->except('_token', 'translatable', 'stickers','categories');
         $data['user_id'] = \Auth::id();
         $attr = Attributes::updateOrCreate($request->id, $data);
-        $attr->stickers()->sync($request->get('stickers'));
+        $attr->stickers()->sync($request->get('stickers',[]));
+        $attr->categories()->sync(json_decode($request->get('categories', [])));
         return redirect()->route('admin_store_attributes');
     }
 
@@ -45,15 +49,21 @@ class AttributesController extends Controller
     {
         $model = Attributes::findOrFail($id);
         $optionModel = null;
-        return $this->view('create_edit_form', compact(['model', 'optionModel']));
+        $categories = Category::with('children')->where('type', 'stocks')->whereNull('parent_id')->get();
+        $checkedCategories = $model->categories()->pluck('id')->all();
+        $data = Category::recursiveItems($categories, 0, [], $checkedCategories);
+
+        return $this->view('create_edit_form', compact(['model', 'optionModel','categories','data','checkedCategories']));
     }
 
     public function postAttributesEdit(Request $request, $id)
     {
-        $data = $request->except('_token', 'translatable', 'stickers');
+        $data = $request->except('_token', 'translatable', 'stickers','categories');
         $data['user_id'] = \Auth::id();
         $attr = Attributes::updateOrCreate($request->id, $data);
         $attr->stickers()->sync($request->get('stickers'));
+        $attr->categories()->sync(json_decode($request->get('categories', [])));
+
         return redirect()->route('admin_store_attributes');
     }
 

@@ -20,9 +20,10 @@ class SendEmail extends Mailable
      */
     public $job;
     public $to;
+
     public function __construct(MailJob $job)
     {
-       $this->job=$job;
+        $this->job = $job;
     }
 
     /**
@@ -32,13 +33,17 @@ class SendEmail extends Mailable
      */
     public function build()
     {
-        return $this->from($this->job->email->from)
-            ->subject($this->job->email->subject)
+        $this->from($this->job->email->from);
+        if ($this->job->email->cc) {
+            $this->cc(explode(',', $this->job->email->cc));
+            }
+        $this->subject($this->job->email->subject)
             ->view('send_email')
             ->with([
-            'email'=>$this->job->email,
-            'user'=>User::where('email',$this->job->email->to)->first(),
-            'job'=>$this->job,
-        ]);
+                'email' => $this->job->email,
+                'user' => User::find($this->job->additional_data['user']['id']),
+                'job' => $this->job,
+            ]);
+        return $this;
     }
 }

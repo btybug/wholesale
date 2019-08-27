@@ -23,6 +23,7 @@ class CreateContactUsTable extends Migration
             $table->string('uniq_id');
             $table->string('gmail_id')->nullable();
             $table->tinyInteger('cron_status')->default(0);
+            $table->tinyInteger('is_readed')->default(0);
             $table->unsignedInteger('parent_id')->nullable();
             $table->timestamps();
 

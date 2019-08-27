@@ -60,7 +60,7 @@
 </div>
 <div class="form-group d-flex flex-md-row flex-column align-items-md-center justify-content-between">
     <label for="address2" class="checkout-form_label text-gray-clr mb-0 pl-md-0 pl-3">
-        AddressS 2<span class="form-required-icon text-quatr-clr font-main-bold">&nbsp;&#42;</span>
+        Address 2<span class="form-required-icon text-quatr-clr font-main-bold">&nbsp;&#42;</span>
     </label>
     <div class="col-md-9">
         <div class="checkout-form_input-group">   <!--gets form-has-err class-->
@@ -72,12 +72,12 @@
 </div>
 
 <div class="form-group d-flex flex-md-row flex-column align-items-md-center justify-content-between">
-    <label for="country" class="checkout-form_label text-gray-clr mb-0 pl-md-0 pl-3">Country<span
+    <label for="city" class="checkout-form_label text-gray-clr mb-0 pl-md-0 pl-3">City<span
                 class="form-required-icon text-quatr-clr font-main-bold">&nbsp;&#42;</span></label>
     <div class="col-md-9">
         <div class="checkout-form_input-group">   <!--gets form-has-err class-->
-            {!! Form::select('country',$countriesShipping,null,['class'=>'select-2 select-2--no-search main-select main-select-2arrows checkout-form_select','id' => 'geo_country_book','style' => 'width: 100%;']) !!}
-            <p class="err-msg">country is not valid</p>
+            {!! Form::text('city',null,['class'=>'form-control checkout-form_input-text']) !!}
+            <p class="err-msg">city is not valid</p>
         </div>
 
     </div>
@@ -97,18 +97,6 @@
 </div>
 
 <div class="form-group d-flex flex-md-row flex-column align-items-md-center justify-content-between">
-    <label for="city" class="checkout-form_label text-gray-clr mb-0 pl-md-0 pl-3">City<span
-                class="form-required-icon text-quatr-clr font-main-bold">&nbsp;&#42;</span></label>
-    <div class="col-md-9">
-        <div class="checkout-form_input-group">   <!--gets form-has-err class-->
-            {!! Form::text('city',null,['class'=>'form-control checkout-form_input-text']) !!}
-            <p class="err-msg">city is not valid</p>
-        </div>
-
-    </div>
-</div>
-
-<div class="form-group d-flex flex-md-row flex-column align-items-md-center justify-content-between">
     <label for="posatalCode" class="checkout-form_label text-gray-clr mb-0 pl-md-0 pl-3">Zip/Postal Code:<span
                 class="form-required-icon text-quatr-clr font-main-bold">&nbsp;&#42;</span></label>
     <div class="col-md-9">
@@ -121,11 +109,25 @@
     </div>
 </div>
 
+<div class="form-group d-flex flex-md-row flex-column align-items-md-center justify-content-between">
+    <label for="country" class="checkout-form_label text-gray-clr mb-0 pl-md-0 pl-3">Country<span
+                class="form-required-icon text-quatr-clr font-main-bold">&nbsp;&#42;</span></label>
+    <div class="col-md-9">
+        <div class="checkout-form_input-group">   <!--gets form-has-err class-->
+            {!! Form::select('country',$countriesShipping,null,['class'=>'select-2 select-2--no-search main-select main-select-2arrows checkout-form_select','id' => 'geo_country_book','style' => 'width: 100%;']) !!}
+            <p class="err-msg">country is not valid</p>
+        </div>
+
+    </div>
+</div>
+
+
 
 <div class="d-flex flex-md-row flex-column align-items-md-center justify-content-between">
     <div class="d-flex align-items-center pl-md-0 pl-3 mb-md-0 mb-3">
-        <div class="position-relative">
-            <input name="make_default" class="form-check-input register-form_input-check" type="checkbox" value="1" id="defaultCheckModal">
+        <div class="position-relative modal-accounts">
+            {!! Form::hidden('make_default',0) !!}
+            {!! Form::checkbox('make_default',1,null,['class' => 'form-check-input register-form_input-check','id'=>'defaultCheckModal']) !!}
             <label class="form-check-label text-gray-clr pointer" for="defaultCheckModal">
                 Set as default
                 <span class="check-icon d-inline-flex align-items-center justify-content-center position-absolute">
@@ -139,8 +141,8 @@
     {!! Form::hidden('type','address_book') !!}
     {!! Form::hidden('id') !!}
     <div class="col-md-9 d-flex flex-sm-row flex-column-reverse justify-content-sm-end">
-        <button type="button" class="btn text-uppercase btn-submit btn-submit-cancel font-15 mr-sm-3">Cancel</button>
-        <button type="button" class="btn ntfs-btn save-address-book rounded-0">Submit</button>
+        <button type="button" class="btn btn-danger btn-transp text-uppercase btn-submit btn-submit-cancel font-15 mr-sm-3 rounded-0">Cancel</button>
+        <button type="button" class="btn btn-info ntfs-btn save-address-book rounded-0">Submit</button>
     </div>
 </div>
 

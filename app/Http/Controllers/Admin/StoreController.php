@@ -16,6 +16,7 @@ use App\Models\Category;
 use App\Models\Coupons;
 use App\Models\Emails;
 use App\Models\Items;
+use App\Models\ItemsLocations;
 use App\Models\Notifications\CustomEmails;
 use App\Models\Products;
 use App\Models\Purchase;
@@ -24,6 +25,8 @@ use App\Models\ShippingZones;
 use App\Models\Stock;
 use App\Models\StockVariation;
 use App\Models\Suppliers;
+use App\Models\Warehouse;
+use App\Models\WarehouseRacks;
 use App\Services\UserService;
 use App\User;
 use Carbon\Carbon;
@@ -168,36 +171,55 @@ class StoreController extends Controller
     public function getPurchaseNew()
     {
         $model = null;
-        $items = Items::all()->pluck('name', 'id');
-        $suppliers = Suppliers::all()->pluck('name', 'id');
+        $items = Items::get()->pluck('name', 'id')->all();
+        $suppliers = Suppliers::all()->pluck('name', 'id')->all();
+        $warehouses = Warehouse::all()->pluck('name','id')->all();
 
-        return $this->view('purchase.new', compact('model', 'items', 'suppliers'));
+        return $this->view('purchase.new', compact('model', 'items', 'suppliers','warehouses'));
     }
 
     public function postSaveOrUpdate(PurchaseRequest $request)
     {
-        $data = $request->except('_token');
-        $id=$request->get('id');
-        $qty=$data['qty'];
-        if($id){
-           $purchase =Purchase::findOrFail($id);
-           $qty=$data['qty']-$purchase->qty;
-        }
-        $item=Items::findOrFail($data['item_id']);
-        $item->quantity=$item->quantity+$qty;
-        $item->save();
+        $data = $request->except('_token','qty','locations');
         $data['purchase_date'] = Carbon::parse($data['purchase_date']);
         $data['user_id'] = \Auth::id();
         Purchase::updateOrCreate($request->only('id'), $data);
+        $item = Items::find($request->get('item_id'));
+
+        if($item){
+            $this->saveLocations($item, $request->get('locations', []));
+        }
+
         return redirect()->route('admin_inventory_purchase');
+    }
+
+    private function saveLocations($item, array $data = [])
+    {
+        $deletableArray = [];
+        if (count($data)) {
+            foreach ($data as $datum) {
+                $existing = $item->locations()->where('warehouse_id', $datum['warehouse_id'])
+                    ->where('rack_id', $datum['rack_id'])
+                    ->where('shelve_id', $datum['shelve_id'])->first();
+                if ($existing) {
+                    $datum['qty'] += $existing->qty;
+                    $existing->update($datum);
+                } else {
+                    $location = $item->locations()->create($datum);
+                }
+            }
+        }
     }
 
     public function EditPurchase($id)
     {
         $model = Purchase::findOrFail($id);
-        $items = Items::all()->pluck('name', 'id');
+        $items = Items::where('type','simple')->get()->pluck('name', 'id');
         $suppliers = Suppliers::all()->pluck('name', 'id');
-        return $this->view('purchase.new', compact('model', 'items', 'suppliers'));
+        $warehouses = Warehouse::all()->pluck('name','id')->all();
+        $racks = WarehouseRacks::whereNull('parent_id')->where('warehouse_id',$model->warehouse_id)->get()->pluck('name','id')->all();
+        $shelves = WarehouseRacks::where('warehouse_id',$model->warehouse_id)->where('parent_id',$model->rack_id)->get()->pluck('name','id')->all();
+        return $this->view('purchase.new', compact('model', 'items', 'suppliers','warehouses','racks','shelves'));
     }
 
 
@@ -213,6 +235,14 @@ class StoreController extends Controller
         }
 
         return \Response::json(['error' => true]);
+    }
+
+    public function postItemLocations(Request $request)
+    {
+        $warehouses = Warehouse::all()->pluck('name','id')->all();
+        $html = $this->view("purchase.locations", compact('warehouses'))->render();
+
+        return \Response::json(['error' => false, 'html' => $html]);
     }
 
 }

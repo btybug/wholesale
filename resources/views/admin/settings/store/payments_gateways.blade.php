@@ -13,8 +13,8 @@
                 <a class="nav-link" id="shipping-tab" href="{!! route('admin_settings_shipping') !!}" role="tab"
                    aria-controls="shipping" aria-selected="false">Shipping</a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" id="payment_gateways" href="{!! route('admin_settings_payment_gateways') !!}"
+            <li class="nav-item">
+                <a class="nav-link active" id="payment_gateways" href="{!! route('admin_settings_payment_gateways') !!}"
                    role="tab"
                    aria-controls="shipping" aria-selected="false">Payment gateways</a>
             </li>

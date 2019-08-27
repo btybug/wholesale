@@ -36,7 +36,7 @@
                 </div>
                 <div class="footer-info col-md-5 col-lg-4 col-xl-3 text-md-right p-0 mt-md-0 mt-4 text-sm-left text-center">
                     <a href="#" class="d-block footer-logo">
-                        <img src="/public/img/vapors-logo.png" alt="logo">
+                        <img src="{!! get_site_logo() !!}" alt="{{ get_site_name() }}">
                     </a>
                     <div class="footer-desc mb-3">
                         <p class="mb-0">There are many variations of passages<br/>

@@ -4,9 +4,9 @@
     font-family: 'Montserrat Medium', sans-serif;
 }
 
-.font-main-light {
-    font-family: 'Montserrat Light', sans-serif;
-}
+/*.font-main-light {*/
+/*    font-family: 'Montserrat Light', sans-serif;*/
+/*}*/
 
 .fnz-18 {
     font-size: 18px
@@ -58,7 +58,7 @@ html {
 }
 
 body {
-    color: #222423;
+    /*color: #222423;*/
     height: 100%;
     overflow-x: hidden;
 }
@@ -1411,6 +1411,70 @@ a:hover {
     }
 }
 
+.none-select {
+    pointer-events: none;
+    opacity: 0.5;
+}
 
+/*extra modal start*/
+#extraModal .modal-dialog {
+    max-width: 1400px;
+}
 
+#extraModal .extra-content-left {
+    height: 5px;
+    min-height: 420px;
+    padding: 15px;
+}
+#extraModal .extra-content-left .item{
+    display: flex;
+    height: 120px;
+    border: 1px solid #d7d7d7;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s ease;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+#extraModal .extra-content-left .item:hover,#extraModal .extra-content-left .item.active{
+    -webkit-box-shadow: 2px 9px 12px 0px rgba(16,16,20,0.2);
+    -moz-box-shadow: 2px 9px 12px 0px rgba(16,16,20,0.2);
+    box-shadow: 2px 9px 12px 0px rgba(16,16,20,0.2)
+}
+#extraModal .extra-content-right {
+    height: 5px;
+    min-height: 420px;
+}
+#extraModal .extra-main-content{
+    flex: 1;
+    padding: 15px;
+    padding-left: 0;
+}
+#extraModal .product-card_btn{
+    padding: 14px 40px;
+    width: 240px;
+}
+#extraModal .modal-header{
+    background-color: #353535;
+    color: #fff;
+}
+#extraModal .modal-header .close{
+    opacity: 1;
+    color: #ffffff;
+}
+/*extra modal end*/
 
+/*[data-network] {*/
+/*    display: block !important;*/
+/*}*/
+
+#search-product + span,
+#search-for-filter + span {
+    cursor: pointer;
+}
+
+.user-non-select {
+    pointer-events: none;
+    /*touch-action: none;*/
+    opacity: 0.3;
+}

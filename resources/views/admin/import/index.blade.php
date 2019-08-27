@@ -14,7 +14,7 @@
             </select>
 
             <input type="file" class="form-control hidden" id="exl_file" name="exl_file">
-            <label for="exl_file" class="btn btn-info"><i class="fa fa-download mr-10" aria-hidden="true"></i>Choose File</label>
+            <label for="exl_file" class="btn btn-info mb-0"><i class="fa fa-download mr-10" aria-hidden="true"></i>Choose File</label>
 
             <button class="btn btn-success" type="submit">
                 <i class="fa fa-download" aria-hidden="true"></i>
@@ -25,16 +25,18 @@
 
     <div class="row">
         @foreach($imports as $import)
-            <div class="card col-md-2 col-sm-4">
-                <div class="files">
-                    <div class="delete_file text-center" data-id="{{$import["id"]}}">X</div>
-                    <div class="category text-center bg-primary" data-id="{{$import["id"]}}">{{$import["category"]}}</div>
-                    <div class="view_button text-center bg-primary __view" data-target="#view_modal" data-id="{{$import["id"]}}">View</div>
-                    @if($import["is_imported"])
-                        <div class="btn btn-info import_file" data-id="{{$import["id"]}}">Imported</div>
-                    @else
-                        <div class="btn btn-success import_file __open_modal" data-toggle="modal" data-target="#import_modal" data-id="{{$import["id"]}}">Import</div>
-                    @endif
+            <div class="col-md-2 col-sm-4">
+                <div class="card">
+                    <div class="files">
+                        <div class="delete_file text-center" data-id="{{$import["id"]}}">X</div>
+                        <div class="category text-center bg-info text-white" data-id="{{$import["id"]}}">{{$import["category"]}}</div>
+                        <div class="view_button text-center bg-info __view text-white" data-target="#view_modal" data-id="{{$import["id"]}}">View</div>
+                        @if($import["is_imported"])
+                            <div class="btn btn-info import_file" data-id="{{$import["id"]}}">Imported</div>
+                        @else
+                            <div class="btn btn-success import_file __open_modal" data-toggle="modal" data-target="#import_modal" data-id="{{$import["id"]}}">Import</div>
+                        @endif
+                    </div>
                 </div>
             </div>
         @endforeach

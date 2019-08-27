@@ -1,25 +1,24 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="panel panel-default">
+    <div class="card panel panel-default">
         {!! Form::model($model) !!}
-        <div class="panel-body">
-
+        <div class="card-body panel-body">
             <div class="tab-content tabs_content col-md-12">
 
-                <div id="home" class="tab-pane tab_info fade in active">
+                <div id="home" class="tab-pane tab_info fade in active show">
 
                     <div class="sortable-panels">
                         <div class="form-group">
                             <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item active">
-                                    <a class="nav-link" id="tab1-tab" data-toggle="tab" href="#tab1">To User</a>
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1">To User</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="tab2-tab" data-toggle="tab" href="#tab2">To Admin</a>
                                 </li>
                             </ul>
                             <div class="tab-content tab-content-store-settings">
-                                <div class="tab-pane fade active in" id="tab1"
+                                <div class="tab-pane fade active in show" id="tab1"
                                      aria-labelledby="tab1-tab">
                                     <div class="form-group row">
                                         {{Form::label('from', 'From',['class' => 'col-sm-3'])}}
@@ -40,7 +39,7 @@
                                         @if(count(get_languages()))
                                             <ul class="nav nav-tabs">
                                                 @foreach(get_languages() as $language)
-                                                    <li class="@if($loop->first) active @endif"><a data-toggle="tab"
+                                                    <li class="nav-item"><a class="nav-link @if($loop->first) active @endif" data-toggle="tab"
                                                                                                    href="#{{ strtolower($language->code) }}">
                                                             <span class="flag-icon flag-icon-{{ strtolower($language->code) }}"></span> {{ $language->code }}
                                                         </a></li>
@@ -52,7 +51,7 @@
                                             @if(count(get_languages()))
                                                 @foreach(get_languages() as $language)
                                                     <div id="{{ strtolower($language->code) }}"
-                                                         class="tab-pane fade  @if($loop->first) in active @endif">
+                                                         class="tab-pane fade  @if($loop->first) in active show @endif">
                                                         <div class="form-group row">
                                                             {{--                                                            {{Form::label('subject_'.strtolower($language->code), 'Subject',['class' => 'col-sm-3'])}}--}}
                                                             <label class="col-sm-3">
@@ -99,7 +98,7 @@
                                         @if(count(get_languages()))
                                             <ul class="nav nav-tabs">
                                                 @foreach(get_languages() as $language)
-                                                    <li class="@if($loop->first) active @endif"><a data-toggle="tab"
+                                                    <li class="nav-item"><a class="nav-link @if($loop->first) active @endif" data-toggle="tab"
                                                                                                    href="#{{ strtolower($language->code) }}">
                                                             <span class="flag-icon flag-icon-{{ strtolower($language->code) }}"></span> {{ $language->code }}
                                                         </a></li>
@@ -110,7 +109,7 @@
                                             @if(count(get_languages()))
                                                 @foreach(get_languages() as $language)
                                                     <div id="{{ strtolower($language->code) }}"
-                                                         class="tab-pane fade  @if($loop->first) in active @endif">
+                                                         class="tab-pane fade  @if($loop->first) in active show @endif">
                                                         <div class="form-group row">
                                                             <label class="col-sm-3">{{__('Subject')}}</label>
                                                             {{--{{Form::label('subject_'.strtolower($language->code), 'Subject',['class' => 'col-sm-3'])}}--}}

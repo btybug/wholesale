@@ -111,7 +111,7 @@ $("body").on("input", "#region", function(e) {
         function(res) {
             if (!res.error) {
                 $(".coupon-category-list").empty();
-                console.log(res);
+                // console.log(res);
                 Object.values(res.data).forEach(item => {
                     if (item !== null) {
                         $(".coupon-category-list").append(
@@ -254,7 +254,7 @@ $("body").on("change", "#ShippingZones", function(e) {
 
 $("body").on("click", ".add-new-payment-option", function(e) {
     $(this).html(`<i class="fa fa-trash"></i>`);
-    $(this).attr("class", "remove-new-payment-option");
+    $(this).attr("class", "btn btn-danger ml-5 remove-new-payment-option");
     postSendAjax(
         "/admin/settings/store/shipping/search-payment-options",
         {},
@@ -263,11 +263,11 @@ $("body").on("click", ".add-new-payment-option", function(e) {
             res.forEach(item => {
                 options += `<option value="${item.key}">${item.key}</option>`;
             });
-            let html = `<div class="payment-option-container" style="display: flex">
+            let html = `<div class="payment-option-container mb-2" style="display: flex">
             <select class="form-control" id="payment_options" name="payment_options[]">
                 ${options}
             </select>
-            <button type="button" class="add-new-payment-option"><i class="fa fa-plus"></i></button>
+            <button type="button" class="btn btn-primary add-new-payment-option ml-5"><i class="fa fa-plus"></i></button>
         
             </div>`;
             $(".payment-container").append(html);
@@ -364,7 +364,7 @@ $("body").on("change", ".country", function() {
 
 $("body").on("click", ".add-new-get-zones", function() {
     $(this).html(`<i class="fa fa-trash"></i>`);
-    $(this).attr("class", "remove-new-get-zones");
+    $(this).attr("class", "btn btn-danger remove-new-get-zones");
     let count = Number($(this).attr("data-count"));
     count++;
     let html = `<tr>
@@ -651,7 +651,7 @@ $("body").on("click", ".add-new-get-zones", function() {
     </td>
     <td>
        <div>
-          <button type="button" data-count="${count}" class="add-new-get-zones"><i class="fa fa-plus"></i></button>
+          <button type="button" data-count="${count}" class="btn btn-primary add-new-get-zones"><i class="fa fa-plus"></i></button>
        </div>
     </td>
  </tr>`;

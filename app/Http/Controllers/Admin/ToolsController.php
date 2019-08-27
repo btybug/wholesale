@@ -64,4 +64,9 @@ class ToolsController extends Controller
 
         return \Response::json(['error'=> false,'url' => route('admin_tools_stickers')]);
     }
+
+    public function getFilters()
+    {
+        return $this->view('filters.index',compact());
+    }
 }

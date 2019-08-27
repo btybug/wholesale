@@ -12,6 +12,7 @@ use App\Services\google\GoogleAnalyticsAPI;
 use App\Models\GoogleSettings;
 use App\Http\Controllers\Controller;
 use File;
+use Google_Service_Directory_Alias;
 use Illuminate\Http\Request;
 
 
@@ -45,11 +46,21 @@ class GoogleController extends Controller
 
     public function getAuthorization()
     {
-        $setting = \Config::get('services.google');
-        $ga = new GoogleAnalyticsAPI();
-        $ga->auth->setClientId(env('GOOGLE_CLIENT_ID','client_id'));
-        $ga->auth->setClientSecret(env('GOOGLE_CLIENT_SECRET','client_secret'));
-        $ga->auth->setRedirectUri(url(env('GOOGLE_REDIRECT_URI')));
+        $ga = new \Google_Client();
+        $ga->setClientId(env('GOOGLE_CLIENT_ID','client_id'));
+        $ga->setClientSecret(env('GOOGLE_CLIENT_SECRET','client_secret'));
+        $ga->setRedirectUri(url(env('GOOGLE_REDIRECT_URI')));
+        $ga->setAccessType ("offline");
+        $ga->setApprovalPrompt ("force");
+        foreach (config('gmail.scopes') as $scopes){
+            $ga->addScope($scopes);
+        }
+        foreach (config('gmail.additional_scopes') as $scopes){
+            $ga->addScope($scopes);
+        }
+        $ga->addScope(\Google_Service_Oauth2::USERINFO_EMAIL);
+        $ga->addScope(\Google_Service_Directory::ADMIN_DIRECTORY_GROUP);
+
         \Session::put('oauth_access_token', null);
         if (isset($_GET['force_oauth'])) {
             \Session::put('oauth_access_token', null);
@@ -60,7 +71,7 @@ class GoogleController extends Controller
          */
         if (!(\Session::has('oauth_access_token')) && !isset($_GET['code'])) {
             // Go get the url of the authentication page, redirect the client and go get that token!
-            $url = $ga->auth->buildAuthUrl();
+            $url = $ga->createAuthUrl();
             return redirect($url);
         }
     }
@@ -68,13 +79,16 @@ class GoogleController extends Controller
     public function getAnalyticCallBack(Request $request)
     {
         if (!(\Session::has('oauth_access_token')) && $request->get('code')){
-            $ga = new GoogleAnalyticsAPI();
-            $ga->auth->setClientId(env('GOOGLE_CLIENT_ID','client_id'));
-            $ga->auth->setClientSecret(env('GOOGLE_CLIENT_SECRET','client_secret'));
-            $ga->auth->setRedirectUri(url(env('GOOGLE_REDIRECT_URI')));
-            $auth = $ga->auth->getAccessToken($request->get('code'));
-
-            if ($auth['http_code'] == 200) {
+            $ga = new \Google_Client();
+            $ga->setClientId(env('GOOGLE_CLIENT_ID','client_id'));
+            $ga->setClientSecret(env('GOOGLE_CLIENT_SECRET','client_secret'));
+            $ga->setRedirectUri(url(env('GOOGLE_REDIRECT_URI')));
+            $ga->setAccessType ("offline");
+            $ga->setApprovalPrompt ("force");
+            $ga->authenticate($request->code);
+            $auth = $ga->getAccessToken();
+            if (isset($auth['access_token'])) {
+                $plus = new \Google_Service_Plus($ga);
                 $ga->accessToken=$accessToken = $auth['access_token'];
                 $refreshToken = $auth['refresh_token'];
                 $tokenExpires = $auth['expires_in'];
@@ -85,7 +99,7 @@ class GoogleController extends Controller
                     'expires_in'=>$tokenExpires,
                     'token_created'=>$tokenCreated,
                     'created' => time(),
-                    'email'=> $ga->getProfiles()['username'],
+                    'email'=> $plus->people->get('me')->emails[0]->value,
 
                 ];
                 $client=@json_decode(File::get(storage_path('/app/gmail/tokens/gmail-json.json')),true);

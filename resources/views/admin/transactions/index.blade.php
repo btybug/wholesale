@@ -3,11 +3,11 @@
 
 @stop
 @section('content')
-    <div class="panel panel-default">
-        <div class="panel-heading clearfix">
+    <div class="card panel panel-default">
+        <div class="card-header panel-heading clearfix">
            <h2 class="m-0 pull-left">{!! __('Transactions') !!}</h2>
         </div>
-        <div class="panel-body">
+        <div class="card-body panel-body">
             <table id="orders-table" class="table table-style table-bordered" cellspacing="0" width="100%">
                 <thead>
                 <tr>
@@ -31,6 +31,10 @@
         $(function () {
             $('#orders-table').DataTable({
                 ajax: "{!! route('datatable_all_transactions') !!}",
+                dom: 'Bfrtip',
+                buttons: [
+                    'csv', 'excel', 'pdf', 'print'
+                ],
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'transaction_id', name: 'transaction_id'},

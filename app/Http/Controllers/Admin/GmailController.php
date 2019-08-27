@@ -54,6 +54,6 @@ class GmailController extends Controller
         } catch (\Exception $exception) {
             return redirect()->back()->with(['alert' => ['message' => $exception->getMessage(), 'class' => 'danger']]);
         }
-        return redirect()->back(200);
+        return redirect()->back();
     }
 }

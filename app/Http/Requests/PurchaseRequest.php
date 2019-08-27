@@ -25,7 +25,6 @@ class PurchaseRequest extends FormRequest
     {
         return [
             "item_id"    => 'required',
-            "qty"  => "required|numeric",
             "price"  => "required|numeric",
         ];
     }

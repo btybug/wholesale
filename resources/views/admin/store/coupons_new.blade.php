@@ -3,24 +3,24 @@
 
 @stop
 @section('content')
-    <div class="row">
-        {!! Form::model($coupons,['url' => route('admin_store_coupons_save'),'files' => true,'id' => 'form-coupon','class' => '']) !!}
 
+    {!! Form::model($coupons,['url' => route('admin_store_coupons_save'),'files' => true,'id' => 'form-coupon','class' => '']) !!}
+    <div class="row">
         <div class="col-md-8">
             <div class="coupons_new_page">
-                <div class="panel panel-default coupons_page-panel">
+                <div class="card panel panel-default coupons_page-panel">
                     {!! Form::hidden('id',null) !!}
-                    <div class="panel-heading">
+                    <div class="card-header panel-heading">
                         <div class="left-head">
                             <h2 class="m-0 pull-left">New Coupon</h2>
                         </div>
                         <div class="right-head d-flex">
-                                <div class="button-save ml-5">
-                                    <button type="submit" class="btn btn-info">Save</button>
-                                </div>
+                            <div class="button-save ml-5">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body panel-body">
                         <div class="form-group row required">
                             <label class="col-sm-2 control-label" for="input-name">Coupon Name</label>
                             <div class="col-sm-7">
@@ -41,9 +41,9 @@
                                 <button type="button" class="btn btn-default generate-code">Generate code</button>
                             </div>
                         </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Application</div>
-                            <div class="panel-body">
+                        <div class="card panel panel-default mb-2">
+                            <div class="card-header panel-heading">Application</div>
+                            <div class="card-body panel-body">
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label" for="input-total"><span data-toggle="tooltip"
                                                                                                   title=""
@@ -108,41 +108,50 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Target</div>
-                            <div class="panel-body">
-                                <div class="form-group col-md-8">
-                                    <label class="col-sm-2 control-label">Target</label>
-                                    <div class="col-sm-10">
+                        <div class="card panel panel-default mb-2">
+                            <div class="card-header panel-heading">Target</div>
+                            <div class="card-body panel-body">
+
+                                    <div class="form-group ">
                                         <div class="row">
-                                            <div class="col-sm-4">
-                                                {!! Form::select('target',[
-                                                    '0' => "All",
-                                                    '1' => "Specific"
-                                                ],null,['class' => 'form-control select-target']) !!}
-                                            </div>
-                                            <div class="col-sm-6 user-box {{ (isset($coupons) && $coupons->target) ? '' :'hide' }}">
-                                                {!! Form::select('users[]',$users,null,['class'=> 'form-control input-select2','multiple' => true]) !!}
+                                            <label class="col-sm-3 control-label">Target</label>
+                                            <div class="col-sm-9">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        {!! Form::select('target',[
+                                                            '0' => "All",
+                                                            '1' => "Specific"
+                                                        ],null,['class' => 'form-control select-target']) !!}
+                                                    </div>
+                                                    <div class="col-sm-9 user-box {{ (isset($coupons) && $coupons->target) ? '' :'hide' }}">
+                                                        {!! Form::select('users[]',$users,null,['class'=> 'form-control input-select2','multiple' => true,'style' => 'width:100%;']) !!}
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <label for="send_email" class="col-sm-9 control-label">Send
+                                                email(notification)
+                                                {!! Form::checkbox('send_email',1,null,['id' => 'send_email']) !!}
+                                            </label>
 
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label  for="send_email" class="col-sm-9 control-label">Send email(notification)</label>
-                                    <div class="col-sm-3">
-                                        {!! Form::checkbox('send_email',1,null,['id' => 'send_email']) !!}
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Validity</div>
-                            <div class="panel-body">
+                        <div class="card panel panel-default mb-2">
+                            <div class="card-header panel-heading">Validity</div>
+                            <div class="card-body panel-body">
                                 <div class="form-group row">
                                     <div class="col-md-6">
                                         <div class="form-group row">
-                                            <label class="col-sm-4 control-label" for="input-date-start">Date Start</label>
+                                            <label class="col-sm-4 control-label" for="input-date-start">Date
+                                                Start</label>
                                             <div class="col-sm-8">
                                                 <div class="input-group date">
                                                     {!! Form::text('start_date',$coupons->start_date??null,['placeholder' => 'Date Start',
@@ -229,8 +238,9 @@
 
             </div>
         </div>
-        {!! Form::close() !!}
     </div>
+    {!! Form::close() !!}
+
 
 
     <script type="template" id="variation_template">
@@ -254,7 +264,7 @@
         $("body").on('change', '#voucherThemeSelect', function () {
             $(".voucher-box").html('');
             let data = $("#form-coupon").serialize();
-            if($(this).val() != ""){
+            if ($(this).val() != "") {
                 AjaxCall("/admin/store/coupons/get-theme", data, function (res) {
                     if (!res.error) {
                         $(".voucher-box").append(res.html)
@@ -266,7 +276,7 @@
 
         $("body").on('change', '.product-select', function () {
             $(".variations-box").html('');
-            AjaxCall("/admin/inventory/stock/get-variations-by-id", {id: $(this).val()}, function (res) {
+            AjaxCall("/admin/stock/get-variations-by-id", {id: $(this).val()}, function (res) {
                 if (!res.error) {
                     if (res.data.length) {
                         for (let i in res.data) {

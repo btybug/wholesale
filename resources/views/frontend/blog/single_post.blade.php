@@ -301,10 +301,11 @@
                                         <div class="user-add-comment">
                                             <div class="row">
                                                 <div class="col-sm-12">
+                                                    @if(Auth::check())
                                                     <div class="add-comment">
                                                         {!! Form::open(['route' => 'comment_create_post']) !!}
                                                         {!! Form::hidden('post_id',$post->id) !!}
-                                                        @if(! Auth::check())
+
                                                             {{--<div class="row">--}}
                                                             {{--<div class="col-sm-6">--}}
                                                             {{--<input name="guest_name" type="text"--}}
@@ -317,7 +318,7 @@
                                                             {{--<span class="error-box invalid-feedback guest_email"></span>--}}
                                                             {{--</div>--}}
                                                             {{--</div>--}}
-                                                        @endif
+
                                                         <div class="main-comment-wrap-img">
                                                             <div class="user-imges">
                                                                 <img src="{{ user_avatar() }}"
@@ -348,6 +349,7 @@
                                                         </div>
                                                         {!! Form::close() !!}
                                                     </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -581,30 +583,30 @@
 @stop
 
 @section("js")
-    <script src="{{asset('public/admin_theme/OwlCarousel2/owl.carousel.min.js')}}"></script>
+    {{--<script src="{{asset('public/admin_theme/OwlCarousel2/owl.carousel.min.js')}}"></script>--}}
 
     {!! Html::script('public/js/custom/comments.js') !!}
     <script>
         $(document).ready(function () {
 
-            $('.blog-products-slider').owlCarousel({
-                nav: true,
-                items: 1,
-                dots: false,
-                autoplay: true,
-                loop: true,
-                autoplayTimeout: 3000
-            });
-
-            $('.blog-posts-slider').owlCarousel({
-                nav: false,
-                items: 3,
-                dots: true,
-                autoplay: true,
-                autoplayTimeout: 5000,
-                loop: true,
-                margin: 10
-            });
+//            $('.blog-products-slider').owlCarousel({
+//                nav: true,
+//                items: 1,
+//                dots: false,
+//                autoplay: true,
+//                loop: true,
+//                autoplayTimeout: 3000
+//            });
+//
+//            $('.blog-posts-slider').owlCarousel({
+//                nav: false,
+//                items: 3,
+//                dots: true,
+//                autoplay: true,
+//                autoplayTimeout: 5000,
+//                loop: true,
+//                margin: 10
+//            });
 
             $('body').on('click', '.cancel-comment', function (event) {
                 $(this).parents('form:first')[0].reset();

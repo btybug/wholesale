@@ -27,7 +27,7 @@
                             $optionData = $model->type_attrs_pivot()->where('attributes_id',$attributeSticker->attributes_id)->get();
                         @endphp
 
-                        <select data-attribute_id="{{ $attributeSticker->attributes_id }}" name="variations[{{ $uniqueID }}][options][{{ $attributeSticker->attributes_id }}][options_id]" class="form-control">
+                        <select data-attribute_id="{{ $attributeSticker->attributes_id }}" name="variations[{{ $uniqueID }}][options][{{ $attributeSticker->attributes_id }}][options_id]" class="form-control mb-1">
                             @foreach($optionData as $option)
                                 <option {{ ($selectedValue == $option->sticker_id) ? 'selected' : '' }} value="{{ $option->sticker_id }}">{{ \App\Models\Stickers::getById($option->sticker_id) }}</option>
                             @endforeach
@@ -50,7 +50,7 @@
             {!! media_button("variations[$uniqueID][image]",( (isset($item['image'])) ? $item['image'] : null) ) !!}
         </td>
         <td>
-            <a class="remove-variation btn btn-danger"><i class="fa fa-trash-o"></i></a>
+            <a class="remove-variation btn btn-danger text-white"><i class="fa fa-trash-o"></i></a>
         </td>
     </tr>
 @else

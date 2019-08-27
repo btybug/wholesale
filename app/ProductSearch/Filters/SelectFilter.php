@@ -18,6 +18,8 @@ class SelectFilter implements Filter
      */
     public static function apply(Builder $builder, $value)
     {
+//        dd($value,'select');
+
         if(is_array($value) && count(array_filter($value))){
             $value = array_filter($value);
 //            $attributeStickerIDs = [];

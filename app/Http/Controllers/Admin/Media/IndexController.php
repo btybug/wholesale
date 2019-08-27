@@ -6,6 +6,7 @@
  * Date: 12/19/2016
  * Time: 2:58 PM
  */
+
 use App\Http\Controllers\Controller;
 use App\Models\Media\Folders;
 use App\Models\Media\Settings;
@@ -21,10 +22,23 @@ class IndexController extends Controller
         $this->settings = $settings;
     }
 
-    public function index()
+    public function index($name='drive')
+    {
+        $folder=Folders::where('name',$name)->where('parent_id',0)->first(['id','name']);
+        $settings = [];
+        return view('media.index', compact('settings','folder'));
+    }
+
+    public function html()
     {
         $settings = [];
-        return view('media.index', compact('settings'));
+        return view('media.html', compact('settings'));
+    }
+
+    public function trash()
+    {
+        $settings = [];
+        return view('media.trash', compact('settings'));
     }
 
     public function getSettings()

@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 @section('content')
     <section class="setting_add_lang">
-        <div class="panel panel-default">
-                    <div class="panel-heading">
+        <div class="card panel panel-default">
+                    <div class="card-header panel-heading">
                         <h3 class="box-title m-0">Add Language</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body panel-body">
                         <div class="row">
                             <div class="col-xs-12">
                             </div>
@@ -79,7 +79,7 @@
                                 </div>
 
 
-                                <div class="col-sm-12 text-right">
+                                <div class="text-right">
                                     {!! Form::submit('Save Language',['class' => 'btn btn-info']) !!}
                                     <a href="#"
                                        type="button" class="btn btn-default">Back</a>

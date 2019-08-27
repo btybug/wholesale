@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 @section('content')
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card panel panel-default">
+        <div class="card-header panel-heading">
             <h2 class="m-0">SEO</h2>
         </div>
-        <div class="panel-body">
+        <div class="card-body panel-body">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
 
                 @ok('admin_seo')
@@ -21,17 +21,17 @@
                 </li>
                 @endok
                 @ok('admin_seo_pages')
-                <li class="nav-item active">
-                    <a class="nav-link" id="payment_gateways" href="{!! route('admin_seo_pages') !!}" role="tab"
+                <li class="nav-item">
+                    <a class="nav-link active" id="payment_gateways" href="{!! route('admin_seo_pages') !!}" role="tab"
                        aria-controls="shipping" aria-selected="false">Pages</a>
                 </li>
                 @endok
             </ul>
             <div class="seo-pages mt-20">
                 <div class="container-fluid">
-                    <div class="row m-0">
+                    <div class="row m-0 justify-content-end">
                         @ok('post_admin_seo_pages')
-                        <button class="btn btn-info pull-right" id="form-submit">Save</button>
+                        <button class="btn btn-info" id="form-submit">Save</button>
                         @endok
                     </div>
                     <div class="row mt-20">
@@ -80,10 +80,10 @@
                             </div>
                         </div>
                         <div class="col-md-9">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">General</div>
+                            <div class="card panel panel-default">
+                                <div class="card-header panel-heading">General</div>
                                 {!! Form::model($model) !!}
-                                <div class="panel-body">
+                                <div class="card-body panel-body">
                                     <div class="form-group">
                                         <div class="row">
                                             <label for="seo-title" class="col-md-2 col-xs-12">Title</label>

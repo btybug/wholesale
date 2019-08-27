@@ -31,7 +31,8 @@ class SendEmailOrderSubmitted
                     ->first();
                 MailJob::create([
                     'template_id' => $adminMailTemplate->id,
-                    'must_be_done' => now()
+                    'must_be_done' => now(),
+                    'additional_data' => $event->order
                 ]);
             }
         }

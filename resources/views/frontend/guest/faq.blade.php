@@ -2,64 +2,90 @@
 
 @section('content')
     <main class="main-content">
-        <div class="faq-page">
-
-            <section class="section novi-background breadcrumb-classic">
-                <div class="container section-34 section-sm-50">
-                    <div class="d-flex flex-wrap align-items-xl-center">
-                        {{--<div class="col-xl-5 d-none d-xl-block text-xl-left">--}}
-                        {{--<h2><span class="big">Faq</span></h2>--}}
-                        {{--</div>--}}
-                        <ul class="list-inline list-inline-dashed p">
-                            <li class="list-inline-item"><a href="#">FAQ </a></li>
-                            <li class="list-inline-item"><a href="#">Contact us </a></li>
-                            </li>
-                        </ul>
-                        {{--<div class="col-xl-2 d-none d-md-block text-center"><span><i class="fa fa-question-circle"></i></span></div>--}}
-                        {{--<div class="offset-top-0 offset-md-top-10 col-xl-5 offset-xl-top-0 small text-xl-right">--}}
-                        {{--<ul class="list-inline list-inline-dashed p">--}}
-                        {{--<li class="list-inline-item"><a href="#">Home /</a></li>--}}
-                        {{--<li class="list-inline-item"><a href="#">Pages /</a></li>--}}
-                        {{--<li class="list-inline-item">Faq--}}
-                        {{--</li>--}}
-                        {{--</ul>--}}
-                        {{--</div>--}}
-                    </div>
-                </div>
-
-            </section>
-
-            <div class="container">
+        <section class="support__pages-wrapper faq-page">
+            <div class="container main-max-width">
                 <div class="row">
                     <div class="col-md-3">
-                        <div class="buttons">
-                            <h4>General Questions
-                                <small class="text-muted">({{$categories->count()}})</small>
-                            </h4>
-                            <p>All you need to know about Intense design studio and how to get Support.</p>
-                            {!! renderCategory($categories) !!}
-                        </div>
+                        <ul class="left-wrapper">
+                            @if(LaravelGmail::check())
+                                <li class="item-wrap">
+                                    <a href="{!! route('support_contact_us') !!}"
+                                       class="d-flex align-items-center item-link">
+                                        <span class="line"></span>
+                                        <div class="item-photo">
+                                            <img src="/public/img/message-icon.png" alt="contact">
+                                        </div>
+                                        <div class="item-name font-20">Contact Us</div>
+                                    </a>
+                                </li>
+                            @endif
+                            <li class="item-wrap">
+                                <a href="{!! route('delivery') !!}" class="d-flex align-items-center item-link">
+                                    <div class="item-photo">
+                                        <img src="/public/img/delivery-icon.png" alt="Delivery">
+                                    </div>
+                                    <div class="item-name font-20">Delivery</div>
+                                </a>
+                            </li>
+                            <li class="item-wrap">
+                                <a href="{!! route('terms_conditions') !!}"
+                                   class="d-flex align-items-center item-link ">
+                                    <div class="item-photo">
+                                        <img src="/public/img/paper-icon.png" alt="Terms Conditions">
+                                    </div>
+                                    <div class="item-name font-20">Terms & Conditions</div>
+                                </a>
+                            </li>
+
+                            <li class="item-wrap">
+                                <a href="{!! route('faq_page') !!}" class="d-flex align-items-center item-link active">
+                                    <div class="item-photo">
+                                        <img src="/public/img/faq-icon.png" alt="FAQ">
+                                    </div>
+                                    <div class="item-name font-20">FAQ</div>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                     <div class="col-md-9">
-                        <div class="accord">
-                            <div class="offset-top-66 offset-lg-top-0">
-                                <h3>Other Questions
-                                    <small class="text-muted question-count">({{ $category->faqs->count() }})</small>
-                                </h3>
-                                <p>The answers on most common questions are described bellow.</p>
-                                <div class="mt-5">
-                                    <!-- Bootstrap Accordion-->
-                                    <div class="accordion offset-top-0" role="tablist" aria-multiselectable="true"
-                                         id="accordion-2">
-                                        @include('frontend.guest._partials.faq_questions')
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="buttons">
+                                        <h4>General Questions
+                                            <small class="text-muted">({{$categories->count()}})</small>
+                                        </h4>
+                                        <p>All you need to know about Intense design studio and how to get Support.</p>
+                                        {!! renderCategory($categories) !!}
                                     </div>
                                 </div>
+                                @if($category)
+                                    <div class="col-md-9">
+                                        <div class="accord">
+                                            <div class="offset-top-66 offset-lg-top-0">
+                                                <h3>Other Questions
+                                                    <small class="text-muted question-count">({{ $category->faqs->count() }})</small>
+                                                </h3>
+                                                <p>The answers on most common questions are described bellow.</p>
+                                                <div class="mt-5">
+                                                    <!-- Bootstrap Accordion-->
+                                                    <div class="accordion offset-top-0" role="tablist" aria-multiselectable="true"
+                                                         id="accordion-2">
+                                                        @include('frontend.guest._partials.faq_questions')
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
+
     </main>
 @endsection
 @section('css')

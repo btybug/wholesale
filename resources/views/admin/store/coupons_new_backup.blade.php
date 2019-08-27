@@ -4,10 +4,10 @@
 @stop
 @section('content')
     <div class="coupons_new_page">
-        <div class="panel panel-default coupons_page-panel">
+        <div class="card panel panel-default coupons_page-panel">
             {!! Form::model($coupons,['url' => route('admin_store_coupons_save'),'files' => true,'id' => 'form-coupon','class' => '']) !!}
             {!! Form::hidden('id',null) !!}
-            <div class="panel-heading">
+            <div class="card-header panel-heading">
                 <div class="left-head">
                     <h2 class="m-0 pull-left">New Coupon</h2>
 
@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body panel-body">
                 <div class="row">
                     <div class="col-sm-7">
                         <div class="form-group row required">

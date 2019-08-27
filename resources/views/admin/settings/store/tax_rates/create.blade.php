@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 @section('content')
     <div class="inventory_attributes container-fluid">
-        <div class="panel panel-default">
-            <div class="panel-heading clearfix">
+        <div class="card panel panel-default">
+            <div class="card-header panel-heading clearfix">
                 <h2 class="m-0 pull-left">Attribute</h2>
                 <a class="btn btn-default pull-right"
                    href="{!! route('admin_settings_tax_rates') !!}">Back</a>
@@ -17,14 +17,14 @@
                 </div>
             @endif
 
-            <div class="panel-body">
+            <div class="card-body panel-body">
                 <div class="row">
                     <div class="col-md-9">
                         {!! Form::model($model,['class'=>'','url'=>route('post_admin_settings_tax_create_or_update',($model)?$model->id:null)]) !!}
                         @if(count(get_languages()))
                             <ul class="nav nav-tabs">
                                 @foreach(get_languages() as $language)
-                                    <li class="@if($loop->first) active @endif"><a data-toggle="tab"
+                                    <li class="nav-item"><a class="nav-link @if($loop->first) active @endif" data-toggle="tab"
                                                                                    href="#{{ strtolower($language->code) }}">
                                             <span class="flag-icon flag-icon-{{ strtolower($language->code) }}"></span> {{ $language->code }}
                                         </a></li>
@@ -35,7 +35,7 @@
                             @if(count(get_languages()))
                                 @foreach(get_languages() as $language)
                                     <div id="{{ strtolower($language->code) }}"
-                                         class="tab-pane fade  @if($loop->first) in active @endif">
+                                         class="tab-pane fade  @if($loop->first) in active show @endif">
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Tax Name</label>
                                             <div class="col-sm-10">

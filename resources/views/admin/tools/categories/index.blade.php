@@ -4,14 +4,14 @@
 @stop
 @section('content')
     <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading head-space-between">
+        <div class="card panel panel-default">
+            <div class="card-header panel-heading head-space-between">
                 <h2>{!! ucfirst(str_replace("_"," ",$type)) !!} Category</h2>
                 <div class="button-area text-right">
                     <a class="btn btn-primary add-category" href="javascript:void(0)"><span class="icon-plus"><i class="fa fa-plus"></i></span>Add new</a>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body panel-body">
                 <div class="row">
                     <div class="col-md-4">
                         <div id="tree1"></div>
@@ -35,7 +35,25 @@
             </div>
         </div>
     </div>
+    <div class="modal fade releted-products-add-modal" id="productsModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Select products</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="all-list">
 
+                    </ul>
+                </div>
+                {{--<div class="modal-footer">--}}
+                {{--<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>--}}
+                {{--</div>--}}
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 @stop
 @section('js')
     <script src="https://mbraak.github.io/jqTree/tree.jquery.js"></script>
@@ -55,6 +73,8 @@
                 }
             });
         });
+
+
 
         $('.icon-picker').iconpicker();
         $("body").on("click", ".iconpicker-item", function () {
@@ -100,8 +120,7 @@
             onDragStop: function (e, node) {
                 let id = e.id
                 let parentId = e.parent.id
-                // var tree_json = $("#tree1").tree("toJson");
-                AjaxCall("/admin/tools/categories/update-parent/{{ $type }}", {id, parentId}, function (res) {
+                AjaxCall("/admin/tools/filters/update-parent", {id, parentId}, function (res) {
                     $(".category-form-place").html('');
                 });
             }

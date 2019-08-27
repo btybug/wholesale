@@ -13,11 +13,11 @@ class Reply extends Model
     protected $guarded = ['id'];
 
     public function scopeMain($query){
-        return $query->whereNull('parent_id')->where('status', true)->orderBy('created_at','desc');
+        return $query->whereNull('parent_id')->where('status', true);
     }
 
     public function scopeMainAll($query){
-        return $query->whereNull('parent_id')->orderBy('created_at','desc');
+        return $query->whereNull('parent_id');
     }
 
     public function ticket()

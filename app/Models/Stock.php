@@ -10,6 +10,7 @@ namespace App\Models;
 
 use App\Models\Common\Translatable;
 use App\Models\Translations\StockTranslation;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Stock extends Translatable
@@ -21,8 +22,8 @@ class Stock extends Translatable
 
     public $translationModel = StockTranslation::class;
 
-    public $translatedAttributes = ['name', 'short_description', 'long_description','what_is_content'];
-    /**
+    public $translatedAttributes = ['name', 'short_description', 'long_description', 'what_is_content'];
+    /**specifications
      * @var array
      */
     protected $guarded = ['id'];
@@ -52,7 +53,18 @@ class Stock extends Translatable
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'stock_categories', 'stock_id', 'categories_id')
-            ->where('categories.type', 'stocks');
+            ->whereIn('categories.type', ['stocks','brands']);
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Category::class, 'brand_id', 'id');
+    }
+
+    public function offers()
+    {
+        return $this->belongsToMany(Category::class, 'stock_categories', 'stock_id', 'categories_id')
+            ->whereIn('categories.type', ['offers']);
     }
 
     public function stockAttrs()
@@ -73,6 +85,16 @@ class Stock extends Translatable
     public function related_products()
     {
         return $this->belongsToMany(Stock::class, 'stock_related', 'stock_id', 'related_id');
+    }
+
+    public function special_offers()
+    {
+        return $this->belongsToMany(Stock::class, 'stock_offer_products', 'stock_id', 'offer_id');
+    }
+
+    public function offer_products()
+    {
+        return $this->belongsToMany(Stock::class, 'stock_offer_products', 'offer_id', 'stock_id');
     }
 
     public function promotions()
@@ -137,14 +159,19 @@ class Stock extends Translatable
     public function active_sales()
     {
         $now = strtotime(now());
-        return $this->hasMany(StockSales::class, 'stock_id')->where('canceled',false)
+        return $this->hasMany(StockSales::class, 'stock_id')->where('canceled', false)
             ->whereRaw("stock_sales.start_date <= ? AND stock_sales.end_date >= ?",
-            array($now, $now)
-        );
+                array($now, $now)
+            );
     }
 
     public function faqs()
     {
         return $this->belongsToMany(Faq::class, 'faq_stocks', 'stock_id', 'faq_id');
+    }
+
+    public function in_favorites()
+    {
+        return $this->belongsToMany(User::class, 'favorites', 'stock_id', 'user_id');
     }
 }

@@ -1,11 +1,15 @@
+@php
+    $active=($active)??null;
+
+@endphp
 <ul class="profile-sidebar-menu list-unstyled mb-0 w-100 main-scrollbar">
-    <li class="profile-sidebar-menu_item active">
+    <li class="profile-sidebar-menu_item @if($active=='my_account') active @endif">
         <a href="{!! route('my_account') !!}"
            class="profile-sidebar-menu_link d-inline-flex align-items-center font-15 main-transition">
-                <span class="d-inline-block profile-sidebar-menu_icon mr-3">
+                <span class="d-inline-block profile-sidebar-menu_icon mr-2">
                     <svg
-                            viewBox="0 0 22 24"
-                            width="22px" height="24px">
+                        viewBox="0 0 22 24"
+                        width="22px" height="24px">
                     <path fill-rule="evenodd" fill="rgb(81, 132, 229)"
                           d="M20.454,23.292 C18.787,19.625 15.097,17.266 10.998,17.266 C6.903,17.266 3.213,19.625 1.542,23.292 L0.001,23.292 C1.184,20.274 3.596,17.879 6.674,16.685 L7.252,16.460 L6.711,16.160 C3.948,14.627 2.231,11.743 2.231,8.634 C2.231,3.874 6.163,0.002 10.998,0.002 C15.832,0.002 19.765,3.874 19.765,8.634 C19.765,11.744 18.050,14.628 15.289,16.160 L14.747,16.460 L15.325,16.685 C18.400,17.879 20.812,20.274 21.997,23.292 L20.454,23.292 ZM10.998,1.402 C6.949,1.402 3.655,4.646 3.655,8.634 C3.655,12.622 6.949,15.866 10.998,15.866 C15.049,15.866 18.344,12.622 18.344,8.634 C18.344,4.646 15.049,1.402 10.998,1.402 Z"/>
                 </svg>
@@ -13,7 +17,7 @@
             <span class="d-inline-block">Account</span>
         </a>
     </li>
-    <li class="profile-sidebar-menu_item">
+    <li class="profile-sidebar-menu_item @if($active=='notifications') active @endif ">
         <a href="{!! route('messages') !!}"
            class="profile-sidebar-menu_link d-inline-flex align-items-center font-15 main-transition">
                                 <span class="d-inline-block profile-sidebar-menu_icon mr-2">
@@ -50,13 +54,13 @@
             <span class="d-inline-block">Messages </span>
         </a>
     </li>
-    <li class="profile-sidebar-menu_item">
+    <li class="profile-sidebar-menu_item @if($active=='my_account_favourites') active @endif">
         <a href="{!! route('my_account_favourites') !!}"
            class="profile-sidebar-menu_link d-inline-flex align-items-center font-15 main-transition">
                 <span class="d-inline-block profile-sidebar-menu_icon mr-2">
                     <svg
-                            viewBox="0 0 22 21"
-                            width="22px" height="21px">
+                        viewBox="0 0 22 21"
+                        width="22px" height="21px">
                     <path fill-rule="evenodd" fill="rgb(81, 132, 229)"
                           d="M15.952,1.493 C18.635,1.493 20.659,3.532 20.659,6.235 C20.659,9.774 17.405,12.847 11.653,17.972 L11.624,17.999 L11.596,18.027 L11.000,18.625 L10.404,18.027 L10.376,17.999 L10.346,17.972 C4.595,12.847 1.342,9.774 1.342,6.235 C1.342,3.532 3.365,1.493 6.048,1.493 C7.514,1.493 9.020,2.201 9.978,3.342 L11.000,4.560 L12.023,3.342 C12.981,2.201 14.486,1.493 15.952,1.493 M15.952,0.144 C14.077,0.144 12.208,1.031 11.000,2.470 C9.791,1.031 7.923,0.144 6.048,0.144 C2.644,0.144 0.002,2.806 0.002,6.235 C0.002,10.450 3.740,13.886 9.459,18.983 L11.000,20.530 L12.541,18.983 C18.260,13.886 21.998,10.450 21.998,6.235 C21.998,2.806 19.356,0.144 15.952,0.144 L15.952,0.144 Z"/>
                 </svg>
@@ -64,13 +68,13 @@
             <span class="d-inline-block">Favorites</span>
         </a>
     </li>
-    <li class="profile-sidebar-menu_item">
+    <li class="profile-sidebar-menu_item @if($active=='my_account_orders') active @endif">
         <a href="{!! route('my_account_orders') !!}"
            class="profile-sidebar-menu_link d-inline-flex align-items-center font-15 main-transition">
                 <span class="d-inline-block profile-sidebar-menu_icon mr-2">
                     <svg
-                            viewBox="0 0 21 24"
-                            width="21px" height="24px">
+                        viewBox="0 0 21 24"
+                        width="21px" height="24px">
                     <path fill-rule="evenodd" fill="rgb(81, 132, 229)"
                           d="M16.116,4.279 L16.116,0.439 L4.839,0.439 L4.839,4.279 L0.909,4.279 L0.909,23.736 L20.046,23.736 L20.046,4.279 L16.116,4.279 ZM6.158,1.706 L14.796,1.706 L14.796,4.279 L6.158,4.279 L6.158,1.706 ZM18.726,22.468 L2.228,22.468 L2.228,5.547 L4.839,5.547 L4.839,8.095 L6.158,8.095 L6.158,5.547 L14.796,5.547 L14.796,8.095 L16.116,8.095 L16.116,5.547 L18.726,5.547 L18.726,22.468 Z"/>
                 </svg>
@@ -78,13 +82,13 @@
             <span class="d-inline-block">Orders</span>
         </a>
     </li>
-    <li class="profile-sidebar-menu_item">
+    <li class="profile-sidebar-menu_item @if($active=='my_account_address') active @endif">
         <a href="{!! route('my_account_address') !!}"
            class="profile-sidebar-menu_link d-inline-flex align-items-center font-15 main-transition">
                 <span class="d-inline-block profile-sidebar-menu_icon mr-2">
                     <svg
-                            viewBox="0 0 21 21"
-                            width="21px" height="21px">
+                        viewBox="0 0 21 21"
+                        width="21px" height="21px">
                     <path fill-rule="evenodd" fill="rgb(81, 132, 229)"
                           d="M2.709,0.614 L2.709,3.948 L0.917,3.948 L0.917,5.239 L2.709,5.239 L2.709,10.161 L0.917,10.161 L0.917,11.452 L2.709,11.452 L2.709,16.359 L0.917,16.359 L0.917,17.650 L2.709,17.650 L2.709,20.999 L20.041,20.999 L20.041,0.614 L2.709,0.614 ZM18.769,19.818 L3.980,19.818 L3.980,17.650 L7.229,17.650 L7.229,16.359 L3.980,16.359 L3.980,11.452 L7.229,11.452 L7.229,10.161 L3.980,10.161 L3.980,5.239 L7.229,5.239 L7.229,3.948 L3.980,3.948 L3.980,1.795 L18.769,1.795 L18.769,19.818 Z"/>
                 </svg>
@@ -92,13 +96,13 @@
             <span class="d-inline-block">Address</span>
         </a>
     </li>
-    <li class="profile-sidebar-menu_item">
+    <li class="profile-sidebar-menu_item @if($active=='my_account_tickets') active @endif">
         <a href="{!! route('my_account_tickets') !!}"
            class="profile-sidebar-menu_link d-inline-flex align-items-center font-15">
                 <span class="d-inline-block profile-sidebar-menu_icon mr-2">
                     <svg
-                            viewBox="0 0 15 21"
-                            width="15px" height="21px">
+                        viewBox="0 0 15 21"
+                        width="15px" height="21px">
                     <path fill-rule="evenodd" fill="rgb(81, 132, 229)"
                           d="M11.421,20.998 L10.105,20.998 C10.105,20.553 9.984,20.139 9.781,19.778 C9.331,19.003 8.476,18.477 7.499,18.477 C6.523,18.477 5.667,19.003 5.218,19.778 C5.015,20.139 4.894,20.553 4.894,20.998 L3.578,20.998 L-0.003,20.998 L-0.003,-0.003 L15.002,-0.003 L15.002,20.998 L11.421,20.998 ZM13.741,6.639 L12.028,6.639 L12.028,5.305 L13.741,5.305 L13.741,1.218 L1.258,1.218 L1.258,5.305 L2.970,5.305 L2.970,6.639 L1.258,6.639 L1.258,19.778 L3.792,19.778 C4.313,18.281 5.777,17.204 7.499,17.204 C9.222,17.204 10.686,18.281 11.207,19.778 L13.741,19.778 L13.741,6.639 ZM5.464,5.305 L9.534,5.305 L9.534,6.639 L5.464,6.639 L5.464,5.305 Z"/>
                 </svg>
@@ -107,12 +111,12 @@
 
         </a>
     </li>
-    <li class="profile-sidebar-menu_item">
-        <a href="{!! route('my_account_referrals') !!}"
+    <li class="profile-sidebar-menu_item ">
+        <a href="{{ route('my_account_referrals') }}"
            class="profile-sidebar-menu_link d-inline-flex align-items-center font-15">
                 <span class="d-inline-block profile-sidebar-menu_icon mr-2">
                       <svg  x="0px" y="0px"
-                                                viewBox="0 0 490 490">
+                            viewBox="0 0 490 490">
 <g>
 	<g>
 		<path d="M446.52,174.433c-27.254-20.921-63.341-32.443-101.616-32.443c-23.143,0-45.482,4.22-65.555,12.175
@@ -165,8 +169,8 @@
 
         </a>
     </li>
-    <li class="profile-sidebar-menu_item">
-        <a href="{!! route('my_account_special_offers') !!}"
+    <li class="profile-sidebar-menu_item ">
+        <a href="{{ route('my_account_special_offers') }}"
            class="profile-sidebar-menu_link d-inline-flex align-items-center font-15">
                 <span class="d-inline-block profile-sidebar-menu_icon mr-2">
                     <svg viewBox="-91 0 512 512.001">

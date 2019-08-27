@@ -1,0 +1,206 @@
+/*Globals*/
+
+/*fonts*/
+.font-8 { font-size: 0.5rem;}
+.font-9 { font-size: 0.5625rem;}
+.font-10 {font-size: 0.625rem;}
+.font-11 { font-size: 0.6875rem;}
+.font-12 {font-size: 0.75rem;}
+.font-13 {font-size: 0.8125rem;}
+.font-14 {font-size: 0.875rem;}
+.font-15 {font-size: 0.9375rem;}
+.font-16 {font-size: 1rem;}
+.font-17 {font-size: 1.0625rem;}
+.font-18 {font-size: 1.125rem;}
+.font-19 {font-size: 1.1875rem;}
+.font-20  {font-size: 1.25rem;}
+.font-21  {font-size: 1.3125rem;}
+.font-22 {font-size: 1.375rem;}
+.font-23 {font-size: 1.4375rem;}
+.font-24 {font-size: 1.5rem;}
+.font-25 {font-size: 1.563rem;}
+.font-26 {font-size: 1.625rem;}
+.font-28 {font-size: 1.75rem;}
+.font-30 {font-size:1.875rem;}
+.font-35 {font-size:2.1875rem;}
+.font-36 {font-size:2.25rem;}
+.font-40 {font-size: 2.5rem;}
+.font-41 {font-size: 2.5625rem}
+.font-44 {font-size: 2.75rem;}
+.font-48 {font-size: 3rem;}
+.font-50 {font-size: 3.125rem;}
+
+@font-face {
+    font-family: 'Roboto-Light';
+    src: url('../../fonts/Roboto-Light.eot');
+    src: url('../../fonts/Roboto-Light.eot?#iefix') format('embedded-opentype'),
+    url('../../fonts/Roboto-Light.woff2') format('woff2'),
+    url('../../fonts/Roboto-Light.woff') format('woff'),
+    url('../../fonts/Roboto-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Oswald-Regular';
+    src: url('../../fonts/Oswald-Regular.eot');
+    src: url('../../fonts/Oswald-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../../fonts/Oswald-Regular.woff2') format('woff2'),
+    url('../../fonts/Oswald-Regular.woff') format('woff'),
+    url('../../fonts/Oswald-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto-Regular';
+    src: url('../../fonts/Roboto-Regular.eot');
+    src: url('../../fonts/Roboto-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../../fonts/Roboto-Regular.woff2') format('woff2'),
+    url('../../fonts/Roboto-Regular.woff') format('woff'),
+    url('../../fonts/Roboto-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto-Medium';
+    src: url('../../fonts/Roboto-Medium.eot');
+    src: url('../../fonts/Roboto-Medium.eot?#iefix') format('embedded-opentype'),
+    url('../../fonts/Roboto-Medium.woff2') format('woff2'),
+    url('../../fonts/Roboto-Medium.woff') format('woff'),
+    url('../../fonts/Roboto-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Oswald-ExtraLight';
+    src: url('../../fonts/Oswald-ExtraLight.ttf');
+    src: url('../../fonts/Oswald-ExtraLight.eot?#iefix') format('embedded-opentype'),
+    url('../../fonts/Oswald-ExtraLight.woff2') format('woff2'),
+    url('../../fonts/Oswald-ExtraLight.woff') format('woff'),
+    url('../../fonts/Oswald-ExtraLight.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Oswald-Light';
+    src: url('../../fonts/Oswald-Light.eot');
+    src: url('../../fonts/Oswald-Light.eot?#iefix') format('embedded-opentype'),
+    url('../../fonts/Oswald-Light.woff2') format('woff2'),
+    url('../../fonts/Oswald-Light.woff') format('woff'),
+    url('../../fonts/Oswald-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Oswald-Medium';
+    src: url('../../fonts/Oswald-Medium.eot');
+    src: url('../../fonts/Oswald-Medium.eot?#iefix') format('embedded-opentype'),
+    url('../../fonts/Oswald-Medium.woff2') format('woff2'),
+    url('../../fonts/Oswald-Medium.woff') format('woff'),
+    url('../../fonts/Oswald-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'MyriadPro-Regular';
+    src: url('../../fonts/MyriadPro-Regular.eot');
+    src: url('../../fonts/MyriadPro-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../../fonts/MyriadPro-Regular.woff2') format('woff2'),
+    url('../../fonts/MyriadPro-Regular.woff') format('woff'),
+    url('../../fonts/MyriadPro-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.font-main-light {
+    font-family: 'Roboto-Light', sans-serif;
+}
+.font-main-reg {
+    font-family: 'Roboto-Regular', sans-serif;
+}
+
+.font-main-bold {
+    font-family: 'Roboto-Medium', sans-serif;
+}
+
+.font-sec-reg {
+    font-family: 'Oswald-Regular', sans-serif;
+}
+.font-sec-light {
+    font-family: 'Oswald-light', sans-serif;
+}
+.font-sec-ex-light {
+    font-family: 'Oswald-ExtraLight', sans-serif;
+}
+.font-sec-bold {
+    font-family: 'Oswald-Medium', sans-serif;
+}
+.font-myriad-reg {
+    font-family: 'MyriadPro-Regular', sans-serif;
+}
+/*Colors*/
+.text-main-clr {
+    color: #353535;
+}
+
+.text-sec-clr  {
+    color: #fff;
+}
+
+.text-tert-clr {
+    color: #5184e5;
+}
+
+.text-light-clr {
+    color: #515151;
+}
+
+.text-gray-clr{
+    color: #7c7c7c;
+}
+.text-red-clr{
+    color: #ee3a50;
+}
+.text-green-clr{
+    color:#41cf5c
+}
+.bg-blue-clr {
+    background-color: #5184e5;
+}
+.bg-red-clr {
+    background-color: #ee3a50;
+}
+
+
+:root {
+    font-size: 16px;
+}
+
+body {
+    font-size: 16px;
+    height: 100%;
+    color: #353535;
+    font-family: "Roboto-Regular", sans-serif;
+}
+
+ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.lh-1 {
+    line-height: 1;
+}
+
+.btn:focus {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+.border-main{
+    border: 1px solid #d7d7d7;
+}

@@ -2,7 +2,10 @@
 
 use App\Models\OrderItem;
 use App\Models\Orders;
+use App\Models\Stock;
 use App\Models\StockVariation;
+use App\Models\StockVariationDiscount;
+use App\Models\ZoneCountries;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 
 /**
@@ -14,14 +17,18 @@ use Darryldecode\Cart\Facades\CartFacade as Cart;
 class CartService
 {
     public static $cartItems = [];
+    public $variations = [];
+    public $extras = [];
+    public $price = 0;
 
-    public function getCartItems($id = null){
+    public function getCartItems($id = null)
+    {
         $cartCollection = ($id) ? Cart::session(Orders::ORDER_NEW_SESSION_ID)->getContent() : Cart::getContent();
 
         $items = [];
         $empty = ($id) ? Cart::session(Orders::ORDER_NEW_SESSION_ID)->isEmpty() : Cart::isEmpty();
-        if(! $empty){
-            foreach($cartCollection as $key => $value){
+        if (!$empty) {
+            foreach ($cartCollection as $key => $value) {
                 $items[$value->name][$key] = $value;
             }
         }
@@ -31,77 +38,133 @@ class CartService
         return $items;
     }
 
-    public function getCount() {
+    public function getCount()
+    {
         $cartCollection = count($this->getCartItems());
         return $cartCollection;
     }
 
-    public static function getVariation ($id)
+    public static function getVariation($id)
     {
         return StockVariation::find($id);
     }
 
     public static function getPriceSum($id)
     {
-        $data = (isset(self::$cartItems[$id])) ? self::$cartItems[$id] : [] ;
+        $cart = Cart::get($id);
+        $price = $cart->price;
+        if ($cart && $cart->attributes->has('extra') && isset($cart->attributes['extra']['price'])) {
+            $price += $cart->attributes['extra']['price'];
+        }
+        return ($cart) ? $price * $cart->quantity : $price;
+    }
+
+    public static function getTotalPriceSum()
+    {
+        $data = Cart::getContent();
         $price = 0;
-        if(count($data)){
-            foreach ($data as $datum){
-                $price += $datum->getPriceSum();
+        foreach ($data as $cart) {
+            $itemPrice = 0;
+            if ($cart->attributes->has('extra') && isset($cart->attributes['extra']['price'])) {
+                $itemPrice = $cart->attributes['extra']['price'];
             }
+
+            $price += $itemPrice * $cart->quantity;
         }
         return $price;
     }
 
-    public function remove($id,$user_id = null)
+    public static function getTotalCouponSum()
+    {
+        $data = Cart::getConditionsByType('coupon');
+        $price = 0;
+        foreach ($data as $cart) {
+            dd($cart->getValue(),$cart);
+//            if ($cart->getTarget() == 'total') {
+//                $itemPrice = $cart->attributes['extra']['price'];
+//            }
+
+            $price += $cart->getPrice();
+        }
+        return $price;
+    }
+
+    public function remove($id, $user_id = null)
     {
         $list = $this->getCartItems($user_id);
-        $data = (isset($list[$id])) ? $list[$id] : [] ;
+        $data = (isset($list[$id])) ? $list[$id] : [];
 
-        if(count($data)){
-            foreach ($data as $datum){
-                if($user_id){
+        if (count($data)) {
+            foreach ($data as $datum) {
+                if ($user_id) {
                     Cart::session(Orders::ORDER_NEW_SESSION_ID)->remove($datum->id);
-                }else{
+                } else {
                     Cart::remove($datum->id);
                 }
             }
-        }else{
-            if($user_id){
+        } else {
+            if ($user_id) {
                 Cart::session(Orders::ORDER_NEW_SESSION_ID)->remove($id);
-            }else{
+            } else {
                 Cart::remove($id);
             }
         }
     }
 
-    public function update($id,$qty,$condition,$value,$user_id = null)
+    public function removeExtra($id, $section_id, $user_id = null)
+    {
+        $section = Cart::get($section_id);
+        if ($section && $section->attributes->has('extra')) {
+            $attrs = $section->attributes;
+            $extras = $attrs['extra'];
+            foreach ($extras['data'] as $key => $datum) {
+                if ($datum['key'] == $id) {
+                    $price = $datum['price'];
+                    unset($extras['data'][$key]);
+                }
+            }
+
+            $extras['price'] -= $price;
+            $attrs['extra'] = $extras;
+            if ($user_id) {
+                Cart::session(Orders::ORDER_NEW_SESSION_ID)->update($section_id, array(
+                    'attributes' => $attrs
+                ));
+            } else {
+                Cart::update($section_id, array(
+                    'attributes' => $attrs
+                ));
+            }
+        }
+    }
+
+    public function update($id, $qty, $condition, $value, $user_id = null)
     {
         $list = $this->getCartItems($user_id);
-        $data = (isset($list[$id])) ? $list[$id] : [] ;
+        $data = (isset($list[$id])) ? $list[$id] : [];
 
-        if(count($data)){
-            foreach ($data as $datum){
-                if($condition == 'inner'){
-                    if($user_id){
+        if (count($data)) {
+            foreach ($data as $datum) {
+                if ($condition == 'inner') {
+                    if ($user_id) {
                         Cart::session(Orders::ORDER_NEW_SESSION_ID)->update($datum->id, array(
                             'quantity' => array(
                                 'relative' => false,
                                 'value' => $value
                             )));
-                    }else{
+                    } else {
                         Cart::update($datum->id, array(
                             'quantity' => array(
                                 'relative' => false,
                                 'value' => $value
                             )));
                     }
-                }else{
-                    if($user_id){
+                } else {
+                    if ($user_id) {
                         Cart::session(Orders::ORDER_NEW_SESSION_ID)->update($datum->id, array(
                             'quantity' => $qty
                         ));
-                    }else{
+                    } else {
                         Cart::update($datum->id, array(
                             'quantity' => $qty
                         ));
@@ -111,7 +174,7 @@ class CartService
         }
     }
 
-    public function saveOrderItems($items,$order)
+    public function saveOrderItems($items, $order)
     {
         foreach ($items as $variation_id => $item) {
             $main = $item[$variation_id];
@@ -160,8 +223,8 @@ class CartService
 //                }
 //            }
 
-            if(count($item)){
-                foreach($item as $vid){
+            if (count($item)) {
+                foreach ($item as $vid) {
                     $variationOpt = $vid->attributes->variation;
 
                     $options = [];
@@ -185,5 +248,295 @@ class CartService
                 }
             }
         }
+    }
+
+    public function validateProduct($product, $vdata)
+    {
+        $error = false;
+        $extraVariations = $product->variations()->required()->groupby('stock_variations.variation_id')->get();
+//        dd($vdata);
+        if ($vdata && count($vdata) == count($extraVariations)) {
+            foreach ($vdata as $k => $item) {
+                $data = [];
+                $group = $product->variations()->where('variation_id', $item['group_id'])->first();
+                if ($group) {
+                    $data['group'] = $group;
+                    $data['options'] = [];
+                    $product_limit = 0;
+
+                    if (isset($item['products']) && count($item['products'])) {
+                        if ($group->price_per == 'product') {
+                            $data['price'] = $group->price;
+                            $this->price += $group->price;
+                            foreach ($item['products'] as $p) {
+                                $option = $product->variations()->where('variation_id', $item['group_id'])->where('id', $p['id'])->first();
+                                if ($option) {
+                                    $product_limit += $p['qty'];
+                                    $data['options'][] = [
+                                        'option' => $option,
+                                        'qty' => $p['qty'],
+                                    ];
+                                } else {
+                                    $error = "Option not found";
+                                }
+                            }
+                        } else {
+                            $itemPrice = 0;
+                            foreach ($item['products'] as $p) {
+                                $option = $product->variations()->where('variation_id', $item['group_id'])->where('id', $p['id'])->first();
+                                if ($option) {
+                                    $p['qty'] = ($p['qty'])??1;
+                                    if($option->price_type == 'discount'){
+                                        if($p['discount_id'] == null){
+                                            $discount = $option->discounts()->where('from','<=',$p['qty'])->where('to','>=',$p['qty'])->first();
+                                            if($discount) {
+                                                $this->price += $p['qty'] * $discount->price;
+                                                $itemPrice += $p['qty'] * $discount->price;
+                                            }else{
+                                                $error = "Option not found";
+                                            }
+                                        }else{
+                                            $discount = StockVariationDiscount::findOrFail($p['discount_id']);
+                                            if($discount) {
+                                                $this->price += $discount->price;
+                                                $itemPrice += $discount->price;
+                                            }else{
+                                                $error = "Option not found";
+                                            }
+                                        }
+                                    }else{
+                                        $this->price += $p['qty'] * $option->price;
+                                        $itemPrice += $p['qty'] * $option->price;
+                                    }
+                                    $product_limit += $p['qty'];
+
+                                    $data['options'][] = [
+                                        'option' => $option,
+                                        'qty' => $p['qty'],
+                                        'discount_id' => $p['discount_id'],
+                                    ];
+                                } else {
+                                    $error = "Option not found";
+                                }
+                            }
+                            $data['price'] = $itemPrice;
+                        }
+
+                        if ($group->min_count_limit > $product_limit || $group->count_limit < $product_limit) {
+                            $error = "Please select options according to limit";
+                        }
+                    }
+                } else {
+                    $error = "Section not found";
+                }
+
+                if (count($data)) {
+                    $this->variations[] = $data;
+                }
+            }
+        } else {
+            $error = 'Select available options';
+        }
+        $error = false;
+        return $error;
+    }
+
+    public function validateExtra($product, $offers)
+    {
+        $error = false;
+        $offerData = [];
+        if(count($offers)){
+            foreach ($offers as $vdata){
+                $data = [];
+                $offer = Stock::find($vdata['product_id']);
+                if($offer){
+                    $data['offer'] = $offer;
+                    $data['key'] = uniqid();
+                    $data['variations'] = [];
+                    $data['price'] = 0;
+
+                    $variations = [];
+                    if(isset($vdata['variations']) && count($vdata['variations'])){
+                        foreach ($vdata['variations'] as $variation){
+                            $group = $offer->variations()->where('variation_id', $variation['group_id'])->first();
+                            if ($group) {
+                                $variations['group'] = $group;
+                                $variations['key'] = uniqid();
+                                $variations['options'] = [];
+
+                                $product_limit = 0;
+                                if (isset($variation['products']) && count($variation['products'])) {
+                                    if ($group->price_per == 'product') {
+                                        $data['price'] += $group->price;
+                                        $this->price += $group->price;
+                                        foreach ($variation['products'] as $p) {
+                                            $option = $offer->variations()->where('variation_id', $variation['group_id'])->where('id', $p['id'])->first();
+                                            if ($option) {
+                                                $product_limit += $p['qty'];
+                                                $variations['options'][] = [
+                                                    'option' => $option,
+                                                    'qty' => $p['qty'],
+                                                ];
+                                            } else {
+                                                $error = "Option not found";
+                                            }
+                                        }
+                                    } else {
+                                        $itemPrice = 0;
+                                        foreach ($variation['products'] as $p) {
+                                            $option = $offer->variations()->where('variation_id', $variation['group_id'])->where('id', $p['id'])->first();
+                                            if ($option) {
+                                                $p['qty'] = ($p['qty'])??1;
+                                                if($option->price_type == 'discount'){
+                                                    if($p['discount_id'] == null){
+                                                        $discount = $option->discounts()->where('from','<=',$p['qty'])->where('to','>=',$p['qty'])->first();
+                                                        if($discount) {
+                                                            $this->price += $p['qty'] * $discount->price;
+                                                            $itemPrice += $p['qty'] * $discount->price;
+                                                        }else{
+                                                            $error = "Option not found";
+                                                        }
+                                                    }else{
+                                                        $discount = StockVariationDiscount::findOrFail($p['discount_id']);
+                                                        if($discount) {
+                                                            $this->price += $discount->price;
+                                                            $itemPrice += $discount->price;
+                                                        }else{
+                                                            $error = "Option not found";
+                                                        }
+                                                    }
+                                                }else{
+                                                    $this->price += $p['qty'] * $option->price;
+                                                    $itemPrice += $p['qty'] * $option->price;
+                                                }
+                                                $product_limit += $p['qty'];
+
+                                                $variations['options'][] = [
+                                                    'option' => $option,
+                                                    'qty' => $p['qty'],
+                                                    'discount_id' => $p['discount_id'],
+                                                ];
+                                            } else {
+                                                $error = "Option not found";
+                                            }
+                                        }
+                                        $data['price'] += $itemPrice;
+
+                                    }
+
+                                    if ($group->min_count_limit > $product_limit || $group->count_limit < $product_limit) {
+                                        $error = "Please select options according to limit";
+                                    }
+                                }else{
+                                    $error = "Empty variation";
+                                }
+                            }
+                        }
+                    }
+
+                    $data['variations'] = $variations;
+                }else{
+                    $error = "Offer not found";
+                }
+                $offerData['data'][] = $data;
+            }
+        }else {
+            $error = "No offers";
+        }
+
+        if (count($offerData)) {
+            $offerData['price'] = $this->price;
+            $this->extras = $offerData;
+        }
+
+        $error = false;
+        return $error;
+    }
+
+    public function getShipping($items)
+    {
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $default_shipping = $user->addresses()->where('type', 'default_shipping')->first();
+            $zone = ($default_shipping) ? ZoneCountries::find($default_shipping->country) : null;
+            $geoZone = ($zone) ? $zone->geoZone : null;
+            if (!count($items)) {
+                Cart::removeConditionsByType('shipping');
+            } else {
+                if ($geoZone) {
+                    $shipping = Cart::getCondition($geoZone->name);
+                    if (!$shipping) {
+                        Cart::removeConditionsByType('shipping');
+                        if (count($geoZone->deliveries)) {
+                            $subtotal = Cart::getSubTotal();
+                            $delivery = $geoZone->deliveries()->where('min', '<=', $subtotal)->where('max', '>=', $subtotal)->first();
+                            if ($delivery && count($delivery->options)) {
+                                $shippingDefaultOption = $delivery->options->first();
+                                $condition2 = new \Darryldecode\Cart\CartCondition(array(
+                                    'name' => $geoZone->name,
+                                    'type' => 'shipping',
+                                    'target' => 'total',
+                                    'value' => $shippingDefaultOption->cost,
+                                    'order' => 1,
+                                    'attributes' => $shippingDefaultOption
+                                ));
+                                Cart::condition($condition2);
+                                $shipping = Cart::getCondition($geoZone->name);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return [
+            'default_shipping' => (isset($default_shipping) ? $default_shipping : null),
+            'shipping' => (isset($shipping) ? $shipping : null),
+            'geoZone' => (isset($geoZone) ? $geoZone : null)
+        ];
+    }
+
+    public function getShippingWholesaler($items)
+    {
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $default_shipping = $user->addresses()->where('type', 'default_shipping')->first();
+            $zone = ($default_shipping) ? ZoneCountries::find($default_shipping->country) : null;
+            $geoZone = ($zone) ? $zone->geoZone : null;
+            if (!count($items)) {
+                Cart::session('wholesaler')->removeConditionsByType('shipping');
+            } else {
+                if ($geoZone) {
+                    $shipping = Cart::session('wholesaler')->getCondition($geoZone->name);
+                    if (!$shipping) {
+                        Cart::session('wholesaler')->removeConditionsByType('shipping');
+                        if (count($geoZone->deliveries)) {
+                            $subtotal = Cart::session('wholesaler')->getSubTotal();
+                            $delivery = $geoZone->deliveries()->where('min', '<=', $subtotal)->where('max', '>=', $subtotal)->first();
+                            if ($delivery && count($delivery->options)) {
+                                $shippingDefaultOption = $delivery->options->first();
+                                $condition2 = new \Darryldecode\Cart\CartCondition(array(
+                                    'name' => $geoZone->name,
+                                    'type' => 'shipping',
+                                    'target' => 'total',
+                                    'value' => $shippingDefaultOption->cost,
+                                    'order' => 1,
+                                    'attributes' => $shippingDefaultOption
+                                ));
+                                Cart::session('wholesaler')->condition($condition2);
+                                $shipping = Cart::session('wholesaler')->getCondition($geoZone->name);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return [
+            'default_shipping' => (isset($default_shipping) ? $default_shipping : null),
+            'shipping' => (isset($shipping) ? $shipping : null),
+            'geoZone' => (isset($geoZone) ? $geoZone : null),
+            'delivery' => (isset($delivery) ? $delivery : null)
+        ];
     }
 }

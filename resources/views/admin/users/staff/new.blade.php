@@ -3,22 +3,24 @@
 
 @stop
 @section('content')
-   <div class="panel panel-default">
-       <div class="panel-heading clearfix">
-           <h2 class="m-0 pull-left"> New Staff</h2>
-           <ol class="breadcrumb pull-right m-0">
-               <li><a href="http://demo0.laravelcommerce.com/admin/dashboard/this_month"><i class="fa fa-dashboard"></i>
-                       Dashboard</a></li>
-               <li class="active">New Staff</li>
-           </ol>
+   <div class="card panel panel-default">
+       <div class="card-header panel-heading d-flex justify-content-between">
+           <h2 class="m-0"> New Staff</h2>
+           <nav aria-label="breadcrumb m-0 d-inline-flex">
+               <ol class="breadcrumb mb-0 bg-transparent">
+                   <li class="breadcrumb-item"><a href="http://demo0.laravelcommerce.com/admin/dashboard/this_month"><i class="fa fa-dashboard"></i>
+                           Dashboard</a></li>
+                   <li class="breadcrumb-item active" aria-current="page">New Staff</li>
+               </ol>
+           </nav>
        </div>
 
-       <div class="panel-body">
+       <div class="card-body panel-body">
 
            <div class="row">
                <div class="col-md-9">
                    <div class="tab-content">
-                           <div id="users_profile" class="tab-pane fade in active">
+                           <div id="users_profile" class="tab-pane fade in active show">
                                {!! Form::open(['class'=>'']) !!}
                                <div class="form-group row">
                                    <label for="inputName" class="col-sm-2 control-label">First Name</label>
@@ -76,8 +78,8 @@
 
 
                                <div class="form-group row">
-                                   <div class="col-sm-offset-2 col-sm-10 text-right">
-                                       <button type="submit" class="btn btn-success">Update</button>
+                                   <div class="col-sm-12 text-right">
+                                       <button type="submit" class="btn btn-success">Save</button>
                                    </div>
                                </div>
                                {!! Form::close() !!}

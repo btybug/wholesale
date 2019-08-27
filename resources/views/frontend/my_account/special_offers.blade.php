@@ -27,7 +27,7 @@
         <div class="d-flex">
             {{--@include('frontend._partials.left_bar')--}}
 
-            {{--acoount sidebar--}}
+            {{--profile sidebar--}}
             <div class="profile-sidebar profile-sidebar--inner-pages d-flex flex-column align-items-center">
                 @include('frontend.my_account._partials.left_bar')
                 <div class="mt-auto">
@@ -45,20 +45,12 @@
 
             <div class="profile-inner-pg-right-cnt">
                 <div class="profile-inner-pg-right-cnt_inner h-100">
-                    <div class="col-md-9 clearfix">
-                        <div class="col-md-6 float-left">
-                            <h3>Special offers</h3>
-                        </div>
-                        <div class="col-md-6 float-right">
-                            <div class="notification-actions-bar d-none">
-                                <a href="javascript:void(0)"
-                                   class="btn btn-danger delete-selected-notifications">Delete</a>
-                                <a href="javascript:void(0)" class="btn btn-info mark-us-read">Mark us Read</a>
-                                <a href="javascript:void(0)" class="btn btn-warning mark-us-unread">Mark us Unread</a>
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-lg-9">
+                        <div class="notification-actions-bar d-none">
+                            <a href="javascript:void(0)" class="btn btn-transp delete-selected-notifications mr-3">Delete</a>
+                            <a href="javascript:void(0)" class="btn btn-transp mark-us-read mr-3">Mark us <span class="text-uppercase">Read</span></a>
+                            <a href="javascript:void(0)" class="btn btn-transp mark-us-unread">Mark us <span class="text-uppercase">Unread</span></a>
+                        </div>
                         @foreach($coupons as $coupon)
                             <div class="col-ld-3 m-3">
                                 {!! $coupon->renderVoucher() !!}

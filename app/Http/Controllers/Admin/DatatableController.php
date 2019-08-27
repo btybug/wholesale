@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Attributes;
+use App\Models\Barcodes;
 use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Comment;
@@ -11,6 +12,7 @@ use App\Models\ContactUs;
 use App\Models\Coupons;
 use App\Models\Emails;
 use App\Models\Faq;
+use App\Models\Filters;
 use App\Models\GeoZones;
 use App\Models\Items;
 use App\Models\LogActivities;
@@ -31,12 +33,14 @@ use App\Models\Settings;
 use App\Models\Sports;
 use App\Models\Statuses;
 use App\Models\Stock;
+use App\Models\StockSales;
 use App\Models\Suppliers;
 use App\Models\Teams;
 use App\Models\Ticket;
 use App\Models\Transaction;
 use App\Models\Translations;
 use App\Models\TranslationsEntry;
+use App\Models\Warehouse;
 use App\User;
 use function foo\func;
 use Illuminate\Http\Request;
@@ -116,9 +120,26 @@ class DatatableController extends Controller
 
     public function getAllAttributes()
     {
-        return Datatables::of(Attributes::whereNull('parent_id'))
+        return Datatables::of(
+            Attributes::leftJoin('attributes_translations', 'attributes.id', '=', 'attributes_translations.attributes_id')
+                ->leftJoin("attribute_categories", 'attributes.id', '=', 'attribute_categories.attribute_id')
+                ->leftJoin("categories", 'attribute_categories.categories_id', '=', 'categories.id')
+                ->select('attributes.*','attributes_translations.name')
+                ->where('attributes_translations.locale', \Lang::getLocale())
+                    ->whereNull('attributes.parent_id')
+                    ->groupBy('attributes.id')
+        )
             ->editColumn('name', function ($attr) {
                 return $attr->name;
+            })
+            ->editColumn('category', function ($attr) {
+                $html = '';
+                if(count($attr->categories)){
+                    foreach ($attr->categories as $category){
+                        $html .= '<p>'.$category->name .'</p>';
+                    }
+                }
+                return $html;
             })
             ->editColumn('image', function ($attr) {
                 return ($attr->image) ? "<img src='$attr->image' width='50px'/>" : "No image";
@@ -133,7 +154,7 @@ class DatatableController extends Controller
 
                 return (userCan('admin_store_attributes_delete') ? '<a href="javascript:void(0)" class="btn btn-danger delete-button" data-href="' . route("admin_store_attributes_delete") . '" data-key="' . $attr->id . '">Delete</a>' : null) . (userCan('admin_store_attributes_edit') ? '
                     <a href="' . route("admin_store_attributes_edit", $attr->id) . '" class="btn btn-warning">Edit</a>' : null);
-            })->rawColumns(['actions', 'image', 'icon', 'created_at'])
+            })->rawColumns(['actions', 'image', 'icon', 'created_at','category'])
             ->make(true);
     }
 
@@ -281,7 +302,10 @@ class DatatableController extends Controller
 
     public function getAllStocks()
     {
-        return Datatables::of(Stock::query())
+        return Datatables::of(Stock::leftJoin('stock_translations', 'stocks.id', '=', 'stock_translations.stock_id')
+            ->select('stocks.*','stock_translations.name')
+            ->where('stocks.is_offer', false)
+            ->where('stock_translations.locale', \Lang::getLocale()))
             ->editColumn('image', function ($stock) {
                 return ($stock->image) ? "<img src='$stock->image' width='50px'/>" : "No image";
             })
@@ -289,7 +313,28 @@ class DatatableController extends Controller
                 return BBgetDateFormat($stock->created_at) . ' ' . BBgetTimeFormat($stock->created_at);
             })
             ->addColumn('actions', function ($stock) {
-                return "<a class='badge btn-danger' href='#'><i class='fa fa-trash'></i></a>" . ((userCan('admin_stock_edit')) ? "<a class='badge btn-warning' href='" . route("admin_stock_edit", $stock->id) . "'><i class='fa fa-edit'></i></a>" : '') . ((userCan('admin_stock_promotion_edit')) ? "<a class='badge btn-info' href='" . route("admin_stock_promotion_edit", $stock->id) . "'>Promotion</a>" : '');
+                return '<a href="javascript:void(0)" data-href="'.route("admin_stock_delete").'" 
+                class="delete-button badge btn-danger" data-key="' . $stock->id . '"><i class="fa fa-trash"></i></a>' .
+                    ((userCan('admin_stock_edit')) ? "<a class='badge btn-warning mr-1' href='" . route("admin_stock_edit", $stock->id) . "'><i class='fa fa-edit'></i></a>" : '');
+            })->rawColumns(['actions', 'name', 'image'])
+            ->make(true);
+    }
+
+    public function getAllStockOffers()
+    {
+        return Datatables::of(Stock::leftJoin('stock_translations', 'stocks.id', '=', 'stock_translations.stock_id')
+            ->select('stocks.*','stock_translations.name')
+            ->where('stocks.is_offer', true)
+            ->where('stock_translations.locale', \Lang::getLocale()))
+            ->editColumn('image', function ($stock) {
+                return ($stock->image) ? "<img src='$stock->image' width='50px'/>" : "No image";
+            })
+            ->editColumn('created_at', function ($stock) {
+                return BBgetDateFormat($stock->created_at) . ' ' . BBgetTimeFormat($stock->created_at);
+            })
+            ->addColumn('actions', function ($stock) {
+                return '<a href="javascript:void(0)" data-href="'.route("admin_stock_delete").'" 
+                class="delete-button badge btn-danger" data-key="' . $stock->id . '"><i class="fa fa-trash"></i></a>' . "<a class='badge btn-warning mr-1' href='" . route("admin_stock_edit_offer", $stock->id) . "'><i class='fa fa-edit'></i></a>";
             })->rawColumns(['actions', 'name', 'image'])
             ->make(true);
     }
@@ -394,11 +439,14 @@ class DatatableController extends Controller
             })->editColumn('status', function ($attr) {
                 $status = $attr->history()->whereNotNull('status_id')->latest()->first();
                 return ($status && $status->status) ?
-                    '<span class="badge" style="background-color: ' . $status->status->color . '">' . $status->status->name . '</span>' : null;
+                    '<span class="badge badge-secondary" style="background-color: ' . $status->status->color . '">' . $status->status->name . '</span>' : null;
             })->editColumn('updated_at', function ($attr) {
                 return BBgetDateFormat($attr->updated_at);
             })->editColumn('user', function ($attr) {
                 return $attr->user->name . ' ' . $attr->user->last_name;
+            })
+            ->editColumn('type', function ($attr) {
+                return ($attr->type) ? "Wholesaler" : "User";
             })
             ->addColumn('actions', function ($post) {
                 return (userCan('admin_orders_manage')) ? "<a class='badge btn-warning' href='" . route('admin_orders_manage', $post->id) . "'><i class='fa fa-edit'></i></a>" : '';
@@ -463,7 +511,7 @@ class DatatableController extends Controller
             })->addColumn('robots', function ($post) {
                 return "";
             })->addColumn('actions', function ($post) {
-                return userCan('admin_seo_bulk_edit_post') ? "<a href='" . route('admin_seo_bulk_edit_post', $post->id) . "'>Edit</a>" : null;
+                return userCan('admin_seo_bulk_edit_post') ? "<a class='badge btn-warning' href='" . route('admin_seo_bulk_edit_post', $post->id) . "'><i class=\"fa fa-edit\"></i></a>" : null;
             })
             ->rawColumns(['actions', 'name', 'og:image', 'fb:image', 'tw:image'])
             ->make(true);
@@ -510,7 +558,7 @@ class DatatableController extends Controller
             })->addColumn('robots', function ($stock) {
                 return "";
             })->addColumn('actions', function ($stock) {
-                return (userCan('admin_seo_bulk_edit_stock')) ? "<a href='" . route('admin_seo_bulk_edit_stock', $stock->id) . "'>Edit</a>" : null;
+                return (userCan('admin_seo_bulk_edit_stock')) ? "<a class='badge btn-warning' href='" . route('admin_seo_bulk_edit_stock', $stock->id) . "'><i class=\"fa fa-edit\"></i></a>" : null;
             })
             ->rawColumns(['actions', 'name', 'og:image', 'fb:image', 'tw:image'])
             ->make(true);
@@ -574,7 +622,9 @@ class DatatableController extends Controller
         return Datatables::of(Purchase::query())
             ->editColumn('user_id', function ($faq) {
                 return $faq->user->name;
-            })->editColumn('sku', function ($attr) {
+            })->addColumn('name', function ($attr) {
+                return $attr->item->name;
+            })->addColumn('sku', function ($attr) {
                 return $attr->item->sku;
             })->editColumn('created_at', function ($faq) {
                 return BBgetDateFormat($faq->created_at);
@@ -590,6 +640,23 @@ class DatatableController extends Controller
     public function getItemPurchases($item_id)
     {
         return Datatables::of(Purchase::where('item_id', $item_id))
+            ->editColumn('user_id', function ($faq) {
+                return $faq->user->name;
+            })->editColumn('sku', function ($attr) {
+                return $attr->item->sku;
+            })->editColumn('created_at', function ($faq) {
+                return BBgetDateFormat($faq->created_at);
+            })->editColumn('purchase_date', function ($faq) {
+                return BBgetDateFormat($faq->purchase_date);
+            })
+            ->addColumn('actions', function ($faq) {
+                return "<a class='badge btn-warning' href='" . route("admin_inventory_purchase_edit", $faq->id) . "'><i class='fa fa-edit'></i></a>";
+            })->rawColumns(['actions', 'question', 'answer', 'created_at', 'status'])
+            ->make(true);
+    }
+    public function getItemOthers($item_id)
+    {
+        return Datatables::of(Others::where('item_id', $item_id))
             ->editColumn('user_id', function ($faq) {
                 return $faq->user->name;
             })->editColumn('sku', function ($attr) {
@@ -635,6 +702,10 @@ class DatatableController extends Controller
                 return $attr->name;
             })->editColumn('short_description', function ($attr) {
                 return $attr->short_description;
+            })->addColumn('quantity', function ($attr) {
+                return ($attr->type=='simple')?$attr->purchase()->sum('qty')-$attr->others()->sum('qty'):'N/A';
+            })->editColumn('barcode_id', function ($attr) {
+                return ($attr->barcode)?$attr->barcode->code:'no barcode';
             })->editColumn('long_description', function ($attr) {
                 return $attr->long_description;
             })->addColumn('actions', function ($attr) {
@@ -744,6 +815,23 @@ class DatatableController extends Controller
             ->make(true);
     }
 
+    public function getAllBarcodes()
+    {
+        return Datatables::of(
+            Barcodes::query()
+        )
+            ->addColumn('item', function ($barcode) {
+                return ($barcode->item) ? "<a href='".route("admin_items_edit",$barcode->item->id)."' >" .$barcode->item->name. "</a>" : "not connected";
+            })
+            ->addColumn('actions', function ($code) {
+                return "
+<a class='badge btn-danger delete-button' data-key='$code->id' data-href='" . route('admin_inventory_barcode_delete') . "'><i class='fa fa-trash-o'></i></a>
+<a class='badge btn-info' href='".route('admin_inventory_barcode_view',$code->id)."'><i class='fa fa-eye'></i></a>
+";
+            })->rawColumns(['actions','item'])
+            ->make(true);
+    }
+
     public function getCampaigns()
     {
         return Datatables::of(
@@ -762,5 +850,64 @@ class DatatableController extends Controller
         return Datatables::of(
             User::query()
         )->make(true);
+    }
+
+    public function getAllFilters()
+    {
+        return Datatables::of(
+            Category::where('type','filter')
+        )->editColumn('created_at', function ($faq) {
+            return BBgetDateFormat($faq->created_at);
+        })->addColumn('actions', function ($attr) {
+            $html = '<a href="javascript:void(0)" data-href="#" 
+                class="delete-button badge btn-danger" data-key="' . $attr->id . '"><i class="fa fa-trash"></i></a>';
+            return $html .= "<a class='badge btn-warning' href='" . route('admin_tools_filters_manage', $attr->id) . "'><i class='fa fa-edit'></i></a>";
+        })->rawColumns(['actions'])->make(true);
+    }
+
+    public function getAllWarehouses()
+    {
+        return Datatables::of(
+            Warehouse::query()
+        )->editColumn('created_at', function ($faq) {
+            return BBgetDateFormat($faq->created_at);
+        })
+            ->editColumn('image', function ($attr) {
+                return ($attr->image) ? "<img src='$attr->image' class='img img-responsive' width='100px'/>" : "No image";
+            })
+            ->addColumn('actions', function ($attr) {
+            $html = '<a href="'.route("admin_warehouses_manage",$attr->id).'" 
+                class="badge btn-info" ><i class="fa fa-eye"></i></a>';
+            $html .= '<a href="javascript:void(0)" data-href="'.route("admin_warehouses_delete").'" 
+                class="delete-button badge btn-danger" data-key="' . $attr->id . '"><i class="fa fa-trash"></i></a>';
+            return $html .= "<a class='badge btn-warning' href='" . route('admin_warehouses_edit', $attr->id) . "'><i class='fa fa-edit'></i></a>";
+        })->rawColumns(['actions','image'])->make(true);
+    }
+
+    public function getAllPromotions()
+    {
+        return Datatables::of(
+            StockSales::query()
+            )->editColumn('id', function ($item) {
+                return "id";
+            })->editColumn('start_date', function ($item) {
+                return BBgetDateFormat($item->start_date);
+            })->editColumn('end_date', function ($item) {
+                return BBgetDateFormat($item->end_date);
+            })
+            ->editColumn('stock_id', function ($item) {
+                return $item->stock->name;
+            })
+            ->editColumn('canceled', function ($attr) {
+                return ($attr->canceled) ? "YES" : "No";
+            })
+            ->addColumn('actions', function ($attr) {
+                return '';
+//                $html = '<a href="'.route("admin_warehouses_manage",$attr->id).'"
+//                class="badge btn-info" ><i class="fa fa-eye"></i></a>';
+//                $html .= '<a href="javascript:void(0)" data-href="'.route("admin_warehouses_delete").'"
+//                class="delete-button badge btn-danger" data-key="' . $attr->id . '"><i class="fa fa-trash"></i></a>';
+//                return $html .= "<a class='badge btn-warning' href='" . route('admin_warehouses_edit', $attr->id) . "'><i class='fa fa-edit'></i></a>";
+            })->rawColumns(['actions','canceled'])->make(true);
     }
 }

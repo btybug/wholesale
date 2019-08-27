@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Events\Tickets;
+use App\Http\Controllers\Admin\Requests\UserAvaratRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Frontend\Requests\ChangePasswordRequest;
 use App\Http\Controllers\Frontend\Requests\MyAccountContactRequest;
@@ -24,6 +25,7 @@ use App\Models\Ticket;
 use App\Models\Settings;
 use App\Models\ZoneCountries;
 use App\Services\FileService;
+use App\Services\UserService;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -73,7 +75,6 @@ class UserController extends Controller
     {
         $user = \Auth::user();
 
-//        dd($user->favorites->toArray());
         return $this->view('favourites', compact('user'));
     }
 
@@ -174,8 +175,8 @@ class UserController extends Controller
 
     public function getOrders()
     {
-        $user = \Auth::user()->with('orders')->first();
-//        dd($user->toArray());
+        $user = \Auth::user();
+
         return $this->view('orders', compact('user'));
     }
 
@@ -209,6 +210,8 @@ class UserController extends Controller
 
         if (!$ticket) abort(404);
         $replies = $ticket->replies()->main()->get();
+
+//        dd($replies,$ticket->replies()->main()->oldest()->get());
         $data = mergeCollections($replies, $ticket->history);
 
         return $this->view('ticket_view', compact(['ticket', 'data']));
@@ -230,8 +233,11 @@ class UserController extends Controller
         if ($validate) return redirect()->back()->withErrors($validate);
 
         $status = $setting = $this->settings->getData('tickets', 'open');
+        $statusPriotity = $setting = $this->settings->getData('ticket_priority', 'open');
         $data['user_id'] = \Auth::id();
+        $data['author_id'] = \Auth::id();
         $data['status_id'] = ($status) ? $status->val : $this->statuses->where('type', 'tickets')->first()->id;
+        $data['priority_id'] = ($statusPriotity) ? $statusPriotity->val : $this->statuses->where('type', 'ticket_priority')->first()->id;
 
         $ticket = Ticket::create($data);
 
@@ -467,6 +473,18 @@ class UserController extends Controller
         Newsletter::whereNotIn('category_id', $emailSettings)->where('user_id', \Auth::id())->delete();
 
         return redirect()->back();
+    }
+
+    public function postProfileImageUpload(UserAvaratRequest $request, UserService $userService)
+    {
+        $result = $userService->avatarUpload($request->except('_token'));
+        return response()->json($result);
+    }
+
+    public function postProfileImageDelete(Request $request, UserService $userService)
+    {
+        $result = $userService->avatarDelete();
+        return response()->json($result);
     }
 }
 

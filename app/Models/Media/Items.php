@@ -181,4 +181,17 @@ class Items extends Model
     {
         return $this->belongsTo('App\Models\Media\Folders', 'folder_id');
     }
+//[
+//{"title": "Some title 1", "description": "Some desc 1", "content": "My content"},
+//{"title": "Confirm email", "description": "Some desc 2", "url": "{!! url('admin/mail-templates/confirm_email') !!}"}
+//]
+    public static function TinyMceTemplates()
+    {
+        $templates=self::where('extension','html')->where('folder_id','!=',Folders::where('name','trash')->first()->id)->get();
+        $result=[];
+        foreach($templates as $template){
+            $result[]=["title"=>$template->real_name, "description"=>$template->seo_description, "url"=>$template->url];
+        }
+        return json_encode($result);
+    }
 }

@@ -8,6 +8,7 @@ use App\Models\Stock;
 use App\Models\StockAttribute;
 use App\Models\StockTypeAttribute;
 use App\Models\StockVariation;
+use App\Models\StockVariationDiscount;
 use App\Models\StockVariationOption;
 
 /**
@@ -119,8 +120,6 @@ class StockService
 
     public function saveVariations($stock, array $data = [])
     {
-//        $stock->variations()->delete();
-
         if (count($data)) {
             $deletableArray = [];
             foreach ($data as $variation_id => $data) {
@@ -151,24 +150,59 @@ class StockService
         }
     }
 
-    public function savePackageVariation($stock, array $data = [], $price)
+    public function savePackageVariation($stock, array $data = [])
     {
         if (count($data)) {
             $deletableArray = [];
-            foreach ($data as $variation_id => $data) {
-                $newData = $data;
-                $newData['stock_id'] = $stock->id;
-                $newData['price'] = $price;
+            foreach ($data as $variation_id => $datum) {
+                $newData = [];
+                $newData['count_limit'] = ($datum['count_limit']) ?? 0;
+                $newData['min_count_limit'] = ($datum['min_count_limit']) ?? 0;
+                $newData['title'] = $datum['title'];
+                $newData['type'] = $datum['type'];
+                $newData['is_required'] = $datum['is_required'];
+                $newData['display_as'] = $datum['display_as'];
+                $newData['price_per'] = $datum['price_per'];
+                $newData['filter_category_id'] = ($datum['filter_category_id']) ?? 0;
+                $newData['common_price'] = ($datum['common_price']) ?? 0;
 
-                if (isset($newData['id'])) {
-                    $variation = StockVariation::find($newData['id']);
-                    $variation->update($newData);
-                } else {
-                    $variation = StockVariation::create($newData);
+                if (isset($datum['variations']) && count($datum['variations'])) {
+                    foreach ($datum['variations'] as $item) {
+                        $newData['price'] = ($datum['price_per'] == 'product') ? $newData['common_price'] : (($item['price']) ?? 0);
+                        $newData['item_id'] = $item['item_id'];
+                        $newData['qty'] = ($item['qty']) ?? 0;
+                        $newData['image'] = $item['image'];
+                        $newData['name'] = $item['name'];
+                        $newData['variation_id'] = $variation_id;
+
+                        $newData['price_type'] = ($item['price_type']) ?? null;
+                        $newData['discount_type'] = (isset($item['discount_type'])) ?$item['discount_type']: null;
+
+//                        $newData['filter_category_id'] = $datum['filter_category_id'];
+                        if (isset($item['id'])) {
+                            $variation = StockVariation::find($item['id']);
+                            $variation->update($newData);
+                        } else {
+                            $variation = $stock->variations()->create($newData);
+                        }
+                        $discountDeletable = [];
+                        if(isset($item['discount']) && count($item['discount'])){
+                            foreach ($item['discount'] as $discount){
+                                if (isset($discount['id'])) {
+                                    $d = StockVariationDiscount::find($discount['id']);
+                                    $d->update($discount);
+                                } else {
+                                    $d = $variation->discounts()->create($discount);
+                                }
+
+                                $discountDeletable[] = $d->id;
+                            }
+                        }
+                        $variation->discounts()->whereNotIn('id', $discountDeletable)->delete();
+                        $deletableArray[] = $variation->id;
+                    }
                 }
-                $deletableArray[] = $variation->id;
             }
-
             $stock->variations()->whereNotIn('id', $deletableArray)->delete();
         }
     }
@@ -199,6 +233,7 @@ class StockService
     public function saveSingleVariation($stock, array $data = [])
     {
         if (count($data)) {
+
             $data['stock_id'] = $stock->id;
             if (isset($data['id'])) {
                 $variation = StockVariation::find($data['id']);

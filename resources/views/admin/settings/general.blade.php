@@ -4,54 +4,18 @@
 @stop
 @section('content')
     <div class="container-fluid">
-        <div class="row">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                @ok('admin_settings_general')
-                <li class="nav-item active">
-                    <a class="nav-link " id="info-tab" href="{!! route('admin_settings_general') !!}" role="tab"
-                       aria-controls="general" aria-selected="true" aria-expanded="true">Info</a>
-                </li>
-                @endok
-                @ok('admin_settings_accounts')
-                <li class="nav-item">
-                    <a class="nav-link " id="general-tab" href="{!! route('admin_settings_accounts') !!}" role="tab"
-                       aria-controls="accounts" aria-selected="true" aria-expanded="true">Accounts</a>
-                </li>
-                @endok
-                @ok('admin_settings_footer')
-                <li class="nav-item">
-                    <a class="nav-link " id="general-tab" href="{!! route('admin_settings_footer') !!}" role="tab"
-                       aria-controls="general" aria-selected="true" aria-expanded="true">Footer</a>
-                </li>
-                @endok
-                @ok('admin_settings_tc')
-                <li class="nav-item">
-                    <a class="nav-link " id="general-tab" href="{!! route('admin_settings_tc') !!}" role="tab"
-                       aria-controls="general" aria-selected="true" aria-expanded="true">T&C</a>
-                </li>
-                @endok
-                @ok('admin_settings_connections')
-                <li class="nav-item">
-                    <a class="nav-link " id="general-tab" href="{!! route('admin_settings_connections') !!}" role="tab"
-                       aria-controls="general" aria-selected="true" aria-expanded="true">Connections</a>
-                </li>
-                @endok
-                @ok('admin_settings_about_us')
-                <li class="nav-item ">
-                    <a class="nav-link " id="general-tab" href="{!! route('admin_settings_about_us') !!}" role="tab"
-                       aria-controls="general" aria-selected="true" aria-expanded="true">About us</a>
-                </li>
-                @endok
-            </ul>
+        <div class="row flex-column">
+            @include("admin.settings._partials.menu",['active' => 'general'])
+
             <div class="tab-content">
                 {!! Form::model($model) !!}
-                <button class="btn btn-info pull-right mb-20 mt20" type="submit">Save</button>
-                <div class="tab-pane fade active in" id="admin_settings_general">
+
+                <div class="tab-pane fade active in show" id="admin_settings_general">
                     <div class="row">
                         <div class="col-md-9">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">Basics</div>
-                                <div class="panel-body">
+                            <div class="card panel panel-default mb-3">
+                                <div class="card-header panel-heading">Basics</div>
+                                <div class="card-body panel-body">
                                     <div class="col-md-7">
                                         <div class="form-group">
                                             <label for="SiteName">Site Name</label>
@@ -69,9 +33,9 @@
 
                                 </div>
                             </div>
-                            <div class="panel panel-default social-profile-page">
-                                <div class="panel-heading">Social Profile</div>
-                                <div class="panel-body">
+                            <div class="card panel panel-default social-profile-page mb-3">
+                                <div class="card-header panel-heading">Social Profile</div>
+                                <div class="card-body panel-body">
                                     <div class="form-group d-flex flex-wrap align-items-center social-media-group">
                                         @if($model && isset($model->social_media) && @json_decode($model->social_media,true))
 
@@ -170,47 +134,65 @@
                                 </div>
                             </div>
 
-                            <div class="panel panel-default">
-                                <div class="panel-heading">Address</div>
-                                <div class="panel-body">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="firstAddress">1st line address</label>
-                                            {!! Form::text('first_address',null,['class'=>'form-control']) !!}
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="secondAddress">2nd line address</label>
-                                            {!! Form::text('second_address',null,['class'=>'form-control']) !!}
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="country">Country</label>
-                                            {!! Form::select('country',$countries,null,['class'=>'form-control','id' => 'first_line_country']) !!}
+                            <div class="card panel panel-default mb-3">
+                                <div class="card-header panel-heading">Address</div>
+                                <div class="card-body panel-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="firstAddress">1st line address</label>
+                                                {!! Form::text('first_address',null,['class'=>'form-control']) !!}
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="secondAddress">2nd line address</label>
+                                                {!! Form::text('second_address',null,['class'=>'form-control']) !!}
+                                            </div>
+                                            <div class="form-group">
+                                                
+                                                <label for="country">Country</label>
+                                                {!! Form::select('country',$countries,null,['class'=>'form-control','id' => 'first_line_country']) !!}
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="city">City</label>
+                                                <div id="regions">
+                                                    {!! Form::text('city',null,['class'=>'form-control']) !!}
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="postCode">Post Code</label>
+                                                {!! Form::text('post_code',null,['class'=>'form-control']) !!}
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="postCode">Phone</label>
+                                                {!! Form::text('phone',null,['class'=>'form-control']) !!}
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="postCode">Email</label>
+                                                {!! Form::email('email',null,['class'=>'form-control']) !!}
+                                            </div>
 
                                         </div>
-                                        <div class="form-group">
-                                            <label for="city">City</label>
-                                            <div id="regions">
-                                                {!! Form::text('city',null,['class'=>'form-control']) !!}
+                                        <div class="offset-md-1 col-md-6">
+                                            <div class="settings-map-outer">
+                                                <iframe
+                                                    src="https://www.google.com/maps/embed/v1/place?key=&q=Armenia"
+                                                    {{--{{ $settings->first_address. '+'.$settings->second_address. '+'.$settings->city. '+'.$settings->post_code. '+'.$settings->country }}"--}}
+                                                    width="100%" height="100%" frameborder="0" style="border:0"
+                                                    allowfullscreen></iframe>
                                             </div>
                                         </div>
-
-                                        <div class="form-group">
-                                            <label for="postCode">Post Code</label>
-                                            {!! Form::text('post_code',null,['class'=>'form-control']) !!}
-                                        </div>
-
                                     </div>
-                                    <div class="col-md-offset-1 col-md-6">
-                                        <div class="settings-map-outer"></div>
-                                    </div>
+
 
                                 </div>
                             </div>
 
-                            <div class="panel panel-default">
-                                <div class="panel-heading">Opening Hours</div>
-                                <div class="panel-body form-inline">
-                                    <div class="row">
+                            <div class="card panel panel-default mb-3">
+                                <div class="card-header panel-heading">Opening Hours</div>
+                                <div class="card-body panel-body form-inline">
+                                    <div class="row w-100">
                                         <div class="col-md-7">
                                             <table class="table table--opening-hours" id="working-hours">
                                                 @if($model && isset($model->opening_hours) && @json_decode($model->opening_hours,true))
@@ -240,9 +222,10 @@
                                                                     <strong>From</strong>
                                                                     <div class="input-group bootstrap-timepicker timepicker">
                                                                         {!! Form::text('opening_hours[time_from][]',$openingHours['time_from'][$key],['class'=>'form-control timepicker1']) !!}
-                                                                        <label class="input-group-addon"
-                                                                               for="timepicker1"><i
-                                                                                    class="glyphicon glyphicon-time"></i></label>
+                                                                        <label class="input-group-addon input-group-append"
+                                                                               for="timepicker1">
+                                                                            <span class="input-group-text h-100"> <i class="fa fa-clock-o"></i></span>
+                                                                           </label>
                                                                     </div>
 
                                                                 </div>
@@ -252,9 +235,8 @@
                                                                     <strong>To</strong>
                                                                     <div class="input-group bootstrap-timepicker timepicker">
                                                                         {!! Form::text('opening_hours[time_to][]',$openingHours['time_from'][$key],['class'=>'form-control timepicker1']) !!}
-                                                                        <label class="input-group-addon"
-                                                                               for="timepicker2"><i
-                                                                                    class="glyphicon glyphicon-time"></i></label>
+                                                                        <label class="input-group-addon input-group-append"
+                                                                               for="timepicker2"><span class="input-group-text h-100"> <i class="fa fa-clock-o"></i></span></label>
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -294,9 +276,8 @@
                                                                 <strong>From</strong>
                                                                 <div class="input-group bootstrap-timepicker timepicker">
                                                                     {!! Form::text('opening_hours[time_from][]',null,['class'=>'form-control timepicker1']) !!}
-                                                                    <label class="input-group-addon"
-                                                                           for="timepicker1"><i
-                                                                                class="glyphicon glyphicon-time"></i></label>
+                                                                    <label class="input-group-addon input-group-append"
+                                                                           for="timepicker1"><span class="input-group-text h-100"> <i class="fa fa-clock-o"></i></span></label>
                                                                 </div>
 
                                                             </div>
@@ -306,9 +287,8 @@
                                                                 <strong>To</strong>
                                                                 <div class="input-group bootstrap-timepicker timepicker">
                                                                     {!! Form::text('opening_hours[time_to][]',null,['class'=>'form-control timepicker1']) !!}
-                                                                    <label class="input-group-addon"
-                                                                           for="timepicker2"><i
-                                                                                class="glyphicon glyphicon-time"></i></label>
+                                                                    <label class="input-group-addon input-group-append"
+                                                                           for="timepicker2"><span class="input-group-text h-100"> <i class="fa fa-clock-o"></i></span></label>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -325,78 +305,86 @@
 
                                 </div>
                             </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">Holidays</div>
-                                <div class="row">
-                                    <div class="col-md-7">
-                                        <table class="table table--holidays" id="calendar">
-                                            @if($model && isset($model->calendar) && @json_decode($model->calendar,true))
+                            <div class="card panel panel-default mb-3">
+                                <div class="card-header panel-heading">Holidays</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <table class="table table--holidays" id="calendar">
+                                                @if($model && isset($model->calendar) && @json_decode($model->calendar,true))
 
-                                                @php
-                                                    $calendar=@json_decode($model->calendar,true);
-                                                @endphp
+                                                    @php
+                                                        $calendar=@json_decode($model->calendar,true);
+                                                    @endphp
 
-                                                @foreach($calendar['holidays'] as $key=>$holidays)
+                                                    @foreach($calendar['holidays'] as $key=>$holidays)
+                                                        <tr>
+                                                            <td>
+                                                                <label for="calendar">Calendar</label>
+                                                                <div class="input-group">
+                                                                    {!! Form::text('calendar[holidays][]',$holidays,['class'=>'form-control calendar']) !!}
+                                                                    <label class="input-group-addon input-group-append" for="calendar">
+                                                                        <span class="input-group-text h-100"><i class="fa fa-calendar"></i></span>
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                {!! Form::text('calendar[reason][]',$calendar['reason'][$key],['class'=>'form-control']) !!}
+                                                            </td>
+                                                            <td>
+                                                                @if(!$key)
+                                                                    <button type="button" class="btn btn-primary pull-right"
+                                                                            id="add-more-calendar"><i
+                                                                                class="fa fa-plus"></i></button>
+                                                                @else
+                                                                    <button type="button"
+                                                                            class="btn btn-danger pull-right remove-calendar">
+                                                                        <i class="fa fa-minus"></i></button>
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @else
                                                     <tr>
                                                         <td>
                                                             <label for="calendar">Calendar</label>
                                                             <div class="input-group">
-                                                                {!! Form::text('calendar[holidays][]',$holidays,['class'=>'form-control calendar']) !!}
-                                                                <label class="input-group-addon" for="calendar"><i
-                                                                            class="glyphicon glyphicon-calendar"></i></label>
+                                                                {!! Form::text('calendar[holidays][]',null,['class'=>'form-control calendar']) !!}
+                                                                <label class="input-group-addon input-group-append" for="calendar"><span class="input-group-text h-100"><i class="fa fa-calendar"></i></span></label>
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            {!! Form::text('calendar[reason][]',$calendar['reason'][$key],['class'=>'form-control']) !!}
+                                                            {!! Form::text('calendar[reason][]',null,['class'=>'form-control']) !!}
                                                         </td>
                                                         <td>
-                                                            @if(!$key)
-                                                                <button type="button" class="btn btn-primary pull-right"
-                                                                        id="add-more-calendar"><i
-                                                                            class="fa fa-plus"></i></button>
-                                                            @else
-                                                                <button type="button"
-                                                                        class="btn btn-danger pull-right remove-calendar">
-                                                                    <i class="fa fa-minus"></i></button>
-                                                            @endif
+                                                            <button type="button" class="btn btn-primary pull-right"
+                                                                    id="add-more-calendar"><i class="fa fa-plus"></i>
+                                                            </button>
                                                         </td>
                                                     </tr>
-                                                @endforeach
-                                            @else
-                                                <tr>
-                                                    <td>
-                                                        <label for="calendar">Calendar</label>
-                                                        <div class="input-group">
-                                                            {!! Form::text('calendar[holidays][]',null,['class'=>'form-control calendar']) !!}
-                                                            <label class="input-group-addon" for="calendar"><i
-                                                                        class="glyphicon glyphicon-calendar"></i></label>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        {!! Form::text('calendar[reason][]',null,['class'=>'form-control']) !!}
-                                                    </td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-primary pull-right"
-                                                                id="add-more-calendar"><i class="fa fa-plus"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        </table>
+                                                @endif
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">Heading</div>
-                                <div class="panel-body">
+                            <div class="text-right">
+                                <button class="btn btn-info mb-20 mt20" type="submit">Save</button>
+                            </div>
+                            <div class="card panel panel-default">
+                                <div class="card-header panel-heading">Heading</div>
+                                <div class="card-body panel-body">
                                     <div class="form-group">
                                         <label for="dateFormat">Date Format</label>
                                         {!! Form::select('date_format',[
-                                        'MM/DD/YY'=>'MM/DD/YY',
-                                        'DD/MM/YY'=>'DD/MM/YY',
-                                        'YY/MM/DD'=>'YY/MM/DD',
+                                        'd M Y'=>'1 July 2019',
+                                        'M-D-y'=>'May-09-78',
+                                        'm/d/y'=>'12/22/78',
+                                        'd/M/Y'=>'31/DEC/2018',
+                                        'D/M/Y'=>'02/MAY/2016',
+                                        'Y/M/D'=>'2013/FEB/27',
                                         ],null,['class'=>'form-control']) !!}
                                     </div>
                                     <div class="form-group">
@@ -470,14 +458,14 @@
                     '<strong>From</strong> ' +
                     '<div class="input-group bootstrap-timepicker timepicker">' +
                     '<input class="form-control timepicker1" name="opening_hours[time_from][]" type="text" >' +
-                    '<label class="input-group-addon" for="timepicker1">' +
-                    '<i class="glyphicon glyphicon-time"></i></label>' +
+                    '<label class="input-group-addon input-group-append" for="timepicker1">' +
+                    '<span class="input-group-text h-100"> <i class="fa fa-clock-o"></i></span>' +
                     '</div></div> </td> <td> <div class="form-group"> ' +
                     '<strong>To</strong> ' +
                     '<div class="input-group bootstrap-timepicker timepicker"> ' +
                     '<input class="form-control timepicker1" name="opening_hours[time_to][]" type="text"> ' +
-                    '<label class="input-group-addon" for="timepicker2">' +
-                    '<i class="glyphicon glyphicon-time"></i>' +
+                    '<label class="input-group-addon input-group-append" for="timepicker2">' +
+                    '<span class="input-group-text h-100"> <i class="fa fa-clock-o"></i></span>' +
                     '</label> </div> </div> </td> <td><button type="button" class="btn btn-danger pull-right remove-hour"><i class="fa fa-minus"></i></button>' +
                     '</td></tr>';
                 $("#working-hours").append(html);
@@ -494,7 +482,7 @@
                     '<label for="calendar">Calendar</label> ' +
                     '<div class="input-group"> ' +
                     '<input class="form-control calendar" name="calendar[holidays][]" type="text"> ' +
-                    '<label class="input-group-addon" for="calendar"><i class="glyphicon glyphicon-calendar"></i></label> ' +
+                    '<label class="input-group-addon input-group-append" for="calendar"><span class="input-group-text h-100"><i class="fa fa-calendar"></i></span></label> ' +
                     '</div> ' +
                     '</td> ' +
                     '<td> ' +

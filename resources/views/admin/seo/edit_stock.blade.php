@@ -1,18 +1,18 @@
 @extends('layouts.admin')
 @section('content')
     {!! Form::model($stock) !!}
-<div class="panel panel-default">
-    <div class="panel-heading clearfix">
+<div class="card panel panel-default">
+    <div class="card-header panel-heading clearfix">
         <h2 class="m-0 pull-left">SEO Edit Product</h2>
         <div class="pull-right btn-save">
-            <button type="submit" class="btn btn-info">Save</button>
+            <button type="submit" class="btn btn-primary">Save</button>
         </div>
     </div>
 
-    <div class="panel-body">
-        <div class="panel panel-default mt-20">
-            <div class="panel-heading">FB</div>
-            <div class="panel-body">
+    <div class="card-body panel-body">
+        <div class="card panel panel-default mt-20 mb-3">
+            <div class="card-header panel-heading">FB</div>
+            <div class="card-body panel-body">
                 <div class="form-group">
                     <div class="row">
                         <label for="seo-facebook-title" class="col-md-2 col-xs-12">Facebook Title</label>
@@ -41,9 +41,9 @@
             </div>
         </div>
 
-        <div class="panel panel-default mt-20">
-            <div class="panel-heading">Twitter</div>
-            <div class="panel-body">
+        <div class="card panel panel-default mb-3">
+            <div class="card-header panel-heading">Twitter</div>
+            <div class="card-body panel-body">
                 <div class="form-group">
                     <div class="row">
                         <label for="seo-twitter-title" class="col-md-2 col-xs-12">Twitter Title</label>

@@ -10,10 +10,12 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Admin\Requests\AdminProfileRequest;
+use App\Http\Controllers\Admin\Requests\StaffRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddressesRequest;
 use App\Models\Addresses;
 use App\Models\Roles;
+use App\Models\UserNotes;
 use App\User;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
@@ -22,7 +24,7 @@ use App\Models\GeoZones;
 
 class UserController extends Controller
 {
-         use SendsPasswordResetEmails;
+    use SendsPasswordResetEmails;
     protected $redirectTo = '/home';
 
     protected $view = 'admin.users';
@@ -42,9 +44,30 @@ class UserController extends Controller
         return $this->view('index');
     }
 
+    public function getNew(Countries $countries)
+    {
+        $countries = $countries->all()->pluck('name.common', 'name.common')->toArray();
+        $roles = Roles::where('type', 'frontend')->pluck('title', 'id')->toArray();
+        return $this->view('new', compact('countries', 'roles'));
+    }
+
+    public function postNew(StaffRequest $request)
+    {
+        $data = $request->except('_token');
+        $data['customer_number'] = generate_number("AMC");
+        User::create($data);
+        return redirect()->route('admin_customers');
+    }
+
+
     public function showStaff()
     {
         return $this->view('staff');
+    }
+
+    public function showWholesallers()
+    {
+        return $this->view('wholesallers');
     }
 
     public function newStaff(Countries $countries)
@@ -53,10 +76,11 @@ class UserController extends Controller
         $roles = Roles::where('type', 'backend')->pluck('title', 'id')->toArray();
         return $this->view('staff.new', compact('countries', 'roles'));
     }
-    //TODO create validation
-    public function postStaff(Request $request)
+
+    public function postStaff(StaffRequest $request)
     {
         $data = $request->except('_token');
+        $data['customer_number'] = generate_number("AMC");
         User::create($data);
         return redirect()->route('admin_staff');
     }
@@ -68,8 +92,8 @@ class UserController extends Controller
         $roles = Roles::where('type', 'frontend')->pluck('title', 'id')->toArray();
         $billing_address = $user->addresses()->where('type', 'billing_address')->first();
         $default_shipping = $user->addresses()->where('type', 'default_shipping')->first();
-        $address = $user->addresses()->where(function ($query){
-           $query->where('type','address_book')->orWhere('type','default_shipping');
+        $address = $user->addresses()->where(function ($query) {
+            $query->where('type', 'address_book')->orWhere('type', 'default_shipping');
         })->pluck('first_line_address', 'id');
         $countriesShipping = [null => 'Select Country'] + $this->geoZones
                 ->join('zone_countries', 'geo_zones.id', '=', 'zone_countries.geo_zone_id')
@@ -77,8 +101,9 @@ class UserController extends Controller
                 ->groupBy('country')->pluck('country', 'id')->toArray();
 
 //        dd();
-        return $this->view('edit', compact('user', 'countries', 'roles','billing_address','default_shipping','address','countriesShipping'));
+        return $this->view('edit', compact('user', 'countries', 'roles', 'billing_address', 'default_shipping', 'address', 'countriesShipping'));
     }
+
     public function editStaff(Request $request, Countries $countries)
     {
         $user = User::find($request->id);
@@ -86,24 +111,24 @@ class UserController extends Controller
         $roles = Roles::where('type', 'backend')->pluck('title', 'id')->toArray();
         $billing_address = $user->addresses()->where('type', 'billing_address')->first();
         $default_shipping = $user->addresses()->where('type', 'default_shipping')->first();
-        $address = $user->addresses()->where(function ($query){
-           $query->where('type','address_book')->orWhere('type','default_shipping');
+        $address = $user->addresses()->where(function ($query) {
+            $query->where('type', 'address_book')->orWhere('type', 'default_shipping');
         })->pluck('first_line_address', 'id');
         $countriesShipping = [null => 'Select Country'] + $this->geoZones
                 ->join('zone_countries', 'geo_zones.id', '=', 'zone_countries.geo_zone_id')
                 ->select('zone_countries.*', 'zone_countries.name as country')
                 ->groupBy('country')->pluck('country', 'id')->toArray();
 
-        return $this->view('staff.edit', compact('user', 'countries', 'roles','billing_address','default_shipping','address','countriesShipping'));
+        return $this->view('staff.edit', compact('user', 'countries', 'roles', 'billing_address', 'default_shipping', 'address', 'countriesShipping'));
     }
 
-    public function postEditStaff($id,AdminProfileRequest $request)
+    public function postEditStaff($id, StaffRequest $request)
     {
         $user = User::findOrFail($id);
 
         $user->update($request->except('_token'));
 
-        return redirect()->back()->with('message',"Profile Updated successfully");
+        return redirect()->back()->with('message', "Profile Updated successfully");
     }
 
     public function postAddressBookForm(Request $request)
@@ -164,33 +189,7 @@ class UserController extends Controller
             ->with('status', trans($response));
     }
 
-    public function postReject(Request $request)
-    {
-        $user = User::findOrFail($request->user_id);
-        if($user->email_verified_at && ! $user->status) {
-            $user->update([
-                'verification_type' => null,
-                'verification_image' => null
-            ]);
-            return \Response::json(['error' => false]);
-        }
 
-        abort(404);
-    }
-
-    public function postApprove(Request $request)
-    {
-        $user = User::findOrFail($request->user_id);
-        if($user->email_verified_at && ! $user->status) {
-            $user->update([
-                'status' => true
-            ]);
-
-            return \Response::json(['error' => false]);
-        }
-
-        abort(404);
-    }
 
     public function deleteStaff(Request $request)
     {
@@ -206,5 +205,93 @@ class UserController extends Controller
         $user->delete();
 
         return response()->json(['error' => false]);
+    }
+
+    public function postNoteForm(Request $request)
+    {
+        $model = UserNotes::find($request->id);
+        $html = view("admin.users._partials.new_note",compact(['model']))->render();
+
+        return response()->json(['error' => false,'html' => $html]);
+    }
+
+    public function postSaveNote(Request $request)
+    {
+        $note = UserNotes::find($request->id);
+        if($note){
+            $note->update($request->except('_token','id'));
+        }else{
+            $data = $request->except('_token');
+            $data['author_id'] = \Auth::id();
+            $note = UserNotes::create($data);
+        }
+
+        $html = view('admin.users._partials.user_notes')->with('user',$note->user)->render();
+        return response()->json(['error' => false,'html' => $html]);
+    }
+
+    public function postDeleteNote(Request $request)
+    {
+        $note = UserNotes::findOrFail($request->slug);
+        $note->delete();
+
+        return response()->json(['error' => false]);
+    }
+
+    public function postVerify(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        if (! $user->email_verified_at) {
+            $user->markEmailAsVerified();
+            $user->update([
+                'status' => true
+            ]);
+
+            return redirect()->back();
+        }
+
+        abort(404);
+    }
+
+    public function postRejectVerified(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        if ($user->email_verified_at) {
+            \DB::table("users")->update(['email_verified_at' => null]);
+            $user->update([
+                'status' => false
+            ]);
+            return redirect()->back();
+        }
+
+        abort(404);
+    }
+
+    public function postApprove(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        if (! $user->wholesaler_status) {
+            $user->update([
+                'wholesaler_status' => true
+            ]);
+
+            return redirect()->back();
+        }
+
+        abort(404);
+    }
+
+    public function postRejectApproved(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        if ($user->wholesaler_status) {
+            $user->update([
+                'wholesaler_status' => false
+
+            ]);
+            return redirect()->back();
+        }
+
+        abort(404);
     }
 }

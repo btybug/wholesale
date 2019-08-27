@@ -3,18 +3,18 @@
 
 @stop
 @section('content')
-    <div class="panel panel-default users-log-wrapper">
-        <div class="panel-heading clearfix">
-            <h2 class="m-0 pull-left"> Admin Profile </h2>
-            <ol class="breadcrumb pull-right mb-0">
-                <li><a href="http://demo0.laravelcommerce.com/admin/dashboard/this_month"><i class="fa fa-dashboard"></i>
-                        Dashboard</a></li>
-                <li class="active">Admin Profile</li>
-            </ol>
+    <div class="card panel panel-default users-log-wrapper">
+        <div class="card-header panel-heading d-flex justify-content-between">
+            <h2 class="m-0">{{ ($user) ? $user->name . ' ' . $user->last_name : "Admin Profile" }} </h2>
+            <nav aria-label="breadcrumb m-0 d-inline-flex">
+                <ol class="breadcrumb mb-0 bg-transparent">
+                    <li class="breadcrumb-item"><a href="http://demo0.laravelcommerce.com/admin/dashboard/this_month"><i class="fa fa-dashboard"></i>
+                            Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Admin Profile</li>
+                </ol>
+            </nav>
         </div>
-
-        <div class="panel-body">
-
+        <div class="card-body panel-body">
             <div class="row">
                 <div class="col-md-3">
                     <!-- Profile Image -->
@@ -32,12 +32,12 @@
                         <!-- /.box-body -->
                     </div>
                     <!-- /.box -->
-                    <ul class=" nav nav-pills nav-stacked admin-profile-left">
-                        <li class="active">
-                            <a href="#users_profile" data-toggle="tab">Profile</a>
+                    <ul class=" nav nav-pills flex-column nav-stacked admin-profile-left tabs-colors">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#users_profile" data-toggle="tab">Profile</a>
                         </li>
-                        <li>
-                            <a href="#users_logs" data-toggle="tab">Logs</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#users_logs" data-toggle="tab">Logs</a>
                         </li>
                     </ul>
                     <!-- /.box -->
@@ -49,12 +49,12 @@
                         {{--<li><a href="#passwordDiv" data-toggle="tab">Password</a></li>--}}
                         {{--</ul>--}}
                         <div class="tab-content">
-                            <div id="users_profile" class="tab-pane fade in active">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
+                            <div id="users_profile" class="tab-pane fade in active show">
+                                <div class="card panel panel-default">
+                                    <div class="card-header panel-heading">
                                         <h3 class="m-0">Profile</h3>
                                     </div>
-                                    <div class="panel-body">
+                                    <div class="card-body panel-body">
                                         <!-- The timeline -->
                                         {!! Form::model($user,['class'=>'']) !!}
                                         {!! Form::hidden('id') !!}
@@ -121,7 +121,7 @@
 
 
                                         <div class="form-group row">
-                                            <div class="col-sm-offset-2 col-sm-10 text-right">
+                                            <div class="col-sm-12 text-right">
                                                 <button type="submit" class="btn btn-success">Update</button>
                                             </div>
                                         </div>
@@ -433,6 +433,10 @@
 
             $('#users-table').DataTable({
                 ajax:  "{!! route('datatable_user_activity',$user->id) !!}",
+                dom: 'Bfrtip',
+                buttons: [
+                    'csv', 'excel', 'pdf', 'print'
+                ],
                 columns: [
                     {data: 'id',name: 'id'},
                     {data: 'url',name: 'url'},
@@ -452,6 +456,10 @@
 
             $('#orders-table').DataTable({
                     ajax: "{!! route('datatable_user_orders',$user->id) !!}",
+                dom: 'Bfrtip',
+                buttons: [
+                    'csv', 'excel', 'pdf', 'print'
+                ],
                     columns: [
                         {data: 'id', name: 'id'},
                         {data: 'user', name: 'user'},

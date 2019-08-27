@@ -75,6 +75,26 @@
 }
 
 @font-face {
+    font-family: 'Oswald-ExtraLight';
+    src: url('../fonts/Oswald-ExtraLight.ttf');
+    src: url('../fonts/Oswald-ExtraLight.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/Oswald-ExtraLight.woff2') format('woff2'),
+    url('../fonts/Oswald-ExtraLight.woff') format('woff'),
+    url('../fonts/Oswald-ExtraLight.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Oswald-Light';
+    src: url('../fonts/Oswald-Light.eot');
+    src: url('../fonts/Oswald-Light.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/Oswald-Light.woff2') format('woff2'),
+    url('../fonts/Oswald-Light.woff') format('woff'),
+    url('../fonts/Oswald-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
     font-family: 'Oswald-Medium';
     src: url('../fonts/Oswald-Medium.eot');
     src: url('../fonts/Oswald-Medium.eot?#iefix') format('embedded-opentype'),
@@ -84,8 +104,16 @@
     font-weight: 500;
     font-style: normal;
 }
-
-
+@font-face {
+    font-family: 'MyriadPro-Regular';
+    src: url('../fonts/MyriadPro-Regular.eot');
+    src: url('../fonts/MyriadPro-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/MyriadPro-Regular.woff2') format('woff2'),
+    url('../fonts/MyriadPro-Regular.woff') format('woff'),
+    url('../fonts/MyriadPro-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 
 .font-main-light {
     font-family: 'Roboto-Light', sans-serif;
@@ -101,10 +129,18 @@
 .font-sec-reg {
     font-family: 'Oswald-Regular', sans-serif;
 }
+.font-sec-light {
+    font-family: 'Oswald-light', sans-serif;
+}
+.font-sec-ex-light {
+    font-family: 'Oswald-ExtraLight', sans-serif;
+}
 .font-sec-bold {
     font-family: 'Oswald-Medium', sans-serif;
 }
-
+.font-myriad-reg {
+    font-family: 'MyriadPro-Regular', sans-serif;
+}
 /*Colors*/
 .text-main-clr {
     color: #353535;
@@ -125,9 +161,17 @@
 .text-gray-clr{
     color: #7c7c7c;
 }
-
+.text-red-clr{
+    color: #ee3a50;
+}
+.text-green-clr{
+    color:#41cf5c
+}
 .bg-blue-clr {
     background-color: #5184e5;
+}
+.bg-red-clr {
+    background-color: #ee3a50;
 }
 
 
@@ -146,7 +190,11 @@ body {
         max-width: 1600px;
     }
 }
-
+@media (min-width: 1350px) and (max-width: 1629px){
+    .main-max-width  {
+        max-width: 1300px;
+    }
+}
 body {
     position: relative;
     color: #353535;
@@ -309,6 +357,24 @@ textarea {
     background: #9cbcf9;
 }
 
-body::-webkit-scrollbar {  width: 5px;}
+body::-webkit-scrollbar {  width: 8px;}
 body::-webkit-scrollbar-track {  background: #ebeef4; }
 body::-webkit-scrollbar-thumb {  background: #9cbcf9; }
+
+/*new_scrollbar*/
+.new__scroll{
+    overflow-y: auto;
+}
+.new__scroll::-webkit-scrollbar {
+    width: 11px;
+}
+
+/*.special__popup-content-scroll::-webkit-scrollbar-track {  background: #9cbcf9; }*/
+.new__scroll::-webkit-scrollbar-thumb {
+    background: #e7e7e7;
+}
+@media (max-width: 991px) {
+    .container{
+        max-width: 100%;
+    }
+}

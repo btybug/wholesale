@@ -49,21 +49,21 @@ class Category extends Translatable
                 'name' => $item->name,
                 'text' => $item->name,
                 'parent_id' => $item->parent_id,
-                "state"=> false,
+                "state" => false,
                 'children' => []
             ];
 
-            if(count($selected) && in_array($item->id,$selected)){
+            if (count($selected) && in_array($item->id, $selected)) {
                 $data[$i]['state'] = ['selected' => true];
             }
 
             if (count($item->children)) {
-                $data[$i]['children'] = self::recursiveItems($item->children, 0, $data[$i]['children'],$selected);
+                $data[$i]['children'] = self::recursiveItems($item->children, 0, $data[$i]['children'], $selected);
             }
 
             $i = $i + 1;
             if ($i != count($iems)) {
-                $data = self::recursiveItems($iems, $i, $data,$selected);
+                $data = self::recursiveItems($iems, $i, $data, $selected);
             }
 
             return $data;
@@ -72,16 +72,31 @@ class Category extends Translatable
 
     public function stickers()
     {
-        return $this->belongsToMany(Stickers::class, 'category_stickers', 'categories_id','sticker_id');
+        return $this->belongsToMany(Stickers::class, 'category_stickers', 'categories_id', 'sticker_id');
     }
 
     public function products()
     {
-        return $this->belongsToMany(Stock::class, 'stock_categories',  'categories_id','stock_id');
+        return $this->belongsToMany(Stock::class, 'stock_categories', 'categories_id', 'stock_id');
     }
 
     public function faqs()
     {
-        return $this->belongsToMany(Faq::class, 'faq_categories',  'categories_id','faq_id');
+        return $this->belongsToMany(Faq::class, 'faq_categories', 'categories_id', 'faq_id');
+    }
+
+    public function filters()
+    {
+        return $this->hasMany(Filters::class, 'category_id');
+    }
+
+    public function stocks()
+    {
+        return $this->belongsToMany(Stock::class, 'stock_categories', 'categories_id', 'stock_id');
+    }
+
+    public function brandProducts()
+    {
+        return $this->hasMany(Stock::class,'brand_id');
     }
 }

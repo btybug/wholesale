@@ -3,9 +3,9 @@
 @stop
 @section('content')
     <section class="tickets-edit-page">
-       <div class="panel panel-default">
-           <h2 class="panel-heading mt-0">Edit ticket</h2>
-          <div class="panel-body">
+       <div class="card panel panel-default">
+           <h2 class="card-header panel-heading mt-0">{{ ($model) ? $model->subject : "Add ticket" }}</h2>
+          <div class="card-body panel-body">
               <div class="row">
                   <div class="col-md-7 ">
                       <div class="subject-wall">
@@ -84,7 +84,7 @@
                                                       </div>
                                                       <div class="col-sm-6 text-right">
                                                           <button type="button"
-                                                                  class="btn btn-outline-warning add-comment-btn">
+                                                                  class="btn btn-info add-comment-btn">
                                                               Submit
                                                           </button>
                                                       </div>
@@ -104,14 +104,14 @@
                   <div class="col-md-5 ">
                       {!! Form::model($model,['url' => route('admin_tickets_edit_post',$model->id), 'id' => 'ticket_form','files' => true]) !!}
                       {!! Form::hidden('id',null) !!}
-                      <div class="panel panel-default">
-                          <div class="panel-heading">
+                      <div class="card panel panel-default">
+                          <div class="card-header panel-heading">
                               <div class="text-right">
-                                  {!! Form::submit('Save',['class' => 'btn btn-info']) !!}
+                                  {!! Form::submit('Save',['class' => 'btn btn-primary']) !!}
                               </div>
                           </div>
 
-                         <div class="panel-body">
+                         <div class="card-body panel-body">
                              <div class="status-wall wall">
                                  <div class="row form-group">
                                      {{Form::label('status', 'Status',['class' => 'col-sm-3'])}}
@@ -155,6 +155,15 @@
                                      <div class="col-sm-9">
                                          {!! Form::select('category_id',$categories,null,
                                                      ['class' => 'form-control','id'=> 'category']) !!}
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="status-wall wall">
+                                 <div class="row">
+                                     {{Form::label('priority_id', 'Priority',['class' => 'col-sm-3'])}}
+                                     <div class="col-sm-9">
+                                         {!! Form::select('priority_id',$priorities,null,
+                                                     ['class' => 'form-control','id'=> 'priority']) !!}
                                      </div>
                                  </div>
                              </div>
@@ -265,14 +274,13 @@
                     '                                  placeholder="Your reply"></textarea>\n' +
                     '                        <span class="error-box invalid-feedback comment"></span>\n' +
                     '                        <div class="row mt-1">\n' +
-                    '                            <div class="col-sm-6">\n' +
-                    '<button type="button" class="btn btn-outline-warning btn-block cancel-reply">Cancel </button>\n' +
-                    '                            </div>\n' +
-                    '                            <div class="col-sm-6 text-right">\n' +
+                    '                            <div class="col-sm-12">\n' +
                     '                                <button type="button"\n' +
-                    '                                        class="btn btn-outline-warning add-comment-btn">\n' +
+                    '                                        class="btn btn-info add-comment-btn pull-right">\n' +
                     '                                    Submit\n' +
                     '                                </button>\n' +
+                    '<button type="button" class="btn btn-danger cancel-reply pull-right mr-10">Cancel </button>\n' +
+
                     '                            </div>\n' +
                     '                        </div>\n' +
                     '{!! Form::close() !!}\n' +

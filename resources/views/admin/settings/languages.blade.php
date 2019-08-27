@@ -2,21 +2,27 @@
 @section('content')
     <section class="settings_lang">
 
-        <div class="panel panel-default">
-            <div class="panel-heading clearfix">
-                <h3 class="mt-0 pull-left">Listing All Languages </h3>
-                @ok('admin_settings_language_manager')
-                <a href="{{ route('admin_settings_language_manager') }}" class="mt-0 pull-left">Language Manager </a>
-                @endok
+        <div class="card panel panel-default">
+            <div class="card-header panel-heading setting_lang_panel_head">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:void(0);">Listing All Languages</a>
+                    </li>
+                    <li class="nav-item">
+                        @ok('admin_settings_language_manager')
+                        <a class="nav-link text-white" href="{{ route('admin_settings_language_manager') }}">Language Manager </a>
+                        @endok
+                    </li>
+                </ul>
                 @ok('admin_settings_languages_new')
                 <div class="box-tools pull-right">
-                    <a href="{!! route('admin_settings_languages_new') !!}" type="button"
+                    <a href="{!! route('admin_settings_languages_new') !!}"
                        class="btn btn-primary">Add</a>
                 </div>
                 @endok
             </div>
 
-            <div class="panel-body">
+            <div class="card-body panel-body">
 
                 <div class="row">
                     <div class="col-xs-12">
@@ -32,7 +38,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-sm-12">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -63,13 +69,13 @@
                                         @ok('admin_settings_languages_edit')
                                         <a href="{!! route('admin_settings_languages_edit',$language->id) !!}"
                                            data-toggle="tooltip" data-placement="bottom" title="{!! $language->name !!}"
-                                           class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o"
+                                           class="btn btn-sm btn-warning"><i class="fa fa-pencil-square-o"
                                                                              aria-hidden="true"></i></a>
                                         @endok
                                         @ok('admin_settings_languages_delete')
                                         <a href="{!! route('admin_settings_languages_delete',$language->id) !!}"
                                            data-toggle="tooltip" data-placement="bottom" title="{!! $language->name !!}"
-                                           class="btn btn-xs bg-red"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                           class="btn btn-sm bg-red"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                         @endok
                                     </td>
                                 </tr>

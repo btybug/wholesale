@@ -1,5 +1,7 @@
 <?php namespace App\Services;
 
+use App\Models\ContactUs;
+
 /**
  * Created by PhpStorm.
  * User: sahak
@@ -18,7 +20,14 @@ class ShortCodes
         'ticket' => [
 
         ],
-        'order_is_Canceled' => [
+        'new_contact_us' => [
+            ['code' => 'guest_name', 'description' => 'guest name'],
+            ['code' => 'guest_phone', 'description' => 'guest phone number '],
+            ['code' => 'guest_email', 'description' => 'guest email address '],
+            ['code' => 'guest_category', 'description' => 'message category selected'],
+            ['code' => 'guest_message', 'description' => 'message'],
+        ],
+        'order_is_canceled' => [
             ['code' => 'order_status', 'description' => 'order status'],
             ['code' => 'order_code', 'description' => 'order unique code'],
             ['code' => 'order_amount', 'description' => 'order total amount'],
@@ -132,6 +141,19 @@ class ShortCodes
         }
 
         return $content;
+    }
+//\r\n0.Trying to get property 'name' of non-object (View: C:\xampp\htdocs\e-cigar\resources\views\send_email.blade.php)
+    public function contact_us(ContactUs $contactUs, $content)
+    {
+        $data = $contactUs->toArray();
+        $codes=collect($this->relatedShortcoders['new_contact_us'])->pluck('code');
+        $shortcodes=[];
+        foreach ($codes as $sortcode){
+            $code=str_replace('guest_','',$sortcode);
+            $shortcodes['a'][]="[$sortcode]";
+            $shortcodes['b'][]=$data[$code];
+        }
+        return str_replace( $shortcodes['a'],$shortcodes['b'],$content);
     }
 
 }

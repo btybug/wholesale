@@ -23,10 +23,10 @@ class OtherController extends Controller
         return $this->view('index');
     }
 
-    public function getNew($id=null)
+    public function getNew($id = null)
     {
 
-        $items = Items::all()->pluck('name', 'id');
+        $items = Items::where('type', 'simple')->get()->pluck('name', 'id');
         $model = Others::find($id);
         return $this->view('new', compact('model', 'items'));
     }
@@ -35,19 +35,14 @@ class OtherController extends Controller
     {
         $data = $request->only(['item_id', 'qty', 'reason', 'notes']);
         $id = $request->get('id');
-        $qty = $data['qty'];
-        $data['group']=uniqid();
+        $data['grouped'] = uniqid();
         if ($id) {
             $other = Others::findOrFail($id);
-            $qty = $data['qty'] - $other->qty;
-            $data['group']=$other->group;
+            $data['grouped'] = $other->grouped;
         }
-        $item = Items::findOrFail($data['item_id']);
-        $item->quantity = $item->quantity - $qty;
-        $data['parent_id']=$id;
-        $data['user_id']=\Auth::id();
+        $data['parent_id'] = $id;
+        $data['user_id'] = \Auth::id();
         Others::create($data);
-        $item->save();
         return redirect()->route('admin_inventory_other');
     }
 

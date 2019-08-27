@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="m-0">Form Name</h2>
+    <div class="card panel panel-default">
+        <div class="card-header panel-heading">
+            <h2 class="m-0">{{ ($model) ? $model->name : "Form Name" }}</h2>
         </div>
-        <div class="panel-body">
+        <div class="card-body panel-body">
            <div class="col-md-8">
            {!! Form::model($model,['class'=>'','url'=>route('post_admin_suppliers')]) !!}
            {!! Form::hidden('id') !!}

@@ -15,50 +15,54 @@
                             {{--<div class="col-md-8">--}}
                                 {{--<input class="form-control new-oreder-input"  name="translatable[gb][name]" type="text">--}}
                             {{--</div>--}}
-                            <div class="col-md-4 text-right">
+                            <div class="col-md-12 text-right">
                                <button class="btn btn-primary add-new-order"  type="submit"><span class="icon-plus"><i class="fa fa-plus"></i></span>Add New</button>
                             </div>
-                            </form>
+                            {!! Form::close() !!}
                         </div>
                     </div>
             </div>
             <div class="panel-body">
-                <div class="col-md-3 attributes-container">
-                   <div class="mb-20 list-group">
-                       @foreach($statuses as $status)
-                           <div class="form-group row list-group-item bg-light  pointer" data-item-id="{!! $status->id !!}"
-                                data-parent-id="1">
-                               <div class="col-md-6 attr-option" data-item-id="{!! $status->id !!}">
-                                   {!! $status->name !!}
-                               </div>
-                               <div class="col-md-4 text-right">
-                                   <div style="width: 20px;height: 20px;background: {{ $status->color }}"></div>
-                               </div>
-                               <div class="col-md-2 text-right">
-                                   @if(!$status->is_default)
-                                   {!! Form::model($status,['url' => route('post_admin_stock_statuses_delete')]) !!}
-                                   {!! Form::hidden('id',null) !!}
-                                   <button class="btn btn-sm btn-danger" type="submit"><i class='fa fa-trash'></i></button>
-                                   {!! Form::close() !!}
-                                       @endif
-                               </div>
-                           </div>
-                       @endforeach
-                   </div>
-                    {{--<div class="form-group row bord-top">--}}
+                <div class="row">
+                    <div class="col-md-3 attributes-container">
+                        <div class="mb-20 list-group">
+                            @foreach($statuses as $status)
+                                <div class="d-flex flex-wrap form-group row list-group-item bg-light  pointer" data-item-id="{!! $status->id !!}"
+                                     data-parent-id="1">
+                                    <div class="col-md-6 attr-option" data-item-id="{!! $status->id !!}">
+                                        {!! ($status->name)??"Empty" !!}
+                                    </div>
+                                    <div class="col-md-4 text-right">
+                                        <div style="width: 20px;height: 20px;background: {{ $status->color }}"></div>
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        @if(!$status->is_default)
+                                            {!! Form::model($status,['url' => route('post_admin_stock_statuses_delete')]) !!}
+                                            {!! Form::hidden('id',null) !!}
+                                                <button class="btn btn-sm btn-danger" type="submit"><i class='fa fa-trash'></i></button>
+                                            {!! Form::close() !!}
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        {{--<div class="form-group row bord-top">--}}
                         {{--{!! Form::open(['url'=>route('post_admin_stock_statuses_manage')]) !!}--}}
-                              {{--<input name="type" type="hidden" value="{!! $type !!}">--}}
-                            {{--<div class="col-md-8">--}}
-                                {{--<input class="form-control new-oreder-input"  name="translatable[gb][name]" type="text">--}}
-                            {{--</div>--}}
-                            {{--<div class="col-md-4 text-right">--}}
-                                {{--<button class="btn btn-primary add-new-order"  type="submit">Add </button>--}}
-                            {{--</div>--}}
+                        {{--<input name="type" type="hidden" value="{!! $type !!}">--}}
+                        {{--<div class="col-md-8">--}}
+                        {{--<input class="form-control new-oreder-input"  name="translatable[gb][name]" type="text">--}}
+                        {{--</div>--}}
+                        {{--<div class="col-md-4 text-right">--}}
+                        {{--<button class="btn btn-primary add-new-order"  type="submit">Add </button>--}}
+                        {{--</div>--}}
                         {{--</form>--}}
-                    {{--</div>--}}
+                        {{--</div>--}}
+                    </div>
+                    <div class="col-md-8 col-md-offset-1">
+                        @include('admin.tools.statuses._patrials.status_form')
+                    </div>
                 </div>
 
-                @include('admin.tools.statuses._patrials.status_form')
             </div>
         </div>
     </div>

@@ -22,7 +22,7 @@ class CreateCategoriesTable extends Migration
             $table->string('icon',255)->nullable();
             $table->string('classes',255)->nullable();
             $table->string('type',100)->default('stocks');
-            $table->tinyInteger('is_core');
+            $table->tinyInteger('is_core')->default(0);
             $table->timestamps();
 
             $table->index('parent_id');

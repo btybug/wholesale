@@ -3,70 +3,69 @@
 
 @stop
 @section('content')
-    <div class="row">
-    {!! Form::model($role) !!}
-    {!! Form::hidden('id') !!}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="m-0">Create Role</h2>
-        </div>
-
-    <!-- Button -->
-        <div class="form-group row">
-            <div class="col-sm-12 text-right pull-right">
-                <button id="singlebutton" class="btn btn-info save-role">Save</button>
+    <div>
+        {!! Form::model($role) !!}
+        {!! Form::hidden('id') !!}
+        <div class="card panel panel-default mb-3">
+            <div class="card-header panel-heading">
+                <h2 class="m-0">{{  $role->title  }}</h2>
             </div>
-        </div>
-        <div class="panel-body">
 
-            <div class="col-md-4">
-                <div class="row">
-                    <!-- Password input-->
-                    <div class="form-group row">
-                        <label class="col-md-2" for="passwordinput">Title</label>
-                        <div class="col-md-10">
-                            {!! Form::text('title',null,['class'=>'form-control input-md']) !!}
+            <!-- Button -->
+            <div class="form-group">
+                <div class="text-right m-2">
+                    <button id="singlebutton" class="btn btn-info save-role">Save</button>
+                </div>
+            </div>
+            <div class="card-body panel-body">
+
+                <div class="col-md-4">
+                    <div class="row flex-column">
+                        <!-- Password input-->
+                        <div class="form-group row">
+                            <label class="col-md-3" for="passwordinput">Title</label>
+                            <div class="col-md-9">
+                                {!! Form::text('title',null,['class'=>'form-control input-md']) !!}
+                            </div>
                         </div>
-                    </div>
-                    <!-- Password input-->
-                    <div class="form-group row">
-                        <label class="col-md-2" for="passwordinput">Type</label>
-                        <div class="col-md-10">
-                            {!! Form::select('type',['backend'=>'Admin Panel','frontend'=>'Front Site'],null,['class'=>'form-control input-md']) !!}
+                        <!-- Password input-->
+                        <div class="form-group row">
+                            <label class="col-md-3" for="passwordinput">Type</label>
+                            <div class="col-md-9">
+                                {!! Form::select('type',['backend'=>'Admin Panel','frontend'=>'Front Site'],null,['class'=>'form-control input-md']) !!}
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-2" for="passwordinput">Description</label>
-                        <div class="col-md-10">
-                            {!! Form::textarea('description',null,['class'=>'form-control input-md']) !!}
+                        <div class="form-group row">
+                            <label class="col-md-3" for="passwordinput">Description</label>
+                            <div class="col-md-9">
+                                {!! Form::textarea('description',null,['class'=>'form-control input-md']) !!}
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
 
         </div>
 
-        </div>
-        <div class="col-md-12">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <h3 class="panel-heading m-0">Widgets</h3>
-                    <div class="panel-body">
-                        @include('admin.roles._partials.widgets')
-                    </div>
-                </div>
+        <div class="card panel panel-default mb-3">
+            <div class="card-header">
+                <h3 class="panel-heading m-0">Widgets</h3>
+            </div>
+            <div class="card-body panel-body">
+                @include('admin.roles._partials.widgets')
             </div>
         </div>
-        <div class="col-md-12">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <h3 class="panel-heading m-0">Pages</h3>
-                    <div class="panel-body">
-                        @include('admin.roles._partials.tree')
-                    </div>
-                </div>
+
+        <div class="card panel panel-default">
+            <div class="card-header">
+                <h3 class="panel-heading m-0">Pages</h3>
+            </div>
+            <div class="card-body panel-body">
+                @include('admin.roles._partials.tree')
             </div>
         </div>
+
         {!! Form::close() !!}
     </div>
 @stop

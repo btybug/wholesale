@@ -7,10 +7,9 @@
                     <select name="" id="" class="form-control">
                         @if(count($delivery->options))
                             @foreach($delivery->options as $option)
-
+                                <option value="{{ $option->id }}">  {!! $option->courier->name !!}</option>
                             @endforeach
                         @endif
-                        <option value="{{ $option->id }}">  {!! $option->courier->name !!}</option>
                     </select>
                 @else
                     Customize delivery costs, so it support order ammount
