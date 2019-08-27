@@ -1,5 +1,5 @@
 (function () {
-    $('#login-form').on('submit', function (ev) {
+    $('.sign_in').on('submit', function (ev) {
         ev.preventDefault();
 
         const GOOGLE_RECAPTCHA_KEY = $('meta[name="google-recaptcha-key"]').attr("content");

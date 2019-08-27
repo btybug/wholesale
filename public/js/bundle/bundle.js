@@ -6735,7 +6735,7 @@ function onRecaptchaLoadCallback() {
 })();
 
 (function () {
-    $('#login-form').on('submit', function (ev) {
+    $('.sign_in').on('submit', function (ev) {
         var _this5 = this;
 
         ev.preventDefault();
