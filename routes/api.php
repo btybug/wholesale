@@ -44,6 +44,6 @@ Route::group([
     'prefix' => 'user','middleware' => ['auth:api']
 ], function () {
     Route::get('/', function () {
-        return response()->json(['user'=>Auth::user()->toArray()]);
+        return Auth::user()->toArray();
     });
 });
