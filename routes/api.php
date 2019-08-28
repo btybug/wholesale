@@ -41,7 +41,7 @@ Route::group([
     Route::post('/save-seo', 'Admin\Media\MediaItemsApiController@getSaveSeo');
 });
 Route::group([
-    'prefix' => 'user','middleware' => ['auth:api']
+    'prefix' => 'user'
 ], function () {
     Route::get('/', function () {
         return Auth::user()->toArray();
