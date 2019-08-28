@@ -43,7 +43,7 @@ Route::group([
 Route::group([
     'prefix' => 'user',
 ], function () {
-    Route::get('/', function () {
+    Route::post('/', function () {
         return response()->json(['user' => auth()->user()], 200);
     })->middleware('auth:api');
 });
