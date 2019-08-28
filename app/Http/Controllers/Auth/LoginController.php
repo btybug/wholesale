@@ -49,17 +49,17 @@ class LoginController extends Controller
      * @param Request $request
      * @param $user
      */
-    protected function authenticated(Request $request, $user)
-    {
-        if ($request->get('redirectPath')) {
-            $this->redirectTo = $request->redirectPath;
-        } else {
-            if ($user->isAdministrator()) {
-                $this->redirectTo = '/admin';
-            }
-        }
-
-    }
+//    protected function authenticated(Request $request, $user)
+//    {
+//        if ($request->get('redirectPath')) {
+//            $this->redirectTo = $request->redirectPath;
+//        } else {
+//            if ($user->isAdministrator()) {
+//                $this->redirectTo = '/admin';
+//            }
+//        }
+//
+//    }
 
     protected function validateLogin(Request $request)
     {

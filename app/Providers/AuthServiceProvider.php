@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Passport\Client;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -24,7 +26,8 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
+        Passport::routes();
+        Passport::useClientModel(Client::class);
         /**
          * Determine if the current user can access the admin panel.
          *

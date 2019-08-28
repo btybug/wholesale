@@ -26,22 +26,7 @@
                             </span>
                         </div>
                     @else
-                        {{--<span class="d-inline-block">--}}
-                        {{--<a href="{!! route('login') !!}" class="header-login-link">Login</a>--}}
-                        {{--<span class="header-login-icon">&nbsp;&#47;&nbsp;</span>--}}
-                        {{--<a href="{!! route('register') !!}" class="header-login-link">Register</a>--}}
-                        {{--</span>--}}
 
-
-                        <div class="form-inline my-lg-0 h-100 align-self-lg-auto align-self-baseline pointer">
-                                <span class="d-inline-block">
-                                    <a href="javascript:void(0);" class="text-sec-clr header-login-link"
-                                       data-toggle="modal" data-target="#loginModal">Login</a>
-                                    <span class="text-sec-clr">&nbsp;/&nbsp;</span>
-                                    <a href="javascript:void(0);" class="text-sec-clr header-login-link"
-                                       data-toggle="modal" data-target="#registerModal">Register</a>
-                                </span>
-                        </div>
                     @endif
 
                     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
@@ -77,37 +62,6 @@
                     <img src="{!! get_site_logo() !!}" alt="{{ get_site_name() }}">
                 </a>
 
-                    <div class="d-flex align-self-center cat-search">
-                        @if(Request::route()->getPrefix() != '/wholesaler')
-
-                            <div class="category-select">
-                                @php
-                                    $categories = \App\Models\Category::with('children')->where('type', 'stocks')->whereNull('parent_id')->get()->pluck('name','slug');
-                                @endphp
-                                {!! Form::select('category',['' => 'All Categories'] + $categories->toArray(),null,
-                                    [
-                                        'class' => 'all_categories select-2 select-2--no-search main-select main-select-2arrows products-filter-wrap_select not-selected',
-                                        'style' =>'width: 190px',
-                                        'id' => 'filter_sort'
-                                    ]) !!}
-                            </div>
-
-                            <div class="search position-relative">
-                                <input type="search" class="form-control" id="search-product"
-                                       value="{{ (\Request::has('q')) ? \Request::get('q') :null }}"
-                                       placeholder="Serach for anything">
-                                <span class="position-absolute d-flex align-items-center">
-                                    <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            width="20px" height="20px">
-        <path fill-rule="evenodd" fill="rgb(121, 121, 121)"
-              d="M19.996,18.987 L16.407,15.260 C19.498,11.614 19.327,6.153 15.881,2.715 C14.065,0.902 11.684,-0.004 9.303,-0.004 C6.922,-0.004 4.541,0.902 2.725,2.715 C-0.908,6.339 -0.908,12.216 2.725,15.841 C4.541,17.653 6.922,18.559 9.303,18.559 C11.469,18.559 13.630,17.800 15.371,16.300 L18.936,20.003 L19.996,18.987 ZM9.303,17.370 C7.136,17.370 5.099,16.528 3.567,15.000 C2.035,13.471 1.191,11.439 1.191,9.277 C1.191,7.116 2.035,5.084 3.567,3.555 C5.099,2.027 7.136,1.185 9.303,1.185 C11.469,1.185 13.507,2.027 15.039,3.555 C18.201,6.710 18.201,11.845 15.039,15.000 C13.507,16.528 11.469,17.370 9.303,17.370 Z"/>
-        </svg>
-                                </span>
-                            </div>
-                        @endif
-                    </div>
                     <div class="favorite-add-cart d-flex align-items-center">
 
                         <div class="d-inline-block simple_select_wrapper currency--wrap">
@@ -155,26 +109,17 @@
     </div>
 @endif
 <div id="cartSidebar" class="hidden-sidebar cart-aside d-flex flex-column p-0">
-    @if(Request::route()->getPrefix() != '/wholesaler')
-        @include('frontend._partials.shopping_cart_options')
-    @else
+
         @include('frontend.wholesaler._partials.shopping_cart_options')
-    @endif
 </div>
 <div id="share_modal" class="hidden-sidebar cart-aside d-flex flex-column p-0">
     <button class="share_modal_close">X</button>
     <div class="sharethis-inline-share-buttons main-scrollbar"></div>
 </div>
 @if(!Auth::check())
-
-    <!--modal Login-->
-    @include("frontend._partials.login_modal")
-
     <!--modal Register-->
     @include("frontend._partials.register_modal")
-
 @endif
-
 <script>
 
     $(document).ready(function() {

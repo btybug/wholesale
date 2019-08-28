@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.7.28 on 2019-03-06 09:36:51.
+ * Generated for Laravel 5.7.28 on 2019-08-28 06:39:12.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -8912,10 +8912,14 @@ namespace Illuminate\Support\Facades {
          * header value is a comma+space separated list of IP addresses, the left-most
          * being the original client, and each successive proxy that passed the request
          * adding the IP address where it received the request from.
+         * 
+         * If your reverse proxy uses a different header name than "X-Forwarded-For",
+         * ("Client-Ip" for instance), configure it via the $trustedHeaderSet
+         * argument of the Request::setTrustedProxies() method instead.
          *
          * @return string|null The client IP address
          * @see getClientIps()
-         * @see http://en.wikipedia.org/wiki/X-Forwarded-For
+         * @see https://wikipedia.org/wiki/X-Forwarded-For
          * @static 
          */ 
         public static function getClientIp()
@@ -9333,7 +9337,7 @@ namespace Illuminate\Support\Facades {
          *  * $default
          *
          * @param string|null $default The default format
-         * @return string The request format
+         * @return string|null The request format
          * @static 
          */ 
         public static function getRequestFormat($default = 'html')
@@ -9609,7 +9613,7 @@ namespace Illuminate\Support\Facades {
          * It works if your JavaScript library sets an X-Requested-With HTTP header.
          * It is known to work with common JavaScript frameworks:
          *
-         * @see http://en.wikipedia.org/wiki/List_of_Ajax_frameworks#JavaScript
+         * @see https://wikipedia.org/wiki/List_of_Ajax_frameworks#JavaScript
          * @return bool true if the request is an XMLHttpRequest, false otherwise
          * @static 
          */ 
@@ -10146,8 +10150,7 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function validate($rules, $params = null)
         {
-                        /** @var \Illuminate\Http\Request $instance */
-                        return $instance->__invoke($rules, $params);
+                        return \Illuminate\Http\Request::validate($rules, $params);
         }
         
         /**
@@ -10155,10 +10158,9 @@ namespace Illuminate\Support\Facades {
          *
          * @static 
          */ 
-        public static function hasValidSignature($absolute = null)
+        public static function hasValidSignature($absolute = true)
         {
-                        /** @var \Illuminate\Http\Request $instance */
-                        return $instance->__invoke($absolute);
+                        return \Illuminate\Http\Request::hasValidSignature($absolute);
         }
          
     }
@@ -16743,6 +16745,34 @@ namespace Cartalyst\Stripe\Laravel\Facades {
         }
         
         /**
+         * Returns the application's information.
+         *
+         * @return array|null 
+         * @static 
+         */ 
+        public static function getAppInfo()
+        {
+                        /** @var \Cartalyst\Stripe\Stripe $instance */
+                        return $instance->getAppInfo();
+        }
+        
+        /**
+         * Sets the application's information.
+         *
+         * @param string $appName
+         * @param string $appVersion
+         * @param string $appUrl
+         * @param string $appPartnerId
+         * @return \Cartalyst\Stripe\Stripe 
+         * @static 
+         */ 
+        public static function setAppInfo($appName, $appVersion = null, $appUrl = null, $appPartnerId = null)
+        {
+                        /** @var \Cartalyst\Stripe\Stripe $instance */
+                        return $instance->setAppInfo($appName, $appVersion, $appUrl, $appPartnerId);
+        }
+        
+        /**
          * Returns the amount converter class and method name.
          *
          * @return string 
@@ -17431,6 +17461,9 @@ namespace App\Models {
          * access, then the user is shown a consent screen.
          *
          * @param $prompt string
+         *  {@code "none"} Do not display any authentication or consent screens. Must not be specified with other values.
+         *  {@code "consent"} Prompt the user for consent.
+         *  {@code "select_account"} Prompt the user to select an account.
          * @static 
          */ 
         public static function setPrompt($prompt)
@@ -17487,7 +17520,7 @@ namespace App\Models {
          * Revoke an OAuth2 access token or refresh token. This method will revoke the current access
          * token, if a token isn't provided.
          *
-         * @param string|null $token The token (access token or a refresh token) that should be revoked.
+         * @param string|array|null $token The token (access token or a refresh token) that should be revoked.
          * @return boolean Returns True if the revocation was successful, otherwise False.
          * @static 
          */ 
@@ -17502,7 +17535,8 @@ namespace App\Models {
          * Verify an id_token. This method will verify the current id_token, if one
          * isn't provided.
          *
-         * @throws LogicException
+         * @throws LogicException If no token was provided and no token was set using `setAccessToken`.
+         * @throws UnexpectedValueException If the token is not a valid JWT.
          * @param string|null $idToken The token (id_token) that should be verified.
          * @return array|false Returns the token payload as an array if the verification was
          * successful, false otherwise.
@@ -17520,15 +17554,15 @@ namespace App\Models {
          * 
          * Will remove any previously configured scopes.
          *
-         * @param array $scopes, ie: array('https://www.googleapis.com/auth/plus.login',
+         * @param string|array $scope_or_scopes, ie: array('https://www.googleapis.com/auth/plus.login',
          * 'https://www.googleapis.com/auth/moderator')
          * @static 
          */ 
-        public static function setScopes($scopes)
+        public static function setScopes($scope_or_scopes)
         {
             //Method inherited from \Google_Client            
                         /** @var \Dacastro4\LaravelGmail\LaravelGmailClass $instance */
-                        return $instance->setScopes($scopes);
+                        return $instance->setScopes($scope_or_scopes);
         }
         
         /**
@@ -17818,6 +17852,21 @@ namespace App\Models {
             //Method inherited from \Google_Client            
                         /** @var \Dacastro4\LaravelGmail\LaravelGmailClass $instance */
                         return $instance->getHttpClient();
+        }
+        
+        /**
+         * Set the API format version.
+         * 
+         * `true` will use V2, which may return more useful error messages.
+         *
+         * @param bool $value
+         * @static 
+         */ 
+        public static function setApiFormatV2($value)
+        {
+            //Method inherited from \Google_Client            
+                        /** @var \Dacastro4\LaravelGmail\LaravelGmailClass $instance */
+                        return $instance->setApiFormatV2($value);
         }
         
         /**
@@ -18551,6 +18600,9 @@ namespace Dacastro4\LaravelGmail\Facade {
          * access, then the user is shown a consent screen.
          *
          * @param $prompt string
+         *  {@code "none"} Do not display any authentication or consent screens. Must not be specified with other values.
+         *  {@code "consent"} Prompt the user for consent.
+         *  {@code "select_account"} Prompt the user to select an account.
          * @static 
          */ 
         public static function setPrompt($prompt)
@@ -18607,7 +18659,7 @@ namespace Dacastro4\LaravelGmail\Facade {
          * Revoke an OAuth2 access token or refresh token. This method will revoke the current access
          * token, if a token isn't provided.
          *
-         * @param string|null $token The token (access token or a refresh token) that should be revoked.
+         * @param string|array|null $token The token (access token or a refresh token) that should be revoked.
          * @return boolean Returns True if the revocation was successful, otherwise False.
          * @static 
          */ 
@@ -18622,7 +18674,8 @@ namespace Dacastro4\LaravelGmail\Facade {
          * Verify an id_token. This method will verify the current id_token, if one
          * isn't provided.
          *
-         * @throws LogicException
+         * @throws LogicException If no token was provided and no token was set using `setAccessToken`.
+         * @throws UnexpectedValueException If the token is not a valid JWT.
          * @param string|null $idToken The token (id_token) that should be verified.
          * @return array|false Returns the token payload as an array if the verification was
          * successful, false otherwise.
@@ -18640,15 +18693,15 @@ namespace Dacastro4\LaravelGmail\Facade {
          * 
          * Will remove any previously configured scopes.
          *
-         * @param array $scopes, ie: array('https://www.googleapis.com/auth/plus.login',
+         * @param string|array $scope_or_scopes, ie: array('https://www.googleapis.com/auth/plus.login',
          * 'https://www.googleapis.com/auth/moderator')
          * @static 
          */ 
-        public static function setScopes($scopes)
+        public static function setScopes($scope_or_scopes)
         {
             //Method inherited from \Google_Client            
                         /** @var \Dacastro4\LaravelGmail\LaravelGmailClass $instance */
-                        return $instance->setScopes($scopes);
+                        return $instance->setScopes($scope_or_scopes);
         }
         
         /**
@@ -18938,6 +18991,21 @@ namespace Dacastro4\LaravelGmail\Facade {
             //Method inherited from \Google_Client            
                         /** @var \Dacastro4\LaravelGmail\LaravelGmailClass $instance */
                         return $instance->getHttpClient();
+        }
+        
+        /**
+         * Set the API format version.
+         * 
+         * `true` will use V2, which may return more useful error messages.
+         *
+         * @param bool $value
+         * @static 
+         */ 
+        public static function setApiFormatV2($value)
+        {
+            //Method inherited from \Google_Client            
+                        /** @var \Dacastro4\LaravelGmail\LaravelGmailClass $instance */
+                        return $instance->setApiFormatV2($value);
         }
         
         /**
@@ -19237,15 +19305,16 @@ namespace Maatwebsite\Excel\Facades {
          * @param object $export
          * @param string|null $fileName
          * @param string $writerType
+         * @param array $headers
          * @throws \PhpOffice\PhpSpreadsheet\Exception
          * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
          * @return \Maatwebsite\Excel\BinaryFileResponse 
          * @static 
          */ 
-        public static function download($export, $fileName, $writerType = null)
+        public static function download($export, $fileName, $writerType = null, $headers = array())
         {
                         /** @var \Maatwebsite\Excel\Excel $instance */
-                        return $instance->download($export, $fileName, $writerType);
+                        return $instance->download($export, $fileName, $writerType, $headers);
         }
         
         /**
@@ -19373,6 +19442,32 @@ namespace Maatwebsite\Excel\Facades {
         public static function extend($concern, $handler, $event = 'Maatwebsite\Excel\Events\BeforeWriting')
         {
                         return \Maatwebsite\Excel\Excel::extend($concern, $handler, $event);
+        }
+        
+        /**
+         * When asserting downloaded, stored, queued or imported, use regular expression
+         * to look for a matching file path.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function matchByRegex()
+        {
+                        /** @var \Maatwebsite\Excel\Fakes\ExcelFake $instance */
+                        $instance->matchByRegex();
+        }
+        
+        /**
+         * When asserting downloaded, stored, queued or imported, use regular string
+         * comparison for matching file path.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function doNotMatchByRegex()
+        {
+                        /** @var \Maatwebsite\Excel\Fakes\ExcelFake $instance */
+                        $instance->doNotMatchByRegex();
         }
         
         /**
