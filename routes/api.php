@@ -40,10 +40,8 @@ Route::group([
     Route::post('/get-item-details', 'Admin\Media\MediaItemsApiController@getItemDetalis');
     Route::post('/save-seo', 'Admin\Media\MediaItemsApiController@getSaveSeo');
 });
-Route::group([
-    'prefix' => 'user',
-], function () {
-    Route::post('/', function () {
-        return response()->json(['user' => auth()->user()], 200);
-    })->middleware('auth:api');
+Route::middleware('auth:api')->group( function () {
+    Route::get('user', function (Request $request){
+        return $request->user();
+    });
 });
