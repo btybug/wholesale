@@ -42,6 +42,6 @@ Route::group([
 });
 Route::middleware('auth:api')->group( function () {
     Route::get('user', function (Request $request){
-        return $request->user();
+        return response()->json(['user'=>$request->user()]);
     });
 });
