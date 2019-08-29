@@ -47,4 +47,5 @@ Route::middleware('auth:api')->group( function () {
         return response()->json(['user'=>$request->user()],200);
     });
     Route::get('get-orders','Api\OrdersController@getOrders');
+    Route::get('get-orders-items','Api\OrdersController@getOrderItems');
 });
