@@ -14,7 +14,7 @@ class OrdersController extends Controller
 
     public function getOrderItems(Request $request)
     {
-        $order = \Auth::user()->orders()->findOrfail($request->get('order_id'));
+        $order = \Auth::user()->orders()->findOrFail($request->get('order_id'));
         if ($order) {
             return response()->json(['items' => $order->items,'error'=>false], 200);
         }else{
