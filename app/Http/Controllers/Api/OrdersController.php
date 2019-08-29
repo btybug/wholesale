@@ -7,7 +7,7 @@ class OrdersController extends Controller
 {
     public function getOrders()
     {
-        $orders=\Auth::user()->orders();
+        $orders=\Auth::user()->orders;
         return response()->json(['orders'=>$orders],200);
     }
 
