@@ -41,11 +41,11 @@ Route::group([
     Route::post('/save-seo', 'Admin\Media\MediaItemsApiController@getSaveSeo');
 });
 
-Route::middleware('auth:api')->group( function () {
+Route::middleware('auth:api')->group(function () {
 
-    Route::get('user', function (Request $request){
-        return response()->json(['user'=>$request->user()],200);
+    Route::get('user', function (Request $request) {
+        return response()->json(['user' => $request->user()], 200);
     });
-    Route::get('get-orders','Api\OrdersController@getOrders');
-    Route::get('get-order-items','Api\OrdersController@getOrderItems');
+    Route::get('get-orders', 'Api\OrdersController@getOrders');
+    Route::get('get-order-items', 'Api\OrdersController@getOrderItems');
 });
