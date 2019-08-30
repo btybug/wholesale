@@ -8,7 +8,7 @@ class OrdersController extends Controller
 {
     public function getOrders()
     {
-        $orders=\Auth::user()->orders;
+        $orders=\Auth::user()->orders()->orderBy('is_exported','ASC')->get();
         return response()->json(['orders'=>$orders,'error'=>false],200);
     }
 
