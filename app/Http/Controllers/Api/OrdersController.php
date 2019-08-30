@@ -9,7 +9,7 @@ class OrdersController extends Controller
     public function getOrders()
     {
         $orders=\Auth::user()->orders;
-        return response()->json(['orders'=>$orders],200);
+        return response()->json(['orders'=>$orders,'error'=>false],200);
     }
 
     public function getOrderItems(Request $request)
@@ -21,5 +21,11 @@ class OrdersController extends Controller
             return response()->json(['items' => [],'error'=>true,'message'=>'order not found'], 401);
         }
     }
-
+    public function postImport(Request $request)
+    {
+        $orders=\Auth::user()->orders()->findOrFail($request->get('order_id'));
+        $orders->is_exported=1;
+        $orders->save();
+        return response()->json(['error'=>false],200);
+    }
 }

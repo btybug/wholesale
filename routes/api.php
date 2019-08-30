@@ -48,4 +48,5 @@ Route::middleware('auth:api')->group(function () {
     });
     Route::get('get-orders', 'Api\OrdersController@getOrders');
     Route::get('get-order-items', 'Api\OrdersController@getOrderItems');
+    Route::post('post-import', 'Api\OrdersController@postImport');
 });
