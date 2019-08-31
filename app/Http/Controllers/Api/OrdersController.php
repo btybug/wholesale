@@ -32,9 +32,7 @@ class OrdersController extends Controller
         $item= OrderItem::leftJoin('orders','orders.id','=','order_items.order_id')
             ->where('orders.user_id',\Auth::id())
             ->where('order_items.id',$request->get('item_id'))
-            ->first();
-        $item->is_exported=1;
-        $item->save();
+            ->update(['is_exported'=>1]);
         return response()->json(['error'=>false],200);
     }
 
