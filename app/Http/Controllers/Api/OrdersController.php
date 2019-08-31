@@ -61,7 +61,7 @@ class OrdersController extends Controller
                 'order_items.amount',
                 'order_items.is_exported',
                 'order_items.created_at',
-                'orders.order_number')->orderBy('is_exported','ASC')
+                'orders.order_number')->orderBy('order_items.is_exported','ASC')
             ->get();
         return response()->json(['items' => $result,'error'=>false], 200);
     }
