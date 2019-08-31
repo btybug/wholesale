@@ -17,11 +17,11 @@ class OrdersController extends Controller
 
     public function getOrderItems(Request $request)
     {
-        $order = \Auth::user()->orders()->findOrFail($request->get('order_id'));
-        if ($order) {
-            return response()->json(['items' => $order->items,'error'=>false], 200);
+        $item = \Auth::user()->orders()->items()->findOrFail($request->get('item_id'));
+        if ($item) {
+            return response()->json(['item' => $item,'error'=>false], 200);
         }else{
-            return response()->json(['items' => [],'error'=>true,'message'=>'order not found'], 401);
+            return response()->json(['item' => [],'error'=>true,'message'=>'order not found'], 401);
         }
     }
     public function postImport(Request $request)
