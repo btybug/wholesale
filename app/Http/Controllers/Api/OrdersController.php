@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Items;
 use App\Models\OrderItem;
 use App\Models\Orders;
+use DateTime;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
@@ -32,7 +33,7 @@ class OrdersController extends Controller
         $item= OrderItem::leftJoin('orders','orders.id','=','order_items.order_id')
             ->where('orders.user_id',\Auth::id())
             ->where('order_items.id',$request->get('item_id'))
-            ->update(['order_items.is_exported'=>1]);
+            ->update(['order_items.is_exported'=>1,'order_items.updated_at'=>new DateTime]);
         return response()->json(['error'=>false],200);
     }
 
