@@ -29,9 +29,12 @@ class OrdersController extends Controller
     }
     public function postImport(Request $request)
     {
-        $orders=\Auth::user()->orders()->findOrFail($request->get('order_id'));
-        $orders->is_exported=1;
-        $orders->save();
+        $item= $item = OrderItem::leftJoin('orders','orders.id','=','order_items.order_id')
+            ->where('orders.user_id',\Auth::id())
+            ->where('order_items.id',$request->get('item_id'))
+            ->first();
+        $item->is_exported=1;
+        $item->save();
         return response()->json(['error'=>false],200);
     }
 
@@ -58,8 +61,10 @@ class OrdersController extends Controller
                 'order_items.qty',
                 'order_items.price',
                 'order_items.amount',
+                'order_items.is_exported',
                 'order_items.created_at',
-                'orders.order_number')->get();
+                'orders.order_number')->orderBy('is_exported','ASC')
+            ->get();
         return response()->json(['items' => $result,'error'=>false], 200);
     }
 }
