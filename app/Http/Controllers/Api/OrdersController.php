@@ -50,6 +50,7 @@ class OrdersController extends Controller
     {
         $result=OrderItem::leftJoin('orders','orders.id','=','order_items.order_id')
             ->where('orders.user_id',\Auth::id())->select(
+                'order_items.id',
                 'order_items.name',
                 'order_items.qty',
                 'order_items.price',
