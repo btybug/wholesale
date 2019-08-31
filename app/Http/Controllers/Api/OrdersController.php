@@ -49,7 +49,7 @@ class OrdersController extends Controller
     public function getOredersAndItems()
     {
         $result=OrderItem::leftJoin('orders','orders.id','=','order_items.order_id')
-            ->where('orders.user_id',\Auth::id())->select('order_items.*','orders.order_number')->get();
+            ->where('orders.user_id',\Auth::id())->select('order_items.name','order_items.qty','order_items.price','order_items.amount','orders.order_number')->get();
         return response()->json(['items' => $result,'error'=>false], 200);
     }
 }
