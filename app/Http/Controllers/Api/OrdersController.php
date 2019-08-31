@@ -29,7 +29,7 @@ class OrdersController extends Controller
     }
     public function postImport(Request $request)
     {
-        $item= $item = OrderItem::leftJoin('orders','orders.id','=','order_items.order_id')
+        $item= OrderItem::leftJoin('orders','orders.id','=','order_items.order_id')
             ->where('orders.user_id',\Auth::id())
             ->where('order_items.id',$request->get('item_id'))
             ->first();
