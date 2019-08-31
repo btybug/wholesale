@@ -18,7 +18,7 @@ class OrdersController extends Controller
     public function getOrderItems(Request $request)
     {
         $item = OrderItem::leftJoin('orders','orders.id','=','order_items.order_id')
-            ->where('orders.user_id',\Auth::id())->where('id',$request->get('item_id'))->first();
+            ->where('orders.user_id',\Auth::id())->where('order_items.id',$request->get('item_id'))->first();
         if ($item) {
             return response()->json(['item' => $item,'error'=>false], 200);
         }else{
