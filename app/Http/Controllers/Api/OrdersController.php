@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Items;
+use App\Models\OrderItem;
+use App\Models\Orders;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
@@ -42,5 +44,12 @@ class OrdersController extends Controller
             }
         }
         return response()->json(['items' => $data,'error'=>false], 200);
+    }
+
+    public function getOredersAndItems()
+    {
+        $result=OrderItem::leftJoin('orders','orders.id','=','order_items.order_id')
+            ->where('orders.user_id',\Auth::id())->select('order_items.*','orders.order_number')->get();
+        return response()->json(['items' => $result,'error'=>false], 200);
     }
 }
