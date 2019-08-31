@@ -13,7 +13,7 @@ class OrderItem extends Model
         'options' => 'json',
         'additional_data' => 'json',
     ];
-
+    protected $dates = ['order_items.created_at', 'order_items.updated_at'];
     public function order()
     {
         return $this->belongsTo(Orders::class,'order_id');
