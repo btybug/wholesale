@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Items;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
@@ -27,5 +28,11 @@ class OrdersController extends Controller
         $orders->is_exported=1;
         $orders->save();
         return response()->json(['error'=>false],200);
+    }
+
+    public function postItems(Request $request)
+    {
+        $items=Items::whereIn('id',$request->get('ides'));
+        return response()->json(['items' => $items,'error'=>false], 200);
     }
 }
