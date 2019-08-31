@@ -32,7 +32,7 @@ class OrdersController extends Controller
 
     public function postItems(Request $request)
     {
-        $items=Items::whereIn('id',$request->get('ides'));
+        $items=Items::whereIn('id',$request->get('ides'))->get();
         return response()->json(['items' => $items,'error'=>false], 200);
     }
 }
