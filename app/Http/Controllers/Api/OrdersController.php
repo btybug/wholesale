@@ -44,14 +44,18 @@ class OrdersController extends Controller
     public function postItems(Request $request)
     {
         $ides = $request->get('ides');
+
         $items = Items::whereIn('id', $request->get('ides'))->get();
         $data = [];
-        foreach ($ides as $id) {
-            foreach ($items as $item) {
-                if ($item->id == $id)
-                    $data[$id] = $item;
+        if(count($ides)){
+            foreach ($ides as $id) {
+                foreach ($items as $item) {
+                    if ($item->id == $id)
+                        $data[$id] = $item;
+                }
             }
         }
+
         return response()->json(['items' => $data, 'error' => false], 200);
     }
 
