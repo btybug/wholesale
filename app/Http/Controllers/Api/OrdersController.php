@@ -59,6 +59,14 @@ class OrdersController extends Controller
         return response()->json(['items' => $data, 'error' => false], 200);
     }
 
+    public function postItem(Request $request)
+    {
+
+        $item = Items::findOrFail($request->id);
+
+        return response()->json(['item' => $item, 'error' => false], 200);
+    }
+
     public function getOredersAndItems()
     {
         $result = OrderItem::leftJoin('orders', 'orders.id', '=', 'order_items.order_id')
