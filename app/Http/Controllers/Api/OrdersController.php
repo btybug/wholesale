@@ -62,7 +62,7 @@ class OrdersController extends Controller
     public function postItem(Request $request)
     {
 
-        $item = Items::findOrFail($request->id);
+        $item = Items::with(['barcode'])->findOrFail($request->id);
 
         return response()->json(['item' => $item, 'error' => false], 200);
     }
