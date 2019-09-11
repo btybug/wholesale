@@ -46,10 +46,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('user', function (Request $request) {
         return response()->json(['user' => $request->user()], 200);
     });
-    Route::get('get-orders', 'Api\OrdersController@getOrders');
-    Route::get('get-order-items', 'Api\OrdersController@getOrderItems');
-    Route::post('post-import', 'Api\OrdersController@postImport');
-    Route::post('post-items', 'Api\OrdersController@postItems');
-    Route::post('post-item', 'Api\OrdersController@postItem');
-    Route::get('get-orders-and-items', 'Api\OrdersController@getOredersAndItems');
+    Route::get('get-orders', 'Api\ApiController@getOrders');
+    Route::get('get-order-items', 'Api\ApiController@getOrderItems');
+    Route::post('post-import', 'Api\ApiController@postImport');
+    Route::post('post-items', 'Api\ApiController@postItems');
+    Route::post('post-item', 'Api\ApiController@postItem');
+    Route::get('get-orders-and-items', 'Api\ApiController@getOredersAndItems');
+    Route::get('get-categories', 'Api\ApiController@getCategories');
 });

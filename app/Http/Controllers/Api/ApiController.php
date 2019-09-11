@@ -7,7 +7,7 @@ use App\Models\Items;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 
-class OrdersController extends Controller
+class ApiController extends Controller
 {
     public function getOrders()
     {
@@ -82,5 +82,10 @@ class OrdersController extends Controller
                 'orders.order_number')->orderBy('order_items.is_exported', 'ASC')
             ->get();
         return response()->json(['items' => $result, 'error' => false], 200);
+    }
+
+    public function getCategories()
+    {
+        return Category::with('children')->where('type', 'stocks')->whereNull('parent_id')->get();
     }
 }
