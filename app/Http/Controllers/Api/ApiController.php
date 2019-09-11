@@ -45,7 +45,7 @@ class ApiController extends Controller
     {
         $ides = $request->get('ides',[]);
 
-        $items = Items::with('barcode')->whereIn('id', $request->get('ides',[]))->get();
+        $items = Items::with('barcode')->with('categories')->whereIn('id', $request->get('ides',[]))->get();
         $data = [];
         if(count($ides)){
             foreach ($ides as $id) {
