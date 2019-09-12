@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Items;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
