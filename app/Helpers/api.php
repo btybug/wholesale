@@ -535,7 +535,7 @@ function generate_random_letters($length, $prefix = '', $suffix = '')
     for ($i = 0; $i < $length; $i++) {
         $random .= chr(rand(ord('a'), ord('z')));
     }
-    return upper($prefix . $random . $suffix);
+    return strtoupper($prefix . $random . $suffix);
 }
 
 function BBcodeDate($then)
