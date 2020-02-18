@@ -16,6 +16,7 @@ use App\Models\Stock;
 use App\Models\StockVariation;
 use App\Models\Ticket;
 use App\Models\UserNotes;
+use App\Models\WholesaleToken;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -162,5 +163,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function notes()
     {
         return $this->hasMany(UserNotes::class, 'user_id');
+    }
+
+    public function wholesaleToken()
+    {
+        return $this->hasOne(WholesaleToken::class,'user_id');
     }
 }
