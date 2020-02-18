@@ -66,8 +66,9 @@ class OauthLoginController extends Controller
 
             'password' => \Hash::make(\Illuminate\Support\Str::random(8)),
         ]);
-        $shop=$user->makeDefaultStorage($data['user']);
-        $shop->racks()->create(['name' => 'Main', 'slug' => 'main', 'is_default' => 1, 'description' => 'sale is possible only from this rack']);
+//        $shop=$user->makeDefaultStorage($data['user']);
+//        $shop->racks()->create(['name' => 'Main', 'slug' => 'main', 'is_default' => 1, 'description' => 'sale is possible only from this rack']);
+//
         $user->wholesaleToken()->create($response);
         return $user;
     }
