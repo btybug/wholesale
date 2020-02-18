@@ -607,6 +607,9 @@ Route::group(['prefix' => 'wholesellers'], function () {
     Route::get('/view/{id}', 'Admin\WholesallersController@viewItems')->name('admin_wholesallers_view');
     Route::get('/manage/{id}', 'Admin\WholesallersController@manage')->name('admin_wholesallers_manage');
 });
+Route::group(['prefix' => 'passport'], function () {
+    Route::get('/', 'Admin\PassportController@index')->name('admin_passport');
+});
 
 Route::get('/print-pdf/{id}', 'Admin\OrdersController@printPdf')->name('pdf_download');
 

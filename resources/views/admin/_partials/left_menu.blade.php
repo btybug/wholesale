@@ -299,6 +299,21 @@
 
             </li>
             @endHasAccess
+            @hasAccess('admin_passport')
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-handshake-o"></i>
+                    <span>Passport</span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                   <li><a href="{{route('admin_passport')}}"><i class="fa fa-circle-o"></i>Requests</a></li>
+                </ul>
+
+            </li>
+            @endHasAccess
         </ul>
     </section>
     <!-- /.sidebar -->

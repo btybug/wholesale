@@ -9,6 +9,14 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
 {{--{!! Html::style("public/admin_theme/bower_components/bootstrap/dist/css/bootstrap.min.css") !!}--}}
+    <script src="{{ asset('public/js/app.js') }}" defer></script>
+
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    <!-- Styles -->
+    <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
 <!-- Bootstrap 4.3.1 -->
 {!! Html::style("public/admin_theme/bower_components/bootstrap-4/css/bootstrap.min.css") !!}
 <!-- Font Awesome -->
@@ -32,7 +40,6 @@
 <!-- bootstrap wysihtml5 - text editor -->
   {!! Html::style("public/admin_theme/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css") !!}
   {!! Html::style("public/plugins/bootstrap-select/bootstrap-select.min.css") !!}
-
 
   <link rel="stylesheet" href="{{asset('public/admin_assets/css/animate.css')}}">
   <link rel="stylesheet" href="{{asset('public/admin_assets/css/media-tree.css')}}">
@@ -286,6 +293,6 @@
 
 @yield('js')
 @stack('javascript')
-<script src="{{asset('public/admin_assets/js/custom.js')}}"></script>
+{{--<script src="{{asset('public/admin_assets/js/custom.js')}}"></script>--}}
 </body>
 </html>
