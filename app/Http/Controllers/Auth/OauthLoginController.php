@@ -39,8 +39,7 @@ class OauthLoginController extends Controller
 
     private function loginOrNewUser(array $client, $response)
     {
-        $user = User::where('email', $client['user']['email'])
-            ->orWhere('wholesale_id', $client['user']['id'])->first();
+        $user = User::where('email', $client['user']['email'])->first();
 
         ($user) ? $this->login($user,$response) : \Auth::login($this->newUser($client, $response));
         return redirect()->route('customer_dashboard');
