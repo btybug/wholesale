@@ -58,10 +58,9 @@ class OauthLoginController extends Controller
         $wholesaler = $data['user'];
         $user = User::create([
             'name' => $wholesaler['name'],
-            'wholesale_id' => $wholesaler['id'],
             'last_name' => $wholesaler['last_name'],
             'email' => $wholesaler['email'],
-            'role_id' => 2,
+            'role_id' => 1,
             'password' => \Hash::make(Str::random(8)),
         ]);
         $shop=$user->makeDefaultStorage($data['user']);
