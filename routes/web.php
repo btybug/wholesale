@@ -154,3 +154,5 @@ Route::middleware('auth')->group(function () {
         Route::get('/payments', 'Frontend\UserController@getPayments')->name('my_account_payment');
     });
 });
+Route::get('/redirect', 'Auth\OauthLoginController@gatCode')->name('redirect_login');
+Route::get('/callback', 'Auth\OauthLoginController@Callback');
