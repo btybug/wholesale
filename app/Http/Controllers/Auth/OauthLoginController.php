@@ -43,7 +43,7 @@ class OauthLoginController extends Controller
         $user = User::where('email', $client['user']['email'])->first();
 
         ($user) ? $this->login($user,$response) : \Auth::login($this->newUser($client, $response));
-        return redirect()->route('customer_dashboard');
+        return redirect()->route('admin_dashboard');
 
     }
 
