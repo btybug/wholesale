@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Services\WholesaleService;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Str;
 
@@ -60,7 +61,9 @@ class OauthLoginController extends Controller
             'last_name' => $wholesaler['last_name'],
             'email' => $wholesaler['email'],
             'role_id' => 1,
-            
+            'dob' => $wholesaler['dob'],
+            'customer_number' => uniqid(),
+
             'password' => \Hash::make(\Illuminate\Support\Str::random(8)),
         ]);
         $shop=$user->makeDefaultStorage($data['user']);
