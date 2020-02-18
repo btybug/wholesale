@@ -48,7 +48,7 @@ class WholesaleService
         $response = $this->http->post($this->url('/oauth/token'), [
             'form_params' => [
                 'grant_type' => 'authorization_code',
-                'redirect_uri' => 'http://app.thevaporshub.co.uk/callback',
+                'redirect_uri' => url('callback'),
                 'client_id' => env('WHOLESALER_ID'),
                 'client_secret' => env('WHOLESALER_SECRET'),
                 'code' => $request->code,
