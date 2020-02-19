@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\WholesaleService;
 use App\Models\Attributes;
 use App\Models\Barcodes;
 use App\Models\Campaign;
@@ -909,5 +910,16 @@ class DatatableController extends Controller
 //                class="delete-button badge btn-danger" data-key="' . $attr->id . '"><i class="fa fa-trash"></i></a>';
 //                return $html .= "<a class='badge btn-warning' href='" . route('admin_warehouses_edit', $attr->id) . "'><i class='fa fa-edit'></i></a>";
             })->rawColumns(['actions','canceled'])->make(true);
+    }
+
+    public function getAllPurchase(WholesaleService $wholesaleService)
+    {
+        $response = $wholesaleService->getOrdersAndItems();
+        $items= $response['items'];
+        return Datatables::of($items) ->addColumn('actions', function ($attr) {
+            return (!$attr['is_exported'])?
+                '<a rel="tooltip" class="btn btn-success" href="'.route('customer_purchases_import',$attr['id']).'" data-original-title="" title="">
+                                Import</a>':'<span data-id="'. $attr["id"] .'">Imported</span>';
+        })->rawColumns(['actions'])->make(true);;
     }
 }

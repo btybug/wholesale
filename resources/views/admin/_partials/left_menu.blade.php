@@ -299,6 +299,21 @@
 
             </li>
             @endHasAccess
+            @hasAccess('admin_purchases')
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-handshake-o"></i>
+                    <span>Purchases</span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                   <li><a href="{{route('admin_purchases')}}"><i class="fa fa-circle-o"></i>Purchases</a></li>
+                </ul>
+
+            </li>
+            @endHasAccess
             @hasAccess('admin_passport')
             <li class="treeview">
                 <a href="#">
