@@ -70,7 +70,6 @@ class ApiController extends Controller
 
     public function getOredersAndItems()
     {
-        return response()->json(['items' => [1,2,3], 'error' => false], 200);
         $result = OrderItem::leftJoin('orders', 'orders.id', '=', 'order_items.order_id')
             ->where('orders.user_id', \Auth::id())->select(
                 'order_items.id',
