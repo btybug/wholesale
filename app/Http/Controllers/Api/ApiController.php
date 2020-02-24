@@ -70,6 +70,7 @@ class ApiController extends Controller
 
     public function getOredersAndItems()
     {
+        return response()->json(['items' => [1,2,3], 'error' => false], 200);
         $result = OrderItem::leftJoin('orders', 'orders.id', '=', 'order_items.order_id')
             ->where('orders.user_id', \Auth::id())->select(
                 'order_items.id',
@@ -80,7 +81,8 @@ class ApiController extends Controller
                 'order_items.amount',
                 'order_items.is_exported',
                 'order_items.created_at',
-                'orders.order_number')->orderBy('order_items.is_exported', 'ASC')
+                'orders.order_number')
+            ->orderBy('order_items.is_exported', 'ASC')
             ->get();
         return response()->json(['items' => $result, 'error' => false], 200);
     }
