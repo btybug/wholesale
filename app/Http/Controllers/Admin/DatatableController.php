@@ -922,4 +922,6 @@ class DatatableController extends Controller
                                 Import</a>':'<span data-id="'. $attr["id"] .'">Imported</span>';
         })->rawColumns(['actions'])->make(true);;
     }
+
+
 }
