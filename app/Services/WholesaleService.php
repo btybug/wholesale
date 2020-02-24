@@ -172,7 +172,7 @@ class WholesaleService
 
     public function getFreshToken()
     {
-        if ((time() >= \Carbon\Carbon::parse($this->access_token->updated_at)->unix() + $this->access_token->expires_in)) {
+        if ((time() >= \Carbon\Carbon::parse($this->access_token->updated_at)->timestamp + $this->access_token->expires_in)) {
             return $this->updateToken($this->refresh_token());
         }
         return $this->access_token->access_token;
