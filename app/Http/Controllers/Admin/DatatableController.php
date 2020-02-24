@@ -918,7 +918,7 @@ class DatatableController extends Controller
         $items= $response['items'];
         return Datatables::of($items) ->addColumn('actions', function ($attr) {
             return (!$attr['is_exported'])?
-                '<a rel="tooltip" class="btn btn-success" href="'.route('customer_purchases_import',$attr['id']).'" data-original-title="" title="">
+                '<a rel="tooltip" class="btn btn-success" href="'.route('admin_purchases_import',$attr['id']).'" data-original-title="" title="">
                                 Import</a>':'<span data-id="'. $attr["id"] .'">Imported</span>';
         })->rawColumns(['actions'])->make(true);;
     }
