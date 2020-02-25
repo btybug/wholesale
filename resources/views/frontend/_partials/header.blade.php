@@ -138,10 +138,6 @@
     <div class="sharethis-inline-share-buttons main-scrollbar"></div>
 </div>
 @if(!Auth::check())
-
-    <!--modal Login-->
-    @include("frontend._partials.login_modal")
-
     <!--modal Register-->
     @include("frontend._partials.register_modal")
 

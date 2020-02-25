@@ -123,39 +123,39 @@ function autocomplete(inp, arr) {
 
 $(document).ready(function () {
     // if($('#filter-form .filter-sidebar-wrapper').length === 0) {
-        document.getElementById("search-product")
-            .addEventListener("keyup", function(event) {
-                event.preventDefault();
-
-                event.target.value.trim() === '' ? $('#autocomplite_content_search').css('display', 'none') : $('#autocomplite_content_search').css('display', 'block')
-                if(event.target.value.trim() !== '') {
-                    console.log('***********************')
-                    $('.search_icon_header').removeClass('d-flex').addClass('d-none');
-                    $('.close_icon_header').removeClass('d-none').addClass('d-flex');
-                } else {
-                    $('.search_icon_header').removeClass('d-none').addClass('d-flex');
-                    $('.close_icon_header').removeClass('d-flex').addClass('d-none');
-                }
-                if (event.keyCode === 13) {
-                    var form = $("#filter-form");
-                    var category = $('.all_categories').val();
-                    var search_text = $("#search-product").val();
-                    var url = "/products/"+category;
-
-                    if(form.length > 0){
-                        if(search_text){
-                            var input = $("<input>")
-                                .attr("type", "hidden")
-                                .attr("name", "q").val(search_text);
-                            form.append(input);
-                        }
-                        form.attr('action',url);
-                        form.submit();
-                    }else{
-                        window.location = "/products/"+category +"?q="+$(this).val();
-                    }
-                }
-            });
+    //     document.getElementById("search-product")
+    //         .addEventListener("keyup", function(event) {
+    //             event.preventDefault();
+    //
+    //             event.target.value.trim() === '' ? $('#autocomplite_content_search').css('display', 'none') : $('#autocomplite_content_search').css('display', 'block')
+    //             if(event.target.value.trim() !== '') {
+    //                 console.log('***********************')
+    //                 $('.search_icon_header').removeClass('d-flex').addClass('d-none');
+    //                 $('.close_icon_header').removeClass('d-none').addClass('d-flex');
+    //             } else {
+    //                 $('.search_icon_header').removeClass('d-none').addClass('d-flex');
+    //                 $('.close_icon_header').removeClass('d-flex').addClass('d-none');
+    //             }
+    //             if (event.keyCode === 13) {
+    //                 var form = $("#filter-form");
+    //                 var category = $('.all_categories').val();
+    //                 var search_text = $("#search-product").val();
+    //                 var url = "/products/"+category;
+    //
+    //                 if(form.length > 0){
+    //                     if(search_text){
+    //                         var input = $("<input>")
+    //                             .attr("type", "hidden")
+    //                             .attr("name", "q").val(search_text);
+    //                         form.append(input);
+    //                     }
+    //                     form.attr('action',url);
+    //                     form.submit();
+    //                 }else{
+    //                     window.location = "/products/"+category +"?q="+$(this).val();
+    //                 }
+    //             }
+    //         });
     // }
 
     $(document).on('click', function(ev) {
@@ -176,84 +176,84 @@ $(document).ready(function () {
 
     // $('#search-product').val().trim() === '' ? $('#autocomplite_content_search').css('display', 'none') : $('#autocomplite_content_search').css('display', 'block')
 
-    $("#search-product").autocomplete({
-        // serviceUrl: '/search',
-        // onSelect: function (suggestion) {
-        //     alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
-        // },
-        // source:countries,
-        // lookup: countries,
-        appendTo: "#autocomplite_content_search",
-        width: '100%',
-        source: function (d, e) {
-
-            var category = $(".all_categories").val();
-            category= category.length === 0 ? null : $(".all_categories").val();
-            var data = {
-                name: $("#search-product").val(),
-                category: category
-            };
-            $.ajax({
-                type: 'POST',
-                url: '/search',
-                dataType: "JSON",
-                headers: {
-                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
-                },
-                data: data,
-                success: function (b) {
-                    // console.log(b, d, e);
-                    var c = [];
-                    console.log('------------------', b.data);
-
-
-                    if(b.data.length > 0) {
-                        $.each(b.data, function (i, a) {
-                            c.push(a);
-                        });
-                        $('#autocomplite_content_search .not_found').removeClass('d-flex').addClass('d-none');
-                    } else {
-
-                        if($('#search-product').val().trim() === '') {
-                            $('#autocomplite_content_search').css('display', 'none')
-                            $('#autocomplite_content_search .not_found').removeClass('d-flex').addClass('d-none');
-                        } else {
-                            $('#autocomplite_content_search').css('display', 'block');
-                            $('#autocomplite_content_search .not_found').removeClass('d-none').addClass('d-flex');
-                        }
-
-                    }
-                    e(c);
-
-                }
-            });
-        },
-        onSelect: function (suggestion) {
-            alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
-        }
-    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-        // console.log(location, 55555555555, item);
-        encodeURI(item.slug)
-        var inner_html = `  <a class="autocomplete_link_custom" style="all: unset;" href="${location.origin}/products/${encodeURI(item.category)}/${encodeURI(item.slug)}">
-                                <div class="autocomplete_content_custom">
-                                    <div class="autocomplete_image_container_custom">
-                                        <img class="autocomplete_image_custom" src="${item.image}">
-                                    </div>
-                                    <div class="autocomplete-right-main-content">
-                                         <div class="autocomplete_title_container_custom">
-                                            <h4 class="font-sec-reg font-17 text-main-clr lh-1 autocomplete_title_custom">${item.name}</h4>
-                                        </div>
-                                        <p class="font-main-light text-light-clr font-14 autocomplete_description_custom">${item.short_description}...</p>
-                                    </div>
-
-                                </div>
-                            </a>`;
-        // console.log('--------------', item);
-        return $( "<li></li>" )
-            .data( "item.autocomplete", item )
-            .append(inner_html)
-            .appendTo( ul );
-    };
+    // $("#search-product").autocomplete({
+    //     // serviceUrl: '/search',
+    //     // onSelect: function (suggestion) {
+    //     //     alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+    //     // },
+    //     // source:countries,
+    //     // lookup: countries,
+    //     appendTo: "#autocomplite_content_search",
+    //     width: '100%',
+    //     source: function (d, e) {
+    //
+    //         var category = $(".all_categories").val();
+    //         category= category.length === 0 ? null : $(".all_categories").val();
+    //         var data = {
+    //             name: $("#search-product").val(),
+    //             category: category
+    //         };
+    //         $.ajax({
+    //             type: 'POST',
+    //             url: '/search',
+    //             dataType: "JSON",
+    //             headers: {
+    //                 "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+    //             },
+    //             data: data,
+    //             success: function (b) {
+    //                 // console.log(b, d, e);
+    //                 var c = [];
+    //                 console.log('------------------', b.data);
+    //
+    //
+    //                 if(b.data.length > 0) {
+    //                     $.each(b.data, function (i, a) {
+    //                         c.push(a);
+    //                     });
+    //                     $('#autocomplite_content_search .not_found').removeClass('d-flex').addClass('d-none');
+    //                 } else {
+    //
+    //                     if($('#search-product').val().trim() === '') {
+    //                         $('#autocomplite_content_search').css('display', 'none')
+    //                         $('#autocomplite_content_search .not_found').removeClass('d-flex').addClass('d-none');
+    //                     } else {
+    //                         $('#autocomplite_content_search').css('display', 'block');
+    //                         $('#autocomplite_content_search .not_found').removeClass('d-none').addClass('d-flex');
+    //                     }
+    //
+    //                 }
+    //                 e(c);
+    //
+    //             }
+    //         });
+    //     },
+    //     onSelect: function (suggestion) {
+    //         alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+    //     }
+    // }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+    //     // console.log(location, 55555555555, item);
+    //     encodeURI(item.slug)
+    //     var inner_html = `  <a class="autocomplete_link_custom" style="all: unset;" href="${location.origin}/products/${encodeURI(item.category)}/${encodeURI(item.slug)}">
+    //                             <div class="autocomplete_content_custom">
+    //                                 <div class="autocomplete_image_container_custom">
+    //                                     <img class="autocomplete_image_custom" src="${item.image}">
+    //                                 </div>
+    //                                 <div class="autocomplete-right-main-content">
+    //                                      <div class="autocomplete_title_container_custom">
+    //                                         <h4 class="font-sec-reg font-17 text-main-clr lh-1 autocomplete_title_custom">${item.name}</h4>
+    //                                     </div>
+    //                                     <p class="font-main-light text-light-clr font-14 autocomplete_description_custom">${item.short_description}...</p>
+    //                                 </div>
+    //
+    //                             </div>
+    //                         </a>`;
+    //     // console.log('--------------', item);
+    //     return $( "<li></li>" )
+    //         .data( "item.autocomplete", item )
+    //         .append(inner_html)
+    //         .appendTo( ul );
+    // };
 
     $("body").on('click','.shopping-cart-content .inp-up, .shopping-cart-content .inp-down',function () {
         var uid = $(this).closest('.shopping__cart-tab-table-wall').data('uid');

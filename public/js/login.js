@@ -43,7 +43,7 @@
                         },
                         success: function (data) {
                             if (!data.error) {
-                                location.href = data.redirectPath
+                                location.href = "/"
                                 console.log(data)
                             } else {
                                 alert('error')

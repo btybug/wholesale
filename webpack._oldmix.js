@@ -49,5 +49,3 @@ mix.babel([
         'public/css/main.css',
         'public/css/flag-icon.css'
     ], 'public/css/bundle.css')
-
-
