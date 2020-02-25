@@ -50,6 +50,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('get-order-items', 'Api\ApiController@getOrderItems');
     Route::post('post-import', 'Api\ApiController@postImport');
     Route::post('post-items', 'Api\ApiController@postItems');
+    Route::post('post-all-items', 'Api\ApiController@postAllItems');
     Route::post('post-item', 'Api\ApiController@postItem');
     Route::get('get-orders-and-items', 'Api\ApiController@getOredersAndItems');
     Route::get('get-categories', 'Api\ApiController@getCategories');

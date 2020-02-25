@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Exports;
 use App\Models\Permissions;
 use App\Models\Roles;
+use App\Services\WholesaleService;
 use Illuminate\Http\Request;
 
 class WholesallersController extends Controller
@@ -36,5 +37,10 @@ class WholesallersController extends Controller
     {
         $exports=Exports::find($id);
         return $this->view('manage',compact('exports'));
+    }
+
+    public function synch(WholesaleService $service)
+    {
+        dd($service->getAllItems());
     }
 }

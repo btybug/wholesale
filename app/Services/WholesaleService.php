@@ -119,6 +119,16 @@ class WholesaleService
         ]);
         return json_decode((string)$response->getBody(), true);
     }
+    public function getAllItems()
+    {
+        $response = $this->http->post($this->url('/api/post-items'), [
+            'headers' => [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->getFreshToken(),
+            ]
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
 
     public function getCategories()
     {
