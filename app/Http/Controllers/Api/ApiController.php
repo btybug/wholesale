@@ -61,7 +61,7 @@ class ApiController extends Controller
     }
     public function postAllItems(Request $request)
     {
-        $items = Items::with('barcode')->with('categories')->all();
+        $items = Items::with('barcode')->with('categories')->get();
         return response()->json(['items' => $items, 'error' => false], 200);
     }
 
