@@ -121,7 +121,7 @@ class WholesaleService
     }
     public function getAllItems()
     {
-        $response = $this->http->post($this->url('/api/post-items'), [
+        $response = $this->http->post($this->url('/api/post-all-items'), [
             'headers' => [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->getFreshToken(),
