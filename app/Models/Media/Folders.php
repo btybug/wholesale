@@ -17,7 +17,35 @@ use Illuminate\Database\Schema\Blueprint;
 
 /**
  * Class Folders
+ *
  * @package App\Models\Media
+ * @property int $id
+ * @property string $name
+ * @property string|null $prefix
+ * @property int $parent_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Media\Folders[] $children
+ * @property-read int $children_count
+ * @property-read bool $folder
+ * @property-read int|null $items_count
+ * @property-read mixed $key
+ * @property-read mixed $text
+ * @property-read mixed|string $title
+ * @property-read \Illuminate\Contracts\Routing\UrlGenerator|string $url
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Media\Items[] $items
+ * @property-read \App\Models\Media\Folders $parent
+ * @property-read \App\Models\Media\Settings $settings
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Folders newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Folders newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Folders query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Folders whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Folders whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Folders whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Folders whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Folders wherePrefix($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Folders whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Folders extends Model
 {
@@ -140,25 +168,27 @@ class Folders extends Model
 
     /**
      * @param $data
-     * @return bool
+     * @return array
      */
     public static function removeFolder($data)
     {
-        $id = $data['folder_id'];
+        $result = [];
         if (!$data['trash']) {
-            $folder = self::find($id);
-            if (File::isDirectory($folder->path())) File::deleteDirectory($folder->path());
-            if ($folder->delete()) {
-
-                return true;
+            foreach ($data['folder_id'] as $id) {
+                $folder = self::find($id);
+                $items = $folder->items;
+                foreach ($items as $item) {
+                    File::delete($item->path());
+                }
+                $result[] = $folder->delete();
             }
+
         } else {
-            if (self::find($id)->trash()) {
-                return true;
+            foreach ($data['folder_id'] as $id) {
+                $result[] = self::find($id)->trash();
             }
-
         }
-        return false;
+        return $result;
     }
 
     /**
@@ -167,7 +197,7 @@ class Folders extends Model
     protected static function boot()
     {
         parent::boot();
-       return static::deleting(function ($tutorial) {
+        return static::deleting(function ($tutorial) {
             foreach ($tutorial->childs as $child) {
                 $child->delete();
             }
@@ -202,9 +232,14 @@ class Folders extends Model
         return $this->belongsTo('App\Models\Media\Folders', 'parent_id');
     }
 
+    public function childs()
+    {
+        return $this->hasMany(Folders::class, 'parent_id');
+    }
+
     public function items()
     {
-        return $this->hasMany('App\Models\Media\Items', 'folder_id');
+        return $this->hasMany(Items::class, 'folder_id');
     }
 
     //end Api Functions
@@ -260,10 +295,6 @@ class Folders extends Model
             $count = null;
 
         }
-        if (!File::isDirectory($this->path())) {
-            $this->delete();
-            return \Response::json(['error' => true, 'message' => ['invalid dir']]);
-        }
         $data['settings']['slug'] = $data['folder_name'] . $this->id;
 
         $settings_data = $data['settings'];
@@ -276,8 +307,6 @@ class Folders extends Model
         );
         $settings_data['folder_id'] = $self->id;
         $settings = Settings::create($settings_data);
-        File::makeDirectory($self->path());
-        File::put($self->path('.gitignore'), '');
         return \Response::json(['error' => false, 'data' => $self->toArray()]);
 
     }
@@ -318,23 +347,17 @@ class Folders extends Model
         }
 
         $count = self::where('name', $data['folder_name'])->where('parent_id', $parent->id)->count();
-        if ($count) {
-            $count++;
-            $path = $parent->path . '/' . $data['folder_name'] . "($count)";
-        } else {
-            $count = null;
-            $path = $parent->path . '/' . $data['folder_name'];
-        }
+
         $data['settings']['slug'] = $data['folder_name'] . $parent->id;
-        $settings = $this->settings()->update($data['settings']);
+//        $settings = $this->settings()->update($data['settings']);
         unset($data['settings']);
         $self = $this->update([
             'name' => $data['folder_name'],
-            'parent_id' => $this->id,
+//            'parent_id' => $this->id,
             'prefix' => $count,
-            'settings_id' => $settings->id,
+//            'settings_id' => $settings->id,
         ]);
-        return $self->toArray();
+        return $this->toArray();
     }
 
     public function settings()
@@ -350,24 +373,38 @@ class Folders extends Model
 
     public static function sort($data)
     {
-        $folder = self::find($data['folder_id']);
-        $parent = self::find($data['parent_id']);
+        $result = [];
+        if (is_array($data['folder_id'])) {
+            foreach ($data['folder_id'] as $folder_id) {
+                $folder = self::find($folder_id);
 
-        $count = self::where('name', $folder->name)->where('parent_id', $data['parent_id'])->count();
-        if ($count) {
-            $count++;
+
+                $count = self::where('name', $folder->name)->where('parent_id', $data['parent_id'])->count();
+                if ($count) {
+                    $count++;
+                } else {
+                    $count = null;
+                }
+                $folder->parent_id = $data['parent_id'];
+                $folder->prefix = $count;
+                $folder->save();
+                $result[] = $folder;
+            }
         } else {
-            $count = null;
-        }
-        $sourceDir = $folder->path();
-        $success = File::copyDirectory($sourceDir, $parent->path($folder->title));
-        if ($success) {
-            File::deleteDirectory($sourceDir);
+            $folder = self::find($data['folder_id']);
+            $count = self::where('name', $folder->name)->where('parent_id', $data['parent_id'])->count();
+            if ($count) {
+                $count++;
+            } else {
+                $count = null;
+            }
             $folder->parent_id = $data['parent_id'];
             $folder->prefix = $count;
             $folder->save();
-            return \Response::json(['error' => false, 'data' => $folder]);
+            $result[] = $folder;
         }
+
+        return \Response::json(['error' => false, 'data' => $result]);
     }
 
     public function info()
@@ -378,5 +415,35 @@ class Folders extends Model
         unset($info['settings_id']);
         $info['settings'] = $this->settings->toArray();
         return $info;
+    }
+
+    public function uploadPath($i = 1)
+    {
+        if (File::isDirectory(public_path('media' . DS . 'drive' . DS . $i))) {
+            if (count(File::allFiles(public_path('media' . DS . 'drive' . DS . $i))) >= 50) {
+                $i++;
+                return $this->uploadPath($i);
+            } else {
+                return ['path' => public_path('media' . DS . 'drive' . DS . $i), 'folder' => $i];
+            }
+        } else {
+            File::makeDirectory(public_path('media' . DS . 'drive' . DS . $i));
+            return ['path' => public_path('media' . DS . 'drive' . DS . $i), 'folder' => $i];
+        }
+    }
+
+    public static function emptyTrash()
+    {
+        $result=[];
+        $trash = self::where('name', 'trash')->first();
+        $folders = self::where('parent_id', $trash->id)->get();
+        foreach ($folders as $folder) {
+            $items = $folder->items;
+            foreach ($items as $item) {
+                File::delete($item->path());
+            }
+            $result[] = $folder->delete();
+        }
+        return $result;
     }
 }

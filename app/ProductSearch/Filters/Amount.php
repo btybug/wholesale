@@ -17,8 +17,8 @@ class Amount implements Filter
             $value[1] = ($value[1]) ?? 1000;
 
             if($currencyCode != 'USD'){
-                $changed = (new \App\Models\SiteCurrencies())->where('code',get_currency())->first();
-                $value = explode(',', $value);
+                $changed = (new \App\Models\SiteCurrencies())->where('code',$currencyCode)->first();
+                $value = (is_string($value))?explode(',', $value):$value;
                 $value[0] = $value[0] / $changed->rate;
                 $value[1] = $value[1] / $changed->rate;
             }elseif (is_string($value)){

@@ -16,14 +16,14 @@
     font-weight: bold;
     line-height: 1;
     margin-bottom: 32px;
-    opacity: .2;
+    opacity: .3;
 }
 .home__main-slider .main-slider-wall-inner .text-second{
     color: #5184e5;
     font-size: 65px;
     line-height: 1;
     text-indent: 6px;
-    opacity: .2;
+    opacity: .3;
 }
 .home__main-slider-thumb .main-slider-wall-inner {
     left: 10px;
@@ -60,5 +60,17 @@
     .home__main-slider .main-slider-wall-inner{
         left: 50%;
         transform: translateX(-50%);
+    }
+}
+@media (max-width: 575px) {
+    .home__main-slider .main-slider-wall-inner .text-second{
+        font-size: 30px;
+        white-space: nowrap;
+    }
+    .home__main-slider .main-slider-wall-inner .text-big{
+        margin-bottom: 16px;
+    }
+    .home__main-slider .main-slider-wall-inner{
+        bottom: 90px;
     }
 }

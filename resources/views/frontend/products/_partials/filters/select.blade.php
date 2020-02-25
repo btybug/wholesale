@@ -1,8 +1,8 @@
-<div class="form-group row select_with-tag-wrapper position-relative">
+<div class="form-group select_with-tag-wrapper position-relative">
 
-    <label for="deliverySelect{{ $filter->id }}"
-           class="text-main-clr mb-0 col-4 col-form-label text-right text-uppercase">{{ $filter->name }}</label>
-    <div class="simple_select_wrapper col-8 p-sm-0">
+    {{--<label for="deliverySelect{{ $filter->id }}"--}}
+           {{--class="text-main-clr mb-0 col-4 col-form-label text-right text-uppercase">{{ $filter->name }}</label>--}}
+    <div class="simple_select_wrapper col-12 p-sm-0">
         @php
             $dataOptions = $filter->stickers->pluck('name','id')->toArray();
         @endphp

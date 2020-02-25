@@ -11,6 +11,33 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 
 
+/**
+ * App\Models\Media\Settings
+ *
+ * @property int $id
+ * @property string|null $function
+ * @property string|null $slug
+ * @property int $folder_id
+ * @property string $action
+ * @property array|null $uploader_data
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Media\Folders $folder
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Settings newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Settings newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Settings query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Settings whereAction($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Settings whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Settings whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Settings whereFolderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Settings whereFunction($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Settings whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Settings whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Settings whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Settings whereUploaderData($value)
+ * @mixin \Eloquent
+ */
 class Settings extends Model
 {
     /**

@@ -1335,7 +1335,7 @@ ul.notes li div {
   padding: 5px 0;
 }
 .folder-list li {
-  border-bottom: 1px solid #e7eaec;
+  /* border-bottom: 1px solid #e7eaec; */
   display: block;
 }
 .folder-list li i {

@@ -273,7 +273,9 @@ textarea {
     border-color: #5184e5 transparent transparent transparent;
     border-width: 5px 4px 0 4px
 }
-
+.select-2.select-1arrow:not(.main-select-2arrows) + .select2-container--default .select2-selection--single .select2-selection__arrow b{
+    border-color: rgba(255, 255, 255, 0.7) transparent transparent transparent !important;
+}
 .select-2.main-select-transparent + .select2-container--default .select2-selection--single .select2-selection__rendered {
     line-height: 1;
 }
@@ -344,7 +346,7 @@ textarea {
 .main-scrollbar::-webkit-scrollbar,
 .table-responsive::-webkit-scrollbar {
     height: 3px;
-    width: 5px;
+    width: 8px;
 }
 
 .main-scrollbar::-webkit-scrollbar-track,
@@ -357,7 +359,7 @@ textarea {
     background: #9cbcf9;
 }
 
-body::-webkit-scrollbar {  width: 8px;}
+body::-webkit-scrollbar {  width: 12px;}
 body::-webkit-scrollbar-track {  background: #ebeef4; }
 body::-webkit-scrollbar-thumb {  background: #9cbcf9; }
 

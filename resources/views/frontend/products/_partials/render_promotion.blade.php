@@ -40,7 +40,7 @@
                   @php
                       $price = ($promotionPrice) ? $promotionPrice->price : (($variation) ? $variation->price : null)
                   @endphp
-                {{ convert_price($price,$currency) }}
+                {{ convert_price($price,$currency, false) }}
             </span>
         @endif
     </div>

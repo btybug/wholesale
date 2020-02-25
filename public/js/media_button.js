@@ -7,7 +7,7 @@
 //             files: true,
 //             access_token: "string"
 //         };
-//         postSendAjax("/api/api-media/get-folder-childs", jsondata, getfolder);
+//         postSendAjax("/api-media/get-folder-childs", jsondata, getfolder);
 //     };
 //     /*$('.file-box').each(function() {
 //              animationHover(this, 'pulse');
@@ -369,7 +369,7 @@
 //     //var getfloderid = {folder_id:'1','access_token':'string'  }
 //     var getfolderSlug = $('input[data-type="folder"]').val();
 //     var jsondata = { slug: getfolderSlug, files: true, access_token: "string" };
-//     postSendAjax("/api/api-media/get-folder-childs", jsondata, getfolder);
+//     postSendAjax("/api-media/get-folder-childs", jsondata, getfolder);
 
 //     ajaxMedia("/api/api-media/get-media-uploaders", {}, uploadersmedia);
 //     $('[data-selectmenu="Uploader"]').change(function() {
@@ -555,7 +555,7 @@
 //                 access_token: "string"
 //             };
 //             postSendAjax(
-//                 "/api/api-media/get-folder-childs",
+//                 "/api-media/get-folder-childs",
 //                 jsondata,
 //                 getfolder
 //             );

@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Enums\ReviewStatusTypes;
 use App\Http\Controllers\Controller;
 use App\Models\Attributes;
 use App\Models\AttributeStickers;
 use App\Models\Category;
+use App\Models\Items;
 use App\Models\Posts;
 use App\Models\Products;
+use App\Models\Review;
+use App\Models\Settings;
 use App\Models\Stickers;
 use App\Models\Stock;
 use App\Models\StockVariation;
@@ -22,17 +26,28 @@ class ProductsController extends Controller
 {
     protected $view = 'frontend.products';
 
+    public $settings;
+
+    public function __construct(Settings $settings)
+    {
+        $this->settings = $settings;
+    }
+
     public function index(Request $request, $type = null)
     {
-        $category = Category::where('type', 'stocks')->whereNull('parent_id')->where('slug', $type)->first();
+        $category = Category::where('type', 'stocks')
+            ->where('status',true)->whereNull('parent_id')->where('slug', $type)->first();
         if (!$category && $type != null) abort(404);
 
-        $categories = Category::with('children')->where('type', 'stocks')->whereNull('parent_id')->get()->pluck('name', 'slug');
+        $categories = Category::with('children')
+            ->where('status',true)->where('type', 'stocks')->whereNull('parent_id')->get()->pluck('name', 'slug');
         $products = ProductSearch::apply($request, $category);
 //        $products = ProductSearch::apply($request,$category,true);
 //        dd($products);
         $filters = (new Attributes)->getFiltersByCategory($type);
+
         $data = $request->except('_token');
+        $sc = $request->get('subcategory','all');
         $selecteds = [];
         $selectedBrands = [];
         if (isset($data['select_filter']) && count($data['select_filter'])) {
@@ -61,24 +76,30 @@ class ProductsController extends Controller
         }
 
         if($request->ajax()){
-            $html = View('frontend.products._partials.products_render',compact(['products','selectedBrands','selecteds']))->with('all_products',true)->render();
+            $html = View('frontend.products._partials.products_render',compact(['products','selectedBrands','selecteds','category']))->with('all_products',true)->render();
            return response()->json(['error' => false, 'html' => $html]);
         }
-        return $this->view('index', compact('categories', 'category', 'products', 'filters', 'selecteds', 'type','selectedBrands'))->with('filterModel', $request->all());
+        return $this->view('index', compact('categories', 'category', 'products', 'filters', 'selecteds', 'type','selectedBrands','sc'))->with('filterModel', $request->all());
     }
 
     public function getSingle($type, $slug)
     {
 //        Cart::clear();
 //        $x = Cart::getContent();
-
         enableFilter();
-        $vape = Stock::with(['variations', 'stockAttrs'])->where('slug', $slug)->first();
+        $vape = Stock::with(['variations', 'stockAttrs','translations'])->whereTranslation('slug', $slug)->first();
         if (!$vape) abort(404);
+
+        if ($vape->is_offer) abort(404);
 
         $variations = $vape->variations()->required()->with('options')->get();
 
-        return $this->view('single', compact(['vape', 'variations', 'type']));
+        $ads = $this->settings->getEditableData('single_product');
+        if($ads && isset($ads['data'])){
+            $ads = json_decode($ads['data'],true);
+        }
+        $reviews = Review::whereIn('item_id',$vape->variations()->pluck('item_id','item_id')->all())->where('status',ReviewStatusTypes::PUBLISHED)->latest()->get();
+        return $this->view('single', compact(['vape', 'variations', 'type','ads','reviews']));
     }
 
     public function getPrice(Request $request)
@@ -156,7 +177,7 @@ class ProductsController extends Controller
 
 
 
-        
+
         if ($variation) {
             $promotionPrice = $variation->stock->active_sales()->where('variation_id', $variation->id)->first();
             $price = ($promotionPrice) ? $promotionPrice->price : $variation->price;
@@ -306,14 +327,25 @@ class ProductsController extends Controller
         if($qty != null){
             $variation = StockVariation::findOrFail($request->variation_id);
             $discount = $variation->discounts()->where('from','<=',$qty)->where('to','>=',$qty)->first();
+
             if($discount){
                 $price = $discount->price * $qty;
+                if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                    $price = number_format($price);
+                } else {
+                    $price = money_format('%(#10n',$price);
+                }
                 return response()->json(['error' => false,'price' => $price]);
             }
         }elseif($discount_id != null){
             $discount = StockVariationDiscount::findOrFail($discount_id);
             if($discount){
-                return response()->json(['error' => false,'price' => $discount->price]);
+                if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                    $price = number_format($discount->price);
+                } else {
+                    $price = money_format('%(#10n',$discount->price);
+                }
+                return response()->json(['error' => false,'price' => $price]);
             }
         }
 

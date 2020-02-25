@@ -103,23 +103,50 @@
         @include('frontend.my_account._partials.left_bar')
         {!! Form::open(['url'=>route('logout'),'class' => 'mt-auto']) !!}
         <button class="profile-sidebar_logout-btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-white pointer">
-            Logout
+            {!! __('logout') !!}
         </button>
         {!! Form::close() !!}
+        <span class="profileSidebar-close">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    width="19px" height="19px">
+<path fill-rule="evenodd"  fill="rgb(53, 53, 53)"
+      d="M17.441,18.554 L9.689,10.803 L1.493,18.999 L-0.002,17.504 L8.194,9.308 L0.434,1.548 L1.840,0.143 L9.600,7.903 L17.505,-0.002 L18.999,1.492 L11.094,9.397 L18.846,17.149 L17.441,18.554 Z"/>
+</svg>
+        </span>
     </div>
 @endif
 <div id="cartSidebar" class="hidden-sidebar cart-aside d-flex flex-column p-0">
-
+    @if(Request::route() && Request::route()->getPrefix() != '/wholesaler')
+        @include('frontend._partials.shopping_cart_options')
+    @else
         @include('frontend.wholesaler._partials.shopping_cart_options')
+    @endif
+    <span class="profileSidebar-close">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    width="19px" height="19px">
+<path fill-rule="evenodd"  fill="rgb(53, 53, 53)"
+      d="M17.441,18.554 L9.689,10.803 L1.493,18.999 L-0.002,17.504 L8.194,9.308 L0.434,1.548 L1.840,0.143 L9.600,7.903 L17.505,-0.002 L18.999,1.492 L11.094,9.397 L18.846,17.149 L17.441,18.554 Z"/>
+</svg>
+        </span>
 </div>
 <div id="share_modal" class="hidden-sidebar cart-aside d-flex flex-column p-0">
     <button class="share_modal_close">X</button>
     <div class="sharethis-inline-share-buttons main-scrollbar"></div>
 </div>
 @if(!Auth::check())
+
+    <!--modal Login-->
+    @include("frontend._partials.login_modal")
+
     <!--modal Register-->
     @include("frontend._partials.register_modal")
+
 @endif
+
 <script>
 
     $(document).ready(function() {
@@ -138,6 +165,11 @@
         resize_win(x);
         $(window).on('resize', function() {
             resize_win(x);
+        })
+        // profile sidbar close
+        $('body').on('click','.profileSidebar-close',function () {
+            $(this).closest('.hidden-sidebar').removeClass('show')
+            $(this).closest('body').find('.sidebar_button_active_detector').removeClass('active')
         })
     });
 </script>

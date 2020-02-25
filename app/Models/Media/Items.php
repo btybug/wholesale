@@ -11,6 +11,43 @@ namespace App\Models\Media;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 
+/**
+ * App\Models\Media\Items
+ *
+ * @property int $id
+ * @property string $original_name
+ * @property string $real_name
+ * @property string $extension
+ * @property string $size
+ * @property int $folder_id
+ * @property string|null $seo_keywords
+ * @property string|null $seo_caption
+ * @property string|null $seo_description
+ * @property string|null $seo_alt
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $key
+ * @property-read mixed $relative_url
+ * @property-read mixed $type
+ * @property-read mixed $url
+ * @property-read \App\Models\Media\Folders $storage
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items whereExtension($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items whereFolderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items whereOriginalName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items whereRealName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items whereSeoAlt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items whereSeoCaption($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items whereSeoDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items whereSeoKeywords($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items whereSize($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media\Items whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Items extends Model
 {
     public $types = [
@@ -66,16 +103,38 @@ class Items extends Model
 
     public static function removeItem($data)
     {
-        if ($data['trash']) {
+        if (isset($data['trash']) && $data['trash']) {
             $trash = Folders::where('name', 'trash')->first();
             $data['folder_id'] = $trash->id;
             return self::sort($data);
         } else {
             if (is_array($data['item_id'])) {
+                foreach ($data['item_id'] as $id){
+                    $i=self::find($id);
+                    if (\File::exists($i->path()))
+                    \File::delete($i->path());
+
+                }
+                if (\File::exists(media_image_tmb_path($i->url))){
+                    \File::delete(media_image_tmb_path($i->url));
+                }
+
                 return self::whereIn('id', $data['item_id'])->delete();
             }
-            return self::find($data['item_id'])->delete();
+            $i = self::find($data['item_id']);
+            if (\File::exists($i->path())) {
+                \File::delete($i->path());
+            }
+            return self::where('id', $data['item_id'])->delete();
         }
+    }
+
+    public static function emptyTrash()
+    {
+        $trash = Folders::where('name', 'trash')->first();
+        $items['item_id'] = $trash->items->pluck('id')->toArray();
+        return self::removeItem($items);
+
     }
 
     public static function sort($data)
@@ -100,15 +159,17 @@ class Items extends Model
         $item = self::find($item_id);
 
         if ($item) {
+            $folder = Folders::find($item->folder_id);
+            $uploadPath=$folder->uploadPath();
             $originalName = md5(uniqid()) . '.' . $item->extension;
             $realName = str_replace('.' . $item->extension, '_copy.' . $item->extension, $item->real_name);
             $newItem = $item->replicate();
             $newItem->original_name = $originalName; // the new project_id
             $newItem->real_name = $realName; // the new project_id
+            $newItem->original_folder = $uploadPath['folder'];
             if ($newItem->save()) {
-                $folder = Folders::find($item->folder_id);
-                if ($folder && \File::isDirectory($folder->path())) {
-                    if (\File::copy($item->url, $folder->path() . DS . $originalName))
+                if ($folder) {
+                    if (\File::copy($item->url, $uploadPath['path'] . DS . $originalName))
                         return false;
                 }
             }
@@ -121,23 +182,12 @@ class Items extends Model
     {
         $item = self::find($item_id);
         $folder = Folders::find($folder_id);
-        if ($item) {
-            if ($folder && \File::isDirectory($folder->path())) {
-                $oldFolder = $item->storage;
-                if (\File::exists($oldFolder->url($item->original_name, false))) {
-                    if (\File::copy($oldFolder->url($item->original_name, false), $folder->path() . DS . $item->original_name))
-                        $item->folder_id = $folder_id;
-                    if ($item->save()) {
-                        unlink($oldFolder->url($item->original_name, false));
-                        return $item;
-                    }
-                } else {
-                    return $item->delete();
-                }
-
+        if ($item && $folder) {
+            $item->folder_id = $folder_id;
+            if ($item->save()) {
+                return $item;
             }
         }
-
         return false;
     }
 
@@ -169,17 +219,17 @@ class Items extends Model
 
     public function getUrlAttribute()
     {
-        return $this->storage->url() . '/' . $this->original_name;
+        return url('/public/media/drive/' . $this->original_folder . '/' . $this->original_name);
     }
 
     public function getRelativeUrlAttribute()
     {
-        return str_replace('http://' . $_SERVER['SERVER_NAME'], '', $this->storage->url()) . '/' . $this->original_name;
+        return '/public/media/drive/' . $this->original_folder . '/' . $this->original_name;
     }
 
     public function storage()
     {
-        return $this->belongsTo('App\Models\Media\Folders', 'folder_id');
+        return $this->belongsTo(Folders::class, 'folder_id');
     }
 //[
 //{"title": "Some title 1", "description": "Some desc 1", "content": "My content"},
@@ -193,5 +243,10 @@ class Items extends Model
             $result[]=["title"=>$template->real_name, "description"=>$template->seo_description, "url"=>$template->url];
         }
         return json_encode($result);
+    }
+
+    public function path()
+    {
+        return public_path('media' . DS . 'drive' . DS . $this->original_folder . DS . $this->original_name);
     }
 }

@@ -50,6 +50,11 @@ const normAjax = function (URL, obj = {}, cb) {
 };
 //********normAjax********end
 
+
+
+
+
+
 /*
  Helpers
  **TYPES**
@@ -63,6 +68,7 @@ const normAjax = function (URL, obj = {}, cb) {
 const App = function() {
   let globalFolderId = document.getElementById('core-folder').value;
   this.selectedImage = [];
+  const breadCrumbsData = []
 
   //********App -> htmlMaker********start
   //htmlMaker includes all methods to create html markup
@@ -89,169 +95,221 @@ const App = function() {
                 </div>
                 <div class="file-name">
                 <span class="icon-file"><i class="fa fa-file-o" aria-hidden="true"></i></span>
-                <span class="file-title click-no title-change"  contenteditable="true">${data.title}</span>
+                <span class="file-title click-no title-change"  contenteditable="true">${data.name}</span>
                     <!--<small>Added: ${data.updated_at}</small>-->
                 </div>
-                <span class="dropdown file-actions d-none" style="position: absolute; right: 5px; top: 5px; max-width: 100px;">
-                  <button class="btn btn-sm btn-default dropdown-toggle click-no" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0 10px">
-                    <i class="fa fa-ellipsis-h click-no" aria-hidden="true"></i>
-                  </button>
-                  <span  class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="min-width: 100%;box-shadow: 0 0 4px #777;padding: 6px;margin-top: auto;">
-                    <button class="btn btn-sm btn-danger dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="remove_folder">
-                      <i class="fa fa-trash" style="color:#ffffff"></i>
-                    </button>
-                    <button class="btn btn-sm btn-primary dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px"><i class="fa fa-cog"></i></button>
-                    <button class="btn btn-sm btn-warning dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom:0" bb-media-click="edit_item"><i class="fa fa-pencil"></i></button>
-                  </span>
-                </span>
+                
             </a>
         </div>`);
     },
+
+    //ACTION BUTTON jsdel
+
+    //folder
+    // <span class="dropdown file-actions d-none" style="position: absolute; right: 5px; top: 5px; max-width: 100px;">
+    //               <button class="btn btn-sm btn-default dropdown-toggle click-no" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0 10px">
+    //                 <i class="fa fa-ellipsis-h click-no" aria-hidden="true"></i>
+    //               </button>
+    //               <span  class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="min-width: 100%;box-shadow: 0 0 4px #777;padding: 6px;margin-top: auto;">
+    //                 <button class="btn btn-sm btn-danger dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="remove_folder">
+    //                   <i class="fa fa-trash" style="color:#ffffff"></i>
+    //                 </button>
+    //                 <button class="btn btn-sm btn-primary dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px"><i class="fa fa-cog"></i></button>
+    //                 <button class="btn btn-sm btn-warning dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom:0" bb-media-click="edit_item"><i class="fa fa-pencil"></i></button>
+    //               </span>
+    //             </span>
+
+    //image
+    // <span class="dropdown file-actions d-none" style="position: absolute; right: 5px; top: 5px; max-width: 100px;">
+    //                           <button class="btn btn-sm btn-default dropdown-toggle click-no" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0 10px">
+    //                             <i class="fa fa-ellipsis-h click-no" aria-hidden="true"></i>
+    //                           </button>
+    //                           <span  class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="min-width: 100%;box-shadow: 0 0 4px #777;padding: 6px;margin-top: auto;">
+    //                             <button class="btn btn-sm btn-danger dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="remove_image">
+    //                               <i class="fa fa-trash" style="color:#ffffff"></i>
+    //                             </button>
+    //                             <button class="btn btn-sm btn-primary dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="open_full_modal"><i class="fa fa-cog"></i></button>
+    //                             <button class="btn btn-sm btn-warning dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom:0" bb-media-click="edit_item"><i class="fa fa-pencil"></i></button>
+    //                           </span>
+    //                         </span>
+
+    //html
+    // <span class="dropdown file-actions d-none" style="position: absolute; right: 5px; top: 5px; max-width: 100px;">
+    //                           <button class="btn btn-sm btn-default dropdown-toggle click-no" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0 10px">
+    //                             <i class="fa fa-ellipsis-h click-no" aria-hidden="true"></i>
+    //                           </button>
+    //                           <span  class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="min-width: 100%;box-shadow: 0 0 4px #777;padding: 6px;margin-top: auto;">
+    //                             <button class="btn btn-sm btn-danger dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="remove_image">
+    //                               <i class="fa fa-trash" style="color:#ffffff"></i>
+    //                             </button>
+    //                             <button class="btn btn-sm btn-primary dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="open_full_modal"><i class="fa fa-cog"></i></button>
+    //                             <button class="btn btn-sm btn-warning dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom:0" bb-media-click="edit_item"><i class="fa fa-pencil"></i></button>
+    //                           </span>
+    //                         </span>
+
+    //tree
+    // <span class="dropdown file-actions d-none" style="position: absolute; right: 10px; top: -8px; max-width: 100px;">
+    //               <button class="btn btn-sm btn-default dropdown-toggle click-no" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0 10px">
+    //                 <i class="fa fa-ellipsis-h click-no" aria-hidden="true"></i>
+    //               </button>
+    //               <span  class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="min-width: 100%;box-shadow: 0 0 4px #777;padding: 6px;margin-top: auto;">
+    //                 <button class="btn btn-sm btn-danger dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="remove_folder">
+    //                   <i class="fa fa-trash" style="color:#ffffff"></i>
+    //                 </button>
+    //                 <button class="btn btn-sm btn-primary dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px"><i class="fa fa-cog"></i></button>
+    //                 <button class="btn btn-sm btn-warning dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom:0" bb-media-click="edit_item"><i class="fa fa-pencil"></i></button>
+    //               </span>
+    //             </span>
+
+    //branch
+    // <span class="dropdown file-actions d-none" style="position: absolute; right: 10px; top: -8px; max-width: 100px;">
+    //               <button class="btn btn-sm btn-default dropdown-toggle click-no" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0 10px">
+    //                 <i class="fa fa-ellipsis-h click-no" aria-hidden="true"></i>
+    //               </button>
+    //               <span  class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="min-width: 100%;box-shadow: 0 0 4px #777;padding: 6px;margin-top: auto;">
+    //                 <button class="btn btn-sm btn-danger dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="remove_folder">
+    //                   <i class="fa fa-trash" style="color:#ffffff"></i>
+    //                 </button>
+    //                 <button class="btn btn-sm btn-primary dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px"><i class="fa fa-cog"></i></button>
+    //                 <button class="btn btn-sm btn-warning dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom:0" bb-media-click="edit_item"><i class="fa fa-pencil"></i></button>
+    //               </span>
+    //             </span>
+
+
     //********App -> htmlMaker -> makeFolder********end
 
     //********App -> htmlMaker -> makeImage********start
     makeImage: (data) => {
-      return (`<div draggable="true" data-id="${data.id}" class="file" >
-        <a  bb-media-click="select_item" bb-media-type="image">
-            <span class="corner"></span>
+            return (`<div draggable="true" data-id="${data.id}" class="file" data-type="${data.extension}" ${data.extension === "pdf" && ('data-url="' + data.url + '"')}>
+                        <a  bb-media-click="select_item" bb-media-type="image">
+                            <span class="corner"></span>
+                
+                            <div class="icon">
+                                <img width="180px" data-lightbox="image" src="${data.extension.toUpperCase() === 'PNG' || data.extension.toUpperCase() === 'JPG' || data.extension.toUpperCase() === 'JPEG' ? '/public/media/tmp/' + data.original_name : data.url}">
+                                <i class="fa fa-file"></i>
+                            </div>
+                            <div class="file-name">
+                            <span class="icon-file"><i class="fa fa-file-image-o" aria-hidden="true"></i></span>
+                            <span class="file-title title-change" contenteditable="true" >${data.real_name}</span>
+                            </div>
+                            <!--<small>Added: ${data.updated_at}</small>-->
+                            
+                        </a>
+                    </div>`);
 
-            <div class="icon">
-                <img width="180px" data-lightbox="image" src="/public/media/tmp/${data.original_name}">
-                <i class="fa fa-file"></i>
-            </div>
-            <div class="file-name">
-            <span class="icon-file"><i class="fa fa-file-image-o" aria-hidden="true"></i></span>
-            <span class="file-title title-change" contenteditable="true" >${data.real_name}</span>
-            </div>
-            <!--<small>Added: ${data.updated_at}</small>-->
-            <span class="dropdown file-actions d-none" style="position: absolute; right: 5px; top: 5px; max-width: 100px;">
-              <button class="btn btn-sm btn-default dropdown-toggle click-no" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0 10px">
-                <i class="fa fa-ellipsis-h click-no" aria-hidden="true"></i>
-              </button>
-              <span  class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="min-width: 100%;box-shadow: 0 0 4px #777;padding: 6px;margin-top: auto;">
-                <button class="btn btn-sm btn-danger dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="remove_image">
-                  <i class="fa fa-trash" style="color:#ffffff"></i>
-                </button>
-                <button class="btn btn-sm btn-primary dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="open_full_modal"><i class="fa fa-cog"></i></button>
-                <button class="btn btn-sm btn-warning dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom:0" bb-media-click="edit_item"><i class="fa fa-pencil"></i></button>
-              </span>
-            </span>
-        </a>
-    </div>`);
     },
     //********App -> htmlMaker -> makeImage********end
 
       makeHtmlItem: (data) => {
-        console.log(data, 'nhang')
-          return (`<div draggable="true" data-id="${data.id}" class="file" data-type="${data.extension}" >
-        <a  bb-media-click="select_item" bb-media-type="image">
-            <span class="corner"></span>
 
-            <div class="icon">
-                <img width="180px" data-lightbox="image" src="/public/images/html.jpg">
-                <i class="fa fa-file"></i>
-            </div>
-            <div class="file-name" data-url="${data.url}" data-id="${data.id}" data-key="${data.key}">
-            <span class="icon-file"><i class="fa fa-file-image-o" aria-hidden="true"></i></span>
-            <span class="file-title title-change" contenteditable="true" >${data.real_name}</span>
-            </div>
-            <!--<small>Added: ${data.updated_at}</small>-->
-            <span class="dropdown file-actions d-none" style="position: absolute; right: 5px; top: 5px; max-width: 100px;">
-              <button class="btn btn-sm btn-default dropdown-toggle click-no" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0 10px">
-                <i class="fa fa-ellipsis-h click-no" aria-hidden="true"></i>
-              </button>
-              <span  class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="min-width: 100%;box-shadow: 0 0 4px #777;padding: 6px;margin-top: auto;">
-                <button class="btn btn-sm btn-danger dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="remove_image">
-                  <i class="fa fa-trash" style="color:#ffffff"></i>
-                </button>
-                <button class="btn btn-sm btn-primary dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="open_full_modal"><i class="fa fa-cog"></i></button>
-                <button class="btn btn-sm btn-warning dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom:0" bb-media-click="edit_item"><i class="fa fa-pencil"></i></button>
-              </span>
-            </span>
-        </a>
-    </div>`);
+          return (`<div draggable="true" data-id="${data.id}" class="file" >
+                        <a  bb-media-click="select_item" bb-media-type="image">
+                            <span class="corner"></span>
+                
+                            <div class="icon">
+                                <img width="180px" data-lightbox="image" src="/public/images/html.jpg">
+                                <i class="fa fa-file"></i>
+                            </div>
+                            <div class="file-name" data-url="${data.url}" data-id="${data.id}" data-key="${data.key}">
+                            <span class="icon-file"><i class="fa fa-file-image-o" aria-hidden="true"></i></span>
+                            <span class="file-title title-change" contenteditable="true" >${data.real_name}</span>
+                            </div>
+                            <!--<small>Added: ${data.updated_at}</small>-->
+                            
+                        </a>
+                    </div>`);
       },
 
+      makePdfItem: (data) => {
+
+        return (`<div draggable="true" data-id="${data.id}" class="file" >
+                      <a  bb-media-click="select_item" bb-media-type="image">
+                          <span class="corner"></span>
+              
+                          <div class="icon">
+                              <img width="180px" data-lightbox="image" src="/public/images/pdf.png">
+                              <i class="fa fa-file"></i>
+                          </div>
+                          <div class="file-name" data-url="${data.url}" data-id="${data.id}" data-key="${data.key}">
+                          <span class="icon-file"><i class="fa fa-file-image-o" aria-hidden="true"></i></span>
+                          <span class="file-title title-change" contenteditable="true" >${data.real_name}</span>
+                          </div>
+                          <!--<small>Added: ${data.updated_at}</small>-->
+                          
+                      </a>
+                  </div>`);
+    },
+
     makeTreeLeaf: (id, name) => {
-      return (`<li class="dd-item mjs-nestedSortable-leaf" data-id=${id} data-name="${name}" id="item_${id}" bb-media-type="folder">
-                  <div class="dd-handle oooo" bb-media-click="get_folder_items" draggable="true">${name}</div>
-                  <span class="dropdown file-actions d-none" style="position: absolute; right: 10px; top: -8px; max-width: 100px;">
-                  <button class="btn btn-sm btn-default dropdown-toggle click-no" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0 10px">
-                    <i class="fa fa-ellipsis-h click-no" aria-hidden="true"></i>
-                  </button>
-                  <span  class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="min-width: 100%;box-shadow: 0 0 4px #777;padding: 6px;margin-top: auto;">
-                    <button class="btn btn-sm btn-danger dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="remove_folder">
-                      <i class="fa fa-trash" style="color:#ffffff"></i>
-                    </button>
-                    <button class="btn btn-sm btn-primary dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px"><i class="fa fa-cog"></i></button>
-                    <button class="btn btn-sm btn-warning dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom:0" bb-media-click="edit_item"><i class="fa fa-pencil"></i></button>
-                  </span>
-                </span>
-                </li>`);
+      return (`<li class="dd-item mjs-nestedSortable-leaf" data-id="${id}" data-name="${name}" id="item_${id}" bb-media-type="folder">
+                <div class="dd-handle oooo ui-sortable-handle" bb-media-click="get_folder_items" draggable="true">
+                    <span class="icon-folder-opening"></span>
+                    <span class="icon-folder-name"><i class="fa fa-folder"></i></span>
+                    ${name}
+                </div>
+            </li>`);
     },
 
     makeTreeBranch: (id, name, children, makeTree) => {
-      return (`<li class="dd-item mjs-nestedSortable-branch mjs-nestedSortable-expanded" data-name="${name}" data-id=${id} id="item_${id}" bb-media-type="folder">
-                <div class="oooo" bb-media-click="get_folder_items" draggable="true">
-                  <div class="disclose oooo"><span class="closer"></span></div>
-                  <div class="dd-handle oooo">${name}</div>
-                  <span class="dropdown file-actions d-none" style="position: absolute; right: 10px; top: -8px; max-width: 100px;">
-                  <button class="btn btn-sm btn-default dropdown-toggle click-no" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0 10px">
-                    <i class="fa fa-ellipsis-h click-no" aria-hidden="true"></i>
-                  </button>
-                  <span  class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="min-width: 100%;box-shadow: 0 0 4px #777;padding: 6px;margin-top: auto;">
-                    <button class="btn btn-sm btn-danger dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="remove_folder">
-                      <i class="fa fa-trash" style="color:#ffffff"></i>
-                    </button>
-                    <button class="btn btn-sm btn-primary dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px"><i class="fa fa-cog"></i></button>
-                    <button class="btn btn-sm btn-warning dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom:0" bb-media-click="edit_item"><i class="fa fa-pencil"></i></button>
-                  </span>
-                </span>
-                </div>
-                <ol class="dd-list">${makeTree(children).join(' ')}</ol>
-               </li>`);
+      return (`<li class="dd-item mjs-nestedSortable-branch mjs-nestedSortable-expanded" data-name="${name}" data-id="${id}" id="item_${id}" bb-media-type="folder">
+                    <div class="dd-handle oooo" bb-media-click="get_folder_items" draggable="true">
+                        <div class="disclose oooo"><span class="closer"></span></div>
+                        <span class="icon-folder-name"><i class="fa fa-folder"></i></span>
+                        ${name}
+                    </div>
+                    <ol class="dd-list">
+                      ${makeTree(children).join(' ')}
+                    </ol>
+                </li>`);
     },
 
     makeTreeBranchInsteadLeaf: (id, branchName, leafName) => {
-      return (`<div class="oooo" bb-media-click="get_folder_items"  draggable="true">
-                 <div class="disclose oooo"><span class="closer"></span></div>
-                 <div class="dd-handle oooo">${branchName}</div>
-               </div>
-               <ol class="dd-list">
-                 <li class="dd-item mjs-nestedSortable-leaf" data-id=${id} data-name="${leafName}" id="item_${id}" >
-                   <div class="dd-handle oooo" bb-media-click="get_folder_items"  draggable="true">${leafName}</div>
-                 </li>
-               </ol>`);
+      return (`<div class="oooo" bb-media-click="get_folder_items" draggable="true">
+                <div class="disclose oooo"><span class="closer"></span></div>
+                <span class="icon-folder-name"><i class="fa fa-folder"></i></span>
+                ${branchName} 
+              </div>
+              <ol class="dd-list">
+                  <li class="dd-item mjs-nestedSortable-leaf" data-id="${id}" data-name="${leafName}" id="item_${id}">
+                      <div class="dd-handle oooo" bb-media-click="get_folder_items" draggable="true">
+                          <span class="icon-folder-opening"><i class="fa fa-caret-right"></i></span>
+                          <span class="icon-folder-name"><i class="fa fa-folder"></i></span>
+                          ${leafName}
+                      </div>
+
+                  </li>
+              </ol>`);
     },
 
     treeMove: (nodeId, parentId) => {
       if(Number(parentId) === 1) {
-        $('#folder-list2>ol').append($(`li.dd-item[data-id="${nodeId}"]`));
+          $('#folder-list2>ol').append($(`li.dd-item[data-id="${nodeId}"]`));
       } else {
         if($(`li.dd-item[data-id="${parentId}"]>ol`).length !== 0) {
-          $(`li.dd-item[data-id="${parentId}"]>ol`).append($(`li.dd-item[data-id="${nodeId}"]`));
+            $(`li.dd-item[data-id="${parentId}"]>ol`).append($(`li.dd-item[data-id="${nodeId}"]`));
         } else {
-          const ol = $('<ol></ol>');
-          ol.addClass('dd-list');
-          $(`li.dd-item[data-id="${parentId}"]`).addClass('mjs-nestedSortable-branch mjs-nestedSortable-expanded');
-          $(`li.dd-item[data-id="${parentId}"]>div`).replaceWith(`<div class="oooo" bb-media-click="get_folder_items"  draggable="true">
-                 <div class="disclose oooo"><span class="closer"></span></div>
-                 <div class="dd-handle oooo">${$(`li.dd-item[data-id="${parentId}"]`).text().trim().split(' ')[0].trim()}</div>
-                 <span class="dropdown file-actions d-none" style="position: absolute; right: 10px; top: -8px; max-width: 100px;">
-                  <button class="btn btn-sm btn-default dropdown-toggle click-no" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0 10px">
-                    <i class="fa fa-ellipsis-h click-no" aria-hidden="true"></i>
-                  </button>
-                  <span  class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="min-width: 100%;box-shadow: 0 0 4px #777;padding: 6px;margin-top: auto;">
-                    <button class="btn btn-sm btn-danger dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="remove_folder">
-                      <i class="fa fa-trash" style="color:#ffffff"></i>
+
+            const ol = $('<ol></ol>');
+            ol.addClass('dd-list');
+            $(`li.dd-item[data-id="${parentId}"]`).addClass('mjs-nestedSortable-branch mjs-nestedSortable-expanded');
+            $(`li.dd-item[data-id="${parentId}"]>div`).replaceWith(`<div class="oooo" bb-media-click="get_folder_items"  draggable="true">
+                  <div class="disclose oooo"><span class="closer"></span></div>
+                  <div class="dd-handle oooo">${$(`li.dd-item[data-id="${parentId}"]`).text().trim().split(' ')[0].trim()}</div>
+                  <span class="dropdown file-actions d-none" style="position: absolute; right: 10px; top: -8px; max-width: 100px;">
+                    <button class="btn btn-sm btn-default dropdown-toggle click-no" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0 10px">
+                      <i class="fa fa-ellipsis-h click-no" aria-hidden="true"></i>
                     </button>
-                    <button class="btn btn-sm btn-primary dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px"><i class="fa fa-cog"></i></button>
-                    <button class="btn btn-sm btn-warning dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom:0" bb-media-click="edit_item"><i class="fa fa-pencil"></i></button>
+                    <span  class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="min-width: 100%;box-shadow: 0 0 4px #777;padding: 6px;margin-top: auto;">
+                      <button class="btn btn-sm btn-danger dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px" bb-media-click="remove_folder">
+                        <i class="fa fa-trash" style="color:#ffffff"></i>
+                      </button>
+                      <button class="btn btn-sm btn-primary dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom: 3px"><i class="fa fa-cog"></i></button>
+                      <button class="btn btn-sm btn-warning dropdown-item" style="display: block;color: #fff;padding: 0px 10px;margin-bottom:0" bb-media-click="edit_item"><i class="fa fa-pencil"></i></button>
+                    </span>
                   </span>
-                </span>
-               </div>`)
-          $(`li.dd-item[data-id="${parentId}"]`).append(ol);
-          $(`li.dd-item[data-id="${parentId}"]>ol`).append($(`li.dd-item[data-id="${nodeId}"]`));
+                </div>`)
+            $(`li.dd-item[data-id="${parentId}"]`).append(ol);
+            $(`li.dd-item[data-id="${parentId}"]>ol`).append($(`li.dd-item[data-id="${nodeId}"]`));
         }
       }
       if($(`li.dd-item[data-id="${this.dragElement}"]>ol`).children().length === 0) {
@@ -265,139 +323,177 @@ const App = function() {
       }});
     },
 
+    myFuckingTree: {
+
+      copyHtml: (source, destination) => {
+        var clone = source.ownerDocument === destination.ownerDocument
+            ? source.cloneNode(true)
+            : destination.ownerDocument.importNode(source, true);
+        while (clone.firstChild) {
+          destination.appendChild(clone.firstChild);
+        }
+      },
+    
+      replaceHtml: (source, destination) => {
+        while (destination.firstChild) {
+          destination.removeChild(destination.firstChild);
+        }
+        this.copyHtml(source, destination);
+      },
+    
+      makeTreeLeaf: (id, name) => {
+        return (`<li class="tree_leaf tree_leaf_without_branch" data-id="${id}" data-name="${name}" id="item_${id}" bb-media-type="folder">
+                  <div class="tree_leaf_content" bb-media-click="get_folder_items" draggable="true">
+                    <span class="icon-folder-opening"><i class="fa fa-caret-down  d-none"></i></span>
+                    <span class="icon-folder-name"><i class="fa fa-folder"></i></span>
+                    <span class="folder-item--title">${name}</span>
+                    
+                  </div>
+                  <ol class="tree_branch">
+                        
+                  </ol>
+              </li>`);
+      },
+      
+      makeTreeBranch: function(id, name) {
+        return (`<li class="tree_leaf tree_leaf_with_branch" data-name="${name}" data-id="${id}" id="item_${id}" bb-media-type="folder">
+                      <div class="tree_leaf_content" bb-media-click="get_folder_items" draggable="true">
+                          <span class="icon-folder-opening"><i class="fa fa-caret-right"></i></span>
+                          <span class="icon-folder-name"><i class="fa fa-folder"></i></span>
+                          <span class="folder-item--title">${name}</span>
+                          
+                      </div>
+                      <ol class="tree_branch closed_branch">
+                        
+                      </ol>
+                  </li>`);
+      },
+      
+      mapTree: (el, data) => {
+        el.html('');
+        data.map((child) => {
+          if(child.children.length === 0) {
+            el.append(this.htmlMaker.myFuckingTree.makeTreeLeaf(child.id, child.name));
+          } else {
+            el.append(this.htmlMaker.myFuckingTree.makeTreeBranch(child.id, child.name))
+            this.htmlMaker.myFuckingTree.mapTree($($(`.tree_leaf[data-id="${child.id}"]`).find('.tree_branch')[0]), child.children)
+          }
+        })
+      },
+    
+      makeTree: function(data, rootSelector) {
+        const treeRootElement = $(rootSelector);
+        data && this.mapTree(treeRootElement, data);
+      },
+    
+      mapItems: function(data) {
+        const itemRootElement = $('.items_container');
+        
+        data.items.length > 0 && itemRootElement.append(data.items.map((item) => {
+          return this.makeItem(item);
+        }))
+      },
+    
+      makeItem: function(item) {
+        return `<li class="item" data-id="${item.id}" draggable='true'>Item ${item.id}</li>`
+      },
+
+      removeTree: (folderId) => {
+        const brench = $(`.left--media-col .media-tree_leaf-wrapper .tree_leaf[data-id="${folderId}"]`).parent('.tree_branch');
+        $(`.left--media-col .media-tree_leaf-wrapper .tree_leaf[data-id="${folderId}"]`).remove();
+        if(brench.find('.tree_leaf').length === 0) {
+          brench.closest('.tree_leaf').removeClass('tree_leaf_with_branch');
+          brench.closest('.tree_leaf').addClass('tree_leaf_without_branch');
+          brench.closest('.tree_leaf').find('.icon-folder-opening i').removeClass('d-inline');
+          brench.closest('.tree_leaf').find('.icon-folder-opening i').addClass('d-none');
+        }
+      }
+    },
+
 
     //********App -> htmlMaker -> makeTreeFolder********start
     makeTreeFolder: (data, el) => {
       const self = this;
+      $($('.media-tree_leaf-wrapper').find('.tree_branch')[0]).html('');
+      self.htmlMaker.myFuckingTree.makeTree(data, '.media__folder-list .tree_branch');
+      var branch = document.querySelectorAll('.tree_branch');
+    for (var i = 0; i < branch.length; i++) {
+      new Sortable(branch[i], {
+        group: 'b',
+        filter: '.filter',
+        draggable: ".tree_leaf",
+        sort: true,
+        animation: 150,
+        fallbackOnBody: true,
+        dataIdAttr: 'data-id',
+        forceFallback: false,
+        fallbackClass: "sortable-fallback",
+        swapThreshold: 0.20,
+        ghostClass: 'background-class',
+        swapClass: 'highlight', // The class applied to the hovered swap item
+    
+        setData: function (/** DataTransfer */dataTransfer, /** HTMLElement*/dragEl) {
+          dataTransfer.setData('id', $(dragEl).data('id')); // `dataTransfer` object of HTML5 DragEvent
+        },
+        onEnd: function (/**Event*/evt) {
+          
+          const nodeId = evt.item.getAttribute('data-id');
+          const parentId = evt.to.closest('.tree_leaf').getAttribute('data-id');
+
+          if($(evt.to).closest('.tree_leaf').hasClass('tree_leaf_without_branch')) {
+            $(evt.to).closest('.tree_leaf').removeClass('tree_leaf_without_branch');
+            $(evt.to).closest('.tree_leaf').addClass('tree_leaf_with_branch');
+            
+            $($(evt.to).closest('.tree_leaf').find('.icon-folder-opening')[0]).find('i').removeClass('d-none');
+            $($(evt.to).closest('.tree_leaf').find('.icon-folder-opening')[0]).find('i').addClass('d-inline');
+          }
+    
+          if($(evt.from)[0].children.length === 0) {
+            $(evt.from).closest('.tree_leaf').removeClass('tree_leaf_with_branch');
+            $(evt.from).closest('.tree_leaf').addClass('tree_leaf_without_branch');
+    
+            $($(evt.from).closest('.tree_leaf').find('.icon-folder-opening')[0]).find('i').addClass('d-none');
+            $($(evt.from).closest('.tree_leaf').find('.icon-folder-opening')[0]).find('i').removeClass('d-inline');
+          }
+          
+          self.requests.transferFolder(
+            {
+              folder_id: [Number(nodeId)],
+              parent_id: Number(parentId),
+              access_token: "string"
+            },
+              () => {
+                  self.htmlMaker.treeMove(nodeId, parentId);
+              }
+          );
+        },
+        onMove: function (/**Event*/evt, /**Event*/originalEvent) {
+          // Example: https://jsbin.com/nawahef/edit?js,output
+
+          
+          if($($(evt.related).find('.tree_branch')[0]).hasClass('closed_branch')) {
+            const branch = $(evt.related).closest('.tree_leaf');
+            const opening_icon = $($(evt.related).find('.icon-folder-opening')[0]);
+            if(branch.hasClass('tree_leaf_with_branch')) {
+              if($(branch.find('.tree_branch')[0]).hasClass('closed_branch')) {
+                $(branch.find('.tree_branch')[0]).removeClass('closed_branch');
+              }
+    
+              if(opening_icon.find('i').hasClass('fa-caret-right')) {
+                opening_icon.find('i').removeClass('fa-caret-right');
+                opening_icon.find('i').addClass('fa-caret-down');
+              }
+            }
+          }
+        }
+      });
+    }
+
+    
       const {makeTreeLeaf, makeTreeBranch} = this.htmlMaker;
       let {currentParentOfDrag, currentDragTreeElementId} = this.htmlMaker;
       const {dndForTree} = this.events;
       const {transferFolder} = this.requests;
-      console.log(data, 'hariva');
-
-      function makeTree (data) {
-        const getTreeData = (data) => {
-          return data.map((el) => {
-            const children = el.children.length === 0 ? null : getTreeData(el.children);
-            return {id: el.key, title: el.title, children: children};
-          });
-        };
-        return data && data.map((el)=>{
-          return !el.children || el.children.length === 0 ? makeTreeLeaf(el.key, el.name) : makeTreeBranch(el.key, el.name, el.children, makeTree);
-        });
-      };
-
-      $(el).children().html(makeTree(data).join(' '));
-
-      $('document').ready(() => {
-        $(el + '>ol').nestedSortable({
-          disableNesting: 'no-nest',
-          forcePlaceholderSize: true,
-          handle: 'div',
-          helper: 'clone',
-          items: 'li',
-          opacity: .6,
-          placeholder: 'placeholder',
-          tabSize: 15,
-          tolerance: 'pointer',
-          toleranceElement: '> div',
-          isTree: true,
-          startCollapsed: true,
-          update: function (ev, data) {
-
-            const id = $(ev.originalEvent.target).closest('li').attr('data-id') || currentDragTreeElementId;
-            const treeArray = $(this).nestedSortable('toArray');
-            const parent_id = treeArray.filter((el) => el.id === id)[0].parent_id;
-            let parentId = null;
-            $(this).nestedSortable('toArray').map((el)=>{
-              (el.id && Number(el.id)) === Number(id) && (parentId = el.parent_id);
-            });
-
-            const getData = (treeData) => {
-              return treeData && treeData.map((el) => {
-                return {key: el.id, name: $(`li.dd-item[data-id="${el.id}"]`).text().trim().split(' ')[0].trim(), children: el.children && getData(el.children)};
-              });
-            };
-
-            const findParent = (treeData, p_id) => {
-              var parent;
-              !Array.isArray(findParent.children) && (findParent.children = []);
-              parent = treeData && treeData.find((el) => {
-                    el.children && findParent.children.push(...el.children);
-                return Number(el.id) === Number(p_id);
-              });
-
-              if(parent) {
-                return parent;
-              } else {
-                const p = findParent(findParent.children, p_id);
-                if(p) {
-                  return p;
-                }
-              }
-            };
-
-            const parentTransformToLeaf = () => {
-              $(currentParentOfDrag.find('ol')[0]).children().length === 0 &&
-                $(currentParentOfDrag[0]).replaceWith(makeTreeLeaf(currentParentOfDrag.attr('data-id'), currentParentOfDrag.text().trim()));
-            };
-            const dataOfBranch = parentId && getData([findParent($(this).nestedSortable('toHierarchy'), parentId)]);
-            const leafTransformToParent = (data) => {
-              $(`li.dd-item[data-id="${parent_id}"]`).replaceWith(makeTreeBranch(parent_id, $(`li.dd-item[data-id="${parent_id}"]`).text().trim().split(' ')[0].trim(), data[0].children, makeTree));
-            };
-
-            parentId === null && (function () {
-              transferFolder(
-                  {
-                    folder_id: Number(id),
-                    parent_id: Number(1),
-                    access_token: "string"
-                  }
-              );
-            })();
-            transferFolder(
-                {
-                  folder_id: Number(id),
-                  parent_id: Number(parentId),
-                  access_token: "string"
-                }
-            );
-
-            dndForTree();
-
-            parentTransformToLeaf();
-            parentId && leafTransformToParent(dataOfBranch);
-
-            findParent.children = [];
-            document.querySelectorAll('.disclose').forEach((el)=>{el.onclick = function() {
-              $(this).closest('li').toggleClass('mjs-nestedSortable-collapsed').toggleClass('mjs-nestedSortable-expanded');
-            }});
-          },
-          change: function(ev, data) {
-          },
-          sort: function (ev, data) {
-          },
-          revert: function() {
-          },
-          relocate: function() {
-            dndForTree();
-          },
-          start: function (ev, data) {
-            currentParentOfDrag = $(ev.originalEvent.target).closest('li').parent().closest('li');
-            currentDragTreeElementId = $(ev.originalEvent.target).closest('li').attr('data-id');
-          },
-          stop: function(ev, data) {
-            // $('#page-wrapper .over-auto').css('overflow', 'auto');
-          },
-          out: function(ev, data) {
-            // $('#page-wrapper .over-auto').css('overflow', 'unset');
-          },
-          over: function () {
-            // $('#page-wrapper .over-auto').css('overflow', 'auto');
-          }
-        });
-
-      });
 
       dndForTree();
 
@@ -411,7 +507,9 @@ const App = function() {
     makeBreadCrumbsItem: (key, name, state) => {
       return (`<li class="breadcrumb-item bread-crumbs-list-item ${state}" data-id="${key}" data-crumbs-id="${key}" 
                     bb-media-click="get_folder_items" >
-                 <a>${name}</a>
+                 <a style="
+                 user-select: none;
+             ">${name}</a>
                </li>`);
     },
     //********App -> htmlMaker -> makeBreadCrumbsItem********end
@@ -441,7 +539,7 @@ const App = function() {
     },
 
     remove_modal: (id, name, iorf) => {
-      return (`<div class="modal fade show d-block custom_modal_edit" id="myModal" role="dialog">
+              return (`<div class="modal fade show d-block custom_modal_edit" id="myModal" role="dialog">
                 <div class="modal-dialog" role="document">
             
                   <!-- Modal content-->
@@ -451,11 +549,11 @@ const App = function() {
                       <button type="button" class="close" data-dismiss="modal" bb-media-click="close_name_modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                          <p>Do You want to remove ${iorf === 'image' ? (name.length === 0 ? 'selected images' : 'image') : 'folder'} ${name}?</p>
+                          <p>Do You want to remove selected items?</p>
                     </div>
                     <div class="modal-footer">
                      <button bb-media-click="close_name_modal" type="button" class="btn btn-primary btn-save" data-dismiss="modal">Close</button>
-                            <button type="button" data-id=${id} class="btn btn-secondary btn-close" bb-media-click="${iorf === 'image' ? 'remove_image_req' : 'remove_folder_req'}">Remove</button>
+                            <button type="button" class="btn btn-secondary btn-close done_remove_items">Remove</button>
                     </div>
                   </div>
             
@@ -471,19 +569,16 @@ const App = function() {
                 <div class="modal-content col-md-9 p-0">
                     <div class="modal-header" style="overflow: visible;">
                         <button type="button" bb-media-click="close_full_modal" class="close" data-dismiss="modal" aria-label="Close"><i class="iconaction iconClose"></i></button>`
-
-                        // <button type="button" class="btn btn-action-popup" title="Edit image" data-dismiss="modal" data-toggle="modal" data-target="#imageeditMode"><i class="iconaction iconEditImageGrey"></i></button>
-                        // <button type="button" class="btn btn-action-popup" title="Download"  data-slideshow="download" ><i class="iconaction iconDownloadGrey"></i></button>
-
         +`</div>
                     <div class="modal-body text-center">
-                    <div class="modal-title">
-                    <img src="${data.url}" data-slideshow="typeext" style="width:100%">
-                    </div>
-                    </div>
-                       <div class="modal-footer col-md-9">
-<div style="display: flex; justify-content: space-between;width:100%">
-                    <button href="#" type="button" role="button" ${
+                    ${data.extension === 'pdf' ? `<iframe src="https://docs.google.com/gview?url=${data.url}&amp;embedded=true" style="width:100%; height:500px" frameborder="0"></iframe><div class="modal-title"></div>` : `<div class="modal-title"><img src="${data.url}" data-slideshow="typeext" style="width:100%"></div>`}
+												
+												
+												
+												</div>
+													 <div class="modal-footer col-md-9">
+		<div style="display: flex; justify-content: space-between;width:100%">
+												<button href="#" type="button" role="button" ${
               countId === 0 ? "disabled" : ""
               } data-id="${countId - 1}" class="btn btn-info popuparrow go-prev-image" bb-media-click="modal_load_image" ><i class="fa fa-arrow-left"></i></button>
 
@@ -502,14 +597,8 @@ const App = function() {
                 <div class="popupDetail col-md-3 p-0">
                     <div class="row p-t-10 p-b-10 justify-content-center">
                         <div class="text-center">`+
-                            // <button class="btn btn-default btn-block active" type="button" data-tabaction="details">Details</button>
           `<h4>${data.real_name}</h4></div>` +
-          // <div class="col-xs-4 col-md-4">
-          //     <button class="btn btn-default btn-block" type="button" data-tabaction="seo">SEO</button>
-          // </div>
-          // <div class="col-xs-4 col-md-4">
-          //     <button class="btn btn-default btn-block" type="button">Option 3</button>
-          // </div>
+          
           `</div>
                     <div class="row rowsection collapse in show" data-tabcontent="details">
                         <div class="col-xs-12 col-md-12">
@@ -550,15 +639,7 @@ const App = function() {
               data.updated_at
               }</span></td>
                                     </tr>` +
-          // <tr>
-          //     <th>Version</th>
-          //     <td>
-          //         <div class=" col-xs-3 p-l-0">
-          //             <select class="form-control"  data-slideshow="version"></select>
-          //         </div>
-          //         <button type="button" class="btn btn-default p-l-5 p-r-5" data-action="makeasDefault">Make as Default</button>
-          //     </td>
-          // </tr>
+         
           `</table>
                             </div>
                             <div class="table-responsive">
@@ -845,41 +926,55 @@ const App = function() {
 
   //********App -> helpers********start
   this.helpers = {
-    //********App -> helpers -> makeBreadCrumbs********start
-    makeBreadCrumbs: (id, res) => {
-      const self = this;
-      const breadCrumbsList = document.querySelector(".bread-crumbs-list");
-      breadCrumbsList.innerHTML = `<li class="breadcrumb-item bread-crumbs-list-item active" data-id="1" data-crumbs-id="1"
-                                        bb-media-click="get_folder_items" >
-                                     <a>Drive</a>
-                                   </li>`;
-      $('document').ready(() => {
-var count = 0;
-        const getTreeData = (data, id) => {
-
-          const element = data.find((el) => {
-            return Number(el.id) === Number(id);
-          });
-
-          !Array.isArray(getTreeData.breadCrumbsData) && (getTreeData.breadCrumbsData = []);
-          element && getTreeData.breadCrumbsData.unshift({id: element.id, name: element.name});
-          element && (Number(element.parent_id) !== 1) && getTreeData(data, element.parent_id);
-          count++;
-        };
-
-
-        const treeData = $('#folder-list2>ol').nestedSortable('toArray');
-        treeData.shift();
-        treeData[0] && (treeData[0].parent_id = "1");
-        getTreeData(treeData, id);
-
-        getTreeData.breadCrumbsData.length > 0 && getTreeData.breadCrumbsData
-            .map((el, index) => {
-              index === getTreeData.breadCrumbsData.length-1 ?
-                  breadCrumbsList.innerHTML += self.htmlMaker.makeBreadCrumbsItem(el.id, el.name, 'disabled') :
-                  breadCrumbsList.innerHTML += self.htmlMaker.makeBreadCrumbsItem(el.id, el.name, 'active');
-            });
+    count: 0,
+    upToHead: (currentLeaf) => {
+      let hasNotId = true;
+      this.helpers.count === 0 && (breadCrumbsData.length = 0);
+      breadCrumbsData.map((el) => {
+        if(el.id === currentLeaf.data('id')) {
+          return true
+        }
       });
+      if(hasNotId) {
+        breadCrumbsData.unshift({id: currentLeaf.data('id'), name: currentLeaf.data('name')})
+        this.helpers.count += 1;
+        if(currentLeaf.parent().closest('.tree_leaf').length !== 0) {
+
+          this.helpers.upToHead(currentLeaf.parent().closest('.tree_leaf'));
+        } else {
+          return true;
+        }
+      }
+      this.helpers.count = 0;
+    },
+    //********App -> helpers -> makeBreadCrumbs********start
+    makeBreadCrumbs: (id, name) => {
+      const breadCrumbsList = document.querySelector(".bread-crumbs-list");
+      
+      const currentLeaf = $('.media-tree_leaf-wrapper').find(`.tree_leaf[data-id="${id}"]`);
+      this.helpers.upToHead(currentLeaf)
+
+      if(id !== 1) {
+        breadCrumbsList.innerHTML = `<li class="breadcrumb-item bread-crumbs-list-item active" data-id="1" data-crumbs-id="1"
+                                          bb-media-click="get_folder_items" >
+                                        <a style="
+                                        user-select: none;
+                                    ">Drive</a>
+                                      </li>`
+        breadCrumbsData.map((bread) => {
+          if(bread.id !== 1) {
+            breadCrumbsList.innerHTML += this.htmlMaker.makeBreadCrumbsItem(bread.id, bread.name, 'active')
+
+          }
+        });
+      } else {
+        breadCrumbsList.innerHTML = `<li class="breadcrumb-item bread-crumbs-list-item active" data-id="1" data-crumbs-id="1"
+                                          bb-media-click="get_folder_items" >
+                                        <a style="
+                                        user-select: none;
+                                    ">Drive</a>
+                                      </li>`
+      }
     },
     //********App -> helpers -> makeBreadCrumbs********end
 
@@ -953,7 +1048,12 @@ var count = 0;
               crt.style.width = width + 'px';
               crt.style.height= height + "px";
               document.body.appendChild(crt);
-              const id = this.getAttribute("data-id");
+              // const id = this.getAttribute("data-id");
+              const id = [];
+              $('.file-box.folder-container.active').each((ind, el) => {
+                id.push($($(el).find('.file')).attr("data-id"));
+              });
+              id.length === 0 && id.push($(this).attr("data-id"))
               e.dataTransfer.setDragImage(crt, 0, 0);
               // e.dataTransfer.effectAllowed = "copy"; // only dropEffect='copy' will be dropable
               e.dataTransfer.setData("node_id", JSON.stringify({data: id, item: $(e.target).closest('[bb-media-type]').attr('bb-media-type')})); // required otherwise doesn't work
@@ -964,6 +1064,165 @@ var count = 0;
           });
           elm.addEventListener("dragend", function() {
             $('.start').remove();
+          });
+        });
+
+        document.querySelectorAll(".tree_leaf_content").forEach(folder => {
+          folder.addEventListener("dragover", function (e) {
+            if (e.preventDefault) e.preventDefault(); // allows us to drop
+            e.dataTransfer.dropEffect = "copy";
+            this.classList.add("over");
+            return false;
+          });
+          folder.addEventListener("dragleave", function (e) {
+            if (e.preventDefault) e.preventDefault(); // allows us to drop
+            this.classList.remove("over");
+            return false;
+          });
+          folder.addEventListener("drop", function (e, file) {
+            this.classList.remove("over");
+  
+      //       function addEventHandler(obj, evt, handler) {
+      //         if(obj.addEventListener) {
+      //             // W3C method
+      //             obj.addEventListener(evt, handler, false);
+      //         } else if(obj.attachEvent) {
+      //             // IE method.
+      //             obj.attachEvent('on'+evt, handler);
+      //         } else {
+      //             // Old school method.
+      //             obj['on'+evt] = handler;
+      //         }
+      //     }
+  
+  
+  
+      //     e = e || window.event; // get window.event if e argument missing (in IE)   
+      //   if (e.preventDefault) { e.preventDefault(); } // stops the browser from redirecting off to the image.
+      //   // alert('asasasasas')
+      //   var dt    = e.dataTransfer;
+      //   var files = dt.files;
+      //   for (var i=0; i<files.length; i++) {
+      //     var file = files[i];
+      //     var reader = new FileReader();
+            
+      //     //attach event handlers here...
+         
+      //     reader.readAsDataURL(file);
+      //   }
+  
+      //   var list = document.querySelector('.upload-content')
+  
+      //   Function.prototype.bindToEventHandler = function bindToEventHandler() {
+      //     var handler = this;
+      //     var boundParameters = Array.prototype.slice.call(arguments);
+      //     //create closure
+      //     return function(e) {
+      //         e = e || window.event; // get window.event if e argument missing (in IE)   
+      //         boundParameters.unshift(e);
+      //         handler.apply(this, boundParameters);
+      //     }
+      //   };
+  
+  
+  
+      //   addEventHandler(reader, 'loadend', function(e, file) {
+      //     var bin           = this.result; 
+      //     var newFile       = document.createElement('div');
+      //     newFile.innerHTML = 'Loaded : '+file.name+' size '+file.size+' B';
+      //     // list.appendChild(newFile);  
+      //     var fileNumber = list.getElementsByTagName('div').length;
+      //     status.innerHTML = fileNumber < files.length 
+      //                      ? 'Loaded 100% of file '+fileNumber+' of '+files.length+'...' 
+      //                      : 'Done loading. processed '+fileNumber+' files.';
+      
+      //     var img = document.createElement("img"); 
+      //     img.file = file;   
+      //     img.src = bin;
+      //     // list.appendChild(img);
+  
+      //     let formData = new FormData();
+  
+      //     formData.append('item[]', file);
+      //     formData.append('_token', $('[name="csrf-token"]').attr('content'));
+      //     formData.append('folder_id', '1');
+  
+      //     fetch('/api-media/upload', {
+      //       method: "post",
+      //       headers: {
+      //         "Content-Type": "multipart/form-data; boundary=----7dd322351017c",
+      //         Accept: "application/json, text/javascript, */*; q=0.01",
+      //         "X-Requested-With": "XMLHttpRequest",
+      //         "X-CSRF-Token": $('input[name="_token"]').val()
+      //       },
+      //       credentials: "same-origin",
+      //       body: formData
+      //     })
+      //       .then(function (response) {
+      //         return response.json();
+      //       })
+      //       .then(function (json) {
+      //         return console.log(json);
+      //       })
+      //       .catch(function (error) {
+      //         console.log(error);
+      //       });
+      //     // shortAjax(, formData, () => {
+      //     //   console.log('Hurrraaaa')
+      //     // });
+      // }.bindToEventHandler(file));
+            const transfer = JSON.parse(e.dataTransfer.getData("node_id"));
+  
+            let nodeId = self.htmlMaker.dragElementOfTree || transfer.data;
+            const type = transfer.item;
+            let parentId = e.target
+                .closest(".tree_leaf")
+                .getAttribute("data-id");
+            if(type === 'image') {
+                  self.requests.transferImage(
+                    {
+                      item_id: nodeId,
+                      folder_id: Number(parentId),
+                      access_token: "string"
+                    }
+                  );
+            } else if(type === 'folder') {
+              if(self.htmlMaker.dragElementOfTree || $($('.folderitems').find(`[data-id="${nodeId}"]`)[0]).closest('.folder-container')) {
+                let nodeId = transfer.data;
+                Number(nodeId) !== Number(parentId) && self.requests.transferFolder(
+                  {
+                    folder_id: nodeId,
+                    parent_id: Number(parentId),
+                    access_token: "string"
+                  },
+                    () => {
+                      nodeId.map((id) => {
+                        self.htmlMaker.treeMove(id, parentId);
+                      })
+                      
+                      self.requests.drawingItems({
+                        folder_id: self.globalFolderId,
+                        files: true,
+                        access_token: "string"
+                      }, true,
+                      () => {
+                      });
+                      
+                    }
+                );
+              } else {
+                self.requests.transferImage(
+                  {
+                    item_id: [Number(nodeId)],
+                    folder_id: Number(parentId),
+                    access_token: "string"
+                  }
+                );
+              }
+            }
+            self.htmlMaker.dragElementOfTree = null;
+            self.htmlMaker.currentId = null;
+            self.selectedImage.length = 0;
           });
         });
 
@@ -979,39 +1238,141 @@ var count = 0;
           this.classList.remove("over");
           return false;
         });
-        folder.addEventListener("drop", function (e) {
+        folder.addEventListener("drop", function (e, file) {
           this.classList.remove("over");
-          console.log(JSON.parse(e.dataTransfer.getData("node_id")))
-          let nodeId = self.htmlMaker.dragElementOfTree || JSON.parse(e.dataTransfer.getData("node_id")).data;
+
+    //       function addEventHandler(obj, evt, handler) {
+    //         if(obj.addEventListener) {
+    //             // W3C method
+    //             obj.addEventListener(evt, handler, false);
+    //         } else if(obj.attachEvent) {
+    //             // IE method.
+    //             obj.attachEvent('on'+evt, handler);
+    //         } else {
+    //             // Old school method.
+    //             obj['on'+evt] = handler;
+    //         }
+    //     }
+
+
+
+    //     e = e || window.event; // get window.event if e argument missing (in IE)   
+    //   if (e.preventDefault) { e.preventDefault(); } // stops the browser from redirecting off to the image.
+    //   // alert('asasasasas')
+    //   var dt    = e.dataTransfer;
+    //   var files = dt.files;
+    //   for (var i=0; i<files.length; i++) {
+    //     var file = files[i];
+    //     var reader = new FileReader();
+          
+    //     //attach event handlers here...
+       
+    //     reader.readAsDataURL(file);
+    //   }
+
+    //   var list = document.querySelector('.upload-content')
+
+    //   Function.prototype.bindToEventHandler = function bindToEventHandler() {
+    //     var handler = this;
+    //     var boundParameters = Array.prototype.slice.call(arguments);
+    //     //create closure
+    //     return function(e) {
+    //         e = e || window.event; // get window.event if e argument missing (in IE)   
+    //         boundParameters.unshift(e);
+    //         handler.apply(this, boundParameters);
+    //     }
+    //   };
+
+
+
+    //   addEventHandler(reader, 'loadend', function(e, file) {
+    //     var bin           = this.result; 
+    //     var newFile       = document.createElement('div');
+    //     newFile.innerHTML = 'Loaded : '+file.name+' size '+file.size+' B';
+    //     // list.appendChild(newFile);  
+    //     var fileNumber = list.getElementsByTagName('div').length;
+    //     status.innerHTML = fileNumber < files.length 
+    //                      ? 'Loaded 100% of file '+fileNumber+' of '+files.length+'...' 
+    //                      : 'Done loading. processed '+fileNumber+' files.';
+    
+    //     var img = document.createElement("img"); 
+    //     img.file = file;   
+    //     img.src = bin;
+    //     // list.appendChild(img);
+
+    //     let formData = new FormData();
+
+    //     formData.append('item[]', file);
+    //     formData.append('_token', $('[name="csrf-token"]').attr('content'));
+    //     formData.append('folder_id', '1');
+
+    //     fetch('/api-media/upload', {
+    //       method: "post",
+    //       headers: {
+    //         "Content-Type": "multipart/form-data; boundary=----7dd322351017c",
+    //         Accept: "application/json, text/javascript, */*; q=0.01",
+    //         "X-Requested-With": "XMLHttpRequest",
+    //         "X-CSRF-Token": $('input[name="_token"]').val()
+    //       },
+    //       credentials: "same-origin",
+    //       body: formData
+    //     })
+    //       .then(function (response) {
+    //         return response.json();
+    //       })
+    //       .then(function (json) {
+    //         return console.log(json);
+    //       })
+    //       .catch(function (error) {
+    //         console.log(error);
+    //       });
+    //     // shortAjax(, formData, () => {
+    //     //   console.log('Hurrraaaa')
+    //     // });
+    // }.bindToEventHandler(file));
+          const transfer = JSON.parse(e.dataTransfer.getData("node_id"));
+
+          let nodeId = self.htmlMaker.dragElementOfTree || transfer.data;
+          const type = transfer.item;
           let parentId = e.target
               .closest(".file")
               .getAttribute("data-id");
-          if(Array.isArray(nodeId)) {
-            nodeId.map((id)=> {
+          if(type === 'image') {
                 self.requests.transferImage(
                   {
-                    item_id: Number(id),
+                    item_id: nodeId,
                     folder_id: Number(parentId),
                     access_token: "string"
                   }
                 );
-            });
-          } else {
-            if(self.htmlMaker.dragElementOfTree || $('.folderitems').find(`[data-id="${nodeId}"]`)[0].closest('.folder-container')) {
-              self.requests.transferFolder(
+          } else if(type === 'folder') {
+            if(self.htmlMaker.dragElementOfTree || $($('.folderitems').find(`[data-id="${nodeId}"]`)[0]).closest('.folder-container')) {
+              let nodeId = transfer.data;
+              Number(nodeId) !== Number(parentId) && self.requests.transferFolder(
                 {
-                  folder_id: Number(nodeId),
+                  folder_id: nodeId,
                   parent_id: Number(parentId),
                   access_token: "string"
                 },
                   () => {
-                    self.htmlMaker.treeMove(nodeId, parentId);
+                    nodeId.map((id) => {
+                      self.htmlMaker.treeMove(id, parentId);
+                    })
+                    
+                    self.requests.drawingItems({
+                      folder_id: self.globalFolderId,
+                      files: true,
+                      access_token: "string"
+                    }, true,
+                    () => {
+                    });
+                    
                   }
               );
             } else {
               self.requests.transferImage(
                 {
-                  item_id: Number(nodeId),
+                  item_id: [Number(nodeId)],
                   folder_id: Number(parentId),
                   access_token: "string"
                 }
@@ -1039,14 +1400,14 @@ var count = 0;
                    },
                    tree = false,
                    cb) => {
-      shortAjax("/api/api-media/get-folder-childs", obj, res => {
+      shortAjax("/api-media/get-folder-childs", obj, res => {
         if (!res.error) {
           const mainContainer = document.querySelector(
               `[data-type="main-container"]`
           );
           mainContainer.innerHTML = "";
             res.data.children.forEach((folder, index) => {
-            var html = `<div class="file-box folder-container col-lg-2 col-md-3 col-sm-6 col-xs-12">${this.htmlMaker.makeFolder(
+            var html = `<div class="file-box folder-container col-xl-2 col-md-4 col-sm-6">${this.htmlMaker.makeFolder(
                 folder
             )}</div>`;
             mainContainer.innerHTML += html;
@@ -1054,25 +1415,41 @@ var count = 0;
             res.data.items.forEach((file, index) => {
               let html;
               if(file.extension === "html") {
-                  html = `<div data-image="${index}" class="file-box image-container col-lg-2 col-md-3 col-sm-6 col-xs-12">${this.htmlMaker.makeHtmlItem(
+                  html = `<div data-image="${index}" class="file-box image-container col-xl-2 col-md-4 col-sm-6">${this.htmlMaker.makeHtmlItem(
                       file
                   )}</div>`;
+              } else if(file.extension === "pdf") {
+                  html = `<div data-image="${index}" class="file-box image-container col-xl-2 col-md-4 col-sm-6">${this.htmlMaker.makePdfItem(
+                    file
+                  )}</div>`;
               } else {
-                  html = `<div data-image="${index}" class="file-box image-container col-lg-2 col-md-3 col-sm-6 col-xs-12">${this.htmlMaker.makeImage(
+                  html = `<div data-image="${index}" class="file-box image-container col-xl-2 col-md-4 col-sm-6">${this.htmlMaker.makeImage(
                       file
                   )}</div>`;
               }
             mainContainer.innerHTML += html;
           });
           if (tree) {
-              console.log(res)
             this.htmlMaker.makeTreeFolder(res.data.children, '#folder-list2');
           }
-          globalFolderId = res.settings.id;
-          this.helpers.makeBreadCrumbs(res.settings.id, res);
+          $('.search_item_js').val('');
+          this.globalFolderId = res.settings.id;
+          this.helpers.makeBreadCrumbs(res.settings.id, res.settings.slug);
           this.helpers.makeDnD();
           this.selectedImage.length = 0;
+          if(location.pathname === "/admin/media/trash") {
+            $('.file-title').attr('contenteditable', 'false');
+            $('.title-change').css('cursore', 'pointer')
+            $('.file-title').hover(function() {
+              $(this).css('box-shadow', 'none',);
+            })
+            
+          }
+          $('.media__folder-list .media-tree_leaf-wrapper .tree_leaf_content.active').removeClass('active');
+          $($(`.media__folder-list .media-tree_leaf-wrapper .tree_leaf[data-id="${this.globalFolderId}"]`).find('.tree_leaf_content')[0]).addClass('active');
+
           cb ? cb() : null;
+          return true;
         }
       });
     },
@@ -1080,7 +1457,7 @@ var count = 0;
 
     //********App -> requests -> removeTreeFolder********start
     removeTreeFolder: (obj = {}, cb) => {
-      shortAjax("/api/api-media/get-remove-folder", obj, res => {
+      shortAjax("/api-media/get-remove-folder", obj, res => {
         if (!res.error) {
           cb();
           // this.requests.drawingItems(undefined, true);
@@ -1091,7 +1468,7 @@ var count = 0;
 
     //********App -> requests -> saveSeo********start
     saveSeo: (obj = {}, cb) => {
-      normAjax("/api/api-media/save-seo", obj, res => {
+      normAjax("/api-media/save-seo", obj, res => {
         if (!res.error) {
           cb();
         }
@@ -1101,7 +1478,7 @@ var count = 0;
 
     //********App -> requests -> editImageName********start
     editImageName: (obj = {}, cb) => {
-      shortAjax("/api/api-media/rename-item", obj, res => {
+      shortAjax("/api-media/rename-item", obj, res => {
         if (!res.error) {
           (typeof cb) === "function" && cb(res);
         }
@@ -1111,9 +1488,9 @@ var count = 0;
 
     //********App -> requests -> editImageName********start
     editFolderName: (obj = {}, cb) => {
-      shortAjax("/api/api-media/rename-folder", obj, res => {
+      shortAjax("/api-media/get-edit-folder", obj, res => {
         if (!res.error) {
-          // cb(res);
+          cb();
         }
       });
     },
@@ -1121,7 +1498,7 @@ var count = 0;
 
     //********App -> requests -> transferImage********start
     transferImage: (obj = JSON.stringify({}), cb) => {
-      shortAjax("/api/api-media/transfer-item", obj, res => {
+      shortAjax("/api-media/transfer-item", obj, res => {
         if (!res.error) {
           this.requests.drawingItems();
         }
@@ -1131,7 +1508,7 @@ var count = 0;
 
     //********App -> requests -> transferFolder********start
     transferFolder: (obj = {}, cb) => {
-      shortAjax("/api/api-media/get-sort-folder", obj, res => {
+      shortAjax("/api-media/get-sort-folder", obj, res => {
         if (!res.error) {
           this.requests.drawingItems();
           cb && cb();
@@ -1142,10 +1519,22 @@ var count = 0;
 
     //********App -> requests -> removeImage********start
     removeImage: (obj = {}, cb, cb2) => {
-      shortAjax("/api/api-media/get-remove-item", obj, res => {
+      shortAjax("/api-media/get-remove-item", obj, res => {
         if (!res.error) {
           this.requests.drawingItems(undefined,undefined,cb2);
           cb();
+        }
+      });
+    },
+
+    emptyTrash: (obj = {}) => {
+      shortAjax("/api-media/empty-trash", obj, res => {
+        if (!res.error) {
+          this.requests.drawingItems({
+            folder_id: 2,
+            files: true,
+            access_token: "string"
+          });
         }
       });
     },
@@ -1153,7 +1542,7 @@ var count = 0;
 
     //********App -> requests -> addNewFolder********start
       addNewFolder: (obj = {}, cb) => {
-        shortAjax("/api/api-media/get-create-folder-child", obj, res => {
+        shortAjax("/api-media/get-create-folder-child", obj, res => {
           if (!res.error) {
             this.requests.drawingItems();
             cb(res);
@@ -1164,7 +1553,7 @@ var count = 0;
 
     //********App -> requests -> getImageDetails********start
       getImageDetails: (obj = {}, cb) => {
-        shortAjax("/api/api-media/get-item-details", obj, res => {
+        shortAjax("/api-media/get-item-details", obj, res => {
           if (!res.error) {
             cb(res.data);
           }
@@ -1172,7 +1561,7 @@ var count = 0;
       },
 
       copyImages: (obj = {}, cb) => {
-        shortAjax("/api/api-media/copy-item", {item_id: obj}, res => {
+        shortAjax("/api-media/copy-item", {item_id: obj}, res => {
           if (!res.error) {
             typeof cb === "function" && cb(res.data);
           }
@@ -1205,8 +1594,7 @@ var count = 0;
           folder_id: globalFolderId
         };
       }
-    })
-    .on("filebatchselected", (event, files) => {
+    }).on("filebatchselected", (event, files) => {
       $("#uploader").fileinput("upload");
     })
     .on("filebatchuploadsuccess", (event, files) => {
@@ -1242,86 +1630,52 @@ var count = 0;
       this.requests.saveSeo($(elm).closest('form').serializeArray());
     },
     //********App -> events -> save_seo********end
-
-    remove_folder: (elm, e) => {
-      e.stopPropagation();
-      e.preventDefault();
-      const id = (elm.closest(".file") ? elm.closest(".file").getAttribute("data-id") : elm.closest(".dd-item").getAttribute("data-id")),
-            name = e.target
-              .closest(".file") ? e.target
-              .closest(".file")
-              .querySelector(".file-name")
-              .textContent.trim() : elm.closest('.dd-item').querySelector('.dd-handle').innerText;
-      $('#modal_area').html(this.htmlMaker.remove_modal(id, name));
-    },
-
-    //********App -> events -> remove_folder********start
-    remove_folder_req: (elm, e) => {
-      e.stopPropagation();
-      e.preventDefault();
-
-      const id = e.target.getAttribute("data-id") || (elm.closest(".file") ? elm.closest(".file").getAttribute("data-id") : elm.closest(".dd-item").getAttribute("data-id"));
-      if(!id) return;
-      const tree = $('#folder-list2>ol'),
-            leaf = tree.find(`[data-id="${id}"]`),
-            {makeTreeLeaf} = this.htmlMaker,
-            {close_name_modal} = this.events,
-            {removeTreeFolder} = this.requests;
-
-      removeTreeFolder(
-        {
-          folder_id: Number(id),
-          trash: 1,
-          access_token: "string"
-        },
-        () => {
-          !elm.closest(".folder-container") ? $(`div[data-id=${'' + id}]`).closest(".folder-container").remove() : elm.closest(".folder-container").remove();
-          close_name_modal();
-
-          const ol = leaf.closest('ol');
-          const li = leaf.closest('li');
-          const key = ol.closest('li').attr('data-id');
-          const name = ol.closest('li').children('div')[0] ? ol.closest('li').children('div')[0].innerText : null;
-
-          li.remove();
-          name && ol.children().length === 0 && ol.closest('li').replaceWith(makeTreeLeaf(key, name));
-
-          if(globalFolderId === 1) {
-            tree.find(`[data-id="${id}"]`).remove();
-
-          }
-          // const ol = leaf.closest('ol');
-          // const li = leaf.closest('li');
-          // const key = ol.closest('li').attr('data-id');
-          // const name = ol.closest('li').children('div')[0].innerText;
-          // console.log('leaf :', leaf, 'ol: ', ol, 'li: ', li, 'key: ', key, 'name: ', name);
-          //
-          // li.remove();
-          // ol.children().length === 0 && ol.closest('li').replaceWith(makeTreeLeaf(key, name));
-        }
-      );
-    },
-    //********App -> events -> remove_folder********end
-
+    
     //********App -> events -> get_folder_items********start
     get_folder_items: (elm, e) => {
       const self = this;
-      console.log('self', e.target)
-      !$(e.target).hasClass('closer') && (function(){
-        const id = elm.closest("[data-id]").getAttribute("data-id");
-        globalFolderId = id;
-        if (id && !elm.classList.contains("disabled")) {
+      if(e.type === 'dblclick') {
+        if($(e.target).closest('.tree_leaf').length !== 0 || $(e.target).closest('.bread-crumbs-list').length > 0) {
+          return true;
+        }
+        !$(e.target).hasClass('closer') && (function(){
+          const id = elm.closest("[data-id]").getAttribute("data-id");
+          globalFolderId = id;
+          if (id && !elm.classList.contains("disabled")) {
+            self.requests.drawingItems(
+                {
+                  folder_id: Number(id),
+                  files: true,
+                  access_token: "string"
+                },
+                $(e.target).data('core') === true,
+                () => self.htmlMaker.currentId = id
+            );
+          }
+        })();
+      } else if(e.type === 'click') {
+        if(($(e.target).closest('.media__folder-list').find('.media-tree_leaf-wrapper').length !== 0 && $(e.target).closest('.icon-folder-opening').length === 0) || $(e.target).closest('.bread-crumbs-list').length > 0) {
+          const id = elm.closest("[data-id]").getAttribute("data-id");
+          if(globalFolderId === id) {
+            return true;
+          }
+          globalFolderId = id;
           self.requests.drawingItems(
-              {
-                folder_id: Number(id),
-                files: true,
-                access_token: "string"
-              },
-              $(e.target).data('core') === true,
-              () => self.htmlMaker.currentId = id
+            {
+              folder_id: Number(id),
+              files: true,
+              access_token: "string"
+            },
+            $(e.target).data('core') === true,
+            () => self.htmlMaker.currentId = id
           );
         }
-      })();
+        if(!$(e.target).closest('.file-box.folder-container').hasClass('active')) {
+          $(e.target).closest('.file-box.folder-container').addClass('active')
+        } else {
+          $(e.target).closest('.file-box.folder-container').removeClass('active')
+        }
+      }
     },
     //********App -> events -> get_folder_items********end
 
@@ -1461,14 +1815,23 @@ var count = 0;
           document.querySelectorAll(".adminmodal ").forEach(item => item.remove());
           $('#modal_area').html(this.htmlMaker.fullInfoModal(
               res,
-              Number(id)
+              Number(id),
+              // e.target.closest(".imageload").attr('type') === 'pdf' && `<iframe src="https://docs.google.com/gview?url=${$(e.target).closest('.file').data('url')}&amp;embedded=true" style="width:100%; height:500px" frameborder="0"></iframe>`
           ));
         });
       }
     },
     //********App -> events -> modal_load_image********end
 
-    //********App -> events -> remove_image********start
+    //********App -> events -> remove_items********start
+    remove_items: (elm, e, elements) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const modal = this.htmlMaker.remove_modal();
+      $('#modal_area').html(modal);
+    },
+
     remove_image: (elm, e, elements) => {
       e.preventDefault();
       e.stopPropagation();
@@ -1482,17 +1845,66 @@ var count = 0;
       $('#modal_area').html(modal);
     },
 
-    remove_image_req: (elm, e) => {
-      const itemId = this.selectedImage.length === 0 || (e.target.getAttribute("data-id").indexOf(',') < 0 && !this.selectedImage.includes(e.target.getAttribute("data-id"))) ? e.target.getAttribute("data-id") : this.selectedImage;
+    remove_folder: (elm, e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const id = (elm.closest(".file") ? elm.closest(".file").getAttribute("data-id") : elm.closest(".dd-item").getAttribute("data-id")),
+            name = e.target
+              .closest(".file") ? e.target
+              .closest(".file")
+              .querySelector(".file-name")
+              .textContent.trim() : elm.closest('.dd-item').querySelector('.dd-handle').innerText;
+      $('#modal_area').html(this.htmlMaker.remove_modal(id, name, 'folder'));
+    },
+
+    remove_image_req: (elm, e, ids, resolve) => {
+      // const itemId = this.selectedImage.length === 0 || (e.target.getAttribute("data-id").indexOf(',') < 0 && !this.selectedImage.includes(e.target.getAttribute("data-id"))) ? e.target.getAttribute("data-id") : this.selectedImage;
+      if(ids.length === 0) resolve(true);
+
       this.requests.removeImage(
         {
-          item_id: this.selectedImage.length === 0 || (e.target.getAttribute("data-id").indexOf(',') < 0 && !this.selectedImage.includes(e.target.getAttribute("data-id"))) ? Number(itemId) : this.selectedImage,
+          item_id: ids,
+          // this.selectedImage.length === 0 || (e.target.getAttribute("data-id").indexOf(',') < 0 && !this.selectedImage.includes(e.target.getAttribute("data-id"))) ? Number(itemId) : this.selectedImage,
           trash: true,
           access_token: "string"
-        },
-        this.events.close_name_modal
+        }, () => {
+          resolve(true);
+          // this.requests.drawingItems()
+          // this.events.close_name_modal();
+        }
+        // this.events.close_name_modal
       );
     },
+
+    
+
+    //********App -> events -> remove_folder********start
+    remove_folder_req: (elm, e, ids, resolve, cb) => {
+      e && e.stopPropagation();
+      e && e.preventDefault();
+
+      // const id = e.target.getAttribute("data-id") || (elm.closest(".file") ? elm.closest(".file").getAttribute("data-id") : elm.closest(".dd-item").getAttribute("data-id"));
+      if(ids.length === 0) resolve(true);
+      // const tree = $('#folder-list2>ol'),
+      //       leaf = tree.find(`[data-id="${id}"]`),
+      //       {makeTreeLeaf} = this.htmlMaker,
+      //       {close_name_modal} = this.events,
+      //       {removeTreeFolder} = this.requests;
+
+      this.requests.removeTreeFolder(
+        {
+          folder_id: ids,
+          // Number(id),
+          trash: 1,
+          access_token: "string"
+        },
+        () => {
+          resolve(true);
+          cb()
+        }
+      );
+    },
+    //********App -> events -> remove_folder********end
 
     copy_images: (elm, e) => {
       this.selectedImage.length > 0 &&  $('#modal_area').html(this.htmlMaker.copy_modal(this.selectedImage));
@@ -1504,20 +1916,6 @@ var count = 0;
           this.events.close_name_modal();
       });
     },
-
-    // remove_image_items: (e) => {
-    //   e.preventDefault();
-    //   e.stopPropagation();
-    //   selectedImage.length !== 0 ? selectedImage.map((id) => {
-    //     this.requests.removeImage(
-    //         {
-    //           item_id: Number(id),
-    //           trash: false,
-    //           access_token: "string"
-    //         }
-    //     );
-    //   }) : this.events.show_remover();
-    // },
     //********App -> events -> remove_image********end
 
     //********App -> events -> edit_item********start
@@ -1561,6 +1959,7 @@ var count = 0;
               access_token: "string"
             },
             () => {
+              
               $(`.file[data-id="${itemId}"]`).find('.file-title').html(name);
               this.events.close_name_modal();
             }
@@ -1605,7 +2004,7 @@ var count = 0;
     //********App -> events -> folder_level_up********end
 
     //********App -> events -> close_name_modal********start
-    close_name_modal: (elm, e) => {
+    close_name_modal: async (elm, e) => {
       // this.requests.drawingItems(undefined, true);
       $(".custom_modal_edit").remove();
       $('.folderitems').on('mouseenter mouseleave', 'div.file', function(ev) {
@@ -1635,9 +2034,6 @@ var count = 0;
         folder.addEventListener("dragleave", function (e) {
           if (e.preventDefault) e.preventDefault(); // allows us to drop
           e.stopPropagation();
-
-          // this.children[0].style.backgroundColor = 'white';
-          // this.children[0].style.color = '#294656';
           this.classList.remove("over");
           return false;
         });
@@ -1651,20 +2047,20 @@ var count = 0;
               .closest(".file")
               .getAttribute("data-id") : e.target.closest(".dd-item").getAttribute("data-id");
           if(Array.isArray(nodeId)) {
-            nodeId.map((id)=> {
+            
               self.requests.transferImage(
                   {
-                    item_id: Number(id),
+                    item_id: nodeId,
                     folder_id: Number(parentId),
                     access_token: "string"
                   }
               );
-            });
+        
           } else {
             if($('.folderitems').find(`[data-id="${nodeId}"]`)[0].closest('.folder-container')) {
               self.requests.transferFolder(
                   {
-                    folder_id: Number(nodeId),
+                    folder_id: [Number(nodeId)],
                     parent_id: Number(parentId),
                     access_token: "string"
                   },
@@ -1675,7 +2071,7 @@ var count = 0;
             } else {
               self.requests.transferImage(
                   {
-                    item_id: Number(nodeId),
+                    item_id: [Number(nodeId)],
                     folder_id: Number(parentId),
                     access_token: "string"
                   }
@@ -1754,6 +2150,11 @@ $('body').on('blur', '[contenteditable]', function(ev) {
           folder_id: Number(itemId),
           folder_name: name,
           access_token: "string"
+        },
+        () => {
+          const renamedFolder = $(`.media__folder-list .tree_leaf[data-id="${itemId}"]`);
+          renamedFolder.data('name', 'name');
+          $(renamedFolder.find('.folder-item--title')[0]).html(name)
         }
     );
   }
@@ -1766,8 +2167,55 @@ $('.delete_items').on('click', (ev) => {
     $('.remover-container').toggleClass('d-none');
     $('.uploader-container').addClass('d-none');
   };
-  app.selectedImage.length !== 0 ? app.events.remove_image(undefined, ev) : toggle();
+
+  if($('.file-box.active').length !== 0) {
+    app.events.remove_items(undefined, ev);
+  } else {
+    toggle();
+  }
 });
+
+const remove_req_function = async (ev, images_ids, folders_ids) => {
+  const promise1 = new Promise(function(resolve, reject) {
+    app.events.remove_image_req(undefined, ev, images_ids, resolve);
+  });
+  const promise2 = new Promise(function(resolve, reject) {
+    app.events.remove_folder_req(undefined, ev, folders_ids, resolve);
+  });
+  const promise3 = new Promise(function(resolve, reject) {
+    
+  })
+
+  // images_ids.length > 0 && folders_ids.length > 0 && 
+  Promise.all([promise1, promise2]).then((value) => { 
+    app.requests.drawingItems({
+      folder_id: app.globalFolderId,
+      files: true,
+      access_token: "string"
+    }, false,
+    () => {
+      folders_ids.map((folderId) => {
+        app.htmlMaker.myFuckingTree.removeTree(folderId)
+      })
+      app.events.close_name_modal();
+    });
+  })
+}
+
+$('body').on('click','.done_remove_items', (ev) => {
+  const folders_ids = [];
+  $('.file-box.folder-container.active').map((el, i) => {
+    folders_ids.push(Number($(i).find('.file').data('id')));
+  });
+  const images_ids = [];
+  $('.file-box.image-container.active').map((el,i) => {
+    images_ids.push($(i).find('.file').data('id'));
+  });
+
+  
+  remove_req_function(ev, images_ids, folders_ids)
+  
+})
 
 const removeCheckedImage = (el) => {
   const id = $(el.closest('[data-id]')).attr('data-id');
@@ -1779,9 +2227,14 @@ const removeCheckedImage = (el) => {
 
 const removeImages = () => {
   const checkedImagesArray = [];
+  const checkedFolderArray = []
   const uncheckedImagesArray = [];
+  const uncheckedFolderArray = [];
   $.each($('.check-image'), (index, image) => {
     $(image).prop("checked") ? checkedImagesArray.push($(image).closest('[data-id]').attr('data-id')) : uncheckedImagesArray.push($(image).closest('[data-id]').attr('data-id'));
+  });
+  $.each($('.check-folder'), (index, folder) => {
+    $(folder).prop("checked") ? checkedFolderArray.push($(folder).closest('[data-id]').attr('data-id')) : uncheckedFolderArray.push($(folder).closest('[data-id]').attr('data-id'));
   });
   app.requests.removeImage(
       {
@@ -1802,6 +2255,22 @@ const removeImages = () => {
         });
       }
   );
+  app.events.remove_folder_req(undefined, undefined, checkedFolderArray, () => {
+    checkedFolderArray.map((folderId) => {
+      $('.remover-container-content').find(`[data-id="${folderId}"]`).closest('.folderitems').remove();
+      app.htmlMaker.myFuckingTree.removeTree(folderId)
+    });
+
+    $('.remover-container-content').find('.folderitems').length === 0
+    && $('.remove-button_container').empty() && $('.remover-container-content').append('<p class="remove_title" style="margin: 85px auto;">Drag & drop files you want to delete...</p>');
+  }, () => {
+    checkedFolderArray.map((folderId) => {
+      $(`.media_right_content .folderitems .folder-container [data-id="${folderId}"]`).closest('.file-box').addClass('checked-for-remove').removeClass('active');
+      // app.selectedImage.length = 0;
+    });
+    console.log(22222222222222)
+    app.requests.drawingItems(undefined, false);
+  });
 };
 
 const checkImage = (checkedImage) => {
@@ -1860,31 +2329,64 @@ const removeImageDrop = (ev, data) => {
     app.selectedImage.length = 0;
 };
 
+const removeFolderDrop = (ev, data) => {
+  const imgTag = $(document.querySelector(`.folder-container [data-id="${data}"]`)).find('img');
+  imgTag.attr('draggable', 'false');
+  const name = $(document.querySelector(`.folder-container [data-id="${data}"]`)).find('.file-title').text().trim();
+  const div = `<div class="folderitems col-xl-2 col-sm-6" draggable="false">
+                <div class="file-box folder-container">
+                    <div draggable="false" data-id="${data}" class="file file-remove" >
+                        <a  >
+                            <span class="corner"></span>
+                            <div class="icon position-relative">
+                                <i class="fa fa-folder"></i>
+                                <span class="position-absolute btn btn-danger btn-sm rounded-0" style="right:0;top: 0; line-height: 0" onclick="removeCheckedImage(this)">
+                                  <i class="fa fa-times" style="font-size: 12px;"></i>
+                                </span>
+                            </div>
+                            <div class="file-name">
+                              <span class="icon-file"><i class="fa fa-file-image-o" aria-hidden="true"></i></span>
+                              <span class="file-title" style="width: 100%; font-size: 20px">${name}</span>
+                              <span><input type="checkbox" class="check-folder" checked onchange="checkImage(this)"></span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+              </div>`;
+  $(ev.target).closest('div').find('p.remove_title').remove();
+  $('.remover-container-content .images_container').prepend(div);
+  $('.remover-container-content').find('.remove-checked-item').length === 0
+  && $('.remove-button_container').append(`
+      <div class="d-flex flex-column">
+        <button class="remove-checked-item btn btn-danger" onclick="removeImages()">Delete</button>
+        <button class="remove-in-list btn btn-info my-2" onclick="removeList()">List Remove</button>
+        <input type="checkbox" onchange="checkedAll(this)" checked class="checkbox-all align-self-center">
+      </div>`);
+  $(`.media_right_content .folderitems .folder-container [data-id="${data}"]`).closest('.file-box').addClass('checked-for-remove').removeClass('active');
+  app.selectedImage.length = 0;
+};
+
 const drop = (ev, cb) => {
   ev.preventDefault();
 
   const data = isJson(ev.originalEvent.dataTransfer.getData('node_id'));
   const flag = data.item || 'image';
-  console.log(data)
   if(flag === 'image') {
-    // console.log(data.data)
     if(Array.isArray(data.data)) {
       data.data.map(el=>{
-        console.log($('.remover-container-content').find(`[data-id="${el}"]`), 'hellllllllllll')
         if($('.remover-container-content').find(`[data-id="${el}"]`).length === 0) {
 
           removeImageDrop(ev, el);
         }
       });
     } else {
-      console.log($('.remover-container-content').find(`[data-id="${data.data}"]`), 'lehhhhhhhhhhhhhh')
       if($('.remover-container-content').find(`[data-id="${data.data}"]`).length === 0) {
 
         removeImageDrop(ev, data.data);
       }
     }
   } else if(flag === 'folder') {
-    alert('You may not add folders in DnD area!');
+    removeFolderDrop(ev, data.data);
   }
   cb();
 };
@@ -1914,3 +2416,359 @@ document
     .onclick = function() {
       $('.remover-container').toggleClass('d-none');
     };
+
+
+    if(location.pathname === "/admin/media/trash") {
+      const trashButtons = `<button class="btn btn-danger empty_trash_js">EMPTY TRASH</button>
+      <button type="button" class="btn btn-primary undo_delete_js">UNDO DELETE
+      </button>`;
+    
+      $('.left--media-col').addClass('d-none');
+      $('.right--media-col').toggleClass('col-lg-10 col-lg-12');
+      $('.right--media-col').toggleClass('col-sm-8 col-sm-12');
+      $('.right--media-col').toggleClass('col-md-9 col-md-12');
+      $('[aria-label="breadcrumb"] .bread-crumbs-list').addClass('d-none');
+      $('.upload-content .upload--head').empty();
+      $('.upload-content .upload--head').html(trashButtons);
+    
+      $('body .file-title').each(function() {
+        $(this).attr('contenteditable', 'false');
+      })
+    }
+    
+    $('body').on('click', '.empty_trash_js', function() {
+      app.requests.emptyTrash();
+    })
+
+    $('body').on('click', '.undo_delete_js', function() {
+      const imagesArray = [];
+      const folderArray = [];
+      $('.image-container.active').each(function() {
+        imagesArray.push($(this).find('[data-id]').attr('data-id'))
+      })
+      $('.folder-container.active').each(function() {
+        folderArray.push($(this).find('div[data-id]').attr('data-id'))
+      })    
+   
+        app.requests.transferImage({
+          item_id: imagesArray,
+          folder_id: 1 
+        })
+      
+        app.requests.transferFolder({
+          parent_id: 1,
+          folder_id: folderArray 
+        })
+     
+    })
+
+    
+
+    
+
+    $('#moveMediaModal').on('show.bs.modal', function(ev) {
+      if($('.media_right_content .folderitems').find('.file-box.active').length > 0) {
+
+        $('#moveMediaModal').find('.move-disabled-js').prop('disabled', false);
+        $(this).find('.tree_container').html(`<div class="media-tree_leaf-wrapper" style="display: flex; justify-content: space-between;">
+          <ol class="first-branch">
+            <li class="tree_leaf leaf filter" data-id="1" data-name="Drive" id="item_1">
+              <div class="tree_leaf_content active">
+                  <span class="icon-folder-opening"></span>
+                  <span class="icon-folder-name"><i class="fa fa-folder"></i></span>
+                  Drive2
+              </div>
+            
+              <ol class="tree_branch" id="fff">
+
+              </ol>
+            </li>
+          </ol>
+        </div>`);
+
+        shortAjax("/api-media/get-folder-childs", {"folder_id":"1","files":true,"access_token":"string"}, res => {
+          app.htmlMaker.myFuckingTree.makeTree(res.data.children, '#moveMediaModal .tree_branch');
+          $($('.media_right_content .folderitems').find('.folder-container.active')).each(function() {
+            $('#moveMediaModal').find(`.tree_leaf[data-id="${$(this).find('.file').data('id')}"] .tree_leaf_content`).each(function(index, el) {
+              $(el).css({'pointer-events':' none', 'opacity': '0.3'});
+            });
+          })
+        });
+
+      } else {
+        $(this).find('.tree_container').html('No selected items');
+        $('#moveMediaModal').find('.move-disabled-js').prop('disabled', true);
+      }
+    })
+
+    const imageTransfer = (activeImages, selectedFolder) => {
+        app.requests.transferImage({
+          item_id: activeImages,
+          folder_id: selectedFolder 
+        }); 
+    }
+
+    const folderTransfer = (activeFolders, selectedFolder) => {
+      app.requests.transferFolder({
+        parent_id: selectedFolder,
+        folder_id: activeFolders 
+      });
+    }
+
+    const transferMove = (activeImages, activeFolders, selectedFolder, cb) => {
+      imageTransfer(activeImages, selectedFolder);
+      folderTransfer(activeFolders, selectedFolder);
+       
+      cb();
+    }
+
+    $('body').on('click', '#moveMediaModal .move-disabled-js', function() {
+      const activeFolders = [];
+      $($('.media_right_content .folderitems').find('.folder-container.active')).each(function() {
+        activeFolders.push($(this).find('.file').data('id'));
+      })
+     
+      const activeImages = [];
+      $($('.media_right_content .folderitems').find('.image-container.active')).each(function() {
+        activeImages.push($(this).find('.file').data('id'));
+      })
+      const selectedFolder = $('#moveMediaModal .tree_leaf_content.active').closest('.tree_leaf').data('id');
+
+      transferMove(activeImages, activeFolders, selectedFolder, () => {
+ 
+
+        const from = $(`.media__folder-list .media-tree_leaf-wrapper .tree_leaf[data-id="${app.globalFolderId}"]`);
+        const to = $(`.media__folder-list .media-tree_leaf-wrapper .tree_leaf[data-id="${selectedFolder}"]`);
+
+        activeFolders.map((id) => {
+          from.find(`.tree_leaf[data-id="${id}"]`).appendTo(`.media__folder-list .media-tree_leaf-wrapper .tree_leaf[data-id="${selectedFolder}"] > .tree_branch`);
+        });
+        
+
+        if(from.find('.tree_branch').length === 1 && from.find('.tree_leaf').length === 0 && from.hasClass('tree_leaf_with_branch')) {
+          from.removeClass('tree_leaf_with_branch');
+          from.addClass('tree_leaf_without_branch');
+          $(from.find('.icon-folder-opening')[0]).find('i').removeClass('d-inline');
+          $(from.find('.icon-folder-opening')[0]).find('i').addClass('d-none');
+        }
+
+        if(to.find('.tree_branch').length > 1 && to.hasClass('tree_leaf_without_branch')) {
+          to.removeClass('tree_leaf_without_branch');
+          to.addClass('tree_leaf_with_branch');
+          $(to.find('.icon-folder-opening')[0]).find('i').removeClass('d-none');
+          $(from.find('.icon-folder-opening')[0]).find('i').addClass('d-inline');
+        }
+
+
+            var branch = document.querySelectorAll('.tree_branch');
+            for (var i = 0; i < branch.length; i++) {
+            new Sortable(branch[i], {
+              group: 'b',
+              filter: '.filter',
+              draggable: ".tree_leaf",
+              sort: true,
+              animation: 150,
+              fallbackOnBody: true,
+              // swapThreshold: 0.65,
+              dataIdAttr: 'data-id',
+              forceFallback: false,
+              fallbackClass: "sortable-fallback",
+              swapThreshold: 0.20,
+              ghostClass: 'background-class',
+              swapClass: 'highlight', // The class applied to the hovered swap item
+          
+              setData: function (/** DataTransfer */dataTransfer, /** HTMLElement*/dragEl) {
+                dataTransfer.setData('id', $(dragEl).data('id')); // `dataTransfer` object of HTML5 DragEvent
+              },
+              onEnd: function (/**Event*/evt) {
+                
+                const nodeId = evt.item.getAttribute('data-id');
+                const parentId = evt.to.closest('.tree_leaf').getAttribute('data-id');
+      
+                if($(evt.to).closest('.tree_leaf').hasClass('tree_leaf_without_branch')) {
+                  $(evt.to).closest('.tree_leaf').removeClass('tree_leaf_without_branch');
+                  $(evt.to).closest('.tree_leaf').addClass('tree_leaf_with_branch');
+                  
+                  $($(evt.to).closest('.tree_leaf').find('.icon-folder-opening')[0]).find('i').removeClass('d-none');
+                  $($(evt.to).closest('.tree_leaf').find('.icon-folder-opening')[0]).find('i').addClass('d-inline');
+                }
+          
+                if($(evt.from)[0].children.length === 0) {
+                  $(evt.from).closest('.tree_leaf').removeClass('tree_leaf_with_branch');
+                  $(evt.from).closest('.tree_leaf').addClass('tree_leaf_without_branch');
+          
+                  $($(evt.from).closest('.tree_leaf').find('.icon-folder-opening')[0]).find('i').addClass('d-none');
+                  $($(evt.from).closest('.tree_leaf').find('.icon-folder-opening')[0]).find('i').removeClass('d-inline');
+                }
+                
+                app.requests.transferFolder(
+                  {
+                    folder_id: [Number(nodeId)],
+                    parent_id: Number(parentId),
+                    access_token: "string"
+                  },
+                    () => {
+                      // self.htmlMaker.treeMove(nodeId, parentId);
+                    }
+                );
+              },
+              onMove: function (/**Event*/evt, /**Event*/originalEvent) {
+                // Example: https://jsbin.com/nawahef/edit?js,output
+      
+                
+                if($($(evt.related).find('.tree_branch')[0]).hasClass('closed_branch')) {
+                  const branch = $(evt.related).closest('.tree_leaf');
+                  const opening_icon = $($(evt.related).find('.icon-folder-opening')[0]);
+                  if(branch.hasClass('tree_leaf_with_branch')) {
+                    if($(branch.find('.tree_branch')[0]).hasClass('closed_branch')) {
+                      $(branch.find('.tree_branch')[0]).removeClass('closed_branch');
+                    }
+          
+                    if(opening_icon.find('i').hasClass('fa-caret-right')) {
+                      opening_icon.find('i').removeClass('fa-caret-right');
+                      opening_icon.find('i').addClass('fa-caret-down');
+                    }
+                  }
+                }
+      
+              }
+            });
+          }
+        $('#moveMediaModal').modal('hide');
+      });
+      
+    });
+
+    $('body').on('click', '#moveMediaModal .tree_leaf_content', function(ev) {
+      $('#moveMediaModal .tree_leaf_content.active').removeClass('active');
+      $($(ev.target).closest('.tree_leaf').find('.tree_leaf_content')[0]).addClass('active');
+    });
+
+    $('body').on('click', '.add-folder-js', function() {
+      const newFolderName = $('.folderNameValue').val();
+
+
+      app.requests.addNewFolder(
+        {
+          folder_id: app.globalFolderId || 1,
+          folder_name: newFolderName,
+          access_token: "string"
+        }, (res) => {
+          $($(`.tree_leaf[data-id="${res.data.parent_id}"]`).find('.tree_branch')[0]).append(app.htmlMaker.myFuckingTree.makeTreeLeaf(res.data.id, res.data.name));
+          if($(`.tree_leaf[data-id="${res.data.parent_id}"]`).hasClass('tree_leaf_without_branch')) {
+            $(`.tree_leaf[data-id="${res.data.parent_id}"]`).removeClass('tree_leaf_without_branch');
+            $(`.tree_leaf[data-id="${res.data.parent_id}"]`).addClass('tree_leaf_with_branch');
+            $($(`.tree_leaf[data-id="${res.data.parent_id}"]`).find('.icon-folder-opening')[0]).find('i').removeClass('d-none');
+            $($(`.tree_leaf[data-id="${res.data.parent_id}"]`).find('.icon-folder-opening')[0]).find('i').addClass('d-inline');
+            var branch = document.querySelectorAll('.tree_branch');
+            for (var i = 0; i < branch.length; i++) {
+            new Sortable(branch[i], {
+              group: 'b',
+              filter: '.filter',
+              draggable: ".tree_leaf",
+              sort: true,
+              animation: 150,
+              fallbackOnBody: true,
+              // swapThreshold: 0.65,
+              dataIdAttr: 'data-id',
+              forceFallback: false,
+              fallbackClass: "sortable-fallback",
+              swapThreshold: 0.20,
+              ghostClass: 'background-class',
+              swapClass: 'highlight', // The class applied to the hovered swap item
+          
+              setData: function (/** DataTransfer */dataTransfer, /** HTMLElement*/dragEl) {
+                dataTransfer.setData('id', $(dragEl).data('id')); // `dataTransfer` object of HTML5 DragEvent
+              },
+              onEnd: function (/**Event*/evt) {
+                
+                const nodeId = evt.item.getAttribute('data-id');
+                const parentId = evt.to.closest('.tree_leaf').getAttribute('data-id');
+      
+                if($(evt.to).closest('.tree_leaf').hasClass('tree_leaf_without_branch')) {
+                  $(evt.to).closest('.tree_leaf').removeClass('tree_leaf_without_branch');
+                  $(evt.to).closest('.tree_leaf').addClass('tree_leaf_with_branch');
+                  
+                  $($(evt.to).closest('.tree_leaf').find('.icon-folder-opening')[0]).find('i').removeClass('d-none');
+                  $($(evt.to).closest('.tree_leaf').find('.icon-folder-opening')[0]).find('i').addClass('d-inline');
+                }
+          
+                if($(evt.from)[0].children.length === 0) {
+                  $(evt.from).closest('.tree_leaf').removeClass('tree_leaf_with_branch');
+                  $(evt.from).closest('.tree_leaf').addClass('tree_leaf_without_branch');
+          
+                  $($(evt.from).closest('.tree_leaf').find('.icon-folder-opening')[0]).find('i').addClass('d-none');
+                  $($(evt.from).closest('.tree_leaf').find('.icon-folder-opening')[0]).find('i').removeClass('d-inline');
+                }
+                
+                app.requests.transferFolder(
+                  {
+                    folder_id: [Number(nodeId)],
+                    parent_id: Number(parentId),
+                    access_token: "string"
+                  },
+                    () => {
+                      self.htmlMaker.treeMove(nodeId, parentId);
+                    }
+                );
+              },
+              onMove: function (/**Event*/evt, /**Event*/originalEvent) {
+                // Example: https://jsbin.com/nawahef/edit?js,output
+      
+                // const nodeId = 
+                
+                if($($(evt.related).find('.tree_branch')[0]).hasClass('closed_branch')) {
+                  const branch = $(evt.related).closest('.tree_leaf');
+                  const opening_icon = $($(evt.related).find('.icon-folder-opening')[0]);
+                  if(branch.hasClass('tree_leaf_with_branch')) {
+                    if($(branch.find('.tree_branch')[0]).hasClass('closed_branch')) {
+                      $(branch.find('.tree_branch')[0]).removeClass('closed_branch');
+                    }
+          
+                    if(opening_icon.find('i').hasClass('fa-caret-right')) {
+                      opening_icon.find('i').removeClass('fa-caret-right');
+                      opening_icon.find('i').addClass('fa-caret-down');
+                    }
+                  }
+                }
+      
+              }
+            });
+          }
+          };
+          $('#addFolderModal').modal('hide');
+        });
+    });
+
+  $('body').on('click', '.icon-folder-opening', function(ev) {
+    const branch = $(ev.target).closest('.tree_leaf');
+    const opening_icon = $(ev.target).closest('.icon-folder-opening');
+    if(branch.hasClass('tree_leaf_with_branch')) {
+      if(!$(branch.find('.tree_branch')[0]).hasClass('closed_branch')) {
+        $(branch.find('.tree_branch')[0]).addClass('closed_branch');
+      } else {
+        $(branch.find('.tree_branch')[0]).removeClass('closed_branch');
+      }
+  
+      if(!opening_icon.find('i').hasClass('fa-caret-right')) {
+        opening_icon.find('i').removeClass('fa-caret-down');
+        opening_icon.find('i').addClass('fa-caret-right');
+      } else {
+        opening_icon.find('i').removeClass('fa-caret-right');
+        opening_icon.find('i').addClass('fa-caret-down');
+      }
+    }
+  });
+
+  $('body').on('input', '.search_item_js', function(ev) {
+    const value = $(ev.target).val();
+    $('.file-box .file-title').each(function() {
+      $(this).closest('.file-box').removeClass('d-none')
+      // $(this).closest('.file-box').addClass('d-block')
+      if($(this).text().toUpperCase().includes(value.trim().toUpperCase())) {
+        $(this).closest('.file-box').addClass('d-block')
+      } else {
+        $(this).closest('.file-box').addClass('d-none')
+      }
+    });
+  })

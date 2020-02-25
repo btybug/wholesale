@@ -8,9 +8,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="google-recaptcha-key" content="{!!env('GOOGLE_RECAPTCHA_KEY')!!}">
     <meta name="google-site-verification" content="bYambdrAC-nymmiVMr-A2jiKeKW8gEsCcCRozCLDp4o" />
-    @yield('meta')
-    <title>Document</title>
-    <!-- Start of ukdevplus Zendesk Widget script -->
+{!! main_pages_seo(isset($page_name)?$page_name:null) !!}
+
+@yield('meta')
+
+
+
+<!-- Start of ukdevplus Zendesk Widget script -->
     <script id="ze-snippet"
             src="https://static.zdassets.com/ekr/snippet.js?key=7cef91e3-cb9d-4443-9c06-2ac7bffed052"></script>
     <!-- End of ukdevplus Zendesk Widget script -->
@@ -49,6 +53,7 @@
     {{--*****packed in public/css/bundle.css***** --}}
     <link href="{{asset('public/css/invoice.css')}}" rel="stylesheet" />
     <link rel="stylesheet" href="{{asset('public/css/bundle.css?v='.rand(111,999))}}">
+    <link rel="stylesheet" href="{{asset('public/css/comments.css?v='.rand(111,999))}}">
     {{-- ********************************************* --}}
     {{-- <script src={{asset("public/js/jQuery3.3.1.js")}}></script> --}}
     {{-- <script src={{asset("public/plugins/jquery-ui/jquery-ui.min.js")}}></script> --}}
@@ -65,7 +70,7 @@
     <script src={{asset("public/plugins/crossbrowserjs/ofi.min.js")}}></script>
     <script src={{asset("public/plugins/crossbrowserjs/customFit.js")}}></script>
     <!--<![endif]-->
-{{--    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5d00a4864351e90012650424&product=inline-share-buttons"></script>--}}
+    {{--    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5d00a4864351e90012650424&product=inline-share-buttons"></script>--}}
     <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5d00a4864351e90012650424&product=custom-share-buttons"></script>
     <script src={{asset("public/plugins/autocomplete/jquery.autocomplete.min.js")}}></script>
     @if(!Auth::check())
@@ -110,9 +115,9 @@
     </div>
 </div>
 <img src="/public/images/loader.gif" class="loader-img d-none" style="width:100px;position: absolute;top:50%;left:50%"/>
-
+@include("frontend.products._partials.extra_modal")
 @if(is_enabled_filter_modal())
-  {!! filter_modal_html() !!}
+    {!! filter_modal_html() !!}
 @endif
 @include('frontend._partials.footer')
 
@@ -128,7 +133,7 @@
 {{--<script src={{asset("public/js/register.js")}}></script>--}}
 {{-- *****packed in public/js/bundle/bundle.js***** --}}
 <script src={{asset("public/js/bundle/bundle.js?v=".rand(111,999))}}></script>
-
+{!! Html::script('public/js/custom/comments.js') !!}
 @stack('style')
 
 @yield('js')

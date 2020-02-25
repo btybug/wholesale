@@ -311,7 +311,7 @@ a:hover {
 /*Profile aside*/
 .hidden-sidebar,
 .profile-page-profile-aside{
-    background: #353636;
+    background: #3a3a3a;
 }
 
 /*.hidden-sidebar {*/
@@ -387,7 +387,7 @@ a:hover {
     padding: 15px;
     width: 370px;
     max-width: 100%;
-    right: -370px;
+    right: -410px;
 }
 
 .cart-aside-item {

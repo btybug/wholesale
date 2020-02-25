@@ -18,21 +18,30 @@ Auth::routes();
 Auth::routes(['verify' => true]);
 //Route::get('/home', 'HomeController@index')->name('home');
 Route::middleware('auth')->group(function () {
-    Route::get('/', 'Frontend\WholesalerController@index')->name('home');
+    Route::get('/', 'Frontend\ProductsController@index')->name('home');
 
-    Route::group(['prefix' => 'wholesaler'], function () {
-        Route::post('/add-to-cart', 'Frontend\WholesalerController@addToCart')->name('wholesaler_add_to_cart');
-        Route::get('/my-cart', 'Frontend\WholesalerController@getCart')->name('wholesaler_my_cart');
-        Route::get('/check-out', 'Frontend\WholesalerController@getCheckOut')->name('wholesaler_check_out');
-        Route::get('/payment/{token}', 'Frontend\WholesalerController@getPayment')->name('wholesaler_payment');
-        Route::post('/update-cart', 'Frontend\WholesalerController@postUpdateQty')->name('wholesaler_update_cart');
-        Route::post('/remove-from-cart', 'Frontend\WholesalerController@postRemoveFromCart')->name('wholesaler_remove_from_cart');
-        Route::post('/change-shipping-method', 'Frontend\WholesalerController@postChangeShippingMethod')->name('wholesaler_change_shipping_method');
-        Route::post('/get-payment-options', 'Frontend\WholesalerController@postPaymentOptions')->name('wholesaler_get_payment_options');
-        Route::post('/cash-order', 'Frontend\CashPaymentController@wholesalerOrder')->name('wholesaler_cash_order');
-        Route::get('/cash-order-success/{id}', 'Frontend\CashPaymentController@wholesalerSuccess')->name('wholesaler_cash_order_success');
-        Route::post('/apply-coupon', 'Frontend\WholesalerController@postApplyCoupon')->name('wholesaler_apply_coupon');
-        Route::post('/stripe-charge', 'Frontend\StripePaymentController@wholesalerStripeCharge');
+    Route::group(['prefix' => 'products'], function () {
+        Route::post('/get-price', 'Frontend\ProductsController@getPrice')->name('product_get_price');
+        Route::post('/add-offer', 'Frontend\ProductsController@addOffer')->name('product_add_offer');
+        Route::post('/get-package-type-limit', 'Frontend\ProductsController@getPackageTypeLimit')->name('product_get_package_type_limit');
+        Route::post('/get-subtotal-price', 'Frontend\ProductsController@getSubtotalPrice')->name('product_get_subtotal_price');
+        Route::post('/get-product-variations', 'Frontend\ProductsController@getVariations')->name('product_get_variations');
+        Route::post('/get-variation-menu-raw', 'Frontend\ProductsController@getVariationMenuRaw')->name('product_get_variation_menu_raw');
+        Route::post('/get-offer-menu-raw', 'Frontend\ProductsController@getOfferMenuRaw')->name('product_get_offer_menu_raw');
+        Route::post('/get-offer-menu-raws', 'Frontend\ProductsController@getOfferMenuRaws')->name('product_get_offer_menu_raws');
+        Route::post('/get-variation-menu-raws', 'Frontend\ProductsController@getVariationMenuRaws')->name('product_get_variation_menu_raws');
+        Route::post('/add-to-favorites', 'Frontend\ProductsController@attachFavorite')->name('product_add_to_favorites');
+        Route::post('/remove-from-favorites', 'Frontend\ProductsController@detachFavorite')->name('product_remove_from_favorites');
+        Route::post('/select-items', 'Frontend\ProductsController@postSelectItems')->name('product_variation_items');
+        Route::post('/search-items', 'Frontend\ProductsController@postSearchItems')->name('product_search_items');
+        Route::post('/get-extra-content', 'Frontend\ProductsController@postExtraContent')->name('product_extra_content');
+        Route::post('/get-extra-item', 'Frontend\ProductsController@postExtraItem')->name('product_extra_item');
+        Route::post('/get-discount-price', 'Frontend\ProductsController@getDiscountPrice')->name('product_discount_price');
+        Route::get('/{type?}', 'Frontend\ProductsController@index')->name('categories_front');
+        Route::post('/{type?}', 'Frontend\ProductsController@index')->name('categories_front_post');
+        Route::group(['prefix' => '{type}'], function () {
+            Route::get('/{slug}', 'Frontend\ProductsController@getSingle')->name('product_single');
+        });
     });
 
     Route::post('/stripe-charge', 'Frontend\StripePaymentController@stripeCharge');

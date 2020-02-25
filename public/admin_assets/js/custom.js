@@ -246,4 +246,11 @@ window.onload = function() {
             successMethodForEntry(that)
         );
     });
+    $(function () {
+        $('#admin_find').on('change',function () {
+            if($(this).val()!==null){
+                window.location.href=$(this).val();
+            }
+        });
+    });
 };

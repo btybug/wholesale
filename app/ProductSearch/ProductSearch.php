@@ -2,11 +2,10 @@
 
 namespace App\ProductSearch;
 
-use App\Models\AttributeStickers;
 use App\Models\Category;
 use App\Models\Stock;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class ProductSearch
 {
@@ -17,6 +16,15 @@ class ProductSearch
         );
 
         return static::getResults($query, $sql, $filters);
+    }
+
+    public static function applyQuery(Request $filters, $category = null, $sql = false)
+    {
+        $query = static::applyDecoratorsFromRequest(
+            $filters, static::createObject($category, $filters)
+        );
+
+        return $query;
     }
 
     private static function applyDecoratorsFromRequest(Request $request, Builder $query)
@@ -32,6 +40,7 @@ class ProductSearch
 
     private static function createFilterDecorator($name)
     {
+
         return __NAMESPACE__ . '\\Filters\\' .
             str_replace(' ', '',
                 ucwords(str_replace('_', ' ', $name)));
@@ -108,17 +117,24 @@ class ProductSearch
 
     private static function createObject($category = null, $request)
     {
-//        $builder->whereIn('stock_categories.categories_id',$value);
-
         $query = Stock::leftJoin('stock_translations', 'stocks.id', '=', 'stock_translations.stock_id');
         $query->leftJoin('stock_categories', 'stocks.id', '=', 'stock_categories.stock_id');
 
-        if ($category) {
-            $query->where('stock_categories.categories_id', $category->id);
+        $subcategory = $request->get('subcategory', null);
+        if ($subcategory && $subcategory != 'all') {
+            $subcategoryObject = Category::where('slug', $subcategory)->first();
+            if ($subcategoryObject)
+                $query->where('stock_categories.categories_id', $subcategoryObject->id);
+
+        } else {
+            if ($category) {
+                $query->where('stock_categories.categories_id', $category->id);
+            }
         }
+
         $query->leftJoin('stock_variations', 'stocks.id', '=', 'stock_variations.stock_id')
             ->leftJoin('stock_variation_options', 'stock_variations.id', '=', 'stock_variation_options.variation_id')
-            ->leftJoin('stock_sales', function($join) {
+            ->leftJoin('stock_sales', function ($join) {
                 $now = strtotime(now());
                 $join->on('stock_sales.variation_id', '=', 'stock_variations.id');
                 $join->where('stock_sales.canceled', 0);
@@ -126,12 +142,13 @@ class ProductSearch
                     array($now, $now)
                 );
             })
-
             ->leftJoin('stock_attributes', 'stocks.id', '=', 'stock_attributes.stock_id')
             ->leftJoin('favorites', 'stocks.id', '=', 'favorites.stock_id')
-            ->where('stock_translations.locale', app()->getLocale())
-            ->where('stocks.status', true)
-            ->where('stocks.is_offer', false);
+            ->where('stock_translations.locale', app()->getLocale());
+        if (!$request->has('status')) {
+            $query->where('stocks.status', true);
+        }
+        $query->where('stocks.is_offer', false);
 
         return $query->select('stocks.*', 'stock_translations.name',
             'stock_translations.short_description', 'stock_variations.price', 'stock_variations.id as variation_id',

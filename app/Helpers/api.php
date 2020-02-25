@@ -7,7 +7,7 @@
  */
 
 
-use App\Models\Media\Folders;
+use App\Models\Settings;
 
 $_MEDIA_BUTTON = false;
 $_MEDIA_SLUG = null;
@@ -15,6 +15,22 @@ $_MEDIA_FOLDER = null;
 $_FILTER_BUTTON = false;
 $_FILTER_HTML = '';
 global $_MODEL_BOOTED;
+
+//include "App\Helpers\barcode.php";
+
+function render_bc($format,$symbology,$data,$options = []){
+    $generator = new barcode_generator();
+
+    /* Output directly to standard output. */
+    $generator->output_image($format, $symbology, $data, $options);
+//
+//    /* Create bitmap image. */
+//    $image = $generator->render_image($symbology, $data, $options);
+//    imagepng($image);
+//    imagedestroy($image);
+//    return $image;
+}
+
 function getAlertIconByClass($class = 'success')
 {
     $icon = '';
@@ -86,6 +102,18 @@ function media_button(string $name, $model = null, bool $multiple = false, $slug
     return view('media.button', compact(['multiple', 'slug', 'name', 'model', 'uniqId', 'html', 'id']));
 }
 
+function media_widget(string $name, $model = null, bool $multiple = false, $slug = 'drive', $html = null,$displayName = "Image")
+{
+    $folder = App\Models\Media\Folders::where('name', $slug)->where('parent_id', 0)->first(['id', 'name']);
+
+    enableMedia();
+    $id = $folder->id;
+    global $_MEDIA_FOLDER;
+    $_MEDIA_FOLDER = $folder;
+    $uniqId = uniqid('media_');
+    return view('media.widget', compact(['multiple', 'slug', 'name', 'model', 'uniqId', 'html', 'id','displayName']));
+}
+
 function get_media_folder()
 {
     global $_MEDIA_FOLDER;
@@ -132,6 +160,13 @@ function get_site_name()
 {
     $settings = new \App\Models\Settings();
     $name = $settings->getData('admin_general_settings', 'site_name');
+    return ($name) ? $name->val : '';
+}
+
+function get_site_code()
+{
+    $settings = new \App\Models\Settings();
+    $name = $settings->getData('admin_general_settings', 'site_code');
     return ($name) ? $name->val : '';
 }
 
@@ -204,7 +239,12 @@ function userCan($permission)
 {
     if (!Auth::check()) return false;
     $role = Auth::user()->role;
-    if ($role->slug == 'superadmin') return true;
+    if($permission=='admin_role_membership'){
+        if ($role->slug != 'superadmin'){
+            return false;
+        }
+    };
+    if ($role->slug == 'superadmin' || $role->slug == 'admin') return true;
     return $role->can($permission);
 }
 
@@ -212,7 +252,7 @@ function hasAccess($permission)
 {
     if (!Auth::check()) return false;
     $role = Auth::user()->role;
-    if ($role->slug == 'superadmin') return true;
+    if ($role->slug == 'superadmin' || $role->slug=='admin') return true;
     return $role->hasAccess($permission);
 }
 
@@ -551,8 +591,11 @@ function getUniqueCode($table, $column, $prefix = '')
     return $code;
 }
 
+
 function commentRender($comments, $i = 0, $parent = false)
 {
+    $settingService = new Settings();
+    $settings = $settingService->getEditableData('admin_comments_setting');
     if (count($comments)) {
         $comment = $comments[$i];
         //render main content
@@ -564,7 +607,7 @@ function commentRender($comments, $i = 0, $parent = false)
         echo '<div class="d-flex wrap-wall w-100">';
         echo '<div class="left-photo hidden-xsd-none d-sm-block">';
         echo '<figure class="thumbnail">';
-        echo '<img class="img-fluid" src="' . user_avatar($comment->author->id) . '">';
+        echo '<img class="img-fluid" src="' . user_avatar($comment->author->id) . '" alt="'.$comment->author->name.'" title="'.$comment->author->name.'">';
         echo '</figure>';
         echo '</div>';
 
@@ -575,11 +618,7 @@ function commentRender($comments, $i = 0, $parent = false)
         echo '<header class="text-left">';
         echo '<div class="comment-user">';
         if ($comment->author) {
-            if ($comment->author->isAdministrator()) {
-                echo '<span class="text-center">Admin</span>';
-            } else {
-                echo '<span class="text-center">' . $comment->author->username . '</span>';
-            }
+            echo '<span class="text-center">' . $comment->author->name .' '. $comment->author->last_name . '</span>';
         } else {
             echo '<span class="text-center">' . $comment->guest_name . '</span>';
         }
@@ -590,7 +629,18 @@ function commentRender($comments, $i = 0, $parent = false)
         echo '</div>';
         echo '</div>';
         if (Auth::check()) {
-            echo '<div class="text-right reply-wrapper"><a href="#" data-id="' . $comment->id . '" class="btn btn-secondary btn-sm reply">Reply</a></div>';
+            echo '<div class="text-right reply-wrapper">';
+            echo   '<a href="javascript:void(0)" data-id="' . $comment->id . '" class="btn btn-secondary btn-sm reply">Reply</a>';
+            if($settings){
+                if($settings->user_delete == 1 && $comment->author_id == Auth::id()){
+                    echo  '<a href="javascript:void(0)" data-id="' . $comment->id . '" class="btn btn-danger btn-sm delete-comment">Delete</a>';
+                }
+                if($settings->user_edit == 1 && $comment->author_id == Auth::id()) {
+                    echo '<a href="javascript:void(0)" data-id="' . $comment->id . '" class="btn btn-warning btn-sm edit-comment">Edit</a>';
+                }
+            }
+
+            echo '</div>';
         }
 
         echo '</div>';
@@ -672,7 +722,7 @@ function replyRender($replies, $i = 0, $parent = false)
 
         if ($reply->getTable() == 'history') {
             echo '<div class="admin_updated">
-<div class="image label label-default"><img src="' . user_avatar($reply->user->id) . '" alt="img"></div>
+<div class="image label label-default"><img src="' . user_avatar($reply->user->id) . '" alt="'.$reply->user->name.'" title="'.$reply->user->name.'"></div>
 <p class="font-18 text-gray-clr mb-0"><span class="label label-default">' . $reply->user->name . ' has ' . $reply->body . '</span></p>
 </div>';
         } else {
@@ -685,7 +735,7 @@ function replyRender($replies, $i = 0, $parent = false)
 
             echo '<div class="col-lg-2 col-md-2 hidden-xsd-none d-sm-block">';
             echo '<figure class="thumbnail">';
-            echo '<img class="img-fluid" src="' . user_avatar($reply->author->id) . '">';
+            echo '<img class="img-fluid" src="' . user_avatar($reply->author->id) . '" alt="'.$reply->user->name.'" title="'.$reply->user->name.'">';
             if ($reply->author) {
                 if ($reply->author->isAdministrator()) {
                     echo '<figcaption class="text-center">Admin</figcaption>';
@@ -790,16 +840,87 @@ function time_ago($datetime, $full = false)
 
 function stockSeo($stock)
 {
-    $seoes = $stock->seo;
+    $lang=app()->getLocale();
+    $settings=new Settings();
+    $seo = $stock->seo;
+    $general = $settings->getEditableData('seo_stocks')->toArray();
+    $robot = $settings->getEditableData('seo_robot_stocks');
+    $r = (is_null($seo) || is_null($seo->robots)) ?  $robot->robots : $seo->robots;
+    if (!$r) return null;
     $HTML = '';
-    if ($stock->image) {
-        $HTML .= Html::meta('og:image', url($stock->image))->toHtml() . "\n\r";
-    }
-    foreach ($seoes as $seo) {
-        $HTML .= Html::meta($seo->name, $seo->content)->toHtml() . "\n\r";
-    }
+    $keywords=get_translated($seo,strtolower($lang),'keywords');
+    $title=get_translated($seo,strtolower($lang),'title');
+    $description=get_translated($seo,strtolower($lang),'description');
+    $image=get_translated($seo,strtolower($lang),'image');
+    $HTML .= ($title)?'<title>'.$title.'</title>':'<title>'.getSeo($general,'og:title',$stock).'</title>';
+    $HTML.=($keywords)? Html::meta('keywords',$keywords)->toHtml():Html::meta('keywords',getSeo($general,'og:keywords',$stock))->toHtml();
+    $HTML.=($title)? Html::meta('og:title',$title)->toHtml():Html::meta('og:title',getSeo($general,'og:title',$stock))->toHtml();
+    $HTML.=($description)? Html::meta('og:description',$description)->toHtml():Html::meta('og:description',getSeo($general,'og:description',$stock))->toHtml();
+    $HTML .=($image)? Html::meta('og:image',$image)->toHtml():Html::meta('og:image',getSeo($general,'og:image',$stock))->toHtml();
+
+
+    $HTML.=($title)? Html::meta('title',$title)->toHtml():Html::meta('title',getSeo($general,'og:title',$stock))->toHtml();
+    $HTML.=($description)? Html::meta('description',$description)->toHtml():Html::meta('description',getSeo($general,'og:description',$stock))->toHtml();
+    $HTML .=($image)? Html::meta('image',$image)->toHtml():Html::meta('image',getSeo($general,'og:image',$stock))->toHtml();
+
     return $HTML;
 }
+function postSeo($stock)
+{
+    $lang=app()->getLocale();
+    $settings=new Settings();
+    $seo = $stock->seo;
+    $general = $settings->getEditableData('seo_posts')->toArray();
+    $robot = $settings->getEditableData('seo_robot_posts');
+    $r = (is_null($seo) || is_null($seo->robots)) ?  $robot->robots : $seo->robots;
+    if (!$r) return null;
+    $HTML = '';
+    $keywords=get_translated($seo,strtolower($lang),'keywords');
+    $title=get_translated($seo,strtolower($lang),'title');
+    $description=get_translated($seo,strtolower($lang),'description');
+    $image=get_translated($seo,strtolower($lang),'image');
+    $HTML .= ($title)?'<title>'.$title.'</title>':'<title>'.getSeo($general,'og:title',$stock).'</title>';
+    $HTML.=($keywords)? Html::meta('keywords',$keywords)->toHtml():Html::meta('keywords',getSeo($general,'og:keywords',$stock))->toHtml();
+    $HTML.=($title)? Html::meta('og:title',$title)->toHtml():Html::meta('og:title',getSeo($general,'og:title',$stock))->toHtml();
+    $HTML.=($description)? Html::meta('og:description',$description)->toHtml():Html::meta('og:description',getSeo($general,'og:description',$stock))->toHtml();
+    $HTML .=($image)? Html::meta('og:image',$image)->toHtml():Html::meta('og:image',getSeo($general,'og:image',$stock))->toHtml();
+
+
+    $HTML.=($title)? Html::meta('title',$title)->toHtml():Html::meta('title',getSeo($general,'og:title',$stock))->toHtml();
+    $HTML.=($description)? Html::meta('description',$description)->toHtml():Html::meta('description',getSeo($general,'og:description',$stock))->toHtml();
+    $HTML .=($image)? Html::meta('image',$image)->toHtml():Html::meta('image',getSeo($general,'og:image',$stock))->toHtml();
+
+    return $HTML;
+}
+function brandSeo($brand=null)
+{
+    if (!$brand) return null;
+    $lang=app()->getLocale();
+    $settings=new Settings();
+    $seo = $brand->seo;
+    $general = $settings->getEditableData('seo_brand')->toArray();
+    $robot = $settings->getEditableData('seo_robot_brand');
+    $r = (is_null($seo) || is_null($seo->robots)) ?  $robot->robots : $seo->robots;
+    if (!$r) return null;
+    $HTML = '';
+    $keywords=get_translated($seo,strtolower($lang),'keywords');
+    $title=get_translated($seo,strtolower($lang),'name');
+    $description=get_translated($seo,strtolower($lang),'description');
+    $image=get_translated($seo,strtolower($lang),'image');
+    $HTML .= ($title)?'<title>'.$title.'</title>':'<title>'.getSeo($general,'og:title',$brand).'</title>';
+    $HTML.=($keywords)? Html::meta('keywords',$keywords)->toHtml():Html::meta('keywords',getSeo($general,'og:keywords',$brand))->toHtml();
+    $HTML.=($title)? Html::meta('og:title',$title)->toHtml():Html::meta('og:title',getSeo($general,'og:title',$brand))->toHtml();
+    $HTML.=($description)? Html::meta('og:description',$description)->toHtml():Html::meta('og:description',getSeo($general,'og:description',$brand))->toHtml();
+    $HTML .=($image)? Html::meta('og:image',$image)->toHtml():Html::meta('og:image',getSeo($general,'og:image',$brand))->toHtml();
+
+
+    $HTML.=($title)? Html::meta('title',$title)->toHtml():Html::meta('title',getSeo($general,'og:title',$brand))->toHtml();
+    $HTML.=($description)? Html::meta('description',$description)->toHtml():Html::meta('description',getSeo($general,'og:description',$brand))->toHtml();
+    $HTML .=($image)? Html::meta('image',$image)->toHtml():Html::meta('image',getSeo($general,'og:image',$brand))->toHtml();
+
+    return $HTML;
+}
+
 
 function meta($object, $type = 'seo_posts')
 {
@@ -830,6 +951,7 @@ function meta($object, $type = 'seo_posts')
 function parametazor($string, $object)
 {
     preg_match('/{(.*?)}/', $string, $matches);
+
     if (count($matches)) {
         $string = str_replace($matches[0], $object->{$matches[1]}, $string);
         $string = parametazor($string, $object);
@@ -884,7 +1006,8 @@ function generate_number($prefix)
 
 function get_customer_number()
 {
-    $number = generate_number('AMC');
+    $code = get_site_code();
+    $number = generate_number($code.'-C-');
     $data = check_customer_number($number);
     if ($data) {
         get_customer_number();
@@ -895,7 +1018,8 @@ function get_customer_number()
 
 function get_order_number()
 {
-    $number = generate_number('AMO');
+    $code = get_site_code();
+    $number = generate_number($code.'-O-');
     $data = check_order_number($number);
     if ($data) {
         get_order_number();
@@ -923,6 +1047,20 @@ function get_footer_links()
         ->select('footer_links.*', 'footer_links_translations.title', 'footer_links_translations.locale')
         ->where('footer_links_translations.locale', app()->getLocale())
         ->with('children')->get()->toArray();
+}
+
+function get_general_settings(){
+    $settings = new Settings();
+    $model = $settings->getEditableData('admin_general_settings');
+
+    return $model;
+}
+
+function get_social_icons(){
+    $settings = new Settings();
+    $model = $settings->getEditableData('admin_general_settings');
+    $icons = ($model && $model->social_media) ? json_decode($model->social_media,true) : [];
+    return $icons;
 }
 
 function colors()
@@ -1098,7 +1236,12 @@ function convert_price($price, $currency, $number_format = true, $withoutSymbol 
                 $price = round($price, -3);
             }
             if ($number_format) {
-                $price = number_format($price);
+                if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                    $price = number_format($price);
+                } else {
+                    $price = money_format('%(#10n',$price);
+                }
+
             }
             return ($withoutSymbol) ? $price : $default->symbol . "" . $price;
         } else {
@@ -1109,7 +1252,11 @@ function convert_price($price, $currency, $number_format = true, $withoutSymbol 
                     $price = round($price, -3);
                 }
                 if ($number_format) {
-                    $price = number_format($price);
+                    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                        $price = number_format($price);
+                    } else {
+                        $price = money_format('%(#10n',$price);
+                    }
                 }
                 return ($withoutSymbol) ? $price : $changed->symbol . "" . $price;
             }
@@ -1123,7 +1270,7 @@ function get_currency()
 {
     $default = site_default_currency();
 
-    return (\Cookie::get('currency')) ? \Cookie::get('currency')
+    return (\Cookie::get('currency') && \App\Models\SiteCurrencies::where('code',\Cookie::get('currency'))->exists()) ? \Cookie::get('currency')
         : (($default) ? $default->code : null);
 }
 
@@ -1135,6 +1282,7 @@ function get_symbol()
 
     return (new \App\Models\SiteCurrencies())->where('code', $code)->value('symbol');
 }
+
 
 [['code' => 'referral_name', 'description' => 'Invited user name'],
     ['code' => 'referral_last_name', 'description' => 'Invited user last name'],
@@ -1196,9 +1344,24 @@ function user_can_claim($user)
     return false;
 }
 
-function checkImage($img)
+function checkImage($img,$type=null)
 {
-    return (File::exists(base_path($img))) ? $img : no_image();
+    switch ($type){
+        case 'stock':$img= (File::exists(base_path().$img)) ? $img : stock_default_image();break;
+        case 'item':$img= (File::exists(base_path().$img)) ? $img : item_default_image();break;
+    }
+    return $img;
+
+}
+function stock_default_image(){
+    $settings= new Settings();
+    $settings = $settings->getEditableData('admin_defaults_settings');
+    return ($settings->stock_image)?$settings->stock_image:null;
+}
+function item_default_image(){
+    $settings= new Settings();
+    $settings = $settings->getEditableData('admin_defaults_settings');
+    return ($settings->stock_image)?$settings->item_image:null;
 }
 
 function no_image()
@@ -1213,6 +1376,13 @@ function media_image_tmb($path)
     return (File::exists(base_path($image)) && !File::isDirectory(base_path($image))) ? url($image) : no_image();
 
 }
+function media_image_tmb_path($path)
+{
+    $e = explode('/', $path);
+    $image = 'public'.DS.'media'.DS.'tmp'.DS. end($e);
+    return (File::exists(base_path($image)) && !File::isDirectory(base_path($image))) ? base_path($image) : false;
+
+}
 
 function user_avatar($id = null)
 {
@@ -1221,18 +1391,39 @@ function user_avatar($id = null)
         $user = $userRepo->find($id);
         if ($user) {
             if ($user->avatar) {
-                return "/storage/app/images/$user->email/" . $user->avatar;
+                return "/storage/app/images/users/$user->id/" . $user->avatar;
             }
         }
     } else {
         if (Auth::check()) {
             if (Auth::user()->avatar) {
-                return "/storage/app/images/".Auth::user()->email . "/" . Auth::user()->avatar;
+                return "/storage/app/images/users/".Auth::id() . "/" . Auth::user()->avatar;
             }
         }
     }
 
     return '/public/img/user.svg';
+}
+
+function user_avatar_class($id = null)
+{
+    if ($id) {
+        $userRepo = new \App\User();
+        $user = $userRepo->find($id);
+        if ($user) {
+            if ($user->avatar) {
+                return false;
+            }
+        }
+    } else {
+        if (Auth::check()) {
+            if (Auth::user()->avatar) {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 
@@ -1254,7 +1445,7 @@ function render_widgets($placeholder)
         if (has_permission(Auth::user()->role, $widget->widget) && isset($permissions[$widget->widget])) {
             $content = view($permissions[$widget->widget]['view'])->render();
             $html .= '
-      
+
             <div id="' . $widget->widget . '" style="position: relative" class="box--wall">
                       <div class="card panel panel-default dashboard--panel">
   <div class="card-header panel-heading box-header">
@@ -1275,7 +1466,7 @@ function render_widgets($placeholder)
                   ' . $content . '
                 </div></div>
 </div>
-                
+
             </div>';
         }
 
@@ -1388,5 +1579,47 @@ function getGoogleAlians()
         }
         return collect($emails);
     }
+}
+
+function main_pages_seo($main_page=null){
+    $HTML=' ';
+    if($main_page){
+        $seo= \App\Models\MainPagesSeo::where('page_name',$main_page)->first();
+        if($seo){
+            $HTML .= '<title>'.$seo->title.'</title>' . "\n\r";
+            $HTML .= '<meta property="og:image" content="'.$seo->image.'">' . "\n\r";
+            $HTML .= '<meta property="og:image:type" content="image/jpeg" />' . "\n\r";
+            $HTML .= '<meta property="og:image:width" content="400" />' . "\n\r";
+            $HTML .= '<meta property="og:image:height" content="300" />' . "\n\r";
+            $HTML .= '<meta property="og:title" content="'.$seo->title.'">' . "\n\r";
+            $HTML .= '<meta property="og:description" content="'.$seo->description.'">' . "\n\r";
+            $HTML .= '<meta property="og:keywords" content="'.$seo->keywords.'">' . "\n\r";
+        }
+
+    }
+    return $HTML;
+}
+
+
+function rich(){
+
+    $localBusiness = \Spatie\SchemaOrg\Schema::product()
+        ->name('Spatie')
+        ->image('https://e-cigar.com/public/media/drive/12/ff39e4af551574b9911e15aaedfb9119.png');
+
+    echo $localBusiness->toScript();
+}
+
+function UR_exists($url){
+    $headers=get_headers($url);
+    return stripos($headers[0],"200 OK")?true:false;
+}
+function getItemShortname($id){
+    $item=\App\Models\Items::find($id);
+    if($item){
+        return $item->short_name;
+    }
+    return null;
+
 }
 
