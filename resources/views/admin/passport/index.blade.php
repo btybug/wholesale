@@ -14,6 +14,6 @@
 
 @section('css')
     <!-- Styles -->
-    <script src="{{ asset('public/js/app.js') }}" defer></script>
+    <script src="{{ asset('public/js/app.js?v=2') }}" defer></script>
     <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
 @stop
