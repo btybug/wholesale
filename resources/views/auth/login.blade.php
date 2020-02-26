@@ -51,7 +51,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 text-right modal-accounts_btn-holder">
-                                    <button type="submit" class="btn text-uppercase btn-submit font-15 sign_in">Sign in</button>
+                                    <button type="button" class="btn text-uppercase btn-submit font-15 sign_in">Sign in</button>
                                 </div>
                             </div>
                             {!! Form::hidden('g-recaptcha-response',null,['class'=>'g-recaptcha-response']) !!}

@@ -1,6 +1,5 @@
 (function () {
-    $('#login-form').on('submit', function (ev) {
-        ev.preventDefault();
+    $('.sign_in').on('click', function (ev) {
 
         const GOOGLE_RECAPTCHA_KEY = $('meta[name="google-recaptcha-key"]').attr("content");
         grecaptcha.ready(() => {
