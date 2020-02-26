@@ -1,5 +1,4 @@
 <?php
-dd(123);
 /**
  * Created by PhpStorm.
  * User: sahak
