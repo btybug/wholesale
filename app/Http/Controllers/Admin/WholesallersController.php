@@ -41,6 +41,6 @@ class WholesallersController extends Controller
 
     public function synch(WholesaleService $service)
     {
-        dd($service->getAllItems()[0]);
+        dd($service->getAllItems()['items'][0]);
     }
 }
