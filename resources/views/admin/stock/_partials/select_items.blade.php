@@ -7,9 +7,8 @@
             <label for="searchStickers">
                 Search
             </label>
-            {!! Form::select('filters[]',$stickers,null,
-              ['id' => "searchStickers",'class' => 'select-2 main-select main-select-2arrows select2-hidden-accessible','style' => 'width:100%',
-              'multiple' => true,'data-section-id' => $uniqueId]) !!}
+            {!! Form::text('search',null,
+              ['id' => "searchStickers",'class' => 'form-control','style' => 'width:100%']) !!}
         </div>
         <div class="col-sm-2">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
@@ -17,7 +16,7 @@
         </div>
     </div>
 </div>
-<div class="items-box d-flex flex-column">
+<div class="items-box d-flex flex-column fix-modal--required">
     <div class="modal-body">
         <ul class="all-list modal-stickers--list">
             @include("admin.stock._partials.items_render")

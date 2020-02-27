@@ -5,7 +5,7 @@
             <h2 class="m-0">{{ ($model) ? $model->name : "Form Name" }}</h2>
         </div>
         <div class="card-body panel-body">
-           <div class="col-md-8">
+           <div class="col-xl-8">
            {!! Form::model($model,['class'=>'','url'=>route('post_admin_suppliers')]) !!}
            {!! Form::hidden('id') !!}
 

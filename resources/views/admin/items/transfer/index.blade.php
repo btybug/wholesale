@@ -3,44 +3,56 @@
 
 @stop
 @section('content')
-    <div class="coupons_new_page card panel panel-default">
-        <div class="card-header panel-heading">
-            <h3 class="m-0">Transfer Form</h3>
-        </div>
-        <div class="card-body panel-body">
-
-            <div class="col-md-8">
-                <div class="form-group row required">
-                    <label class="col-sm-2 control-label" for="input-code">
-                        <span data-toggle="tooltip" title="" data-original-title="">Item</span></label>
-                    <div class="col-sm-10">
-                        {!! Form::select('item_id',[null => 'Select'] + $items,null,[ 'class'=> 'form-control select-item']) !!}
-                    </div>
+    <div class="container-fluid">
+        <div class="card panel panel-default">
+            <div class="card-header panel-heading clearfix">
+                <h2 class="m-0 pull-left">{!! __('Transfers') !!}</h2>
+                <div class="pull-right">
+                    @ok('admin_items_new_transfer')<a class="btn btn-primary pull-right mr-1" href="{!! route('admin_items_new_transfer') !!}">
+                        New Transfer</a>@endok
                 </div>
-                <div class="form-group locations">
-
-                </div>
-
+            </div>
+            <div class="card-body panel-body">
+                <table id="orders-table" class="table table-style table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Item</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>QTY</th>
+                        <th>Created At</th>
+                    </tr>
+                    </thead>
+                </table>
             </div>
         </div>
     </div>
 @stop
-@section('css')
-    <link rel="stylesheet" href="{{asset('public/css/custom.css?v='.rand(111,999))}}">
-@stop
 @section('js')
     <script>
-
-
-        $("body").on('change','.select-item',function () {
-            let item_id = $(this).val();
-            $(".locations").html('');
-            AjaxCall("{{ route('admin_items_transfer_locations') }}", {item_id: item_id}, function (res) {
-                if (!res.error) {
-                    $(".locations").append(res.html);
-                }
+        $(function () {
+            $('#orders-table').DataTable({
+                ajax: "{!! route('datatable_all_transfers') !!}",
+                dom: 'Bflrtip',
+                displayLength: 10,
+                lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+                "scrollX": true,
+                buttons: [
+                    'csv', 'excel', 'pdf', 'print'
+                ],
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'user_id', name: 'user_id'},
+                    {data: 'item_id', name: 'item_id'},
+                    {data: 'from_id', name: 'from_id'},
+                    {data: 'to_id', name: 'to_id'},
+                    {data: 'qty', name: 'qty'},
+                    {data: 'created_at', name: 'created_at'}
+                ],
+                order: [ [0, 'desc'] ]
             });
-        })
-
+        });
     </script>
 @stop

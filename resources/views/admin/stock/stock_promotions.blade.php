@@ -64,6 +64,7 @@
                                        class="btn btn-primary btn-block add-promotions"><i
                                                 class="fa fa-plus mr-10"></i>Add promotion</a>
                                 </div>
+
                             </div>
                         </div>
                         <div class="col-sm-9">
