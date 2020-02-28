@@ -49,14 +49,14 @@
 <!--Subtotal-->
 <div class="mt-auto w-100 p-3">
     <div class="d-flex align-items-center justify-content-end w-100 mb-4">
-        <span class="d-inline-block font-18 text-sec-clr mr-3">Subtotal:</span>
+        <span class="d-inline-block font-18 text-sec-clr mr-3">{!! __('subtotal') !!}:</span>
         <span class="d-block cart-product-price font-24 font-sec-reg text-sec-clr">{{  convert_price(\Cart::session('wholesaler')->getSubTotal(),@$currency, false) }}</span>
     </div>
     <!--cart btn-s-->
     <div class="d-flex justify-content-between w-100">
-        <a href="{!! route('wholesaler_my_cart') !!}" class="cart-sidebar_view-btn btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-sec-clr rounded-0 pointer">View Cart</a>
+        <a href="{!! route('wholesaler_my_cart') !!}" class="cart-sidebar_view-btn btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-sec-clr rounded-0 pointer">{!! __('view_cart') !!}</a>
         @if(! \Cart::session('wholesaler')->isEmpty())
-            <a href="{!! route('wholesaler_check_out') !!}" class="cart-sidebar_check-btn btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase rounded-0 text-tert-clr pointer">Checkout</a>
+            <a href="{!! route('wholesaler_check_out') !!}" class="cart-sidebar_check-btn btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase rounded-0 text-tert-clr pointer">{!! __('checkout') !!}</a>
         @endif
     </div>
 

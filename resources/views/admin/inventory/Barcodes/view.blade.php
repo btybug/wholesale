@@ -3,8 +3,8 @@
     <div class="form-group row">
         <div class="col-md-8">
             <div class="row">
-                <label for="text" class="col-4 col-form-label">Code</label>
-                <div class="col-8">
+                <div class="col-md-8">
+                    <label for="text" class="col-4 col-form-label">Code</label>
                     <div class="d-flex">
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -17,6 +17,9 @@
                     </div>
 
                 </div>
+                <div class="col-md-4">
+                    {!! DNS1D::getBarcodeHTML($barcode->code, "EAN13",3,100,"black", true); !!}
+                </div>
             </div>
             <div class="row">
                 <label for="text" class="col-4 col-form-label">Related item</label>
@@ -28,5 +31,6 @@
     </div>
 @stop
 @section('js')
+
 
 @stop

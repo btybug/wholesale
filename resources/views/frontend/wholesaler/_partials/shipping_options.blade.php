@@ -1,8 +1,7 @@
 <div class="cart-delivery">
     <div class="head-delivery">
-        <h3 class="title">Delivery Methode</h3>
-        <p class="delivery-sec-title font-18">Select your delivery
-            service</p>
+        <h3 class="title">{!! __('delivery_method') !!}</h3>
+        <p class="delivery-sec-title font-18">{!! __('select_delivery_method') !!}</p>
     </div>
 
     @if($delivery)
@@ -23,9 +22,9 @@
                                                                     </span>
                                                                      <span class="method-right">
                                                                          <span class="method-item-title">{!! $option->courier->name !!}</span>
-                                                                         <span class="font-main-light method-item-info">Shipping: <span
+                                                                         <span class="font-main-light method-item-info">{!! __('Shipping') !!}: <span
                                                                                  class="text-red-clr">{{ convert_price($option->cost,$currency) }}</span></span>
-                                                                         <span class="font-main-light method-item-info">Delivery Time: {!! $option->time !!} days</span>
+                                                                         <span class="font-main-light method-item-info">{!! __('delivery_time') !!}: {!! $option->time !!} {!! __('days') !!}</span>
 
                                                                     </span>
                                                                 </span>

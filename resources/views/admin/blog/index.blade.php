@@ -4,21 +4,29 @@
 @stop
 @section('content')
     <div class="card panel panel-default">
-        <div class="card-header panel-heading clearfix">
+        <div class="card-header panel-heading d-flex flex-wrap justify-content-between align-items-center">
               <h2 class="m-0 pull-left">Posts</h2>
-               @ok('admin_blog_create') <div class="pull-right"><a class="btn btn-primary pull-right" href="{!! route('admin_blog_create') !!}">Add new</a></div>@endok
+               @ok('admin_blog_settings') <div class=""><a class="btn btn-warning pull-right" href="{!! route('admin_blog_settings') !!}">Settings</a></div>@endok
         </div>
-        <div class="card-body panel-body">
-            <select name="table_head" id="table_head_id" class="selectpicker" multiple>
-                <option value="ID" data-column="0" data-name="id">ID</option>
-                <option value="Title" data-column="1" data-name="title">Title</option>
-                <option value="Author" data-column="2" data-name="user_id">Author</option>
-                <option value="URL" data-column="3" data-name="url">URL</option>
-                <option value="Short Description" data-column="4" data-name="short_description">Short Description</option>
-                <option value="Status" data-column="5" data-name="status">Status</option>
-                <option value="Added/Last Modified Date" data-column="6" data-name="created_at">Added/Last Modified Date</option>
-                <option value="Action" data-column="7" data-name="actions">Action</option>
-            </select>
+        <div class="card-body panel-body pt-0">
+            <div class="d-flex justify-content-between mt-2">
+                <div>
+                    <select name="table_head" id="table_head_id" class="selectpicker" multiple>
+                        <option value="ID" data-column="0" data-name="id">ID</option>
+                        <option value="Title" data-column="1" data-name="title">Title</option>
+                        <option value="Author" data-column="2" data-name="user_id">Author</option>
+                        <option value="URL" data-column="3" data-name="url">URL</option>
+                        <option value="Short Description" data-column="4" data-name="short_description">Short Description</option>
+                        <option value="Status" data-column="5" data-name="status">Status</option>
+                        <option value="Added/Last Modified Date" data-column="6" data-name="created_at">Added/Last Modified Date</option>
+                        <option value="Action" data-column="7" data-name="actions">Action</option>
+                    </select>
+                </div>
+                <div class="ml-1">
+                    @ok('admin_blog_create') <div class=""><a class="btn btn-primary pull-right" href="{!! route('admin_blog_create') !!}">Add new</a></div>@endok
+                </div>
+            </div>
+
             <table id="posts-table" class="table table-style table-bordered" cellspacing="0" width="100%">
                 <thead>
                 <tr>
@@ -83,7 +91,10 @@
                     "processing": true,
                     "serverSide": true,
                     "bPaginate": true,
-                    dom: 'Bfrtip',
+                    "scrollX": true,
+                    dom: '<"d-flex justify-content-between align-items-baseline"lfB><rtip>',
+                    displayLength: 10,
+                    lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
                     buttons: [
                         'csv', 'excel', 'pdf', 'print'
                     ],

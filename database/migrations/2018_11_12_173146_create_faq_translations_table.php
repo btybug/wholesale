@@ -18,6 +18,7 @@ class CreateFaqTranslationsTable extends Migration
             $table->integer('faq_id')->unsigned();
             $table->string('locale')->index();
             $table->string('question');
+            $table->string('slug');
             $table->text('answer')->nullable();
             $table->unique(['faq_id','locale']);
             $table->foreign('faq_id')->references('id')->on('faq')->onDelete('cascade');

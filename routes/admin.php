@@ -5,6 +5,17 @@
  * Date: 31.12.2017
  * Time: 00:09
  */
+
+
+/**
+ * Created by PhpStorm.
+ * User: sahak
+ * Date: 31.12.2017
+ * Time: 00:09
+ */
+
+use App\Services\EAN13render;
+
 Route::get('/', 'Admin\AdminController@getDashboard')->name('admin_dashboard');
 Route::get('/mail-templates/{template}', 'Admin\EmailsNotificationsController@templates');
 
@@ -12,12 +23,19 @@ Route::group(['prefix' => 'find'], function () {
     Route::get('/', 'Admin\FindController@getIndex')->name('admin_find');
     Route::post('/call-find', 'Admin\FindController@postCallFind')->name('admin_find_call');
     Route::post('/products-find', 'Admin\FindController@postProductResults')->name('find_product_results');
+    Route::post('/items-find', 'Admin\FindController@postItemsResults')->name('find_items_results');
     Route::post('/orders-find', 'Admin\FindController@postOrdersResults')->name('find_orders_results');
     Route::post('/customers-find', 'Admin\FindController@postCustomersResults')->name('find_customers_results');
-});
-Route::group(['prefix' => 'purchases'], function () {
-    Route::get('/', 'Admin\PurchasesController@index')->name('admin_purchases');
-    Route::get('/import/{id}', 'Admin\PurchasesController@import')->name('admin_purchases_import');
+    Route::resource('customer', 'Find\CustomerController');
+    Route::resource('order', 'Find\OrderController');
+    Route::resource('products', 'Find\ProductController');
+    Route::get('items', 'Find\ItemsController@index');
+    Route::post('items/barcodes', 'Find\ItemsController@getBarcodes')->name('find_items_barcodes');
+    Route::post('items/qrcodes', 'Find\ItemsController@getQrcodes')->name('find_items_qrcodes');
+    Route::post('items/html', 'Admin\FindController@printHtmlBarcode')->name('find_items_barcode_html');
+    Route::post('items/edit', 'Find\ItemsController@getEditForm');
+    Route::post('items/save', 'Find\ItemsController@postSave');
+
 });
 
 Route::get('/profile', 'Admin\AdminController@getProfile')->name('admin_dashboard_profile');
@@ -66,6 +84,10 @@ Route::group(['prefix' => 'settings'], function () {
         Route::get('/connections', 'Admin\SettingsController@getConnections')->name('admin_settings_connections');
         Route::post('/connections', 'Admin\SettingsController@postConnections')->name('post_admin_settings_connections');
     });
+    Route::group(['prefix' => 'defaults'], function () {
+        Route::get('/', 'Admin\SettingsController@getDefaults')->name('admin_settings_defaults');
+        Route::post('/', 'Admin\SettingsController@saveDefaults')->name('post_admin_settings_save_defaults');
+    });
     Route::group(['prefix' => 'events'], function () {
         Route::get('/', 'Admin\EventsController@getIndex')->name('admin_settings_events');
     });
@@ -76,6 +98,9 @@ Route::group(['prefix' => 'settings'], function () {
 
         Route::get('/payment-gateways/cash', 'Admin\SettingsController@getStorePaymentsGatewaysCash')->name('admin_payment_gateways_cash');
         Route::post('/payment-gateways/cash', 'Admin\SettingsController@postStorePaymentsGatewaysCash')->name('post_admin_payment_gateways_cash');
+
+        Route::get('/printing', 'Admin\SettingsController@getStorePrinting')->name('admin_settings_printing');
+        Route::post('/printing', 'Admin\SettingsController@postStorePrinting')->name('admin_settings_printing_post');
 
         Route::group(['prefix' => 'shipping'], function () {
             Route::get('/', 'Admin\SettingsController@getGeoZones')->name('admin_settings_shipping');
@@ -136,9 +161,21 @@ Route::group(['prefix' => 'settings'], function () {
     });
 
 
+    Route::group(['prefix' => 'translations'], function () {
+        Route::get('/', 'Admin\TranslationsController@getIndex')->name('admin_settings_translations');
+        Route::post('/', 'Admin\TranslationsController@postIndex')->name('admin_settings_translations_post');
+
+        Route::get('/items', 'Admin\TranslationsController@getItems')->name('admin_settings_translations_items');
+        Route::post('/items', 'Admin\TranslationsController@postItems')->name('admin_settings_translations_items_post');
+
+        Route::get('/attributes', 'Admin\TranslationsController@getAttrs')->name('admin_settings_translations_attrs');
+        Route::post('/attributes', 'Admin\TranslationsController@postAttrs')->name('admin_settings_translations_attrs_post');
+    });
+
 });
 Route::group(['prefix' => 'emails-notifications'], function () {
     Route::get('/send-email', 'Admin\EmailsNotificationsController@sendEmail')->name('admin_emails_notifications_send_email');
+    Route::get('/settings', 'Admin\EmailsNotificationsController@settings')->name('admin_emails_notifications_settings');
     Route::get('/send-email/create', 'Admin\EmailsNotificationsController@sendEmailCreate')->name('create_admin_emails_notifications_send_email');
     Route::post('/send-email/create', 'Admin\EmailsNotificationsController@postSendEmailCreate')->name('post_create_admin_emails_notifications_send_email');
     Route::post('/send-email/create-send', 'Admin\EmailsNotificationsController@postSendEmailCreateSend')->name('post_create_send_admin_emails_notifications_send_email');
@@ -153,6 +190,7 @@ Route::group(['prefix' => 'emails-notifications'], function () {
     Route::post('/edit-template/{id?}', 'Admin\EmailsNotificationsController@postCreateOrUpdate')->name('post_admin_mail_create_templates');
 
     Route::get('/newsletters', 'Admin\EmailsNotificationsController@getNewsletters')->name('admin_emails_newsletters');
+    Route::post('/add-subscriber', 'Admin\EmailsNotificationsController@postAddSubscriber')->name('admin_emails_newsletters_add_subscribe');
     Route::post('/delete-newsletter', 'Admin\EmailsNotificationsController@postDeleteNewsletter')->name('admin_emails_newsletter_delete');
 });
 
@@ -161,14 +199,13 @@ Route::group(['prefix' => 'users'], function () {
     Route::get('/new', 'Admin\UserController@getNew')->name('admin_customers_new');
     Route::post('/new', 'Admin\UserController@postNew')->name('admin_customers_new_post');
 
-    Route::get('/wholesalers', 'Admin\UserController@showWholesallers')->name('admin_wholesalers');
-
     Route::get('/staff', 'Admin\UserController@showStaff')->name('admin_staff');
     Route::get('/staff/new', 'Admin\UserController@newStaff')->name('admin_staff_new');
     Route::post('/staff/new', 'Admin\UserController@postStaff')->name('admin_staff_new_post');
     Route::get('/edit/{id}', 'Admin\UserController@edit')->name('admin_users_edit');
     Route::get('/edit-staff/{id}', 'Admin\UserController@editStaff')->name('admin_staff_edit');
     Route::post('/edit-staff/{id}', 'Admin\UserController@postEditStaff')->name('post_admin_staff_edit');
+    Route::post('change-password', 'Admin\UserController@changePassword')->name('change.password');
 
     Route::post('/delete', 'Admin\UserController@delete')->name('admin_users_delete');
     Route::post('/delete-staff', 'Admin\UserController@deleteStaff')->name('admin_staff_delete');
@@ -187,8 +224,13 @@ Route::group(['prefix' => 'users'], function () {
     Route::post('/edit/{id}', 'Admin\UserController@postEdit')->name('post_admin_users_edit');
     Route::post('/send-reset-password-email', 'Admin\UserController@sendResetLinkEmail')->name('post_admin_users_reset_pass');
     Route::get('/activity/{id}', 'Admin\UserController@getUserActivity')->name('admin_users_activity');
+    Route::get('/verify/{id}', 'Admin\UserController@getUserVerify')->name('admin_users_verify');
 
-    Route::group(['prefix' => 'roles-mebership'], function () {
+    Route::get('/approve-review/{id}', 'Admin\UserController@getApproveReview')->name('admin_users_approve_review');
+    Route::get('/disable-review/{id}', 'Admin\UserController@getDisableReview')->name('admin_users_disable_review');
+    Route::get('/allow-edit-review/{id}', 'Admin\UserController@getAllowEditReview')->name('admin_users_allow_edit_review');
+
+    Route::group(['prefix' => 'roles-mebership', 'middleware' => 'superadmin'], function () {
         Route::get('/', 'Admin\RolesController@index')->name('admin_role_membership');
         Route::get('/create', 'Admin\RolesController@create')->name('admin_create_role');
         Route::post('/create', 'Admin\RolesController@postCreate')->name('post_admin_create_role');
@@ -248,6 +290,7 @@ Route::group(['prefix' => 'store'], function () {
 Route::group(['prefix' => 'blog'], function () {
     Route::get('/', 'Admin\PostController@index')->name('admin_blog');
     Route::get('create', 'Admin\PostController@create')->name('admin_blog_create');
+    Route::get('settings', 'Admin\PostController@settings')->name('admin_blog_settings');
     Route::post('delete', 'Admin\PostController@getDelete')->name('admin_post_delete');
     Route::get('edit/{id}', 'Admin\PostController@edit')->name('admin_post_edit');
     Route::post('create-new', 'Admin\PostController@newPost')->name('admin_new_post');
@@ -255,6 +298,14 @@ Route::group(['prefix' => 'blog'], function () {
         Route::get('/', 'Admin\ContactUsController@index')->name('admin_blog_contact_us');
         Route::get('/view/{id}', 'Admin\ContactUsController@getView')->name('admin_blog_contact_us_view');
         Route::post('/replay/{id}', 'Admin\ContactUsController@postReplay')->name('admin_post_blog_contact_us_replay');
+    });
+
+    Route::group(['prefix' => 'brands'], function () {
+        Route::get('/', 'Admin\BrandsController@index')->name('admin_blog_brands');
+        Route::get('/create', 'Admin\BrandsController@create')->name('admin_blog_brands_create');
+        Route::get('/edit/{id}', 'Admin\BrandsController@edit')->name('admin_blog_brands_edit');
+        Route::post('/create-or-edit', 'Admin\BrandsController@postCreateOrUpdateBrand')->name('admin_blog_brands_create_or_edit');
+        Route::get('/fix', 'Admin\BrandsController@fixBrands')->name('admin_blog_brands_fix');
     });
 
     Route::group(['prefix' => '/tickets'], function () {
@@ -265,9 +316,14 @@ Route::group(['prefix' => 'blog'], function () {
         Route::post('/new', 'Admin\TicketsController@postNew')->name('admin_tickets_new_save');
         Route::post('/reply', 'Admin\TicketsController@reply')->name('admin_tickets_reply');
         Route::get('/settings', 'Admin\TicketsController@getSettings')->name('admin_tickets_settings');
+        Route::get('/statuses/{type}', 'Admin\TicketsController@statuses')->name('admin_tickets_statuses');
         Route::post('/settings', 'Admin\TicketsController@postSettings')->name('admin_tickets_settings_save');
         Route::get('/close/{id}', 'Admin\TicketsController@getClose')->name('admin_tickets_close');
 
+    });
+
+    Route::group(['prefix' => '/reviews'], function () {
+        Route::get('/', 'Admin\ReviewsController@index')->name('admin_reviews');
     });
 
 //    Route::group(['prefix' => 'comments'], function () {
@@ -283,9 +339,19 @@ Route::group(['prefix' => 'blog'], function () {
 Route::group(['prefix' => 'faq'], function () {
     Route::get('/', 'Admin\FaqController@index')->name('admin_faq');
     Route::get('create', 'Admin\FaqController@create')->name('admin_faq_create');
+    Route::get('settings', 'Admin\FaqController@settings')->name('admin_faq_settings');
     Route::post('delete', 'Admin\FaqController@getDelete')->name('admin_faq_delete');
     Route::get('edit/{id}', 'Admin\FaqController@edit')->name('admin_faq_edit');
     Route::post('create-new', 'Admin\FaqController@newPost')->name('admin_faq_new');
+});
+
+Route::group(['prefix' => 'landings'], function () {
+    Route::get('/', 'Admin\LandingController@index')->name('admin_landings');
+    Route::get('create', 'Admin\LandingController@create')->name('admin_landings_create');
+    Route::post('delete', 'Admin\LandingController@getDelete')->name('admin_landings_delete');
+    Route::get('edit/{id}', 'Admin\LandingController@edit')->name('admin_landings_edit');
+    Route::post('edit/{id}', 'Admin\LandingController@postEdit')->name('admin_landings_edit_post');
+    Route::post('create', 'Admin\LandingController@postCreate')->name('admin_landings_new');
 });
 
 Route::group(['prefix' => 'manage-api'], function () {
@@ -303,9 +369,11 @@ Route::group(['prefix' => 'manage-api'], function () {
 Route::group(['prefix' => 'orders'], function () {
     Route::get('/', 'Admin\OrdersController@index')->name('admin_orders');
     Route::get('/manage/{id}', 'Admin\OrdersController@getManage')->name('admin_orders_manage');
+    Route::get('/edit/{id}', 'Admin\OrdersController@getEdit')->name('admin_orders_edit');
+    Route::post('/edit/{id}', 'Admin\OrdersController@postEdit')->name('admin_orders_edit_post');
     Route::get('/new', 'Admin\OrdersController@getNew')->name('admin_orders_new');
     Route::post('/add-note', 'Admin\OrdersController@addNote')->name('orders_add_note');
-    Route::get('/settings', 'Admin\OrdersController@getSettings')->name('admin_orders_settings');
+    Route::get('/settings', 'Admin\OrdersController@tickets')->name('admin_orders_settings');
     Route::post('/settings', 'Admin\OrdersController@postSettings')->name('admin_orders_settings_save');
     Route::post('/get-item', 'Admin\OrdersController@getItem')->name('orders_get_product');
 
@@ -323,11 +391,38 @@ Route::group(['prefix' => 'orders'], function () {
     Route::post('/order-new-customer-notes', 'Admin\OrdersController@postApplyCustomerNotes')->name('admin_orders_apply_customer_notes');
 
     Route::post('/cash-payment', 'Admin\OrdersController@orderCash')->name('admin_orders_new_cash');
-    Route::post('/stripe-charge', 'Admin\OrdersController@stripeCharge')->name('admin_orders_new_cash');
+    Route::post('/stripe-charge', 'Admin\OrdersController@stripeCharge')->name('admin_orders_new_stripe');
+
+    Route::group(['prefix' => 'invoices'], function () {
+        Route::get('/', 'Admin\InvoiceOrdersController@index')->name('admin_orders_invoice');
+        Route::get('/manage/{id}', 'Admin\InvoiceOrdersController@getManage')->name('admin_orders_invoice_manage');
+        Route::get('/edit/{id}', 'Admin\InvoiceOrdersController@getEdit')->name('admin_orders_invoice_edit');
+        Route::post('/edit/{id}', 'Admin\InvoiceOrdersController@postEdit')->name('admin_orders_invoice_edit_post');
+        Route::get('/new', 'Admin\InvoiceOrdersController@getNew')->name('admin_orders_invoice_new');
+        Route::post('/add-note', 'Admin\InvoiceOrdersController@addNote')->name('admin_orders_invoice_add_note');
+        Route::get('/settings', 'Admin\InvoiceOrdersController@getSettings')->name('admin_orders_invoice_settings');
+        Route::post('/settings', 'Admin\InvoiceOrdersController@postSettings')->name('admin_orders_invoice_settings_save');
+        Route::post('/get-item', 'Admin\InvoiceOrdersController@getItem')->name('admin_orders_invoice_get_product');
+
+        Route::post('/collecting/{id}', 'Admin\InvoiceOrdersController@postCollecting')->name('admin_orders_invoice_collecting');
+        Route::post('/get-item-by-id', 'Admin\InvoiceOrdersController@ItemById')->name('admin_orders_invoice_items_by_id');
+
+
+        Route::post('/get-user', 'Admin\InvoiceOrdersController@postGetUser')->name('admin_orders_invoice_get_user');
+        Route::post('/add-user', 'Admin\InvoiceOrdersController@postAddUser')->name('admin_orders_invoice_add_user');
+
+        Route::post('/add-to-cart', 'Admin\InvoiceOrdersController@postAddToCart')->name('shop_add_to_cart_admin_orders_invoice');
+        Route::post('/update-cart', 'Admin\InvoiceOrdersController@postUpdateQty')->name('shop_update_cart_admin_orders_invoice');
+        Route::post('/remove-from-cart', 'Admin\InvoiceOrdersController@postRemoveFromCart')->name('shop_remove_from_cart_admin_orders_invoice');
+        Route::post('/apply-coupon', 'Admin\InvoiceOrdersController@postApplyCoupon')->name('admin_orders_invoice_apply_coupon');
+        Route::post('/order-new-customer-notes', 'Admin\InvoiceOrdersController@postApplyCustomerNotes')->name('admin_orders_invoice_apply_customer_notes');
+
+        Route::post('/cash-payment', 'Admin\InvoiceOrdersController@orderCash')->name('admin_orders_invoice_new_cash');
+        Route::post('/stripe-charge', 'Admin\InvoiceOrdersController@stripeCharge')->name('admin_orders_invoice_new_cash');
+    });
 });
 
 Route::group(['prefix' => 'inventory'], function () {
-    Route::get('/', 'Admin\InventoryController@inventory')->name('admin_inventory');
     Route::group(['prefix' => 'warehouses'], function () {
         Route::get('/', 'Admin\WarehouseController@index')->name('admin_warehouses');
         Route::get('/new', 'Admin\WarehouseController@getNew')->name('admin_warehouses_new');
@@ -369,31 +464,45 @@ Route::group(['prefix' => 'inventory'], function () {
 
     Route::group(['prefix' => 'other'], function () {
         Route::get('/', 'Admin\OtherController@getIndex')->name('admin_inventory_other');
-        Route::get('/manage/{id?}', 'Admin\OtherController@getNew')->name('admin_inventory_others_new');
+        Route::get('/manage', 'Admin\OtherController@getNew')->name('admin_inventory_others_new');
+        Route::get('/edtit/{id}', 'Admin\OtherController@getNew')->name('admin_inventory_others_edit');
         Route::post('/new', 'Admin\OtherController@postOthers')->name('post_admin_inventory_others_new');
     });
 
     Route::group(['prefix' => 'transfer'], function () {
         Route::get('/', 'Admin\ItemsController@transfer')->name('admin_items_transfer');
-        Route::post('/', 'Admin\ItemsController@PostTransfer')->name('admin_transfer_post');
+        Route::get('/new', 'Admin\ItemsController@newTransfer')->name('admin_items_new_transfer');
+        Route::post('/new', 'Admin\ItemsController@PostTransfer')->name('admin_transfer_post');
         Route::post('/get-item-locations', 'Admin\ItemsController@postItemLocations')->name('admin_items_transfer_locations');
     });
 
     Route::group(['prefix' => 'items'], function () {
         Route::get('/', 'Admin\ItemsController@index')->name('admin_items');
+        Route::get('/archives', 'Admin\ItemsController@archives')->name('admin_items_archives');
         Route::get('/new', 'Admin\ItemsController@getNew')->name('admin_items_new');
-        Route::get('/new-bundle', 'Admin\ItemsController@getNewBundle')->name('admin_items_new_bundle');
         Route::post('/new', 'Admin\ItemsController@postNew')->name('post_admin_items_new');
+        Route::post('/edit-row', 'Admin\ItemsController@postItemRowEdit')->name('post_admin_items_edit_row');
+        Route::post('/multi-delete', 'Admin\ItemsController@postItemMultiDelete')->name('post_admin_items_multi_delete');
+        Route::get('/edit-rows/{ids}', 'Admin\ItemsController@postItemRowsEdit')->name('post_admin_items_edit_row_many');
+        Route::post('/edit-rows', 'Admin\ItemsController@postItemRowsEditSave')->name('post_admin_items_edit_row_many_save');
+        Route::post('/edit-row-save', 'Admin\ItemsController@postItemRowEditSave')->name('post_admin_items_edit_row_save');
         Route::get('/edit/{id}', 'Admin\ItemsController@getEdit')->name('admin_items_edit');
         Route::get('/purchase/{item_id}', 'Admin\ItemsController@getPurchase')->name('admin_items_purchase');
+        Route::get('/archive/{item_id}', 'Admin\ItemsController@putArchive')->name('admin_items_archive');
         Route::post('/add-package', 'Admin\ItemsController@addPackage')->name('admin_items_package_add');
         Route::post('/add-location', 'Admin\ItemsController@addLocation')->name('admin_items_location_add');
         Route::post('/get-specifications', 'Admin\ItemsController@getSpecification')->name('admin_items_get_specification');
         Route::post('/get-specifications-by-category', 'Admin\ItemsController@getSpecificationByCategory')->name('admin_items_get_specification_by_category');
+        Route::post('/render-barcode', 'Admin\ItemsController@renderBarcode')->name('admin_items_render_barcode');
+        Route::post('/get-download-html', 'Admin\ItemsController@getDownloadHtml')->name('admin_items_download_html');
+        Route::get('/download-code/{code}/{type?}/{item_id?}', 'Admin\ItemsController@downloadCode')->name('admin_items_download_code');
+        Route::get('/datatable-selections', 'Admin\ItemsController@datatableSelections')->name('admin_items_datatable_selections');
+
 
     });
     Route::group(['prefix' => 'barcode'], function () {
         Route::get('/', 'Admin\BarcodesController@getIndex')->name('admin_inventory_barcodes');
+        Route::post('/settings', 'Admin\BarcodesController@postSettings')->name('admin_inventory_barcodes_settings');
         Route::get('/new', 'Admin\BarcodesController@getNew')->name('admin_inventory_barcodes_new');
         Route::post('/new', 'Admin\BarcodesController@postNew')->name('post_admin_inventory_barcodes_new');
         Route::get('/view/{id}', 'Admin\BarcodesController@getBarcodeView')->name('admin_inventory_barcode_view');
@@ -406,14 +515,27 @@ Route::group(['prefix' => 'stock'], function () {
     Route::get('/new', 'Admin\StockController@stockNew')->name('admin_stock_new');
     Route::get('/edit/{id}', 'Admin\StockController@getStockEdit')->name('admin_stock_edit');
     Route::post('/delete', 'Admin\StockController@delete')->name('admin_stock_delete');
+
+    Route::post('/edit-row', 'Admin\StockController@postItemRowEdit')->name('post_admin_stock_edit_row');
+    Route::post('/multi-delete', 'Admin\StockController@postMultyDelete')->name('post_admin_stock_multi_delete');
+    Route::get('/edit-rows/{ids}', 'Admin\StockController@postItemRowsEdit')->name('post_admin_stock_edit_row_many');
+    Route::post('/edit-rows', 'Admin\StockController@postItemRowsEditSave')->name('post_admin_stock_edit_row_many_save');
+    Route::post('/edit-row-save', 'Admin\StockController@postItemRowEditSave')->name('post_admin_stock_edit_row_save');
+
     Route::group(['prefix' => 'offers'], function () {
         Route::get('/', 'Admin\StockController@stockOffers')->name('admin_stock_offers');
         Route::get('/new', 'Admin\StockController@offerNew')->name('admin_stock_new_offer');
         Route::get('/edit/{id}', 'Admin\StockController@getOfferEdit')->name('admin_stock_edit_offer');
     });
 
+    Route::group(['prefix' => 'settings'], function () {
+        Route::get('/', 'Admin\StockController@stockSettings')->name('admin_stock_settings');
+        Route::get('/categories/{type}', 'Admin\StockController@stockCategories')->name('admin_stock_categories');
+    });
+
 
     Route::post('/save-stock', 'Admin\StockController@postStock')->name('admin_stock_save');
+    Route::post('/copy-stock', 'Admin\StockController@postStockCopy')->name('admin_stock_copy');
     Route::post('/link-all', 'Admin\StockController@linkAll')->name('admin_stock_link_all');
     Route::post('/variation-form', 'Admin\StockController@variationForm')->name('admin_stock_variation_form');
     Route::post('/add-variation', 'Admin\StockController@addVariation')->name('admin_stock_variation_add');
@@ -425,7 +547,7 @@ Route::group(['prefix' => 'stock'], function () {
     Route::post('/get-filter-items', 'Admin\StockController@postFilterItems')->name('admin_stock_filter_items');
     Route::post('/variation-option-view', 'Admin\StockController@postVariationOptionsView')->name('admin_stock_variation_type_view');
 
-    Route::post('/edit-variation', 'Admin\StockController@editVariation')->name('admin_stock_variation_add');
+    Route::post('/edit-variation', 'Admin\StockController@editVariation')->name('admin_stock_variation_edit');
     Route::post('/get-option-by-id', 'Admin\StockController@getOptionById')->name('admin_stock_variation_get_option');
     Route::post('/get-specifications', 'Admin\StockController@getSpecification')->name('admin_stock_variation_get_specification');
     Route::post('/get-specifications-by-category', 'Admin\StockController@postSpecificationByCategory')->name('admin_stock_specif_by_category');
@@ -442,6 +564,7 @@ Route::group(['prefix' => 'stock'], function () {
     Route::post('/save-extra-option', 'Admin\StockController@saveExtraOptions')->name('admin_stock_extra_option_save');
 
     Route::post('/apply-discount', 'Admin\StockController@applyDiscount')->name('admin_stock_apply_discount');
+    Route::post('/main-item', 'Admin\StockController@mainItem')->name('admin_stock_main_item');
 });
 
 Route::get('/forum', 'Admin\ForumController@index')->name('admin_forum');
@@ -464,9 +587,6 @@ Route::group(['prefix' => '/tools'], function () {
 
     });
     Route::group(['prefix' => 'categories'], function () {
-        Route::get('/', 'Admin\CategoriesController@list')->name('admin_categories_list');
-
-        Route::get('/{type}', 'Admin\CategoriesController@getCategories')->name('admin_store_categories');
         Route::post('/get-form/{type}', 'Admin\CategoriesController@postCategoryForm')->name('admin_store_categories_form');
         Route::post('/update-parent/{type}', 'Admin\CategoriesController@postCategoryUpdateParent')->name('admin_store_categories_update_parent');
         Route::post('/create-or-update/{type}', 'Admin\CategoriesController@postCreateOrUpdateCategory')->name('admin_store_categories_new_or_update');
@@ -478,19 +598,11 @@ Route::group(['prefix' => '/tools'], function () {
     });
 
     Route::group(['prefix' => 'statuses'], function () {
-        Route::get('/', 'Admin\StatusController@getStatuses')->name('admin_stock_statuses');
-        Route::get('/manage/{type}', 'Admin\StatusController@getStatusesManage')->name('admin_stock_statuses_manage');
         Route::post('/manage/{id?}', 'Admin\StatusController@postStatusesManage')->name('post_admin_stock_statuses_manage');
         Route::post('/delete', 'Admin\StatusController@postStatusesDelete')->name('post_admin_stock_statuses_delete');
         Route::post('get-manage-form', 'Admin\StatusController@postGetManageStatusForm')->name('post_admin_stock_statuses_manage_form');
     });
 
-    Route::group(['prefix' => 'tags'], function () {
-        Route::get('/', 'Admin\TagsController@getIndex')->name('admin_stock_tags');
-        Route::post('/save', 'Admin\TagsController@tagsSave')->name('admin_stock_tags_save');
-        Route::post('/search', 'Admin\TagsController@postSearch')->name('admin_stock_tags_save');
-        Route::post('/delete', 'Admin\TagsController@postDelete')->name('admin_stock_tags_delete');
-    });
 
     Route::group(['prefix' => 'attributes'], function () {
         Route::get('/', 'Admin\AttributesController@getAttributes')->name('admin_store_attributes');
@@ -523,6 +635,8 @@ Route::group(['prefix' => '/tools'], function () {
 
 Route::group(['prefix' => 'comments'], function () {
     Route::get('/', 'Admin\CommentsController@index')->name('show_comments');
+    Route::get('/settings', 'Admin\CommentsController@getSettings')->name('admin_blog_comments_settings');
+    Route::post('/settings', 'Admin\CommentsController@postSettings')->name('admin_blog_comments_settings_post');
     Route::get('/approve/{id}', 'Admin\CommentsController@approve')->name('approve_comments');
     Route::get('/unapprove/{id}', 'Admin\CommentsController@unapprove')->name('unapprove_comments');
     Route::post('/delete', 'Admin\CommentsController@delete')->name('delete_comments');
@@ -546,9 +660,14 @@ Route::group(['prefix' => 'comments'], function () {
 
 //Route::get('/media', 'Admin\Media\IndexController@index')->name('admin_media');
 Route::group(['prefix' => 'media'], function () {
-    Route::get('/{folder?}', 'Admin\Media\IndexController@index')->name('admin_media');
+    Route::get('/clean-media', 'Admin\Media\IndexController@cleanMedia');
+    Route::get('/fix-db', 'Admin\Media\IndexController@fixDb');
+    Route::get('/fix-db-again', 'Admin\Media\IndexController@fixDbAgain');
+    Route::get('/fix-files', 'Admin\Media\IndexController@fixfiles');
     Route::get('/settings', 'Admin\Media\IndexController@getSettings')->name('admin_media_settinds');
     Route::post('/settings', 'Admin\Media\IndexController@postSettings')->name('post_admin_media_settings');
+    Route::get('/{folder?}', 'Admin\Media\IndexController@index')->name('admin_media');
+
 });
 Route::group(['prefix' => 'seo'], function () {
 
@@ -557,17 +676,33 @@ Route::group(['prefix' => 'seo'], function () {
 
     Route::get('/stocks', 'Admin\SeoController@getStocks')->name('admin_seo_stocks');
     Route::post('/stocks', 'Admin\SeoController@postStocks')->name('stocks_admin_seo_stocks');
-    Route::get('/pages', 'Admin\SeoController@getPages')->name('admin_seo_pages');
-    Route::post('/pages', 'Admin\SeoController@postPages')->name('post_admin_seo_pages');
+
+    Route::get('/brands', 'Admin\SeoController@getBrands')->name('admin_seo_brands');
+    Route::post('/brands', 'Admin\SeoController@postBrands')->name('post_admin_seo_brands');
 
     Route::get('/bulk', 'Admin\SeoController@getBulk')->name('admin_seo_bulk');
+
 
     Route::get('/bulk/edit-post-seo/{id}', 'Admin\SeoController@getBulkEditPost')->name('admin_seo_bulk_edit_post');
     Route::post('/bulk/edit-post-seo/{id}', 'Admin\SeoController@createOrUpdatePostSeo')->name('post_admin_seo_bulk_edit_post');
 
+    Route::get('/bulk/edit-brands-seo/{id}', 'Admin\SeoController@getBulkEditBrands')->name('admin_seo_bulk_edit_post');
+    Route::post('/bulk/edit-brands-seo/{id}', 'Admin\SeoController@createOrUpdateBrandsSeo')->name('post_admin_seo_bulk_edit_post');
+
     Route::get('/bulk/edit-stcok-seo/{id}', 'Admin\SeoController@getBulkEditProduct')->name('admin_seo_bulk_edit_stock');
     Route::post('/bulk/edit-stcok-seo/{id}', 'Admin\SeoController@createOrUpdateStockSeo')->name('post_admin_seo_bulk_edit_stock');
     Route::get('/bulk/products', 'Admin\SeoController@getBulkProducts')->name('admin_seo_bulk_products');
+    Route::get('/bulk/pages', 'Admin\SeoController@getMainPages')->name('admin_seo_bulk_pages');
+    Route::post('/main-pages/seo', 'Admin\SeoController@postMainPagesSeo')->name('post_admin_settings_main_pages_seo');
+    Route::get('/bulk/brands', 'Admin\SeoController@getBulkBrands')->name('admin_seo_bulk_brands');
+
+    Route::get('/bulk/products/edit-rows/{ids}', 'Admin\SeoController@postItemRowsEdit')->name('post_admin_seo_stock_edit_row_many');
+    Route::post('/bulk/products/edit-rows/{ids}', 'Admin\SeoController@postItemRowsEditSave')->name('post_admin_seo_stock_edit_row_many_save');
+
+    Route::get('/bulk/posts/edit-rows/{ids}', 'Admin\SeoController@postPostsRowsEdit')->name('post_admin_seo_post_edit_row_many');
+    Route::post('/bulk/posts/edit-rows/{ids}', 'Admin\SeoController@postPostsRowsEditSave')->name('post_admin_seo_post_edit_row_many_save');
+
+    Route::post('rich-properties', 'Admin\SeoController@getRichProperties')->name('gus');
 });
 
 Route::post('/get-categories', 'Admin\CategoriesController@getCategory')->name('admin_get_categories');
@@ -576,6 +711,61 @@ Route::post('/get-stocks', 'Admin\StockController@getStocks')->name('admin_inven
 Route::post('/get-special-offers', 'Admin\StockController@getSpecialOffers')->name('admin_inventary_get_special_offers');
 Route::post('/add-special-offers', 'Admin\StockController@addSpecialOffers')->name('admin_inventary_add_special_offers');
 Route::post('/save-tags', 'Admin\StoreController@saveTags')->name('admin_store_save_tags');
+
+
+Route::group(['prefix' => 'gmail'], function () {
+    Route::get('/', 'Admin\GmailController@index')->name('admin_gmail');
+    Route::get('/settings', 'Admin\GmailController@settings')->name('admin_gmail_settings');
+    Route::post('/settings', 'Admin\GmailController@postSettings')->name('post_admin_gmail_settings');
+
+    Route::get('analytics-login', 'Admin\Google\GoogleController@getAuthorization')->name('analytics_login');
+    Route::get('/oauth/callback', 'Admin\Google\GoogleController@getAnalyticCallBack');
+
+    Route::get('/oauth/gmail/logout', function () {
+        LaravelGmail::logout(); //It returns exception if fails
+        return redirect()->route('admin_settings_connections');
+    })->name('google_log_out');
+});
+
+
+Route::group(['prefix' => 'category'], function () {
+    Route::get('/', 'Admin\CategoriesController@list')->name('admin_category');
+});
+Route::group(['prefix' => 'reports'], function () {
+    Route::get('/', 'Admin\ReportsController@getList')->name('admin_reports');
+    Route::get('/new', 'Admin\ReportsController@getIndex')->name('admin_reports_new');
+});
+
+
+Route::get('/print-pdf/{id}', 'Admin\OrdersController@printPdf')->name('pdf_download');
+Route::get('/fix-barcodes', function () {
+    $barcodes = \App\Models\Barcodes::all()->pluck('code');
+    foreach ($barcodes as $code) {
+        try {
+            $path = EAN13render::get($code, public_path('barcodes' . DS . $code . '.png'));
+        } catch (Exception $e) {
+            echo $code . '<br>';
+        }
+
+    }
+    dd('finish');
+});
+Route::get('/datatable-test', function () {
+    return view('admin.test');
+});
+
+Route::group(['prefix' => 'ebay'], function () {
+    Route::get('/', 'Admin\EbayController@settings')->name('admin_ebay');
+    Route::get('/listing', 'Admin\EbayController@listing')->name('admin_ebay_listing');
+    Route::get('/orders', 'Admin\EbayController@orders')->name('admin_ebay_orders');
+    Route::get('/test', 'Admin\EbayController@test')->name('admin_ebay_test');
+    Route::get('/app', 'Admin\EbayController@app');
+    Route::get('/get-app-token', 'Admin\EbayController@getAppToken')->name('admin_ebay_get_app_token');
+    Route::get('/get-user-token', 'Admin\EbayController@getUserToken')->name('admin_ebay_get_user_token');
+    Route::get('/auth-accepted', 'Admin\EbayController@getUserTokenBack');
+    Route::get('/get-account', 'Admin\EbayController@getAccount')->name('admin_ebay_get_account');
+
+});
 
 
 Route::group(['prefix' => 'import'], function () {
@@ -592,19 +782,6 @@ Route::group(['prefix' => 'import'], function () {
 
     Route::post("/view_file", 'Admin\ImportController@view_file')->name('view_file');
 });
-Route::group(['prefix' => 'gmail'], function () {
-    Route::get('/', 'Admin\GmailController@index')->name('admin_gmail');
-    Route::get('/settings', 'Admin\GmailController@settings')->name('admin_gmail_settings');
-    Route::post('/settings', 'Admin\GmailController@postSettings')->name('post_admin_gmail_settings');
-
-    Route::get('analytics-login', 'Admin\Google\GoogleController@getAuthorization')->name('analytics_login');
-    Route::get('/oauth/callback', 'Admin\Google\GoogleController@getAnalyticCallBack');
-
-    Route::get('/oauth/gmail/logout', function () {
-        LaravelGmail::logout(); //It returns exception if fails
-        return redirect()->route('admin_settings_connections');
-    })->name('google_log_out');
-});
 
 Route::group(['prefix' => 'wholesellers'], function () {
     Route::get('/', 'Admin\WholesallersController@index')->name('admin_wholesallers');
@@ -615,7 +792,5 @@ Route::group(['prefix' => 'wholesellers'], function () {
 Route::group(['prefix' => 'passport'], function () {
     Route::get('/', 'Admin\PassportController@index')->name('admin_passport');
 });
-
-Route::get('/print-pdf/{id}', 'Admin\OrdersController@printPdf')->name('pdf_download');
 
 

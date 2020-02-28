@@ -85,10 +85,10 @@ class GoogleController extends Controller
             $ga->setRedirectUri(url(env('GOOGLE_REDIRECT_URI')));
             $ga->setAccessType ("offline");
             $ga->setApprovalPrompt ("force");
-            $ga->authenticate($request->code);
+            $ga->fetchAccessTokenWithAuthCode($request->code);
             $auth = $ga->getAccessToken();
             if (isset($auth['access_token'])) {
-                $plus = new \Google_Service_Plus($ga);
+                $plus = new \Google_Service_Gmail($ga);
                 $ga->accessToken=$accessToken = $auth['access_token'];
                 $refreshToken = $auth['refresh_token'];
                 $tokenExpires = $auth['expires_in'];
@@ -99,9 +99,11 @@ class GoogleController extends Controller
                     'expires_in'=>$tokenExpires,
                     'token_created'=>$tokenCreated,
                     'created' => time(),
-                    'email'=> $plus->people->get('me')->emails[0]->value,
+                    'email'=> 'sahak@ukdevplus.co.uk',
+//                    'email'=> $plus->people->get('me')->emails[0]->value,
 
                 ];
+//                dd($data);
                 $client=@json_decode(File::get(storage_path('/app/gmail/tokens/gmail-json.json')),true);
                     File::put(storage_path('/app/gmail/tokens/gmail-json.json'),json_encode($data,true));
                     \Session::put('oauth_access_token', $accessToken);

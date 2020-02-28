@@ -13,6 +13,14 @@ use App\Services\google\GoogleAnalyticsAPI;
 use File;
 
 
+/**
+ * App\Models\GoogleSettings
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GoogleSettings newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GoogleSettings newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GoogleSettings query()
+ * @mixin \Eloquent
+ */
 class GoogleSettings extends Settings
 {
 

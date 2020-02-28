@@ -20,6 +20,7 @@ class CreateStockVariationDiscountsTable extends Migration
             $table->unsignedInteger('qty')->nullable();
             $table->unsignedInteger('from')->nullable();
             $table->unsignedInteger('to')->nullable();
+            $table->unsignedInteger('ordering')->nullable();
             $table->timestamps();
 
             $table->foreign('variation_id')->references('id')->on('stock_variations')->onDelete('cascade');

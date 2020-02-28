@@ -14,6 +14,9 @@
                     <button class="btn btn-info">Save</button>
                 </div>
                 <div class="clearfix"></div>
+                <div class="text-right mb-2">
+                    <button type="button" class="btn btn-primary add-section" data-lang="gb" data-block="{!! count($footer_links) !!}"><i class="fa fa-plus"></i></button>
+                </div>
                 <div class="tab-content setting-general-footer--tabs">
                     <div class="tab-pane fade active in show" id="tab1"
                          aria-labelledby="tab1-tab">
@@ -39,17 +42,18 @@
                                                         <div class="card-header panel-heading">Panel Header
                                                             <div>
                                                                 <button type="button"
-                                                                        class="btn btn-primary add-section"
+{{--                                                                        class="btn btn-primary add-section"--}}
+                                                                        class="btn btn-danger remove-section"
                                                                         data-lang="{!!strtolower($language->code)!!}"
                                                                         data-block="0"><i
-                                                                            class="fa fa-plus"></i></button>
+                                                                            class="fa fa-minus"></i></button>
                                                             </div>
                                                         </div>
                                                         <div class="card-body panel-body">
                                                             <!-- Text input-->
                                                             <div class="form-group">
                                                                 <div class="row mb-20">
-                                                                    <label class="col-md-4 control-label col-form-label text-right"
+                                                                    <label class="col-md-4 control-label col-form-label text-md-right"
                                                                            for="textinput">Name</label>
                                                                     <div class="col-md-4">
                                                                         {!! Form::text('translatable['.strtolower($language->code).'][name][0]',null,['class'=>'form-control input-md']) !!}
@@ -60,27 +64,33 @@
                                                                 <div class="links">
                                                                     <div class="form-group row">
                                                                         <div class="col-md-5">
-                                                                            <label class="col-md-4 control-label col-form-label text-right"
-                                                                                   for="textinput">Title</label>
-                                                                            <div class="col-md-8">
-                                                                                {!! Form::text('translatable['.strtolower($language->code).'][title][0][]',null,['class'=>'form-control input-md']) !!}
+                                                                            <div class="row">
+                                                                                <label class="col-md-4 control-label col-form-label text-md-right"
+                                                                                       for="textinput">Title</label>
+                                                                                <div class="col-md-8">
+                                                                                    {!! Form::text('translatable['.strtolower($language->code).'][title][0][]',null,['class'=>'form-control input-md']) !!}
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-5">
-                                                                            <label class="col-md-4 control-label col-form-label text-right"
-                                                                                   for="textinput">Link</label>
-                                                                            <div class="col-md-8">
-                                                                                {!! Form::text('translatable['.strtolower($language->code).'][link][0][]',null,['class'=>'form-control input-md']) !!}
+                                                                            <div class="row">
+                                                                                <label class="col-md-4 control-label col-form-label text-md-right"
+                                                                                       for="textinput">Link</label>
+                                                                                <div class="col-md-8">
+                                                                                    {!! Form::text('translatable['.strtolower($language->code).'][link][0][]',null,['class'=>'form-control input-md']) !!}
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-2">
-                                                                            <div class="col-md-4">
-                                                                                <button type="button"
-                                                                                        class="btn btn-success add-link"
-                                                                                        data-lang="{!!strtolower($language->code)!!}"
-                                                                                        data-block="0"><i
+                                                                            <div class="row">
+                                                                                <div class="col-md-4">
+                                                                                    <button type="button"
+                                                                                            class="btn btn-success add-link"
+                                                                                            data-lang="{!!strtolower($language->code)!!}"
+                                                                                            data-block="0"><i
                                                                                             class="fa fa-plus"></i>
-                                                                                </button>
+                                                                                    </button>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -96,17 +106,18 @@
                                                             <div class="card-header panel-heading">Panel Header
                                                                 <div>
                                                                     <button type="button"
-                                                                            class="btn btn-primary add-section"
+{{--                                                                            class="btn btn-primary add-section"--}}
+                                                                            class="btn btn-danger remove-section"
                                                                             data-lang="{!!strtolower($language->code)!!}"
                                                                             data-block="{!! $key !!}"><i
-                                                                                class="fa fa-plus"></i></button>
+                                                                                class="fa fa-minus"></i></button>
                                                                 </div>
                                                             </div>
                                                             <div class="card-body panel-body">
                                                                 <!-- Text input-->
                                                                 <div class="form-group">
                                                                     <div class="row mb-20">
-                                                                        <label class="col-md-4 control-label col-form-label text-right"
+                                                                        <label class="col-md-4 control-label col-form-label text-md-right"
                                                                                for="textinput">Name</label>
                                                                         <div class="col-md-4">
                                                                             {!! Form::text('translatable['.strtolower($language->code).'][name]['.$key.']',$footer_link['title'],['class'=>'form-control input-md']) !!}
@@ -119,7 +130,7 @@
                                                                             <div class="row">
                                                                                 <div class="col-md-5">
                                                                                     <div class="row">
-                                                                                        <label class="col-md-4 control-label col-form-label text-right"
+                                                                                        <label class="col-md-4 control-label col-form-label text-md-right"
                                                                                                for="textinput">Title</label>
                                                                                         <div class="col-md-8">
                                                                                             {!! Form::text('translatable['.strtolower($language->code).'][title]['.$key.'][]',$child['title'],['class'=>'form-control input-md']) !!}
@@ -129,7 +140,7 @@
                                                                                 </div>
                                                                                 <div class="col-md-5">
                                                                                     <div class="row">
-                                                                                        <label class="col-md-4 control-label col-form-label text-right"
+                                                                                        <label class="col-md-4 control-label col-form-label text-md-right"
                                                                                                for="textinput">Link</label>
                                                                                         <div class="col-md-8">
                                                                                             {!! Form::text('translatable['.strtolower($language->code).'][link]['.$key.'][]',$child['link'],['class'=>'form-control input-md']) !!}
@@ -141,12 +152,15 @@
                                                                                     <div class="row">
                                                                                         <div class="col-md-4">
                                                                                             @if($loop->first)
+{{--                                                                                                <button type="button"--}}
+{{--                                                                                                        class="btn btn-primary add-link"--}}
+{{--                                                                                                        data-lang="{!!strtolower($language->code)!!}"--}}
+{{--                                                                                                        data-block="{!! $key !!}"><i--}}
+{{--                                                                                                            class="fa fa-plus"></i>--}}
+{{--                                                                                                </button>--}}
                                                                                                 <button type="button"
-                                                                                                        class="btn btn-primary add-link"
-                                                                                                        data-lang="{!!strtolower($language->code)!!}"
-                                                                                                        data-block="{!! $key !!}"><i
-                                                                                                            class="fa fa-plus"></i>
-                                                                                                </button>
+                                                                                                        class="btn btn-danger remove-link"><i
+                                                                                                        class="fa fa-minus"></i></button>
                                                                                             @else
                                                                                                 <button type="button"
                                                                                                         class="btn btn-danger remove-link"><i
@@ -160,6 +174,18 @@
 
                                                                         </div>
                                                                             @endforeach
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-2 offset-md-10">
+                                                                            <div class="row">
+                                                                                <div class="col-md-4">
+                                                                                    <button type="button" class="btn btn-primary add-link">
+                                                                                        <i class="fa fa-plus"></i>
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -180,6 +206,7 @@
 
         </div>
         <script type="template" id="add-section">
+
             <div class="card panel panel-default mb-3">
                 <div class="card-header panel-heading">Panel Header
                     <div class="pull-right">
@@ -201,7 +228,7 @@
                             <div class="row">
                                 <div class="col-md-5">
                                     <div class="row">
-                                        <label class="col-md-4 control-label col-form-label text-right" for="textinput">Title</label>
+                                        <label class="col-md-4 control-label col-form-label text-md-right" for="textinput">Title</label>
                                         <div class="col-md-8">
                                             {!! Form::text('translatable[{code}][title][{block}][]',null,['class'=>'form-control input-md']) !!}
 
@@ -211,7 +238,7 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="row">
-                                        <label class="col-md-4 control-label col-form-label text-right" for="textinput">Link</label>
+                                        <label class="col-md-4 control-label col-form-label text-md-right" for="textinput">Link</label>
                                         <div class="col-md-8">
                                             {!! Form::text('translatable[{code}][link][{block}][]',null,['class'=>'form-control input-md']) !!}
                                         </div>
@@ -239,7 +266,7 @@
                 <div class="row">
                     <div class="col-md-5">
                         <div class="row">
-                            <label class="col-md-4 control-label col-form-label text-right" for="textinput">Title</label>
+                            <label class="col-md-4 control-label col-form-label text-md-right" for="textinput">Title</label>
                             <div class="col-md-8">
                                 {!! Form::text('translatable[{code}][title][{block}][]',null,['class'=>'form-control input-md']) !!}
                             </div>
@@ -248,7 +275,7 @@
                     </div>
                     <div class="col-md-5">
                         <div class="row">
-                            <label class="col-md-4 control-label col-form-label text-right" for="textinput">Link</label>
+                            <label class="col-md-4 control-label col-form-label text-md-right" for="textinput">Link</label>
                             <div class="col-md-8">
                                 {!! Form::text('translatable[{code}][link][{block}][]',null,['class'=>'form-control input-md']) !!}
                             </div>
@@ -285,7 +312,7 @@
                         let block = ($(this).attr('data-block') / 1) + 1
                         html = html.replace(/{block}/g, block);
                         $(this).attr('data-block', block)
-                        $(this).closest('.panel-group').append(html);
+                        $(this).closest('.form-horizontal').find('.panel-group').append(html);
                     });
                     $('body').on('click', '.remove-section', function () {
                         $(this).closest('.panel').remove();
@@ -295,7 +322,7 @@
                         let html = $('#add-link').html();
                         html = html.replace(/{code}/g, $(this).attr('data-lang'));
                         html = html.replace(/{block}/g, $(this).attr('data-block'));
-                        $(this).closest('.links').append(html);
+                        $(this).closest('.card-body').find('.links').append(html);
                     });
 
                     $('body').on('click', '.remove-link', function () {

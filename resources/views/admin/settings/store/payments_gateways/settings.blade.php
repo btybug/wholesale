@@ -7,7 +7,7 @@
         <div class="card-header panel-heading"><h2 class="m-0">Stripe</h2></div>
         <div class="card-body panel-body">
             <div class="row">
-                <div class="col-md-9">
+                <div class="col-xl-9 col-lg-11">
                     {!! Form::model($model,['class'=>''])!!}
                     <div class="form-group row">
                         <label for="text" class="control-label col-sm-3">Payment Name</label>

@@ -7,10 +7,10 @@
            <h2 class="card-header panel-heading mt-0">{{ ($model) ? $model->subject : "Add ticket" }}</h2>
           <div class="card-body panel-body">
               <div class="row">
-                  <div class="col-md-7 ">
+                  <div class="col-xl-8 col-sm-9">
                       <div class="subject-wall">
                           <div class="row d-flex">
-                              <div class="col-md-3 col-xs-12">
+                              <div class="col-xl-3 col-lg-4">
                                   <div class="user-image-name">
                                       <div class="user-image">
                                           <img src="{{ user_avatar() }}"
@@ -21,7 +21,7 @@
                                       </div>
                                   </div>
                               </div>
-                              <div class="col-md-9 col-xs-12">
+                              <div class="col-xl-9 col-lg-8">
                                   <div class="user-content h-100">
                                       <h3>{!! $model->subject !!}</h3>
                                       <p class="info">
@@ -101,7 +101,7 @@
                           </div>
                       </div>
                   </div>
-                  <div class="col-md-5 ">
+                  <div class="col-xl-4 col-sm-3">
                       {!! Form::model($model,['url' => route('admin_tickets_edit_post',$model->id), 'id' => 'ticket_form','files' => true]) !!}
                       {!! Form::hidden('id',null) !!}
                       <div class="card panel panel-default">
@@ -114,8 +114,8 @@
                          <div class="card-body panel-body">
                              <div class="status-wall wall">
                                  <div class="row form-group">
-                                     {{Form::label('status', 'Status',['class' => 'col-sm-3'])}}
-                                     <div class="col-sm-9">
+                                     {{Form::label('status', 'Status',['class' => 'col-xl-3'])}}
+                                     <div class="col-xl-9">
                                          {!! Form::select('status_id',$statuses,null,
                                                      ['class' => 'form-control','id'=> 'status']) !!}
                                      </div>
@@ -123,10 +123,10 @@
                              </div>
                              <div class="tag-wall wall">
                                  <div class="row form-group">
-                                     <label class="col-sm-3 control-label" for="input-category"><span
+                                     <label class="col-xl-3 control-label" for="input-category"><span
                                                  data-toggle="tooltip" title=""
                                                  data-original-title="Choose all products under selected category.">Tags</span></label>
-                                     <div class="col-sm-9">
+                                     <div class="col-xl-9">
                                          <input type="text" name="" value="" placeholder="Tags"
                                                 id="input-tags" class="form-control" autocomplete="off">
                                          <ul class="dropdown-menu"></ul>
@@ -151,8 +151,8 @@
                              </div>
                              <div class="status-wall wall">
                                  <div class="row form-group">
-                                     {{Form::label('category_id', 'Category',['class' => 'col-sm-3'])}}
-                                     <div class="col-sm-9">
+                                     {{Form::label('category_id', 'Category',['class' => 'col-xl-3'])}}
+                                     <div class="col-xl-9">
                                          {!! Form::select('category_id',$categories,null,
                                                      ['class' => 'form-control','id'=> 'category']) !!}
                                      </div>
@@ -160,8 +160,8 @@
                              </div>
                              <div class="status-wall wall">
                                  <div class="row">
-                                     {{Form::label('priority_id', 'Priority',['class' => 'col-sm-3'])}}
-                                     <div class="col-sm-9">
+                                     {{Form::label('priority_id', 'Priority',['class' => 'col-xl-3'])}}
+                                     <div class="col-xl-9">
                                          {!! Form::select('priority_id',$priorities,null,
                                                      ['class' => 'form-control','id'=> 'priority']) !!}
                                      </div>
@@ -173,8 +173,8 @@
                              @if($model->category && $model->category->slug == 'order')
                                  <div class="status-wall wall">
                                      <div class="row form-group">
-                                         {{Form::label('order_id', 'Order Number',['class' => 'col-sm-3'])}}
-                                         <div class="col-sm-9">
+                                         {{Form::label('order_id', 'Order Number',['class' => 'col-xl-3'])}}
+                                         <div class="col-xl-9">
                                              {!! Form::select('order_id',$model->author->orders->pluck('code','id'),null,['class'=>'form-control']) !!}
                                          </div>
                                      </div>
@@ -182,8 +182,8 @@
                              @elseif($model->category && $model->category->slug == 'product')
                                      <div class="status-wall wall">
                                          <div class="row form-group">
-                                             {{Form::label('product_id', 'Product',['class' => 'col-sm-3'])}}
-                                             <div class="col-sm-9">
+                                             {{Form::label('product_id', 'Product',['class' => 'col-xl-3'])}}
+                                             <div class="col-xl-9">
                                                  {!! Form::select('product_id',\App\Models\Stock::all()->pluck('name','id'),null,['class'=>'form-control']) !!}
                                              </div>
                                          </div>
@@ -193,8 +193,8 @@
 
                              <div class="status-wall wall">
                                  <div class="row form-group">
-                                     {{Form::label('staff', 'Responsible staff',['class' => 'col-sm-3'])}}
-                                     <div class="col-sm-9">
+                                     {{Form::label('staff', 'Responsible staff',['class' => 'col-xl-3'])}}
+                                     <div class="col-xl-9">
                                          {!! Form::select('staff_id',$staff,null,
                                                      ['class' => 'form-control','id'=> 'staff']) !!}
                                      </div>

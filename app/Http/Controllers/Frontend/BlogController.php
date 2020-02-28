@@ -5,12 +5,20 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Posts;
+use App\Models\Settings;
 use View;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
     protected $view='frontend.blog';
+
+    public $settings;
+
+    public function __construct(Settings $settings)
+    {
+        $this->settings = $settings;
+    }
 
     public function index(Request $request)
     {
@@ -23,7 +31,12 @@ class BlogController extends Controller
 
     public function getSingle($post_url)
     {
-        $post = Posts::active()->where('url',$post_url)->first();
+        $post = Posts::leftJoin('posts_translations','posts.id','posts_translations.posts_id')
+            ->where('posts.status',true)
+            ->where('posts_translations.url',$post_url)
+            ->where('posts_translations.locale','gb')
+            ->first();
+
         if(! $post) abort(404);
 
         $relatedPosts = Posts::leftJoin('post_categories','posts.id','post_categories.post_id')
@@ -33,12 +46,23 @@ class BlogController extends Controller
             ->orderBy('posts.created_at',"asc")->take(6)->get();
 
         $comments = $post->comments()->main()->get();
-        return $this->view('single_post',compact('post','comments','relatedPosts'));
+        $ads = $this->settings->getEditableData('single_post');
+        if($ads && isset($ads['data'])){
+            $ads = json_decode($ads['data'],true);
+        }
+
+        return $this->view('single_post',compact('post','comments','relatedPosts','ads'));
     }
 
-    public function addComment(Request $request)
+    public function addComment(Request $request,Settings $settings)
     {
         $data = $request->all();
+        $setting = $settings->getEditableData('admin_comments_setting');
+
+        if($setting->status === null){
+            $message = "Something is wrong, please try again later";
+            return \Response::json(['success' => false,'message' => $message,'html' => '']);
+        }
 
         if(\Auth::check()){
             $rules = [
@@ -48,7 +72,7 @@ class BlogController extends Controller
 
             $result = [
                 'post_id' => $data['post_id'],
-                'status' => 1,
+                'status' => $setting->status,
                 'parent_id' => (isset($data['parent_id'])) ? $data['parent_id'] : null,
                 'author_id' => \Auth::id(),
                 'comment' => trim(htmlspecialchars($data['comment']))
@@ -64,7 +88,7 @@ class BlogController extends Controller
 
             $result = [
                 'post_id' => $data['post_id'],
-                'status' => 1,
+                'status' => $setting->status,
                 'comment' => trim(htmlspecialchars($data['comment'])),
                 'parent_id' => (isset($data['parent_id'])) ? $data['parent_id'] : null,
                 'guest_name' => trim(htmlspecialchars($data['guest_name'])),
@@ -82,8 +106,33 @@ class BlogController extends Controller
         $comment->create($result);
         $post = Posts::find($data['post_id']);
         $comments = $post->comments()->main()->get();
-        $html = \View::make('frontend.blog.single_post_comments',compact('comments'))->render();
+        if($setting->status == 1){
 
-        return \Response::json(['success' => true,'message' => 'Success','html' => $html]);
+            $html = \View::make('frontend.blog.single_post_comments',compact('comments'))->render();
+            $message = "Success";
+            $render = true;
+        }else{
+            $html = '';
+            $message = 'Your comment under admin confirmation..., Thank you for your activity !';
+            $render = false;
+        }
+
+        return \Response::json(['success' => true,'message' => $message,'html' => $html,'render' => $render]);
+    }
+
+    public function deleteComment(Request $request,Settings $settings)
+    {
+        $setting = $settings->getEditableData('admin_comments_setting');
+        $id = $request->get('id');
+        if($setting && $setting->user_delete == 1){
+           $comment =  Comment::where('id',$id)->where('author_id',\Auth::id())->first();
+           if($comment){
+               $comment->delete();
+               return \Response::json(['success' => true,'message' => "Your comment deleted successfully!!!"]);
+           }else{
+               return \Response::json(['success' => true,'message' => "You can't delete that comment"]);
+           }
+        }
+        return \Response::json(['success' => false,'message' => "Fails !!!"]);
     }
 }

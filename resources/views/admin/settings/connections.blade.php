@@ -11,7 +11,7 @@
             <div class="tab-content">
                 <div class="tab-pane fade active in show" id="admin_settings_general">
                     <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-xl-9 col-lg-11">
                             <div class="card panel panel-default mb-3">
                                 <div class="card-header panel-heading">SMTP SERVICE</div>
                                 <div class="card-body panel-body">
@@ -20,54 +20,54 @@
                                     <fieldset>
                                         <!-- Text input-->
                                         <div class="form-group row">
-                                            <label class="col-md-4 control-label col-form-label text-right"
+                                            <label class="col-xl-4 col-sm-4 control-label col-form-label text-sm-right"
                                                    for="textinput">MAIL DRIVER</label>
-                                            <div class="col-md-4">
+                                            <div class="col-xl-4 col-sm-8">
                                                 {!! Form::text('MAIL_DRIVER',env('MAIL_DRIVER'),['class'=>'form-control input-md']) !!}
                                             </div>
                                         </div>
                                         <!-- Text input-->
                                         <div class="form-group row">
-                                            <label class="col-md-4 control-label col-form-label text-right"
+                                            <label class="col-xl-4 col-sm-4  control-label col-form-label text-sm-right"
                                                    for="textinput">MAIL HOST</label>
-                                            <div class="col-md-4">
+                                            <div class="col-xl-4 col-sm-8">
                                                 {!! Form::text('MAIL_HOST',env('MAIL_HOST'),['class'=>'form-control input-md']) !!}
                                             </div>
                                         </div>
                                         <!-- Text input-->
                                         <div class="form-group row">
-                                            <label class="col-md-4 control-label col-form-label text-right"
+                                            <label class="col-xl-4 col-sm-4  control-label col-form-label text-sm-right"
                                                    for="textinput">MAIL PORT</label>
-                                            <div class="col-md-4">
+                                            <div class="col-xl-4 col-sm-8">
                                                 {!! Form::text('MAIL_PORT',env('MAIL_PORT'),['class'=>'form-control input-md']) !!}
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-md-4 control-label col-form-label text-right"
+                                            <label class="col-xl-4 col-sm-4 control-label col-form-label text-sm-right"
                                                    for="textinput">MAIL USERNAME</label>
-                                            <div class="col-md-4">
+                                            <div class="col-xl-4 col-sm-8">
                                                 {!! Form::text('MAIL_USERNAME',env('MAIL_USERNAME'),['class'=>'form-control input-md']) !!}
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-md-4 control-label col-form-label text-right"
+                                            <label class="col-xl-4 col-sm-4 control-label col-form-label text-sm-right"
                                                    for="textinput">MAIL PASSWORD</label>
-                                            <div class="col-md-4">
+                                            <div class="col-xl-4 col-sm-8">
                                                 {!! Form::text('MAIL_PASSWORD',env('MAIL_PASSWORD'),['class'=>'form-control input-md']) !!}
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-md-4 control-label col-form-label text-right"
+                                            <label class="col-xl-4 col-sm-4 control-label col-form-label text-sm-right"
                                                    for="textinput">MAIL ENCRYPTION</label>
-                                            <div class="col-md-4">
+                                            <div class="col-xl-4 col-sm-8">
                                                 {!! Form::text('MAIL_ENCRYPTION',env('MAIL_ENCRYPTION'),['class'=>'form-control input-md']) !!}
                                             </div>
                                         </div>
                                         <!-- Button -->
                                         <div class="form-group row">
-                                            <label class="col-md-4 control-label col-form-label text-right"
+                                            <label class="col-xl-4 col-sm-4 control-label col-form-label text-sm-right"
                                                    for="singlebutton"></label>
-                                            <div class="col-md-4">
+                                            <div class="col-xl-4 col-sm-8">
                                                 <button id="singlebutton" name="singlebutton" class="btn btn-info">
                                                     Save
                                                 </button>
@@ -79,7 +79,7 @@
                             </div>
 
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-xl-9 col-lg-11">
                             <div class="card panel panel-default mb-3">
                                 <div class=" card-header panel-heading">GMAIL API</div>
                                 <div class="card-body panel-body">
@@ -91,48 +91,50 @@
                                             <a class="btn btn-danger" href="{!!  route('google_log_out') !!}">Logout</a>
                                         @endif
                                     </div>
-                                    <h1>{{ LaravelGmail::user() }}</h1>
+                                    <div class="w-100">
+                                        <h1 class="settings-connection-email-name text-truncate">{{ LaravelGmail::user() }}</h1>
+                                    </div>
                                     {!! Form::open(['class'=>'form-horizontal','url'=>route('post_admin_gmail_settings')]) !!}
                                     <fieldset>
                                         <!-- Form Name -->
                                         <legend>Google Api Credentials</legend>
                                         <!-- Text input-->
                                         <div class="form-group row">
-                                            <label class="col-md-4 control-label col-form-label text-right"
+                                            <label class="col-xl-4 col-sm-4 control-label col-form-label text-sm-right"
                                                    for="textinput">GOOGLE PROJECT ID</label>
-                                            <div class="col-md-4">
+                                            <div class="col-xl-4 col-sm-8">
                                                 {!! Form::text('GOOGLE_PROJECT_ID',env('GOOGLE_PROJECT_ID'),['class'=>'form-control input-md']) !!}
                                             </div>
                                         </div>
                                         <!-- Text input-->
                                         <div class="form-group row">
-                                            <label class="col-md-4 control-label col-form-label text-right"
+                                            <label class="col-xl-4 col-sm-4 control-label col-form-label text-sm-right"
                                                    for="textinput">GOOGLE CLIENT ID</label>
-                                            <div class="col-md-4">
+                                            <div class="col-xl-4 col-sm-8">
                                                 {!! Form::text('GOOGLE_CLIENT_ID',env('GOOGLE_CLIENT_ID'),['class'=>'form-control input-md']) !!}
                                             </div>
                                         </div>
                                         <!-- Text input-->
                                         <div class="form-group row">
-                                            <label class="col-md-4 control-label col-form-label text-right"
+                                            <label class="col-xl-4 col-sm-4 control-label col-form-label text-sm-right"
                                                    for="textinput">GOOGLE CLIENT SECRET</label>
-                                            <div class="col-md-4">
+                                            <div class="col-xl-4 col-sm-8">
                                                 {!! Form::text('GOOGLE_CLIENT_SECRET',env('GOOGLE_CLIENT_SECRET'),['class'=>'form-control input-md']) !!}
                                             </div>
                                         </div>
                                         <!-- Text input-->
                                         <div class="form-group row">
-                                            <label class="col-md-4 control-label col-form-label text-right"
+                                            <label class="col-xl-4 col-sm-4 control-label col-form-label text-sm-right"
                                                    for="textinput">GOOGLE REDIRECT URI</label>
-                                            <div class="col-md-4">
+                                            <div class="col-xl-4 col-sm-8">
                                                 {!! Form::text('GOOGLE_REDIRECT_URI','/admin/gmail/oauth/callback',['class'=>'form-control input-md']) !!}
                                             </div>
                                         </div>
                                         <!-- Button -->
                                         <div class="form-group row">
-                                            <label class="col-md-4 control-label col-form-label text-right"
+                                            <label class="col-xl-4 col-sm-4 control-label col-form-label text-sm-right"
                                                    for="singlebutton"></label>
-                                            <div class="col-md-4">
+                                            <div class="col-xl-4 col-sm-8">
                                                 <button id="singlebutton" name="singlebutton" class="btn btn-info">
                                                     Save
                                                 </button>
@@ -143,7 +145,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-xl-9 col-lg-11">
                             <div class="card panel panel-default mb-3">
                                 <div class="card-header panel-heading">MANAGE SITE API</div>
                                 <div class="card-body panel-body">
@@ -156,27 +158,27 @@
 
                                                 <!-- Text input-->
                                                 <div class="form-group row">
-                                                    <label class="col-md-4 control-label col-form-label text-right"
+                                                    <label class="col-xl-4 col-sm-4 control-label col-form-label text-sm-right"
                                                            for="textinput">Client ID</label>
-                                                    <div class="col-md-4">
+                                                    <div class="col-xl-4 col-sm-8">
                                                         {!! Form::text('client_id',null,['class'=>'form-control input-md']) !!}
                                                     </div>
                                                 </div>
 
                                                 <!-- Text input-->
                                                 <div class="form-group row">
-                                                    <label class="col-md-4 control-label col-form-label text-right"
+                                                    <label class="col-xl-4 col-sm-4 control-label col-form-label text-sm-right"
                                                            for="textinput">Secret</label>
-                                                    <div class="col-md-4">
+                                                    <div class="col-xl-4 col-sm-8">
                                                         {!! Form::text('client_secret',null,['class'=>'form-control input-md']) !!}
                                                     </div>
                                                 </div>
 
                                                 <!-- Button -->
                                                 <div class="form-group row">
-                                                    <label class="col-md-4 control-label col-form-label text-right"
+                                                    <label class="col-xl-4 col-sm-4 control-label col-form-label text-sm-right"
                                                            for="singlebutton"></label>
-                                                    <div class="col-md-4">
+                                                    <div class="col-xl-4 col-sm-8">
                                                         <button type="submit" name="singlebutton"
                                                                 class="btn btn-info">Save
                                                         </button>

@@ -1,3 +1,4 @@
+<input type="hidden" id="core-folder" value="{!! @get_media_folder()->id !!}">
 <div class="bestbetter-modal">
   <!-- Modal -->
   <div id="myModal" class="modal fade" role="dialog">
@@ -6,18 +7,21 @@
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Modal Header</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
           <div class="content ">
             <div class="left">
-              <div id="jstree_html" class="demo">
+              <div bb-media-click="get_folder_items" class="dd-item" draggable="true" data-id="{!! @get_media_folder()->id !!}" style="background-color: #3c8dbc; width: 100%; text-align: center; color: white;  margin-bottom: -50px; cursor: pointer">{!! strtoupper(@get_media_folder()->name) !!}</div>
+              <div class="folder-list" id="jstree_html" class="demo" data-media="folder" data-menudata>
+                <ol class="dd-list sortable" id="fff">
 
+                </ol>
               </div>
             </div>
             <div class="media_modal_right_content">
-              <div class="content-upload media-modal-content-upload">
+              <div class="content-upload media-modal-content-upload d-none">
                 <div class="upload-content">
                   <div class="uploader-container">
                     <input id="uploader" class="file-loading" data-folder-id="{!! 1 !!}" multiple name="item[]"
@@ -25,6 +29,9 @@
                   </div>
                   <!-- <button type="button" class="btn btn-default mb-20" data-role="btnUploader" bb-media-click="show_uploader">Uploader</button> -->
                 </div>
+              </div>
+              <div class="img">
+                <div class="lds-dual-ring"></div>
               </div>
               <div class="row main-content media-modal-main-content modal_img_container" data-type="main-container">
                 <!-- <div class="icon">
@@ -35,21 +42,6 @@
                         <li class="text-center"><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a></li>
                     </ul>
                 </div> -->
-                <div class="img">
-                  <a href="#">
-                    <img src="http://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg" alt="">
-                  </a>
-                  <ul class="list-unstyled list-inline text-center icons">
-                    <li class="text-center"><a href="#"><i class="fa fa-info" aria-hidden="true"></i></a></li>
-                    <li class="text-center">
-                      <a href="http://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg" target="_blank"
-                         data-lightbox="folder-set" data-title="Images title">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                      </a>
-                    </li>
-                    <li class="text-center"><a href="#"><i class="fa fa-remove" aria-hidden="true"></i></a></li>
-                  </ul>
-                </div>
               </div>
             </div>
 
@@ -59,7 +51,7 @@
 
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="pointer-events: initial;">
         <input type="text" class="pull-left file-realtive-url" placeholder="upload file name" style="display: none">
         <button type="button" class="btn btn-info" bb-media-click="folder_level_up"><i class="fa fa-level-up"
                                                                                        aria-hidden="true"></i></button>

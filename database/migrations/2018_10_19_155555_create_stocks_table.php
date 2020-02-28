@@ -19,15 +19,13 @@ class CreateStocksTable extends Migration
             $table->integer('brand_id')->unsigned()->nullable();
             $table->tinyInteger('status')->default(0);
             $table->tinyInteger('is_promotion')->default(0);
-            $table->string('slug')->unique();
             $table->tinyInteger('type')->default(0);
-            $table->unsignedInteger('price')->default(0);
             $table->string('image')->nullable();
             $table->text('other_images')->nullable();
             $table->string('what_is_image')->nullable();
             $table->text('videos')->nullable();
-            $table->tinyInteger('faq_tab')->default(0);
-            $table->tinyInteger('reviews_tab')->default(0);
+            $table->tinyInteger('faq_tab')->nullable();
+            $table->tinyInteger('reviews_tab')->nullable();
             $table->tinyInteger('is_offer')->default(0);
             $table->tinyInteger('offer_type')->default(0);
             $table->timestamps();
@@ -36,7 +34,7 @@ class CreateStocksTable extends Migration
                 ->on('users')->onDelete('CASCADE');
 
             $table->foreign('brand_id')->references('id')
-                ->on('categories')->onDelete('CASCADE');
+                ->on('brands')->onDelete('CASCADE');
         });
     }
 

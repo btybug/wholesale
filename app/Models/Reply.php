@@ -6,6 +6,39 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 
+/**
+ * App\Models\Reply
+ *
+ * @property int $id
+ * @property int $ticket_id
+ * @property int|null $parent_id
+ * @property int|null $author_id
+ * @property string $reply
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\User|null $author
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Reply[] $children
+ * @property-read int|null $children_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Reply[] $childrenAll
+ * @property-read int|null $children_all_count
+ * @property-read \App\Models\Reply|null $parent
+ * @property-read \App\Models\Ticket $ticket
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply main()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply mainAll()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply whereAuthorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply whereReply($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply whereTicketId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Reply extends Model
 {
     protected $table = 'replies';

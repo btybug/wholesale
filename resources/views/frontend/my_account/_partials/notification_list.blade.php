@@ -6,6 +6,7 @@
         <td>{!! $message['updated_at'] !!}</td>
         <td>{!! $message['subject'] !!}</td>
         <td>{!! (isset($message['category'])) ? $message['category']: null  !!} </td>
-        <td><button class="ntfs-btn btn btn-info __modal rounded-0" data-toggle="modal" data-id="{!! $message['id'] !!}" data-object="{!! $message['object'] !!}"><i class="fa fa-eye"></i></button></td>
+        <td><button class="ntfs-btn btn btn-info __modal rounded-0" data-toggle="modal" data-id="{!! $message['id'] !!}"
+                    data-object="{!! $message['object'] !!}"><i class="fa fa-eye"></i></button></td>
     </tr>
 @endforeach

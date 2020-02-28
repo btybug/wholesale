@@ -169,10 +169,20 @@ class TicketsController extends Controller
 
     public function getSettings()
     {
-        $statuses = $this->statuses->where('type', 'tickets')->get()->pluck('name', 'id')->all();
+        $statuses = $this->statuses->where('type', 'tickets')->get();
         $settings = $this->settings->getEditableData('tickets');
 
-        return $this->view('settings', compact(['settings', 'statuses']));
+        $categories = Category::whereNull('parent_id')->where('type', 'tickets')->get();
+        $allCategories = Category::where('type', 'tickets')->get();
+        enableMedia('drive');
+
+        return $this->view('settings', compact(['settings', 'statuses','categories','allCategories']));
+    }
+
+    public function statuses($type)
+    {
+        $statuses=Statuses::where('type',$type)->get();
+        return $this->view('statuses',compact('statuses','type'));
     }
 
     public function postSettings(Request $request)

@@ -25,7 +25,7 @@
                                 </div>
                                 <div class="row cart-details-address">
                                     <div class="col-md-4">
-                                        <h3 class="title">Shipping Address</h3>
+                                        <h3 class="title">{!! __('shipping_address') !!}</h3>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="address-info">
@@ -47,19 +47,19 @@
                                                 @endif
                                             </div>
                                             <a href="javascript:void(0)" data-toggle="modal" data-target="#addNewAddress"
-                                               class="font-18 bg-blue-clr text-sec-clr add-address-btn address-book-new">Add
-                                                New Address</a>
+                                               class="font-18 bg-blue-clr text-sec-clr add-address-btn address-book-new">
+                                                {!! __('add_new_address') !!}</a>
                                         </div>
                                     </div>
 
                                 </div>
                                 <div class="cart-details-special">
                                     <h3 class="title">
-                                        Special Notes
+                                        {!! __('special_notes') !!}
                                     </h3>
                                     <textarea name="" cols="30" rows="10" class="note"></textarea>
                                     <p class="font-16 text-tert-clr note-info">
-                                        * Your Billing address is same as your account
+                                        {!! __('check_out_area_desc') !!}
                                     </p>
                                 </div>
                             </div>

@@ -71,35 +71,36 @@ class MediaItemsApiController extends Controller
         if ($validator->fails()) {
             return \Response::json(['error' => true, 'message' => $validator->messages()]);
         }
-        $folder = Folders::find($request->folder_id);
-        if ($folder && \File::isDirectory($folder->path())) {
+        if ($validator->fails()) {
+            return \Response::json(['error' => 'ERROR', 'message' => 'Could not upload file.']);
+        }
+            $folder = Folders::find($request->folder_id);
             foreach ($request->item as $item) {
+                $uploadPath=$folder->uploadPath();
                 $realName = $request->item_name ? $request->item_name : $item->getClientOriginalName();
                 $originalName = md5(uniqid()) . '.' . $item->getClientOriginalExtension();
-                if ($item->move($folder->path(), $originalName)) {
+                if ($item->move($uploadPath['path'], $originalName)) {
                     $item = Items::create([
                         'original_name' => $originalName,
                         'real_name' => $realName,
                         'extension' => $item->getClientOriginalExtension(),
-                        'size' => \File::size($folder->path() . DIRECTORY_SEPARATOR . $originalName),
+                        'size' => \File::size($uploadPath['path'] . DIRECTORY_SEPARATOR . $originalName),
+                        'original_folder' => $uploadPath['folder'],
                         'folder_id' => $folder->id
                     ]);
 
                     if ($this->ifIsImage($originalName)) {
-                        $img = \Image::make($folder->path() . DIRECTORY_SEPARATOR . $originalName)->resize(300, null, function ($constraint) {
+                        $img = \Image::make($uploadPath['path'] . DIRECTORY_SEPARATOR . $originalName)->resize(300, null, function ($constraint) {
                             $constraint->aspectRatio();
                         });
+//                        $img->insert('public/watermark.jpg');
                         $img->save(public_path("media/tmp/$originalName"));
                     }
                 }
-
-
             }
             return \Response::json(['uploaded' => 'OK', 'message' => 'File has been uploaded successfully.']);
-        }
-        if ($validator->fails()) {
-            return \Response::json(['error' => 'ERROR', 'message' => 'Could not upload file.']);
-        }
+
+
     }
 
     public function replaceFile(Request $request)
@@ -201,10 +202,8 @@ class MediaItemsApiController extends Controller
         if (isset($data['item_id']) and is_array($data['item_id'])) {
             $vdata = $data['item_id'];
             foreach ($data['item_id'] as $k => $v) {
-                $result = Items::transfer($v, $data['folder_id']);
-                if ($result == true) {
-                    break;
-                }
+                $result[] = Items::transfer($v, $data['folder_id']);
+
             }
         } else {
             $result = Items::transfer($data['item_id'], $data['folder_id']);
@@ -220,7 +219,7 @@ class MediaItemsApiController extends Controller
         if ($validator->fails()) {
             return \Response::json(['error' => true, 'message' => $validator->messages()]);
         }
-        $item = Items::find($request->item_id);
+        $item = Items::with('storage')->find($request->item_id);
         if ($item) {
             return \Response::json(['error' => false, 'data' => $item]);
         }

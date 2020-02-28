@@ -12,5 +12,5 @@
         @endif
     @endforeach
 @else
-    <li>No Attachments</li>
+    <li>{!! __('no_Attachments') !!}</li>
 @endif

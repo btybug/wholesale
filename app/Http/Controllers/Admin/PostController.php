@@ -53,6 +53,14 @@ class PostController extends Controller
         return $this->view('new', compact('post', 'authors', 'general', 'twitterSeo', 'fbSeo', 'robot', 'data'));
     }
 
+    public function settings()
+    {
+        $categories = Category::whereNull('parent_id')->where('type', 'posts')->get();
+        $allCategories = Category::where('type', 'posts')->get();
+        enableMedia('drive');
+        return $this->view('settings',compact('categories','allCategories'));
+    }
+
     public function newPost(StoreBlogPost $request, $locale = null)
     {
 

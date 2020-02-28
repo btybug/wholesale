@@ -4,14 +4,16 @@
 @section('content')
 
     <section class="tickets-edit-page">
-        <div class="panel panel-default">
-            <h2 class="panel-heading mt-0">View Message</h2>
-            <div class="panel-body">
+        <div class="card panel panel-default">
+            <div class="card-header panel-heading">
+                <h2 class="mt-0">View Message</h2>
+            </div>
+            <div class="card-body panel-body">
                 <div class="row">
-                    <div class="col-md-7 ">
+                    <div class="col-xl-8 col-sm-9">
                         <div class="subject-wall">
                             <div class="row d-flex">
-                                <div class="col-md-3 col-xs-12">
+                                <div class="col-xl-3 col-lg-4">
                                     <div class="user-image-name">
                                         <div class="user-image">
                                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXrKQMyhxBra3SmOe6uPCmVHW_N3Xx2egM1P12VV3xC2fRrUXJ"
@@ -22,7 +24,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-9 col-xs-12">
+                                <div class="col-xl-9 col-lg-8">
                                     <div class="user-content h-100">
                                         <h3>{!! $model->email !!}</h3>
                                         <div class="info">
@@ -64,12 +66,12 @@
                                     <div class="divider"></div>
                                     <div class="user-add-comment mt-md-5 my-4">
                                         <div class="row">
-                                            <div class="col-sm-1">
+                                            <div class="col-lg-1 col-2 pr-0">
                                                 <div class="user-img">
                                                     <img src="/public/images/male.png" alt="">
                                                 </div>
                                             </div>
-                                            <div class="col-sm-11">
+                                            <div class="col-lg-11 col-10">
                                                 <div class="add-comment">
                                                     {!! Form::open(['url' => route('admin_post_blog_contact_us_replay',$model->id)]) !!}
                                                     <textarea name="reply" id="" rows="0"
@@ -101,7 +103,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5 ">
+                    <div class="col-xl-4 col-sm-3 blog-contact-us--view">
                         {!! Form::model($model,['url' => route('admin_tickets_edit_post',$model->id), 'id' => 'ticket_form','files' => true]) !!}
                         {!! Form::hidden('id',null) !!}
                         <div class="panel panel-default">
@@ -112,21 +114,21 @@
                             </div>
 
                             <div class="panel-body">
-                                <div class="status-wall wall">
+                                <div class="status-wall wall mt-2">
                                     <div class="row form-group">
-                                        {{Form::label('status', 'Status',['class' => 'col-sm-3'])}}
-                                        <div class="col-sm-9">
+                                        {{Form::label('status', 'Status',['class' => 'col-xl-3'])}}
+                                        <div class="col-xl-9">
                                             {!! Form::select('status_id',[],null,
                                                         ['class' => 'form-control','id'=> 'status']) !!}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tag-wall wall">
+                                <div class="tag-wall status-wall wall">
                                     <div class="row form-group">
-                                        <label class="col-sm-3 control-label" for="input-category"><span
+                                        <label class="col-xl-3 control-label" for="input-category"><span
                                                     data-toggle="tooltip" title=""
                                                     data-original-title="Choose all products under selected category.">Tags</span></label>
-                                        <div class="col-sm-9">
+                                        <div class="col-xl-9">
                                             <input type="text" name="" value="" placeholder="Tags"
                                                    id="input-tags" class="form-control" autocomplete="off">
                                             <ul class="dropdown-menu"></ul>
@@ -151,8 +153,8 @@
                                 </div>
                                 <div class="status-wall wall">
                                     <div class="row form-group">
-                                        {{Form::label('category_id', 'Category',['class' => 'col-sm-3'])}}
-                                        <div class="col-sm-9">
+                                        {{Form::label('category_id', 'Category',['class' => 'col-xl-3'])}}
+                                        <div class="col-xl-9">
                                             {!! Form::select('category_id',[],null,
                                                         ['class' => 'form-control','id'=> 'category']) !!}
                                         </div>
@@ -160,8 +162,8 @@
                                 </div>
                                 <div class="status-wall wall">
                                     <div class="row form-group">
-                                        {{Form::label('priority_id', 'Priority',['class' => 'col-sm-3'])}}
-                                        <div class="col-sm-9">
+                                        {{Form::label('priority_id', 'Priority',['class' => 'col-xl-3'])}}
+                                        <div class="col-xl-9">
                                             {!! Form::select('priority_id',[],null,
                                                         ['class' => 'form-control','id'=> 'priority']) !!}
                                         </div>
@@ -169,8 +171,8 @@
                                 </div>
                                 <div class="status-wall wall">
                                     <div class="row form-group">
-                                        {{Form::label('staff', 'Responsible staff',['class' => 'col-sm-3'])}}
-                                        <div class="col-sm-9">
+                                        {{Form::label('staff', 'Responsible staff',['class' => 'col-xl-3'])}}
+                                        <div class="col-xl-9">
                                             {!! Form::select('staff_id',[],null,
                                                         ['class' => 'form-control','id'=> 'staff']) !!}
                                         </div>

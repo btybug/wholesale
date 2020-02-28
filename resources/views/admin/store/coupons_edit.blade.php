@@ -4,7 +4,7 @@
 @stop
 @section('content')
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-xl-8">
             <div class="coupons_new_page">
                 <div class="card panel panel-default coupons_page-panel">
 
@@ -30,30 +30,30 @@
                     </div>
                     <div class="card-body panel-body">
                         <div class="form-group row required">
-                            <label class="col-sm-2 control-label" for="input-name">Coupon Name</label>
-                            <div class="col-sm-7">
+                            <label class="col-xl-2 col-md-3 control-label" for="input-name">Coupon Name</label>
+                            <div class="col-xl-7 col-md-6">
                                 <div class="form-control">{{ $coupons->name }}</div>
                             </div>
                         </div>
 
                         <div class="form-group row required">
-                            <label class="col-sm-2 control-label" for="input-code"><span data-toggle="tooltip"
+                            <label class="col-xl-2 col-md-3  control-label" for="input-code"><span data-toggle="tooltip"
                                                                                          title=""
                                                                                          data-original-title="The code the customer enters to get the discount.">Code</span></label>
-                            <div class="col-sm-7">
+                            <div class="col-xl-7 col-md-6">
                                 <div class="form-control">{{ $coupons->code }}</div>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-xl-3 col-md-3">
                             </div>
                         </div>
                         <div class="card panel panel-default mb-2">
                             <div class="card-header panel-heading">Application</div>
                             <div class="card-body panel-body">
                                 <div class="form-group row">
-                                    <label class="col-sm-2 control-label" for="input-total"><span data-toggle="tooltip"
+                                    <label class="col-xl-2 col-md-4 control-label" for="input-total"><span data-toggle="tooltip"
                                                                                                   title=""
                                                                                                   data-original-title="The total amount that must be reached before the coupon is valid.">Discount Amount</span></label>
-                                    <div class="col-sm-10">
+                                    <div class="col-xl-10 col-md-8">
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="form-control">{{ $coupons->discount }}</div>
@@ -70,8 +70,8 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-sm-2 control-label">Coupon Based</label>
-                                    <div class="col-sm-10">
+                                    <label class="col-xl-2 col-md-4 control-label">Coupon Based</label>
+                                    <div class="col-xl-10 col-md-8">
                                         @if($coupons->based == 'product')
                                             <div class="form-control"> Product base</div>
                                         @else
@@ -80,21 +80,21 @@
                                     </div>
                                 </div>
                                 <div class="form-group row product-box {{ (isset($coupons) && $coupons->based == 'cart') ? 'hide' :'' }}">
-                                    <label class="col-sm-2 control-label" for="input-product"><span
+                                    <label class="col-xl-2 col-md-4 control-label" for="input-product"><span
                                                 data-toggle="tooltip" title=""
                                                 data-original-title="Choose specific products the coupon will apply to. Select no products to apply coupon to entire cart.">Select Product</span></label>
-                                    <div class="col-sm-4">
+                                    <div class="col-xl-10 col-md-8">
                                         <div class="form-control"> {{ ($coupons->stock) ? $coupons->stock->name : null }}</div>
                                     </div>
                                 </div>
                                 <div class="form-group row product-box {{ (isset($coupons) && $coupons->based == 'cart') ? 'hide' :'' }}">
-                                    <label class="col-sm-2 control-label" for="input-product"><span
+                                    <label class="col-xl-2 col-md-4  control-label" for="input-product"><span
                                                 data-toggle="tooltip" title=""
                                                 data-original-title="Choose specific products the coupon will apply to. Select no products to apply coupon to entire cart.">Variations</span></label>
-                                    <div class="col-md-10 variations-box">
+                                    <div class="col-xl-10 col-md-8 variations-box">
                                         @if($coupons && $coupons->stock)
                                             @foreach($coupons->stock->variations as $variation)
-                                                <div class="col-md-3">
+                                                <div class="">
                                                     <label for="variation_{{ $variation->id }}">{{ get_stock_variation($variation->id) }}</label>
                                                     {!! Form::checkbox('variations[]',$variation->id,null,['id' => 'variation_'.$variation->id]) !!}
                                                 </div>
@@ -103,8 +103,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-2 control-label">Free Shipping</label>
-                                    <div class="col-sm-10">
+                                    <label class="col-xl-2 col-md-4  control-label">Free Shipping</label>
+                                    <div class="col-xl-10 col-md-8">
                                         @if($coupons->shipping_type)
                                             <div class="form-control"> Yes</div>
                                         @else
@@ -118,8 +118,8 @@
                             <div class="card-header panel-heading">Target</div>
                             <div class="card-body panel-body">
                                 <div class="form-group row">
-                                    <label class="col-sm-2 control-label">Target</label>
-                                    <div class="col-sm-10">
+                                    <label class="col-xl-2 col-md-4 control-label">Target</label>
+                                    <div class="col-xl-10 col-md-8">
                                         <div class="row">
                                             <div class="col-sm-4">
                                                 @if($coupons->target)
@@ -131,7 +131,7 @@
                                             <div class="col-sm-6 user-box {{ (isset($coupons) && $coupons->target) ? '' :'hide' }}">
                                                 @if($coupons->users && count($coupons->users))
                                                     @foreach($coupons->users as $user)
-                                                        <div class="col-md-3">{{ get_user($user) }}</div>
+                                                        <div class="">{{ get_user($user) }}</div>
                                                     @endforeach
                                                 @endif
                                             </div>
@@ -158,7 +158,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group row">
-                                            <label class="col-sm-4 control-label text-right" for="input-date-end">Date
+                                            <label class="col-sm-4 control-label text-md-right" for="input-date-end">Date
                                                 End</label>
                                             <div class="col-sm-8">
                                                 <div class="input-group date">
@@ -169,26 +169,26 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-2 control-label" for="input-total"><span data-toggle="tooltip"
+                                    <label class="col-xl-2 col-sm-4 control-label" for="input-total"><span data-toggle="tooltip"
                                                                                                   title=""
                                                                                                   data-original-title="The total amount that must be reached before the coupon is valid.">Minimal order amount</span></label>
-                                    <div class="col-sm-10">
+                                    <div class="col-xl-10 col-sm-8">
                                         <div class="form-control">{{ $coupons->total_amount }}</div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-2 control-label" for="input-uses-total"><span
+                                    <label class="col-xl-2 col-sm-4 control-label" for="input-uses-total"><span
                                                 data-toggle="tooltip" title=""
                                                 data-original-title="The maximum number of times the coupon can be used by any customer. Leave blank for unlimited">Total card use</span></label>
-                                    <div class="col-sm-10">
+                                    <div class="col-xl-10 col-sm-8">
                                         <div class="form-control">{{ $coupons->user_per_coupon }}</div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-2 control-label" for="input-uses-customer"><span
+                                    <label class="col-xl-2 col-sm-4 control-label" for="input-uses-customer"><span
                                                 data-toggle="tooltip" title=""
                                                 data-original-title="The maximum number of times the coupon can be used by a single customer. Leave blank for unlimited">Each user for</span></label>
-                                    <div class="col-sm-10">
+                                    <div class="col-xl-10 col-sm-8">
                                         <div class="form-control">{{ $coupons->user_per_customer }}</div>
                                     </div>
                                 </div>
@@ -214,7 +214,7 @@
                 {!! Form::close() !!}
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-xl-4">
             {!! $coupons->renderVoucher() !!}
         </div>
     </div>

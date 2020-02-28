@@ -9,10 +9,14 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\DataTables\ItemsDataTable;
 use App\Http\Controllers\Admin\Requests\AdminProfileRequest;
 use App\Http\Controllers\Controller;
+use App\ItemsSearch\ItemsSearch;
+use App\Models\Barcodes;
 use App\Models\Category;
 use App\Models\Couriers;
+use App\Models\GeoZones;
 use App\Models\Orders;
 use App\Models\Settings;
 use App\Models\Statuses;
@@ -20,7 +24,6 @@ use App\ProductSearch\ProductSearch;
 use App\Search\Customer\CustomersSearch;
 use App\Search\Orders\OrdersSearch;
 use App\Services\FindService;
-use App\Models\GeoZones;
 use Illuminate\Http\Request;
 
 class FindController extends Controller
@@ -37,14 +40,14 @@ class FindController extends Controller
         $this->findService = $findService;
     }
 
-    public function getIndex()
+    public function getIndex(Request $request, ItemsDataTable $dataTable)
     {
         $options = $this->findService->getOptions();
-
-        return view('admin.find.index', compact(['options']));
+        $data = $request->all();
+        return $dataTable->render('admin.find.index', compact(['options','data']));
     }
 
-    public function postCallFind(Request $request)
+    public function postCallFind(Request $request, ItemsDataTable $dataTable)
     {
         $key = $request->get('key');
         $fn = 'get' . strtoupper($key) . "Data";
@@ -63,10 +66,25 @@ class FindController extends Controller
         return ['categories' => $categories, 'brands' => $brands];
     }
 
+    public function getItemsData()
+    {
+        $categories = Category::where('type', 'stocks')->whereNull('parent_id')->get()->pluck('name', 'id')->all();
+        $brands = Category::where('type', 'brands')->whereNull('parent_id')->get()->pluck('name', 'id')->all();
+        $barcodes = Barcodes::all()->pluck('code', 'id');
+        return compact('categories', 'brands', 'barcodes');
+    }
+
     public function postProductResults(Request $request)
     {
         $products = ProductSearch::apply($request);
         $html = view("admin.find.products.results", compact(['products']))->render();
+        return response()->json(['error' => false, 'html' => $html]);
+    }
+
+    public function postItemsResults(Request $request, ItemsDataTable $dataTable)
+    {
+        $products = ItemsSearch::apply($request);
+        $html = $dataTable->render("admin.find.items.results")->render();
         return response()->json(['error' => false, 'html' => $html]);
     }
 
@@ -99,5 +117,26 @@ class FindController extends Controller
         $orders = OrdersSearch::apply($request);
         $html = view("admin.find.orders.results", compact(['orders']))->render();
         return response()->json(['error' => false, 'html' => $html]);
+    }
+
+    public function printHtmlBarcode(Request $request)
+    {
+        if(! \File::isDirectory(storage_path("app".DS."printer"))){
+            \File::makeDirectory(storage_path("app".DS."printer"));
+        }
+
+        if(! \File::isDirectory(storage_path("app".DS."printer".DS."barcodes"))){
+            \File::makeDirectory(storage_path("app".DS."printer".DS."barcodes"));
+        }
+
+        $html = \File::put(storage_path("app".DS."printer".DS."barcodes".DS."barocodes.html"),$request->get('print'));
+
+        $printerId = 'bc1b47fb-d23d-be25-3cb4-78cfa410fc3b';
+        \GoogleCloudPrint::asHtml()
+            ->file(storage_path("app".DS."printer".DS."barcodes".DS."barocodes.html"))
+            ->printer($printerId)
+            ->send();
+
+        return response()->json(['error' => false]);
     }
 }

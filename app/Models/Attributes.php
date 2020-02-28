@@ -7,6 +7,53 @@ use App\Models\Common\Translatable;
 use App\Models\Translations\AttributeTranslation;
 use phpDocumentor\Reflection\Types\Self_;
 
+/**
+ * App\Models\Attributes
+ *
+ * @property int $id
+ * @property int|null $parent_id
+ * @property int $user_id
+ * @property string|null $image
+ * @property string|null $icon
+ * @property int $filter
+ * @property int $is_core
+ * @property string $display_as
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
+ * @property-read int|null $categories_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Attributes[] $children
+ * @property-read int|null $children_count
+ * @property-read \App\Models\Attributes|null $parent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Stickers[] $stickers
+ * @property-read int|null $stickers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Translations\AttributeTranslation[] $translations
+ * @property-read int|null $translations_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable listsTranslations($translationField)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Attributes newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Attributes newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable notTranslatedIn($locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable orWhereTranslation($key, $value, $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable orWhereTranslationLike($key, $value, $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable orderByTranslation($key, $sortmethod = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Attributes query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable translated()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable translatedIn($locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Attributes whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Attributes whereDisplayAs($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Attributes whereFilter($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Attributes whereIcon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Attributes whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Attributes whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Attributes whereIsCore($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Attributes whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable whereTranslation($key, $value, $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable whereTranslationLike($key, $value, $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Attributes whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Attributes whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable withTranslation()
+ * @mixin \Eloquent
+ */
 class Attributes extends Translatable
 {
     /**
@@ -88,7 +135,7 @@ class Attributes extends Translatable
             $attrs = $attrs->where('categories.slug', $slug);
         }
 
-        return $attrs->get();
+        return $attrs->groupBy('attributes.id')->get();
     }
 
     public function getFiltersByOffer($slug)

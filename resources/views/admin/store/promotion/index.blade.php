@@ -3,28 +3,30 @@
 
 @stop
 @section('content')
-    <div class="container-fluid">
-        <div class="col-nd-12">
+    <div class="">
+        <div>
             <div class="card panel panel-default">
-                <div class="card-header panel-heading clearfix">
-                    <div class="pull-left">
-                        <h2 class="m-0">Promotions</h2>
+{{--                <div class="card-header panel-heading d-flex flex-wrap justify-content-between">--}}
+{{--                        <h2 class="m-0">Promotions</h2>--}}
+{{--                </div>--}}
+                <div class="d-flex flex-wrap justify-content-between px-4 mt-2">
+                    <div>
+                        <select name="table_head" id="table_head_id" class="selectpicker text-black" multiple>
+                            <option value="#" data-column="0" data-name="id">#</option>
+                            <option value="Name" data-column="1" data-name="name">Name</option>
+                            <option value="Product" data-column="2" data-name="stock_id">Product</option>
+                            <option value="Start Date" data-column="3" data-name="start_date">Start Date</option>
+                            <option value="End Date" data-column="4" data-name="end_date">End Date</option>
+                            <option value="Canceled" data-column="5" data-name="canceled">Canceled</option>
+                            <option value="Actions" data-column="6" data-name="actions">Actions</option>
+                        </select>
                     </div>
-                    <div class="pull-right">
-                        <div class="pull-right "><a class="btn btn-primary pull-right" href="{!! route('admin_stock_new') !!}">Add new</a></div>
-                    </div>
-                </div>
-                <div class="card-body panel-body">
+                    @ok('admin_stock_promotions_new')
+                        <div><a class="btn btn-primary pull-right" href="{!! route('admin_stock_promotions_new') !!}">Add new</a></div>
+                    @endok
 
-                    <select name="table_head" id="table_head_id" class="selectpicker text-black" multiple>
-                        <option value="#" data-column="0" data-name="id">#</option>
-                        <option value="Name" data-column="1" data-name="name">Name</option>
-                        <option value="Product" data-column="2" data-name="stock_id">Product</option>
-                        <option value="Start Date" data-column="3" data-name="start_date">Start Date</option>
-                        <option value="End Date" data-column="4" data-name="end_date">End Date</option>
-                        <option value="Canceled" data-column="5" data-name="canceled">Canceled</option>
-                        <option value="Actions" data-column="6" data-name="actions">Actions</option>
-                    </select>
+                </div>
+                <div class="card-body panel-body pt-0">
                     <table id="promotion-table" class="table table-style table-bordered" cellspacing="0" width="100%">
                         <thead>
                         <tr>
@@ -89,7 +91,9 @@
                     "processing": true,
                     "serverSide": true,
                     "bPaginate": true,
-                    dom: 'Bfrtip',
+                    dom: 'Bflrtip',
+                    displayLength: 10,
+                    lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
                     buttons: [
                         'csv', 'excel', 'pdf', 'print'
                     ],

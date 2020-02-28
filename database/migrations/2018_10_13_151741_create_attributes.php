@@ -20,6 +20,7 @@ class CreateAttributes extends Migration
             $table->string('image',255)->nullable();
             $table->string('icon',255)->nullable();
             $table->tinyInteger('filter')->default(0);
+            $table->tinyInteger('is_core')->default(0);
             $table->string('display_as')->default('select');
             $table->timestamps();
 

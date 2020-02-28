@@ -7,9 +7,9 @@
     <div class="inventory_attributes container-fluid">
         <div class="row flex-column">
             <div class="card panel panel-default mb-3">
-                <div class="card-header panel-heading clearfix">
+                <div class="card-header panel-heading d-flex flex-wrap justify-content-between">
                     <h2 class="m-0 pull-left">{{ ($model) ? $model->name : "Add Attribute" }}</h2>
-                    <div class="button-save pull-right">
+                    <div class="button-save">
                         {!! Form::submit('Save',['class' => 'btn btn-primary']) !!}
                         <a class="btn btn-default"
                            href="{!! route('admin_store_attributes') !!}">Back</a>
@@ -27,7 +27,7 @@
 
                 <div class="card-body panel-body basic-details-tab">
                        <div class="row">
-                           <div class="col-md-8">
+                           <div class="col-xl-8 col-lg-7 col-md-6">
                                <div class="basic-wall">
                                    @if(count(get_languages()))
                                        <ul class="nav nav-tabs">
@@ -45,18 +45,18 @@
                                                <div id="{{ strtolower($language->code) }}"
                                                     class="tab-pane fade  @if($loop->first) in active show @endif">
                                                    <div class="form-group row">
-                                                       <label class="col-md-2 control-label"><span data-toggle="tooltip"
+                                                       <label class="col-xl-2 col-lg-4 control-label"><span data-toggle="tooltip"
                                                                                                    title=""
                                                                                                    data-original-title="Attribute Name Title">Attribute Name</span></label>
-                                                       <div class="col-md-10">
+                                                       <div class="col-xl-10 col-lg-8">
                                                            {!! Form::text('translatable['.strtolower($language->code).'][name]',get_translated($model,strtolower($language->code),'name'),['class'=>'form-control']) !!}
                                                        </div>
                                                    </div>
                                                    <div class="form-group row">
-                                                       <label class="col-md-2 control-label"><span data-toggle="tooltip"
+                                                       <label class="col-xl-2 col-lg-4 control-label"><span data-toggle="tooltip"
                                                                                                    title=""
                                                                                                    data-original-title="Attribute description">Attribute Description</span></label>
-                                                       <div class="col-md-10">
+                                                       <div class="col-xl-10 col-lg-8">
                                                            {!! Form::textarea('translatable['.strtolower($language->code).'][description]',get_translated($model,strtolower($language->code),'description'),['class'=>'form-control']) !!}
                                                        </div>
                                                    </div>
@@ -65,10 +65,10 @@
                                        @endif
                                    </div>
                                    <div class="form-group row">
-                                       <label class="col-md-2 control-label" for="input-total"><span data-toggle="tooltip"
+                                       <label class="col-xl-2 col-lg-4 control-label" for="input-total"><span data-toggle="tooltip"
                                                                                                      title=""
                                                                                                      data-original-title="Icon Title">Icon</span></label>
-                                       <div class="col-md-10">
+                                       <div class="col-xl-10 col-lg-8">
                                            {!! Form::text('icon',null,['class'=>'form-control icon-picker']) !!}
                                        </div>
                                        <div class="col-md-1 text-center font-icon-added">
@@ -77,10 +77,10 @@
                                    </div>
 
                                    <div class="form-group row">
-                                       <label class="col-md-2 control-label" for="input-total"><span data-toggle="tooltip"
+                                       <label class="col-xl-2 col-lg-4 control-label" for="input-total"><span data-toggle="tooltip"
                                                                                                      title=""
                                                                                                      data-original-title="Image Title">Image</span></label>
-                                       <div class="col-md-10">
+                                       <div class="col-xl-10 col-lg-8">
                                            {!! media_button('image',$model) !!}
                                        </div>
                                    </div>
@@ -89,13 +89,13 @@
 
                            </div>
 
-                           <div class="col-md-4">
+                           <div class="col-xl-4 col-lg-5 col-md-6">
                                <div class="basic-wall mb-3">
                                    <div class="right_col">
                                        <div class="form-group row">
-                                           <label class="col-md-2 control-label" for="input-total">
+                                           <label class="col-xl-3 col-lg-4 col-md-5 col-3 control-label" for="input-total">
                                                <span data-toggle="tooltip" title="" data-original-title="Filter">Filter</span></label>
-                                           <div class="col-md-10 filter--display">
+                                           <div class="col-xl-9 col-lg-8 col-md-7 col-9 filter--display">
                                                YES {!! Form::radio('filter',1,null) !!}
                                                NO {!! Form::radio('filter',0,null) !!}
                                            </div>
@@ -103,10 +103,10 @@
                                        <div class="card panel panel-default panel-display-as">
                                            <div class="card-header panel-heading">
                                                <div class="row">
-                                                   <div class="col-sm-7 pl-0">
+                                                   <div class="col-sm-7 col-4 pl-0 align-self-center">
                                                        Display as
                                                    </div>
-                                                   <div class="col-sm-5 p-0">
+                                                   <div class="col-sm-5 col-8 p-0">
                                                        {!! Form::select('display_as',[
                                                            'radio' => 'Radio',
                                                            'select' => 'Select',
@@ -209,7 +209,7 @@
                                </div>
                                <div class="basic-wall">
                                    <div class="form-group">
-                                       <label class="col-sm-2 control-label pl-sm-0">Categories</label>
+                                       <label class="control-label pl-sm-0">Categories</label>
                                        {!! Form::hidden('categories',(isset($checkedCategories))
                                        ? json_encode($checkedCategories) : null,['id' => 'categories_tree']) !!}
                                        <div id="treeview_json"></div>
@@ -223,7 +223,7 @@
 
             </div>
             <div class="card panel panel-default">
-                <div class="card-header panel-heading clearfix">
+                <div class="card-header panel-heading d-flex flex-wrap justify-content-between ">
                     {{--<h2>Options {{ $model->name }} </h2>--}}
                     <h2 class="m-0 pull-left">Attributes</h2>
                     <div class="pull-right">
@@ -231,7 +231,7 @@
                     </div>
                 </div>
                 <div class="card-body panel-body">
-                    <div class="d-flex get-all-stickers-tab">
+                    <div class="d-flex flex-wrap get-all-stickers-tab">
                         @if(isset($model) && count($model->stickers))
                             @foreach($model->stickers as $sticker)
                                 <div class="inventory-attr-item" data-id="{{ $sticker->id }}">
@@ -250,7 +250,7 @@
     {!! Form::close() !!}
 
 
-    <div class="modal fade" id="stickerModal" tabindex="-1" role="dialog">
+    <!-- <div class="modal fade" id="stickerModal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -271,6 +271,39 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Done</button>
+                </div> -->
+            <!-- </div> -->
+            <!-- /.modal-content -->
+        <!-- </div> -->
+        <!-- /.modal-dialog -->
+    <!-- </div> -->
+    <!-- /.modal -->
+
+    <div class="modal fade select-stickers__modal" id="stickerModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Select Stickers</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="search-attr" class="col-sm-2 col-form-label">Search</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control search-attr"  placeholder="Search">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-center mb-2">
+                        <input type="checkbox" class="all_select_products_js" style="margin: 0 18.240px"/>
+                        <p class="mb-0">Select All</p>
+                    </div>
+                    <ul class="all-list modal-stickers--list">
+
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary done_select_stickers_js" data-dismiss="modal">Done</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -282,6 +315,13 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
     <script>
+        // $("body").on("keyup",".search-attr", function() {
+        //     var value = $(this).val().toLowerCase();
+        //     $("ul.modal-stickers--list .option-elm-modal").filter(function() {
+        //         $(this).toggle($(this).find('a.searchable').data('name').toLowerCase().indexOf(value) > -1)
+        //     });
+        // });
+
         $('.filter--display input:radio[name="filter"]').change(function() {
             var filter = $(this).filter(':checked').val();
 
@@ -298,41 +338,41 @@
             $(this).closest('.inventory-attr-item').remove();
         });
 
-        $("body").on('click', '.select-stickers', function () {
-            let arr = [];
-            $(".get-all-stickers-tab")
-                .children()
-                .each(function () {
-                    arr.push($(this).attr("data-id"));
-                });
-            AjaxCall("/admin/tools/stickers/get-all", {arr}, function (res) {
-                if (!res.error) {
-                    $("#stickerModal .modal-body .all-list").empty();
-                    res.data.forEach(item => {
-                        let html = `<li data-id="${item.id}" class="option-elm-modal"><a
-                                                href="#">${item.name}
-                                                </a> <a class="btn btn-primary add-sticker-event" data-name="${item.name}"
-                                                data-id="${item.id}">ADD</a></li>`;
-                        $("#stickerModal .modal-body .all-list").append(html);
-                    });
-                    $("#stickerModal").modal();
-                }
-            });
-        });
+        // $("body").on('click', '.select-stickers', function () {
+        //     let arr = [];
+        //     $(".get-all-stickers-tab")
+        //         .children()
+        //         .each(function () {
+        //             arr.push($(this).attr("data-id"));
+        //         });
+        //     AjaxCall("/admin/tools/stickers/get-all", {arr}, function (res) {
+        //         if (!res.error) {
+        //             $("#stickerModal .modal-body .all-list").empty();
+        //             res.data.forEach(item => {
+        //                 let html = `<li data-id="${item.id}" class="option-elm-modal"><a
+        //                                         href="#">${item.name}
+        //                                         </a> <a class="btn btn-primary add-related-event searchable" data-name="${item.name}"
+        //                                         data-id="${item.id}">ADD</a></li>`;
+        //                 $("#stickerModal .modal-body .all-list").append(html);
+        //             });
+        //             $("#stickerModal").modal();
+        //         }
+        //     });
+        // });
 
-        $("body").on("click", ".add-sticker-event", function () {
-            let id = $(this).data("id");
-            let name = $(this).data("name");
-            $(".get-all-stickers-tab")
-                .append(`<div class="inventory-attr-item" data-id="${id}">
-                                            <h3 class="text">${name}</h3>
-                                            <button  type="button" class="btn btn-danger remove-all-attributes "><i class="fa fa-close"></i></button>
-                                            <input type="hidden" name="stickers[]" value="${id}">
-                                        </div>`);
-            $(this)
-                .parent()
-                .remove();
-        });
+        // $("body").on("click", ".add-related-event", function () {
+        //     let id = $(this).data("id");
+        //     let name = $(this).data("name");
+        //     $(".get-all-stickers-tab")
+        //         .append(`<div class="inventory-attr-item" data-id="${id}">
+        //                                     <h3 class="text">${name}</h3>
+        //                                     <button  type="button" class="btn btn-danger remove-all-attributes "><i class="fa fa-close"></i></button>
+        //                                     <input type="hidden" name="stickers[]" value="${id}">
+        //                                 </div>`);
+        //     $(this)
+        //         .parent()
+        //         .remove();
+        // });
 
         $('body').on('change', '.inventory_attributes .display_as-select', function () {
             $(".display-as-wall").addClass("d-none")

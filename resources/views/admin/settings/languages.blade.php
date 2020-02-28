@@ -39,49 +39,52 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Default</th>
-                                <th>Language</th>
-                                <th>Native</th>
-                                <th>Icon</th>
-                                <th>Code</th>
-                                <th>Shared</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($languages as $language)
+                        <div class="table-responsive">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
                                 <tr>
-                                    <td>
-                                        <label>
-                                            <input type="radio" name="languages_id" value="{!! $language->id !!}"
-                                                   @if($language->default) checked @endif class="default_language">
-                                        </label>
-                                    </td>
-                                    <td>{!! $language->name !!}</td>
-                                    <td>{!! $language->original_name !!}</td>
-                                    <td><span class="flag-icon flag-icon-{{ strtolower($language->code) }}"></span></td>
-                                    <td>{!! $language->code !!}</td>
-                                    <td>{!! ($language->shared) ? "YES" : "NO" !!}</td>
-                                    <td>
-                                        @ok('admin_settings_languages_edit')
-                                        <a href="{!! route('admin_settings_languages_edit',$language->id) !!}"
-                                           data-toggle="tooltip" data-placement="bottom" title="{!! $language->name !!}"
-                                           class="btn btn-sm btn-warning"><i class="fa fa-pencil-square-o"
-                                                                             aria-hidden="true"></i></a>
-                                        @endok
-                                        @ok('admin_settings_languages_delete')
-                                        <a href="{!! route('admin_settings_languages_delete',$language->id) !!}"
-                                           data-toggle="tooltip" data-placement="bottom" title="{!! $language->name !!}"
-                                           class="btn btn-sm bg-red"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                        @endok
-                                    </td>
+                                    <th>Default</th>
+                                    <th>Language</th>
+                                    <th>Native</th>
+                                    <th>Icon</th>
+                                    <th>Code</th>
+                                    <th>Shared</th>
+                                    <th>Action</th>
                                 </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                @foreach($languages as $language)
+                                    <tr>
+                                        <td>
+                                            <label>
+                                                <input type="radio" name="languages_id" value="{!! $language->id !!}"
+                                                       @if($language->default) checked @endif class="default_language">
+                                            </label>
+                                        </td>
+                                        <td>{!! $language->name !!}</td>
+                                        <td>{!! $language->original_name !!}</td>
+                                        <td><span class="flag-icon flag-icon-{{ strtolower($language->code) }}"></span></td>
+                                        <td>{!! $language->code !!}</td>
+                                        <td>{!! ($language->shared) ? "YES" : "NO" !!}</td>
+                                        <td>
+                                            <div class="datatable-td__action">
+                                            @ok('admin_settings_languages_edit')
+                                            <a href="{!! route('admin_settings_languages_edit',$language->id) !!}"
+                                               data-toggle="tooltip" data-placement="bottom" title="{!! $language->name !!}"
+                                               class="btn btn-sm btn-warning">Edit</a>
+                                            @endok
+                                            @ok('admin_settings_languages_delete')
+                                            <a href="{!! route('admin_settings_languages_delete',$language->id) !!}"
+                                               data-toggle="tooltip" data-placement="bottom" title="{!! $language->name !!}"
+                                               class="btn btn-danger btn-sm bg-red">x</a>
+                                            @endok
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="col-xs-12 text-right">
 
                         </div>

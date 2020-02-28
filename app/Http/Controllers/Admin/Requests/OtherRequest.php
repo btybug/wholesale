@@ -25,7 +25,6 @@ class OtherRequest extends FormRequest
     {
         return [
             "item_id"    => "required|exists:items,id",
-            "qty"  => "required|integer|min:0",
             "reason"  => "required",
         ];
     }

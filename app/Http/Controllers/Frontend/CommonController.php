@@ -48,6 +48,20 @@ class CommonController extends Controller
         return $this->view('about_us',compact(['model']));
     }
 
+    public function getPrivacy()
+    {
+        $model = Common::where('type','privacy')->first();
+
+        return $this->view('privacy',compact(['model']));
+    }
+
+    public function getCookies()
+    {
+        $model = Common::where('type','cookies')->first();
+
+        return $this->view('cookies',compact(['model']));
+    }
+
     public function changeCurrency(Request $request,SiteCurrencies $siteCurrencies)
     {
         $currency = $siteCurrencies->where('code',$request->code)->first();

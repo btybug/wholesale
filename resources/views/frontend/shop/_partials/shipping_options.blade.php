@@ -1,26 +1,38 @@
-<div>
-    <p class="mb-5">According to your shipping address... Select one of these options:</p>
-    <ul class="list-unstyled mb-0 profile-form row">
-        @if($delivery)
-            @if(count($delivery->options))
-                @foreach($delivery->options as $option)
-                    <li class="col-md-3">
-                        <input data-delivery="{{ $delivery->id }}" class="form-check-input register-form_input-radio select-shipping-method"
+<div class="cart-delivery">
+    <div class="head-delivery">
+        <h3 class="title">{!! __('delivery_method') !!}</h3>
+        <p class="delivery-sec-title font-18">{!! __('select_delivery_method') !!}</p>
+    </div>
+
+    @if($delivery)
+        @if(count($delivery->options))
+            @foreach($delivery->options as $option)
+                <div class="method">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input select-shipping-method"
+                               data-delivery="{{ $delivery->id }}"
                                {!! ($shipping && $shipping->getAttributes()->id == $option->id) ? 'checked="checked"' : "" !!}
-                               type="radio" name="courier_change" value="{!! $option->id !!}" id="deliveryRadios{{ $option->id }}">
-                        <label class="form-check-label mb-0 d-flex text-main-clr pointer" for="deliveryRadios{{ $option->id }}">
-                            <span class="d-inline-flex flex-column">
-                                <span class="delivery-icon">
-                            <img src="img/dhl.png" alt="">
-                            </span>
-                            <span class="font-main-bold mb-1">       {!! $option->courier->name !!}</span>
-                                <span class="font-12"><span class="text-gray-clr">Shipping:</span> <span>{{ convert_price($option->cost,$currency) }}</span></span>
-                                <span class="font-12"><span class="text-gray-clr">Delivery Time:</span> <span> {!! $option->time !!} days</span></span>
-                            </span>
+                               id="deliveryRadios{{ $option->id }}" name="courier_change" value="{!! $option->id !!}">
+                        <label class="custom-control-label" for="deliveryRadios{{ $option->id }}">
+                                                                <span class="d-flex method-wrap pointer">
+                                                                    <span class="method-left">
+                                                                         <span class="photo">
+<img src="{!! $option->courier->image !!}" alt="brand">
+                                                                </span>
+                                                                    </span>
+                                                                     <span class="method-right">
+                                                                         <span class="method-item-title">{!! $option->courier->name !!}</span>
+                                                                         <span class="font-main-light method-item-info">{!! __('Shipping') !!}: <span
+                                                                                 class="text-red-clr">{{ convert_price($option->cost,$currency) }}</span></span>
+                                                                         <span class="font-main-light method-item-info">{!! __('delivery_time') !!}: {!! $option->time !!} {!! __('days') !!}</span>
+
+                                                                    </span>
+                                                                </span>
+                            <span class="check-line"></span>
                         </label>
-                    </li>
-                @endforeach
-            @endif
+                    </div>
+                </div>
+            @endforeach
         @endif
-    </ul>
+    @endif
 </div>

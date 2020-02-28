@@ -3,7 +3,6 @@
 
 @stop
 @section('content')
-    <div class="col-md-12">
         <div class="card panel panel-default">
             <div class="card-header panel-heading head-space-between">
                 <h2>{!! ucfirst(str_replace("_"," ",$type)) !!} Category</h2>
@@ -23,7 +22,7 @@
                         </div>
                         @if ($errors->any())
                             <div class="alert alert-danger">
-                                <ul>
+                                <ul class="nav nav-tabs">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
                                     @endforeach
@@ -34,7 +33,6 @@
                 </div>
             </div>
         </div>
-    </div>
     <div class="modal fade releted-products-add-modal" id="productsModal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -75,8 +73,6 @@
         });
 
 
-
-        $('.icon-picker').iconpicker();
         $("body").on("click", ".iconpicker-item", function () {
             let value = $(".icon-picker").val()
             $("#font-show-area").attr("class", value)
@@ -110,10 +106,6 @@
 
         $("#tree1").tree({
             data: data,
-            //   dataUrl: {
-            //     url: '/example_data.json',
-            //     headers: {'abc': 'def'}
-            // },
             autoOpen: true,
             saveState: true,
             dragAndDrop: true,

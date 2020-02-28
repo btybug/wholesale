@@ -6,9 +6,9 @@
     {{ Form::model($comment,['url' => route('edit_comment_post',$comment->id), 'class' => '']) }}
 
     <div class="card panel panel-default">
-        <div class="card-header panel-heading clearfix">
+        <div class="card-header panel-heading d-flex flex-wrap justify-content-between">
             <h2 class="m-0 pull-left">Edit Comment</h2>
-            <div class="pull-right">
+            <div class="ml-1">
                 <a href="{{route('show_comments')}}" class="btn btn-danger mr-10">{!! trans('admin.cancel') !!}</a>
                 {{ Form::submit(trans('admin.save'), ['class' => 'btn btn-primary pull-right']) }}
             </div>

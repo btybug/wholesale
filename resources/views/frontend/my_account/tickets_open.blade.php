@@ -6,15 +6,15 @@
                 <select id="accounts--selects"
                         class="select-2 select-2--no-search main-select main-select-2arrows not-selected arrow-dark"
                         style="width: 100%">
-                    <option value="{!! route('my_account') !!}">Account</option>
-                    <option value="{!! route('messages') !!}">Notifications</option>
-                    <option value="{!! route('my_account_favourites') !!}">Favorites</option>
-                    <option value="{!! route('my_account_orders') !!}">Orders</option>
-                    <option value="{!! route('my_account_address') !!}">Address</option>
-                    <option value="{!! route('my_account_tickets') !!}">Tickets</option>
-                    <option value="{!! route('my_account_referrals') !!}">Referals</option>
-                    <option value="{!! route('my_account_special_offers') !!}">Special Offers</option>
-                    <option value="">Address</option>
+                    <option value="{!! route('my_account') !!}">{!! __('account') !!}</option>
+                    <option value="{!! route('messages') !!}">{!! __('notifications') !!}</option>
+                    <option value="{!! route('my_account_favourites') !!}">{!! __('favorites') !!}</option>
+                    <option value="{!! route('my_account_orders') !!}">{!! __('orders') !!}</option>
+                    <option value="{!! route('my_account_address') !!}">{!! __('address') !!}</option>
+                    <option value="{!! route('my_account_tickets') !!}">{!! __('tickets') !!}</option>
+                    <option value="{!! route('my_account_referrals') !!}">{!! __('referrals') !!}</option>
+                    <option value="{!! route('my_account_special_offers') !!}">{!! __('special_offer') !!}</option>
+                    <option value="">{!! __('address') !!}</option>
                 </select>
                 {{--<select id="accounts"--}}
                 {{--class="select-2 select-2--no-search main-select main-select-2arrows products-filter-wrap_select not-selected arrow-dark" style="width: 100%">--}}
@@ -33,7 +33,7 @@
                 <div class="mt-auto">
                     {!! Form::open(['url'=>route('logout')]) !!}
                     <div class="text-center">
-                        <button type="submit" class="profile-sidebar_logout-btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-white pointer">Logout</button>
+                        <button type="submit" class="profile-sidebar_logout-btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-white pointer">{!! __('logout') !!}</button>
                     </div>
                     {!! Form::close() !!}
                 </div>
@@ -46,7 +46,7 @@
                         <div class="col-lg-9">
                                 @if (count($errors) > 0)
                                     <div class="alert alert-danger">
-                                        <strong>Sorry!</strong> There were more problems with your equest.<br><br>
+                                        <strong>{!! __('sorry') !!}</strong> {!! __('alert_sorry_desc') !!}<br><br>
                                         <ul>
                                             @foreach ($errors->all() as $error)
                                                 <li>{{ $error }}</li>
@@ -73,7 +73,7 @@
                                     <div class="form-group">
                                         <div class="status-wall wall">
                                             <div class="row form-group">
-                                                {{Form::label('subject', 'Subject',['class' => 'col-sm-3'])}}
+                                                {{Form::label('subject', __('subject'),['class' => 'col-sm-3'])}}
                                                 <div class="col-sm-9">
                                                     {!! Form::text('subject',null,['class'=>'form-control checkout-form_input-text']) !!}
                                                 </div>
@@ -85,7 +85,7 @@
                                         </div>
                                         <div class="status-wall wall">
                                             <div class="row form-group">
-                                                {{Form::label('summary', 'Summary',['class' => 'col-sm-3'])}}
+                                                {{Form::label('summary', __('summary'),['class' => 'col-sm-3'])}}
                                                 <div class="col-sm-9">
                                                     {!! Form::textarea('summary',null,['class'=>'form-control checkout-form_input-text','cols'=>30,'rows'=>2]) !!}
                                                 </div>
@@ -94,14 +94,14 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="form-group row">
-                                            <label class="col-sm-3">Attachments</label>
+                                            <label class="col-sm-3">{!! __('attachments') !!}</label>
                                             <div class="col-sm-9">
                                                 {!! Form::file('attachments[]',['multiple' => true]) !!}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="text-right btn-save">
-                                        {!! Form::submit('Save',['class' => 'btn ntfs-btn rounded-0']) !!}
+                                        {!! Form::submit(__('save'),['class' => 'btn ntfs-btn rounded-0']) !!}
                                     </div>
                                 </div>
 

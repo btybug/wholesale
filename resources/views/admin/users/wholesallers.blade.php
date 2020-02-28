@@ -13,23 +13,25 @@
             </div>
         </div>
         <div class="card-body panel-body">
+<div class="table-responsive">
+    <table id="users-table" class="table table-style table-bordered" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Phone</th>
+            <th>Country</th>
+            <th>Gender</th>
+            <th>Registered</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+    </table>
+</div>
 
-            <table id="users-table" class="table table-style table-bordered" cellspacing="0" width="100%">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Phone</th>
-                    <th>Country</th>
-                    <th>Gender</th>
-                    <th>Registered</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-            </table>
 
         </div>
     </div>

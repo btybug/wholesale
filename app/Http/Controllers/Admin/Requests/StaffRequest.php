@@ -31,10 +31,12 @@ class StaffRequest extends FormRequest
         if($request->routeIs('admin_staff_new_post')){
             $rules = [
                 'email'=>'required|email|unique:users,email',
+                'phone'=>'required|numeric|unique:users,phone'
             ];
         }else{
             $rules = [
                 'email'=>'required|email|unique:users,email,'.$request->id,
+                'phone'=>'required|numeric|unique:users,phone,'.$request->id
             ];
         }
 
@@ -42,9 +44,9 @@ class StaffRequest extends FormRequest
            'name'=>'required',
            'last_name'=>'required',
            'country'=>'required',
-           'phone'=>'required|numeric',
            'gender'=>'required|in:male,female',
-           'role_id'=>'required|exists:roles,id',
+           'password'=>'required|min:6',
+           'role_id'=>'required|exists:roles,id|not_in:1',
        ];
     }
 }

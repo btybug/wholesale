@@ -14,7 +14,7 @@
                                ref="javascript:void(0);">
                                 <span class="font-sec-reg text-main-clr num">1</span>
                                 <span
-                                    class="name text-uppercase font-main-bold font-16 text-truncate">SHOPPING CART</span>
+                                    class="name text-uppercase font-main-bold font-16 text-truncate">{!! __('shopping_cart') !!}</span>
                                 <span class="icon">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +30,7 @@
                             <a class="item visited d-flex align-items-center justify-content-between"
                                href="javascript:void(0);">
                                 <span class="font-sec-reg text-main-clr num">2</span>
-                                <span class="name text-uppercase font-main-bold font-16 text-truncate">CHECKOUT</span>
+                                <span class="name text-uppercase font-main-bold font-16 text-truncate">{!! __('checkout') !!}</span>
                                 <span class="icon">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +46,7 @@
                             <a class="item active d-flex align-items-center justify-content-between"
                                href="javascript:void(0);">
                                 <span class="font-sec-reg text-main-clr num">3</span>
-                                <span class="name text-uppercase font-main-bold font-16 text-truncate">Payment</span>
+                                <span class="name text-uppercase font-main-bold font-16 text-truncate">{!! __('payment') !!}</span>
                                 <span class="icon">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +63,7 @@
                                href="javascript:void(0);">
                                 <span class="font-sec-reg text-main-clr num">4</span>
                                 <span
-                                    class="name text-uppercase font-main-bold font-16 text-truncate">Confirmation</span>
+                                    class="name text-uppercase font-main-bold font-16 text-truncate">{!! __('confirmation') !!}</span>
                                 <span class="icon">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -338,12 +338,12 @@
                 if(method == 'cash'){
                     $("#stripe-method").removeClass('show').addClass('d-none');
                     $("#cash-method").removeClass('d-none').addClass('show');
-                    button = '<button class="order-summary-btn font-sec-reg text-uppercase font-24 text-sec-clr submit-cash">PAY CASH</button>';
+                    button = '<button class="order-summary-btn font-sec-reg text-uppercase font-24 text-sec-clr submit-cash w-100">{!! __('pay_cash') !!}</button>';
                 }else if(method == 'stripe'){
                     $("#stripe-method").removeClass('d-none').addClass('show');
                     $("#cash-method").removeClass('show').addClass('d-none');
 
-                    button = '<button class="order-summary-btn font-sec-reg text-uppercase font-24 text-sec-clr submit-stripe">PAY WITH CARD</button>';
+                    button = '<button class="order-summary-btn font-sec-reg text-uppercase font-24 text-sec-clr submit-stripe">{!! __('pay_with_card') !!}</button>';
                 }
 console.log(method)
                 el.html(button);

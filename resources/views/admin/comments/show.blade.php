@@ -6,10 +6,13 @@
     <div class="card panel panel-default">
         <div class="card-header panel-heading clearfix">
                 <h2 class="m-0 pull-left">Comments</h2>
-                {{--<div class="col-md-6 "><a class="btn btn-primary pull-right" href="{!! route('admin_blog_comments_settings') !!}">Settings</a></div>--}}
-
+            @ok('admin_blog_comments_settings')
+                <div class="col-md-6 ">
+                    <a class="btn btn-primary pull-right" href="{!! route('admin_blog_comments_settings') !!}">Settings</a>
+                </div>
+            @endok
         </div>
-        <div class="card-body panel-body comment--body">
+        <div class="card-body panel-body comment--body pt-0">
             <table id="posts-table" class="table table-style table-bordered" cellspacing="0" width="100%">
                 <thead>
                 <tr>
@@ -37,7 +40,10 @@
                 "processing": true,
                 "serverSide": true,
                 "bPaginate": true,
-                dom: 'Bfrtip',
+                "scrollX": true,
+                dom: '<"d-flex justify-content-between align-items-baseline"lfB><rtip>',
+                displayLength: 10,
+                lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
                 buttons: [
                     'csv', 'excel', 'pdf', 'print'
                 ],
@@ -50,7 +56,7 @@
                     {data: 'replies', name: 'replies'},
                     {data: 'guest_name', name: 'guest_name'},
                     {data: 'guest_email', name: 'guest_email'},
-                   {data: 'created_at', name: 'created_at'},
+                    {data: 'created_at', name: 'created_at'},
                     {data: 'actions', name: 'actions'}
                 ]
             });

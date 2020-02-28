@@ -71,7 +71,7 @@
                 <div class="container main-max-width">
                     <div class="row">
                         <div class="products__page-main_left-wrapper">
-                            {!! Form::model(null,['url' => '','method' => 'GET','id' => 'filter-form']) !!}
+                            {!! Form::model(null,['url' => route('categories_front'),'method' => 'GET','id' => 'filter-form']) !!}
                             <div class="selected_filter-sidebar-wrapper">
                                 {{--@if(count($selecteds))--}}
                                     {{--<div class="d-flex justify-content-between head">--}}
@@ -484,4 +484,5 @@
             })
         });
     </script>
+
 @stop

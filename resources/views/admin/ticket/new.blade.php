@@ -20,7 +20,7 @@
            <div class="card-body panel-body">
 
                <div class="row sortable-panels">
-                   <div class="col-md-7 ">
+                   <div class="col-xl-7 col-sm-6">
                        <div class="form-group">
                            <div class="row">
                                <div class="col-sm-12">
@@ -36,8 +36,8 @@
                                    </div>
                                    <div class="form-group">
                                        <div class="form-group row">
-                                           <label class="col-sm-3">Attachments</label>
-                                           <div class="col-sm-9">
+                                           <label class="col-lg-3">Attachments</label>
+                                           <div class="col-lg-9">
                                                {!! Form::file('attachments[]',['multiple' => true]) !!}
                                            </div>
                                        </div>
@@ -46,40 +46,40 @@
                            </div>
                        </div>
                    </div>
-                   <div class="col-md-5 ">
+                   <div class="col-xl-5 col-sm-6">
                        <div class="view-product-wall list-group">
                            <div class="author-wall wall ">
-                               <div class="row">
-                                   {{Form::label('author', 'Author',['class' => 'col-sm-3'])}}
-                                   <div class="col-sm-9">
+                               <div class="row form-group">
+                                   {{Form::label('author', 'Author',['class' => 'col-lg-3'])}}
+                                   <div class="col-lg-9">
                                        {{ Auth::user()->name }}
                                    </div>
                                </div>
                            </div>
-                           <div class="status-wall wall ">
+                           <div class="status-wall wall form-group">
                                <div class="row">
-                                   {{Form::label('user', 'User',['class' => 'col-sm-3'])}}
-                                   <div class="col-sm-9">
+                                   {{Form::label('user', 'User',['class' => 'col-lg-3'])}}
+                                   <div class="col-lg-9">
                                        {!! Form::select('user_id',$users,null,
                                                    ['class' => 'form-control','id'=> 'user']) !!}
                                    </div>
                                </div>
                            </div>
-                           <div class="status-wall wall ">
+                           <div class="status-wall wall form-group">
                                <div class="row">
-                                   {{Form::label('status', 'Status',['class' => 'col-sm-3'])}}
-                                   <div class="col-sm-9">
+                                   {{Form::label('status', 'Status',['class' => 'col-lg-3'])}}
+                                   <div class="col-lg-9">
                                        {!! Form::select('status_id',$statuses,null,
                                                    ['class' => 'form-control','id'=> 'status']) !!}
                                    </div>
                                </div>
                            </div>
-                           <div class="tag-wall wall ">
+                           <div class="tag-wall wall form-group">
                                <div class="row">
-                                   <label class="col-sm-3 control-label" for="input-category"><span
+                                   <label class="col-lg-3 control-label" for="input-category"><span
                                                data-toggle="tooltip" title=""
                                                data-original-title="Choose all products under selected category.">Tags</span></label>
-                                   <div class="col-sm-9">
+                                   <div class="col-lg-9">
                                        <input type="text" name="" value="" placeholder="Tags"
                                               id="input-tags" class="form-control" autocomplete="off">
                                        <ul class="dropdown-menu"></ul>
@@ -102,10 +102,10 @@
                                    </div>
                                </div>
                            </div>
-                           <div class="status-wall wall ">
+                           <div class="status-wall wall form-group">
                                <div class="row">
-                                   {{Form::label('category_id', 'Category',['class' => 'col-sm-3'])}}
-                                   <div class="col-sm-9">
+                                   {{Form::label('category_id', 'Category',['class' => 'col-lg-3'])}}
+                                   <div class="col-lg-9">
                                        {!! Form::select('category_id',['' => 'Select'] + $categories,null,
                                                    ['class' => 'form-control','id'=> 'category']) !!}
                                    </div>
@@ -114,19 +114,19 @@
                            <div id="category-related">
 
                            </div>
-                           <div class="status-wall wall ">
+                           <div class="status-wall wall form-group">
                                <div class="row">
-                                   {{Form::label('priority_id', 'Priority',['class' => 'col-sm-3'])}}
-                                   <div class="col-sm-9">
+                                   {{Form::label('priority_id', 'Priority',['class' => 'col-lg-3'])}}
+                                   <div class="col-lg-9">
                                        {!! Form::select('priority_id',$priorities,null,
                                                    ['class' => 'form-control','id'=> 'priority']) !!}
                                    </div>
                                </div>
                            </div>
-                           <div class="status-wall wall ">
+                           <div class="status-wall wall form-group">
                                <div class="row">
-                                   {{Form::label('staff', 'Responsible staff',['class' => 'col-sm-3'])}}
-                                   <div class="col-sm-9">
+                                   {{Form::label('staff', 'Responsible staff',['class' => 'col-lg-3'])}}
+                                   <div class="col-lg-9">
                                        {!! Form::select('staff_id',$staff,null,
                                                    ['class' => 'form-control','id'=> 'staff']) !!}
                                    </div>
@@ -156,7 +156,7 @@
     <script src="{{asset('public/admin_theme/bootstrap-tagsinput/bootstrap-tagsinput.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 
-    <script src="/public/js/tinymce/tinymce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.1.2/tinymce.min.js" integrity="sha256-DdWABQXQvgw5MFqHCMQ34eo2D3GTcL6xA36LVz1sAmQ=" crossorigin="anonymous"></script>
     <script src="/public/js/tiket.js"></script>
 
     <script>
@@ -228,19 +228,89 @@
         function initTinyMce(e) {
             tinymce.init({
                 selector: e,
-                height: 500,
-                theme: 'modern',
-                plugins: 'print preview fullpage  searchreplace autolink directionality  visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools  contextmenu colorpicker textpattern help',
-                toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+                plugins: 'print preview fullpage   importcss  searchreplace autolink autosave save directionality  visualblocks visualchars fullscreen image link media  template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists  wordcount   imagetools textpattern noneditable help    charmap   quickbars  emoticons ',
+                //   imagetools_cors_hosts: ['picsum.photos'],
+                //   tinydrive_token_provider: function (success, failure) {
+                //     success({ token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huZG9lIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.Ks_BdfH4CWilyzLNk8S2gDARFhuxIauLa8PwhdEQhEo' });
+                //   },
+                //   tinydrive_demo_files_url: '/docs/demo/tiny-drive-demo/demo_files.json',
+                //   tinydrive_dropbox_app_key: 'jee1s9eykoh752j',
+                //   tinydrive_google_drive_key: 'AIzaSyAsVRuCBc-BLQ1xNKtnLHB3AeoK-xmOrTc',
+                //   tinydrive_google_drive_client_id: '748627179519-p9vv3va1mppc66fikai92b3ru73mpukf.apps.googleusercontent.com',
+                mobile: {
+                    plugins: 'print preview fullpage   importcss  searchreplace autolink autosave save directionality  visualblocks visualchars fullscreen image link media  template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists  wordcount   textpattern noneditable help   charmap  quickbars  emoticons '
+                },
+                menu: {
+                    tc: {
+                    title: 'TinyComments',
+                    items: 'addcomment showcomments deleteallconversations'
+                    }
+                },
+                menubar: '',
+                //   'file edit view insert format tools table tc help',
+                toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist  | forecolor backcolor    removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media  template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+                autosave_ask_before_unload: true,
+                //   autosave_interval: "30s",
+                //   autosave_prefix: "{path}{query}-{id}-",
+                //   autosave_restore_when_empty: false,
+                //   autosave_retention: "2m",
                 image_advtab: true,
-                templates: [
-                    {title: 'Test template 1', content: 'Test 1'},
-                    {title: 'Test template 2', content: 'Test 2'}
-                ],
                 content_css: [
                     '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-                    '//www.tinymce.com/css/codepen.min.css'
-                ]
+                    '//www.tiny.cloud/css/codepen.min.css'
+                ],
+                link_list: [
+                    { title: 'My page 1', value: 'http://www.tinymce.com' },
+                    { title: 'My page 2', value: 'http://www.moxiecode.com' }
+                ],
+                image_list: [
+                    { title: 'My page 1', value: 'http://www.tinymce.com' },
+                    { title: 'My page 2', value: 'http://www.moxiecode.com' }
+                ],
+                image_class_list: [
+                    { title: 'None', value: '' },
+                    { title: 'Some class', value: 'class-name' }
+                ],
+                importcss_append: true,
+                height: 400,
+                //   file_picker_callback: function (callback, value, meta) {
+                //     /* Provide file and text for the link dialog */
+                //     if (meta.filetype === 'file') {
+                //       callback('https://www.google.com/logos/google.jpg', { text: 'My text' });
+                //     }
+
+                //     /* Provide image and alt text for the image dialog */
+                //     if (meta.filetype === 'image') {
+                //       callback('https://www.google.com/logos/google.jpg', { alt: 'My alt text' });
+                //     }
+
+                //     /* Provide alternative source and posted for the media dialog */
+                //     if (meta.filetype === 'media') {
+                //       callback('movie.mp4', { source2: 'alt.ogg', poster: 'https://www.google.com/logos/google.jpg' });
+                //     }
+                //   },
+                templates: [
+                        { title: 'New Table', description: 'creates a new table', content: '<div class="mceTmpl"><table width="98%%"  border="0" cellspacing="0" cellpadding="0"><tr><th scope="col"> </th><th scope="col"> </th></tr><tr><td> </td><td> </td></tr></table></div>' },
+                    { title: 'Starting my story', description: 'A cure for writers block', content: 'Once upon a time...' },
+                    { title: 'New list with dates', description: 'New List with dates', content: '<div class="mceTmpl"><span class="cdate">cdate</span><br /><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>' }
+                ],
+                template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
+                template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
+                height: 600,
+                image_caption: true,
+                quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+                noneditable_noneditable_class: "mceNonEditable",
+                toolbar_drawer: 'sliding',
+                spellchecker_dialog: true,
+                spellchecker_whitelist: ['Ephox', 'Moxiecode'],
+                tinycomments_mode: 'embedded',
+                content_style: ".mymention{ color: gray; }",
+                contextmenu: "link image imagetools table configurepermanentpen",
+                mentions_selector: '.mymention',
+                //   mentions_fetch: mentions_fetch,
+                //   mentions_menu_hover: mentions_menu_hover,
+                //   mentions_menu_complete: mentions_menu_complete,
+                //   mentions_select: mentions_select,
             });
         }
 

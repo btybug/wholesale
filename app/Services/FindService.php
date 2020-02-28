@@ -26,7 +26,7 @@ class FindService
         $data = [];
 
         foreach ($this->config as $key => $value){
-            $data[$key] = $key;
+            $data[url($value['url'])] = $key;
         }
 
         return  $data;

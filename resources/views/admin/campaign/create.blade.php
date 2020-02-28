@@ -8,7 +8,7 @@
         <h2 class="m-0">{{ ($model) ? $model->title : "Create campaign" }}</h2>
     </div>
         <div class="card-body panel-body">
-        <div class="col-md-12">
+        <div class="">
 
             {!! Form::model($model) !!}
                 <!-- Password input-->
@@ -44,63 +44,63 @@
 
             </form>
         </div>
-        <div class="col-md-12">
+        <div class="">
             {!! Form::open(['url' => route('admin_search'),'id' => 'filterForm']) !!}
                 <!-- Password input-->
                 <div class="row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-sm-6">
                         <div class="row">
-                            <label class="col-md-2" for="passwordinput">Name</label>
-                            <div class="col-md-10">
+                            <label class="col-xl-2" for="passwordinput">Name</label>
+                            <div class="col-xl-10">
                                 {!! Form::text('name',null,['class'=>'form-control input-md']) !!}
                             </div>
                         </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-sm-6">
                         <div class="row">
-                            <label class="col-md-2" for="passwordinput">Last Name</label>
-                            <div class="col-md-10">
+                            <label class="col-xl-2" for="passwordinput">Last Name</label>
+                            <div class="col-xl-10">
                                 {!! Form::text('last_name',null,['class'=>'form-control input-md']) !!}
                             </div>
                         </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-sm-6">
                         <div class="row">
-                            <label class="col-md-2" for="passwordinput">Gender</label>
-                            <div class="col-md-10">
+                            <label class="col-xl-2" for="passwordinput">Gender</label>
+                            <div class="col-xl-10">
                                 {!! Form::select('gender',['' => 'Select','male' => 'Male','female' => 'Female'],null,['class'=>'form-control input-md']) !!}
                             </div>
                         </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-sm-6">
                         <div class="row">
-                            <label class="col-md-2" for="passwordinput">Country</label>
-                            <div class="col-md-10">
+                            <label class="col-xl-2" for="passwordinput">Country</label>
+                            <div class="col-xl-10">
                                 {!! Form::select('country[]',$countries,null,['class'=>'form-control select2-input','multiple' => true]) !!}
                             </div>
                         </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-sm-6">
                         <div class="row">
-                            <label class="col-md-2" for="passwordinput">start age</label>
-                            <div class="col-md-10">
+                            <label class="col-xl-2" for="passwordinput">start age</label>
+                            <div class="col-xl-10">
                                 {!! Form::number('start_age',null,['class'=>'form-control input-md','min' => 0]) !!}
                             </div>
                         </div>
 
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-sm-6">
                         <div class="row">
-                            <label class="col-md-2" for="passwordinput">end age</label>
-                            <div class="col-md-10">
+                            <label class="col-xl-2" for="passwordinput">end age</label>
+                            <div class="col-xl-10">
                                 {!! Form::number('end_age',null,['class'=>'form-control input-md','min' => 0]) !!}
                             </div>
                         </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-sm-6">
                         <div class="row">
-                            <label class="col-sm-2 control-label" for="input-date-start">Registered Date start</label>
-                            <div class="col-sm-3">
+                            <label class="col-xl-2 control-label" for="input-date-start">Registered Date start</label>
+                            <div class="col-xl-4">
                                 <div class="input-group date">
                                     {!! Form::text('start_date',null,['placeholder' => 'start date',
                                   'id'=>'input-date-start', 'class'=> 'form-control']) !!}
@@ -110,10 +110,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-sm-6">
                         <div class="row">
-                            <label class="col-sm-2 control-label" for="input-date-start">Registered Date end</label>
-                            <div class="col-sm-3">
+                            <label class="col-xl-2 control-label" for="input-date-start">Registered Date end</label>
+                            <div class="col-xl-4">
                                 <div class="input-group date">
                                     {!! Form::text('end_date',null,['placeholder' => 'end date',
                                   'id'=>'input-date-end', 'class'=> 'form-control']) !!}
@@ -176,7 +176,10 @@
     <script>
         var table=  $('#orders-table').DataTable({
             ajax: "{!! route('datatable_all_channel_customers') !!}",
-            dom: 'Bfrtip',
+            dom: 'Bflrtip',
+            displayLength: 10,
+            lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+            "scrollX": true,
             buttons: [
                 'csv', 'excel', 'pdf', 'print'
             ],

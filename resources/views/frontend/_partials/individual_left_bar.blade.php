@@ -12,9 +12,9 @@
 
 
 
-<div class="category-select">
+<div class="category-select news-page-select-wall">
     <select class="select-2 select-2--no-search main-select main-select-2arrows products-filter-wrap_select not-selected arrow-dark" style="width: 100%">
-        <option class="selected">News</option>
+        <option class="selected">{!! __('news') !!}</option>
         <option>News 1</option>
         <option>News 2</option>
     </select>

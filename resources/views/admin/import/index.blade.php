@@ -7,16 +7,16 @@
     <form method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
-            <select name="category" id="" class="btn btn-info">
+            <select name="category" id="" class="btn btn-info mb-1">
                 <option value="" selected disabled="">Choose Category</option>
                 <option value="stock">Stock</option>
                 <option value="post">Post</option>
             </select>
 
             <input type="file" class="form-control hidden" id="exl_file" name="exl_file">
-            <label for="exl_file" class="btn btn-info mb-0"><i class="fa fa-download mr-10" aria-hidden="true"></i>Choose File</label>
+            <label for="exl_file" class="btn btn-info mb-1"><i class="fa fa-download mr-10" aria-hidden="true"></i>Choose File</label>
 
-            <button class="btn btn-success" type="submit">
+            <button class="btn btn-success mb-1" type="submit">
                 <i class="fa fa-download" aria-hidden="true"></i>
                 Import
             </button>
@@ -25,7 +25,7 @@
 
     <div class="row">
         @foreach($imports as $import)
-            <div class="col-md-2 col-sm-4">
+            <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="card">
                     <div class="files">
                         <div class="delete_file text-center" data-id="{{$import["id"]}}">X</div>

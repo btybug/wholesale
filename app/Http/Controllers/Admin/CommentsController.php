@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
+use App\Models\Settings;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -76,5 +77,19 @@ class CommentsController extends Controller
         $comment = $this->comment->findOrFail($request->slug);
         $comment->delete();
         return response()->json(['errpr' => false]);
+    }
+
+    public function getSettings(Settings $settings)
+    {
+        $model = $settings->getEditableData('admin_comments_setting');
+
+        return $this->view('settings', compact(['model']));
+    }
+
+    public function postSettings(Request $request,Settings $settings)
+    {
+        $settings->updateOrCreateSettings('admin_comments_setting', $request->except('_token'));
+
+        return redirect()->back();
     }
 }

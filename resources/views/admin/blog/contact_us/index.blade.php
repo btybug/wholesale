@@ -5,12 +5,12 @@
 @section('content')
     <div class="card panel panel-default">
         @ok('admin_gmail_settings')
-        <div class="text-right">
-            <a class="btn btn-warning mr-10 mt-10" href="{!! route('admin_gmail_settings') !!}">Settings</a>
+        <div class="text-right px-4 mt-2">
+            <a class="btn btn-warning" href="{!! route('admin_gmail_settings') !!}">Settings</a>
         </div>
         @endok
         @if(LaravelGmail::check())
-        <div class="card-body panel-body">
+        <div class="card-body panel-body pt-0">
             <table id="posts-table" class="table table-style table-bordered" cellspacing="0" width="100%">
                 <thead>
                 <tr>
@@ -46,7 +46,10 @@
                        }
                    })
                 },
-                dom: 'Bfrtip',
+                "scrollX": true,
+                dom: 'Bflrtip',
+                displayLength: 10,
+                lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
                 buttons: [
                     'csv', 'excel', 'pdf', 'print'
                 ],

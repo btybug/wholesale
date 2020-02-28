@@ -6,8 +6,8 @@
 
     <div class="inventory_attributes">
         <div class="card panel panel-default">
-                    <div class="card-header panel-heading clearfix">
-                        <h2 class="mb-0 pull-left">Attribute</h2>
+                    <div class="card-header panel-heading d-flex flex-wrap justify-content-between">
+                        <h2 class="mb-0 mr-1">Attribute</h2>
                         <div class="button-save text-right">
                             <a class="btn btn-default"
                                href="{!! route('admin_store_attributes') !!}">Back</a>
@@ -42,7 +42,7 @@
                                     <div id="{{ strtolower($language->code) }}"
                                          class="tab-pane fade  @if($loop->first) in active show @endif">
                                         <div class="row">
-                                            <div class="col-md-8">
+                                            <div class="col-xl-8">
                                                 <div class="form-group row">
                                                     <label class="col-sm-2 control-label">Couriers Name</label>
                                                     <div class="col-sm-10">
@@ -62,7 +62,7 @@
                             @endif
                         </div>
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-xl-8">
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label" for="input-total">Icon</label>
                                     <div class="col-sm-9">

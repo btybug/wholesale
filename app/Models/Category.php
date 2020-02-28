@@ -6,6 +6,65 @@ namespace App\Models;
 use App\Models\Common\Translatable;
 use App\Models\Translations\CategoryTranslation;
 
+/**
+ * App\Models\Category
+ *
+ * @property int $id
+ * @property int|null $parent_id
+ * @property int $user_id
+ * @property string|null $slug
+ * @property string|null $image
+ * @property string|null $icon
+ * @property string|null $classes
+ * @property string $type
+ * @property int $is_core
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Stock[] $brandProducts
+ * @property-read int|null $brand_products_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $children
+ * @property-read int|null $children_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Faq[] $faqs
+ * @property-read int|null $faqs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Stock[] $filter_products
+ * @property-read int|null $filter_products_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Filters[] $filters
+ * @property-read int|null $filters_count
+ * @property-read \App\Models\Category|null $parent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Stock[] $products
+ * @property-read int|null $products_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Stickers[] $stickers
+ * @property-read int|null $stickers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Stock[] $stocks
+ * @property-read int|null $stocks_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Translations\CategoryTranslation[] $translations
+ * @property-read int|null $translations_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable listsTranslations($translationField)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable notTranslatedIn($locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable orWhereTranslation($key, $value, $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable orWhereTranslationLike($key, $value, $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable orderByTranslation($key, $sortmethod = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable translated()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable translatedIn($locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereClasses($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereIcon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereIsCore($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable whereTranslation($key, $value, $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable whereTranslationLike($key, $value, $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Translatable withTranslation()
+ * @mixin \Eloquent
+ */
 class Category extends Translatable
 {
     /**
@@ -38,6 +97,16 @@ class Category extends Translatable
     public function parent()
     {
         return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function seo()
+    {
+        return $this->hasOne(BrandsSeo::class);
+    }
+    public function getSeoField($name, $type = 'general')
+    {
+        $seo = $this->seo;
+        return ($seo) ? $seo->{$name} : null;
     }
 
     public static function recursiveItems($iems, $i = 0, $data = [], $selected = [])
@@ -80,6 +149,11 @@ class Category extends Translatable
         return $this->belongsToMany(Stock::class, 'stock_categories', 'categories_id', 'stock_id');
     }
 
+    public function filter_products()
+    {
+        return $this->belongsToMany(Stock::class, 'stock_filters', 'categories_id', 'stock_id');
+    }
+
     public function faqs()
     {
         return $this->belongsToMany(Faq::class, 'faq_categories', 'categories_id', 'faq_id');
@@ -93,10 +167,5 @@ class Category extends Translatable
     public function stocks()
     {
         return $this->belongsToMany(Stock::class, 'stock_categories', 'categories_id', 'stock_id');
-    }
-
-    public function brandProducts()
-    {
-        return $this->hasMany(Stock::class,'brand_id');
     }
 }

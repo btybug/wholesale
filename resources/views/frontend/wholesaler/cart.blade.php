@@ -13,7 +13,7 @@
                                ref="javascript:void(0);">
                                 <span class="font-sec-reg text-main-clr num">1</span>
                                 <span
-                                    class="name text-uppercase font-main-bold font-16 text-truncate">SHOPPING CART</span>
+                                    class="name text-uppercase font-main-bold font-16 text-truncate">{!! __('shopping_cart') !!}</span>
                                 <span class="icon">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -29,7 +29,7 @@
                             <a class="item d-flex align-items-center justify-content-between"
                                href="javascript:void(0);">
                                 <span class="font-sec-reg text-main-clr num">2</span>
-                                <span class="name text-uppercase font-main-bold font-16 text-truncate">CHECKOUT</span>
+                                <span class="name text-uppercase font-main-bold font-16 text-truncate">{!! __('checkout') !!}</span>
                                 <span class="icon">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +45,7 @@
                             <a class="item d-flex align-items-center justify-content-between"
                                href="javascript:void(0);">
                                 <span class="font-sec-reg text-main-clr num">3</span>
-                                <span class="name text-uppercase font-main-bold font-16 text-truncate">Payment</span>
+                                <span class="name text-uppercase font-main-bold font-16 text-truncate">{!! __('payment') !!}</span>
                                 <span class="icon">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +62,7 @@
                                href="javascript:void(0);">
                                 <span class="font-sec-reg text-main-clr num">4</span>
                                 <span
-                                    class="name text-uppercase font-main-bold font-16 text-truncate">Confirmation</span>
+                                    class="name text-uppercase font-main-bold font-16 text-truncate">{!! __('confirmation') !!}</span>
                                 <span class="icon">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"

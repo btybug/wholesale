@@ -7,7 +7,7 @@
         <div class="alert alert-danger error-place" style="display: none"></div>
         {!! Form::model($geo_zone,['url'=> route('admin_settings_geo_zone_save',($geo_zone)?$geo_zone->id:null),'class' => '','files' => true, 'id' => 'geo-zones-form' ]) !!}
         <div class="card panel panel-default">
-                <div class="card-header panel-heading clearfix">
+                <div class="card-header panel-heading d-flex flex-wrap justify-content-between">
                     <h2 class="pull-left m-0">Geo Zones</h2>
                     <div class="pull-right">
                         <button type="submit" class="btn btn-primary geo-zones-submit" data-original-title="Save"><i
@@ -18,7 +18,7 @@
                     </div>
                 </div>
             <div class="row">
-                <div class="col-md-9">
+                <div class="col-xl-9 col-lg-11">
                     <div class="card-body panel-body">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
@@ -89,80 +89,82 @@
                                         <fieldset>
                                             <legend>Geo Zones</legend>
                                         </fieldset>
-                                        <table id="zone-to-geo-zone" class="table table-striped table-bordered table-hover">
-                                            <thead>
-                                            <tr class="bg-info">
-                                                <td>Country</td>
-                                                <td colspan="2">Regions</td>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                            <tfoot>
+                                        <div class="table-responsive">
+                                            <table id="zone-to-geo-zone" class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                <tr class="bg-info">
+                                                    <td>Country</td>
+                                                    <td colspan="2">Regions</td>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                                <tfoot>
 
-                                            @if(isset($geo_zone) && $geo_zone && isset($geo_zone->countries) && count($geo_zone->countries))
-                                                @foreach($geo_zone->countries as $key=>$country)
-                                                    <tr>
-                                                        <td>
-                                                            {!! Form::select('country['.$key.']',$countries,$country->name,[ 'class'=>'country form-control', 'data-count' => "0"]) !!}
-                                                        </td>
-                                                        <td>
-                                                            <div class="region-container">
-                                                                <select multiple name='region[{!! $key !!}][]'
-                                                                        class="form-control region select-{!! $key !!}">
-                                                                    @php
-                                                                        $old=$country->regions->pluck('name','name')->toArray();
-                                                                    $getRegions=getRegions($country->name);
-                                                                    @endphp
-                                                                    @foreach($getRegions as $region)
+                                                @if(isset($geo_zone) && $geo_zone && isset($geo_zone->countries) && count($geo_zone->countries))
+                                                    @foreach($geo_zone->countries as $key=>$country)
+                                                        <tr>
+                                                            <td>
+                                                                {!! Form::select('country['.$key.']',$countries,$country->name,[ 'class'=>'country form-control', 'data-count' => "0"]) !!}
+                                                            </td>
+                                                            <td>
+                                                                <div class="region-container">
+                                                                    <select multiple name='region[{!! $key !!}][]'
+                                                                            class="form-control region select-{!! $key !!}" style="min-width: 100px">
+                                                                        @php
+                                                                            $old=$country->regions->pluck('name','name')->toArray();
+                                                                        $getRegions=getRegions($country->name);
+                                                                        @endphp
+                                                                        @foreach($getRegions as $region)
 
-                                                                        <option value="{!! $region !!}"
-                                                                                @if(isset($old[$region])) selected @endif>{!! $region !!}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                                <input type="checkbox"
-                                                                       @if(count($getRegions)==$country->regions->count()) checked
-                                                                       @endif class="select-all"
-                                                                       data-select="select-{!! $key !!}">Select All
-                                                            </div>
+                                                                            <option value="{!! $region !!}"
+                                                                                    @if(isset($old[$region])) selected @endif>{!! $region !!}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <input type="checkbox"
+                                                                           @if(count($getRegions)==$country->regions->count()) checked
+                                                                           @endif class="select-all"
+                                                                           data-select="select-{!! $key !!}">Select All
+                                                                </div>
 
-                                                        </td>
-                                                        <td>
-                                                            <div>
-                                                                @if(count($geo_zone->countries)!=$key+1)
-                                                                    <button type="button" data-count="{!! $key !!}"
-                                                                            class="btm btn-danger remove-new-get-zones"><i
+                                                            </td>
+                                                            <td>
+                                                                <div>
+                                                                    @if(count($geo_zone->countries)!=$key+1)
+                                                                        <button type="button" data-count="{!! $key !!}"
+                                                                                class="btm btn-danger remove-new-get-zones"><i
                                                                                 class="fa fa-trash"></i></button>
 
 
-                                                                @else
-                                                                    <button type="button" data-count="{!! $key !!}"
-                                                                            class="btn btn-primary add-new-get-zones"><i
+                                                                    @else
+                                                                        <button type="button" data-count="{!! $key !!}"
+                                                                                class="btn btn-primary add-new-get-zones"><i
                                                                                 class="fa fa-plus"></i></button>
-                                                                @endif
+                                                                    @endif
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @else
+                                                    <tr>
+                                                        <td>
+                                                            {!! Form::select('country[0]',$countries,null,[ 'class'=>'country form-control', 'data-count' => "0"]) !!}
+                                                        </td>
+                                                        <td>
+                                                            <div class="region-container">
+                                                                {!! Form::select('regions[0][]',[],'all_selected',['class'=>'form-control region','multiple']) !!}
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <button type="button" data-count="0" class="btn btn-primary add-new-get-zones"><i class="fa fa-plus"></i></button>
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                @endforeach
-                                            @else
-                                                <tr>
-                                                    <td>
-                                                        {!! Form::select('country[0]',$countries,null,[ 'class'=>'country form-control', 'data-count' => "0"]) !!}
-                                                    </td>
-                                                    <td>
-                                                        <div class="region-container">
-                                                            {!! Form::select('regions[0][]',[],'all_selected',['class'=>'form-control region','multiple']) !!}
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div>
-                                                            <button type="button" data-count="0" class="btn btn-primary add-new-get-zones"><i class="fa fa-plus"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                            </tfoot>
-                                        </table>
+                                                @endif
+                                                </tfoot>
+                                            </table>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -178,10 +180,10 @@
                                                     <td colspan="6">
                                                         <div class="form-group mb-0 required">
                                                             <div class="row">
-                                                                <div class="col-md-7">
+                                                                <div class="col-xl-7">
                                                                     <div class="row">
-                                                                        <label class="col-sm-2" for="input-name"> Delivery cost</label>
-                                                                        <div class="col-sm-10">
+                                                                        <label class="col-xl-2 col-3" for="input-name"> Delivery cost</label>
+                                                                        <div class="col-xl-10 col-9">
                                                                             {!! Form::select('delivery_cost_types_id',$delivery_types,$delivery->delivery_cost_types_id,['id' => 'input-name','class' => 'form-control']) !!}
                                                                         </div>
                                                                     </div>

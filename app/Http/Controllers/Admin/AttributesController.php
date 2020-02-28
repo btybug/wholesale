@@ -13,12 +13,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AttributesPost;
 use App\Models\Attributes;
 use App\Models\Category;
+use App\Models\Items;
+use App\Services\ItemService;
 use Illuminate\Http\Request;
 
 class AttributesController extends Controller
 {
 
     protected $view = 'admin.tools.attributes';
+
+    private $itemService;
+
+    public function __construct(
+        ItemService $itemService
+    )
+    {
+        $this->itemService = $itemService;
+    }
 
     public function getAttributes()
     {
@@ -42,6 +53,7 @@ class AttributesController extends Controller
         $attr = Attributes::updateOrCreate($request->id, $data);
         $attr->stickers()->sync($request->get('stickers',[]));
         $attr->categories()->sync(json_decode($request->get('categories', [])));
+
         return redirect()->route('admin_store_attributes');
     }
 
@@ -62,7 +74,38 @@ class AttributesController extends Controller
         $data['user_id'] = \Auth::id();
         $attr = Attributes::updateOrCreate($request->id, $data);
         $attr->stickers()->sync($request->get('stickers'));
+        $oldCatgories = $attr->categories()->pluck('id','id')->all();
         $attr->categories()->sync(json_decode($request->get('categories', [])));
+
+        $items = Items::leftJoin('item_categories','items.id','item_categories.item_id')
+            ->select('items.*')->whereIn('item_categories.categories_id',$attr->categories()->pluck('id','id')->all())->groupBy('items.id')->get();
+
+        $removeFrom = array_diff($oldCatgories,$attr->categories()->pluck('id','id')->all());
+
+        $oldItems = Items::leftJoin('item_categories','items.id','item_categories.item_id')
+            ->select('items.*')->whereIn('item_categories.categories_id',$removeFrom)->groupBy('items.id')->get();
+
+        $spec =  [
+          "5dcc18860215f"  => [
+              "attributes_id" => $attr->id
+          ]
+        ];
+
+        if(count($items)){
+            foreach ($items as $item){
+                if(! $item->specifications()->where('attributes_id',$attr->id)->first()){
+                    $item->specificationsPivot()->attach($spec);
+                }
+            }
+        }
+
+        if(count($oldItems)){
+            foreach ($oldItems as $item){
+                if($item->specifications()->where('attributes_id',$attr->id)->first()){
+                    $item->specificationsPivot()->detach($spec);
+                }
+            }
+        }
 
         return redirect()->route('admin_store_attributes');
     }

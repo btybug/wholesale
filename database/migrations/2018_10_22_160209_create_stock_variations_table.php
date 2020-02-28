@@ -33,6 +33,7 @@ class CreateStockVariationsTable extends Migration
             $table->unsignedInteger('filter_category_id');
             $table->string('price_type')->nullable();
             $table->string('discount_type')->nullable();
+            $table->string('ordering')->default(0);
             $table->timestamps();
 
             $table->foreign('stock_id')->references('id')->on('stocks')->onDelete('cascade');

@@ -3,61 +3,34 @@
 
 @stop
 @section('content')
-    <div class="card panel panel-default users-log-wrapper">
-        <div class="card-header panel-heading">
-            <div class="clearfix">
-                <div class="d-flex pull-left">
-                    <img class="profile-user-img img-responsive d-inline-block" src="{!!user_avatar()!!}" alt="avatar">
-                    <div class="d-inline-block ml-10">
-                        {!! Form::hidden('user_id',$user->id,['id' => 'userID']) !!}
-                        <h3 class="profile-username mt-0 mb-1">{!! $user->name.' '.$user->last_name !!}</h3>
+    <div class="card panel panel-default users-log-wrapper bg-transparent border-0">
+        <div class="card-header panel-heading d-flex flex-wrap justify-content-between">
+            <div class="d-flex">
+                <img class="profile-user-img img-responsive d-inline-block" src="{!!user_avatar($user->id)!!}" alt="avatar">
+                <div class="d-inline-block ml-10">
+                    {!! Form::hidden('user_id',$user->id,['id' => 'userID']) !!}
+                    <h3 class="profile-username mt-0 mb-1">{!! $user->name.' '.$user->last_name !!}</h3>
 
-                        <p class="text-muted mb-0">{!! ($user->role)?$user->role->title:'User' !!}</p>
-                    </div>
+                    <p class="text-muted mb-0">{!! ($user->role)?$user->role->title:'User' !!}</p>
                 </div>
-
-                <div class="form-group pull-right">
-                    {!! Form::open(['url'=>route('post_admin_users_reset_pass')]) !!}
-                        {!! Form::hidden('email',$user->email) !!}
-                        <button type="submit" class="btn btn-warning">Send reset password email</button>
-                    {!! Form::close() !!}
-                </div>
-
-                @if(! $user->email_verified_at)
+            </div>
+            <div class="d-flex">
+               @if(! $user->email_verified_at)
                     <div class="form-group ">
                         {!! Form::open(['url'=>route('admin_users_approve')]) !!}
-                            {!! Form::hidden('id',$user->id) !!}
-                            <button type="submit" class="btn btn-success">Verify</button>
-                        {!! Form::close() !!}
-                    </div>
-                @else
-                    <div class="form-group ">
-                        {!! Form::open(['url'=>route('admin_users_reject')]) !!}
                         {!! Form::hidden('id',$user->id) !!}
-                        <button type="submit" class="btn btn-danger">Block</button>
+                        <button type="submit" class="btn btn-success">Verify</button>
                         {!! Form::close() !!}
                     </div>
                 @endif
 
-                @if($user->isWholeseler())
-                    @if(! $user->wholesaler_status)
-                        <div class="form-group ">
-                            {!! Form::open(['url'=>route('admin_users_wholesaler_approve')]) !!}
-                                {!! Form::hidden('id',$user->id) !!}
-                                <button type="submit" class="btn btn-success">Approve Wholesaler</button>
-                            {!! Form::close() !!}
-                        </div>
-                    @else
-                        <div class="form-group ">
-                            {!! Form::open(['url'=>route('admin_users_wholesaler_reject')]) !!}
-                            {!! Form::hidden('id',$user->id) !!}
-                            <button type="submit" class="btn btn-danger">Block Wholesaler</button>
-                            {!! Form::close() !!}
-                        </div>
-                    @endif
-                @endif
-
-                <div class="pull-right mr-10">
+{{--                    <div class="form-group ml-1">--}}
+{{--                        {!! Form::open(['url'=>route('admin_users_reject')]) !!}--}}
+{{--                        {!! Form::hidden('id',$user->id) !!}--}}
+{{--                        <button type="submit" class="btn btn-danger">Block</button>--}}
+{{--                        {!! Form::close() !!}--}}
+{{--                    </div>--}}
+                <div class="pull-right ml-1">
                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#msgModal">Send
                         message
                     </button>
@@ -80,47 +53,68 @@
 
 
                 </div>
+            </div>
+            <div class="w-100">
+
+                @if($user->isWholeseler())
+                    @if(! $user->wholesaler_status)
+                        <div class="form-group ">
+                            {!! Form::open(['url'=>route('admin_users_wholesaler_approve')]) !!}
+                                {!! Form::hidden('id',$user->id) !!}
+                                <button type="submit" class="btn btn-success">Approve Wholesaler</button>
+                            {!! Form::close() !!}
+                        </div>
+                    @else
+                        <div class="form-group ">
+                            {!! Form::open(['url'=>route('admin_users_wholesaler_reject')]) !!}
+                            {!! Form::hidden('id',$user->id) !!}
+                            <button type="submit" class="btn btn-danger">Block Wholesaler</button>
+                            {!! Form::close() !!}
+                        </div>
+                    @endif
+                @endif
+
 
             </div>
 
         </div>
 
-        <div class="card-body panel-body">
+        <div class="card-body panel-body px-0">
 
             <div class="row d-flex">
-                <div class="col-md-2">
+                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-3 col-4 pr-sm-3 pr-0">
                     <!-- Profile Image -->
-                    <div class="box box-primary m-0 users-log-wrapper_col">
+                    <div class="box box-primary m-0 users-log-wrapper_col" style="min-height: auto">
                         <div class="box-body box-profile">
                         </div>
                         <!-- /.box-body -->
                         <ul class=" nav nav-pills flex-column nav-stacked admin-profile-left">
-                            <li class="nav-item">
-                                <a class="nav-link rounded-0 active" href="#users_account" data-toggle="tab">Account</a>
+                            <li class="nav-item w-100">
+                                <a class="nav-link rounded-0 active text-truncate" href="#users_account" data-toggle="tab">Account</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link rounded-0" href="#users_logs" data-toggle="tab">Logs</a>
+                            <li class="nav-item w-100">
+                                <a class="nav-link rounded-0 text-truncate" href="#users_logs" data-toggle="tab">Logs</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link rounded-0" href="#users_favourites" data-toggle="tab">Favourites</a>
+                            <li class="nav-item w-100">
+                                <a class="nav-link rounded-0 text-truncate" href="#users_favourites" data-toggle="tab">Favourites</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link rounded-0" href="#users_orders" data-toggle="tab">Orders</a>
+                            <li class="nav-item w-100">
+                                <a class="nav-link rounded-0 text-truncate" href="#users_orders" data-toggle="tab">Orders</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link rounded-0" href="#users_address" data-toggle="tab">Address</a>
+                            <li class="nav-item w-100">
+                                <a class="nav-link rounded-0 text-truncate" href="#users_address" data-toggle="tab">Address</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link rounded-0" href="#users_tickets" data-toggle="tab">Tickets</a>
+                            <li class="nav-item w-100">
+                                <a class="nav-link rounded-0 text-truncate" href="#users_tickets" data-toggle="tab">Tickets</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link rounded-0" href="#users_referrals" data-toggle="tab">Referrals</a>
+                            <li class="nav-item w-100">
+                                <a class="nav-link rounded-0 text-truncate" href="#users_referrals" data-toggle="tab">Referrals</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link rounded-0" href="#users_offer" data-toggle="tab">Special Offer</a>
+                            <li class="nav-item w-100">
+                                <a class="nav-link rounded-0 text-truncate" href="#users_offer" data-toggle="tab">Special Offer</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link rounded-0" href="#users_special-note" data-toggle="tab">Special
+                            <li class="nav-item w-100">
+                                <a class="nav-link rounded-0 text-truncate" href="#users_special-note" data-toggle="tab">Special
                                     note</a>
                             </li>
                         </ul>
@@ -129,132 +123,134 @@
                     <!-- /.box -->
                 </div>
                 <!-- /.col -->
-                <div class="col-md-10">
+                <div class="col-xl-10 col-lg-9 col-md-8 col-sm-9 col-8">
                     {{--<ul class="nav nav-tabs">--}}
                     {{--<li class="active"><a href="#profile" data-toggle="tab">Profile</a></li>--}}
                     {{--<li><a href="#passwordDiv" data-toggle="tab">Password</a></li>--}}
                     {{--</ul>--}}
                     <div class="tab-content users-log-wrapper_tab-content">
                         <div id="users_account" class="tab-pane fade in active show">
+                            {!! Form::model($user,['class'=>'']) !!}
+                            {!! Form::hidden('id') !!}
                             <div class="card panel panel-default mb-0">
+                                <div class="card-header">
+                                    Account
+
+                                    <button type="submit" class="btn btn-success float-right">Update</button>
+
+                                </div>
                                 <div class="card-body panel-body">
                                     <!-- The timeline -->
-                                    {!! Form::model($user,['class'=>'']) !!}
-                                    {!! Form::hidden('id') !!}
+
 
                                     <div class="form-group row">
-                                        <label for="inputName" class="col-sm-2 control-label">First Name</label>
+                                        <label for="inputName" class="col-xl-2 col-lg-3 control-label">First Name</label>
 
-                                        <div class="col-sm-10">
+                                        <div class="col-xl-10 col-lg-9">
                                             {!! Form::text('name',null,['class'=>'form-control']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputEmail" class="col-sm-2 control-label">Last Name</label>
-                                        <div class="col-sm-10">
+                                        <label for="inputEmail" class="col-xl-2 col-lg-3 control-label">Last Name</label>
+                                        <div class="col-xl-10 col-lg-9">
                                             {!! Form::text('last_name',null,['class'=>'form-control']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="email" class="col-sm-2 control-label">E-mail </label>
+                                        <label for="email" class="col-xl-2 col-lg-3 control-label">E-mail </label>
 
-                                        <div class="col-sm-10">
+                                        <div class="col-xl-10 col-lg-9">
                                             {!! Form::text('email',null,['class'=>'form-control']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputExperience" class="col-sm-2 control-label">Phone</label>
-                                        <div class="col-sm-10">
+                                        <label for="inputExperience" class="col-xl-2 col-lg-3 control-label">Phone</label>
+                                        <div class="col-xl-10 col-lg-9">
                                             {!! Form::text('phone',null,['class'=>'form-control']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputSkills" class="col-sm-2 control-label">Country</label>
-                                        <div class="col-sm-10">
+                                        <label for="inputSkills" class="col-xl-2 col-lg-3 control-label">Country</label>
+                                        <div class="col-xl-10 col-lg-9">
                                             {!! Form::select('country',$countries,null,['class'=>'form-control']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputExperience" class="col-sm-2 control-label">Gender</label>
-                                        <div class="col-sm-10">
+                                        <label for="inputExperience" class="col-xl-2 col-lg-3 control-label">Gender</label>
+                                        <div class="col-xl-10 col-lg-9">
                                             {!! Form::select('gender',['male'=>'Male','female'=>'Female'],null,['class'=>'form-control']) !!}
 
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputExperience" class="col-sm-2 control-label">Status</label>
-                                        <div class="col-sm-10">
-                                            {!! Form::hidden('status',null) !!}
+                                        <label for="inputExperience" class="col-xl-2 col-lg-3 control-label">Status</label>
+                                        <div class="col-xl-10 col-lg-9">
                                             @if($user->email_verified_at == null)
+                                                {!! Form::hidden('status',null) !!}
                                                 <div class="form-control">Email Not Verified</div>
-                                            @elseif($user->email_verified_at && ! $user->status)
-                                                <div class="form-control">ID Not Verified</div>
-                                            @elseif($user->email_verified_at && $user->status)
-                                                <div class="form-control">Active</div>
+                                            @else
+                                               {!! Form::select('status',[0 => 'Suspend',1=>'Active'],null,['class' => 'form-control']) !!}
                                             @endif
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputExperience" class="col-sm-2 control-label">Membership</label>
-                                        <div class="col-sm-10">
-                                            {!! Form::select('role_id',[null=>'No Membership']+$roles,null,['class'=>'form-control']) !!}
+                                        <label for="inputExperience" class="col-xl-2 col-lg-3 control-label">Password</label>
+                                        <div class="col-xl-10 col-lg-9">
+                                            {!! Form::open(['url'=>route('post_admin_users_reset_pass')]) !!}
+                                            {!! Form::hidden('email',$user->email) !!}
+                                            <button type="submit" class="btn btn-warning">Send reset password email</button>
+                                            {!! Form::close() !!}
 
                                         </div>
                                     </div>
-
-
-                                    <div class="form-group row">
-                                        <div class="col-sm-12 text-right">
-                                            <button type="submit" class="btn btn-success">Update</button>
-                                        </div>
-                                    </div>
-                                    {!! Form::close() !!}
-
-
-                                    @if($user->verification_type && $user->verification_image)
-                                        {!! Form::open() !!}
-                                        <div class="row">
-                                            <div class="form-group col-md-10">
-                                                <div class="row">
-                                                    <label for="inputExperience" class="col-sm-4 control-label">Uploaded
-                                                        Doc
-                                                        : {{ strtoupper(str_replace('_'," ",$user->verification_type)) }}</label>
-                                                    <div class="col-sm-8">
-                                                        <img class="img" src="{{ $user->verification_image }}"
-                                                             width="100"/>
-                                                    </div>
-                                                </div>
-                                                <div class="">
-                                                    <button type="button" class="btn btn-info">View</button>
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                                @if(! $user->status)
-                                                    <div>
-                                                        <button type="button" class="btn btn-success approve-verify">
-                                                            Approve
-                                                        </button>
-                                                    </div>
-                                                    <div>
-                                                        <button type="button" class="btn btn-danger reject-verify">
-                                                            Reject
-                                                        </button>
-                                                    </div>
-                                                @else
-                                                    <div>
-                                                        <div class="alert alert-success">Verified</div>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        {!! Form::close() !!}
-                                    @endif
                                 </div>
                             </div>
+                            {!! Form::close() !!}
 
+                            @if($user->verification_type && $user->verification_image)
+                                {!! Form::open() !!}
+                                <div class="row">
+                                    <div class="form-group col-md-10">
+                                        <div class="row">
+                                            <label for="inputExperience" class="col-sm-4 control-label">Uploaded
+                                                Doc
+                                                : {{ strtoupper(str_replace('_'," ",$user->verification_type)) }}</label>
+                                            <div class="col-sm-8">
+                                                <img class="img" src="{{ $user->verification_image }}"
+                                                     width="100"/>
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <button type="button" class="btn btn-info">View</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        @if(! $user->status)
+                                            <div>
+                                                <button type="button" class="btn btn-success approve-verify">
+                                                    Approve
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btn btn-danger reject-verify">
+                                                    Reject
+                                                </button>
+                                            </div>
+                                        @else
+                                            <div>
+                                                <div class="alert alert-success">Verified</div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                {!! Form::close() !!}
+                            @endif
                         </div>
                         <div id="users_logs" class="tab-pane fade">
+                            <div class="card-header">
+Logs
+                            </div>
                             <div class="card panel panel-default mb-0">
                                 <div class="card-body panel-body">
                                     <table id="users-table" class="table table-style table-bordered" cellspacing="0"
@@ -281,6 +277,7 @@
                         </div>
                         <div id="users_favourites" class="tab-pane fade">
                             <div class="card panel panel-default mb-0">
+                                <div class="card-header">Favourites</div>
                                 <div class="card-body panel-body">
 
                                 </div>
@@ -288,6 +285,7 @@
                         </div>
                         <div id="users_orders" class="tab-pane fade">
                             <div class="card panel panel-default mb-0">
+                                <div class="card-header">Orders</div>
                                 <div class="card-body panel-body">
                                     <table id="orders-table" class="table table-style table-bordered" cellspacing="0"
                                            width="100%">
@@ -314,8 +312,10 @@
                         </div>
                         <div id="users_address" class="tab-pane fade">
                             <div class="card panel panel-default mb-0">
+                                <div class="card-header">
+                                    Address
+                                </div>
                                 <div class="card-body panel-body">
-                                    <div class="col-md-12">
                                         <ul class="nav nav-pills nav-fill" role="tablist">
                                             <li class="mr-1">
                                                 <a class="btn btn-info nav-link nav-link--new-address active"
@@ -332,19 +332,18 @@
                                                     Book</a>
                                             </li>
                                         </ul>
-
                                         <div class="tab-content">
-                                            <div class="tab-pane active in p-4" id="billingAddress" role="tabpanel"
+                                            <div class="tab-pane active in mt-4" id="billingAddress" role="tabpanel"
                                                  aria-labelledby="billingAddress-tab">
                                                 {!! Form::model($billing_address,['class'=>'form-horizontal','url' => route('admin_users_address')]) !!}
                                                 {!! Form::hidden('user_id',$user->id) !!}
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <label for="text"
-                                                               class="control-label col-sm-4 col-form-label text-right">Name</label>
-                                                        <div class="col-sm-8">
+                                                               class="control-label col-lg-2 col-form-label">Name</label>
+                                                        <div class="col-lg-10">
                                                             <div class="row">
-                                                                <div class="col-sm-6">
+                                                                <div class="col-sm-6 mb-sm-0 mb-1">
                                                                     {!! Form::text('first_name',null,['class'=>'form-control']) !!}
                                                                 </div>
                                                                 <div class="col-sm-6">
@@ -357,9 +356,9 @@
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <label for="text"
-                                                               class="control-label col-sm-4 col-form-label text-right">Company
+                                                               class="control-label col-lg-2 col-form-label">Company
                                                             name</label>
-                                                        <div class="col-sm-8">
+                                                        <div class="col-lg-10">
                                                             {!! Form::text('company',null,['class'=>'form-control']) !!}
                                                         </div>
                                                     </div>
@@ -367,10 +366,10 @@
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <label for="text"
-                                                               class="control-label col-sm-4 col-form-label text-right">1st
+                                                               class="control-label col-lg-2 col-form-label">1st
                                                             Line
                                                             address</label>
-                                                        <div class="col-sm-8">
+                                                        <div class="col-lg-10">
                                                             {!! Form::text('first_line_address',null,['class'=>'form-control']) !!}
                                                         </div>
                                                     </div>
@@ -378,10 +377,10 @@
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <label for="text"
-                                                               class="control-label col-sm-4 col-form-label text-right">2nd
+                                                               class="control-label col-lg-2 col-form-label">2nd
                                                             line
                                                             address</label>
-                                                        <div class="col-sm-8">
+                                                        <div class="col-lg-10">
                                                             {!! Form::text('second_line_address',null,['class'=>'form-control']) !!}
                                                         </div>
                                                     </div>
@@ -389,8 +388,8 @@
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <label for="text"
-                                                               class="control-label col-sm-4 col-form-label text-right">Country</label>
-                                                        <div class="col-sm-8">
+                                                               class="control-label col-lg-2 col-form-label">Country</label>
+                                                        <div class="col-lg-10">
                                                             {!! Form::select('country',['' => 'SELECT'] + $countries,null,['class'=>'form-control']) !!}
                                                         </div>
                                                     </div>
@@ -398,8 +397,8 @@
                                                 <div class="form-group ">
                                                     <div class="row">
                                                         <label for="text"
-                                                               class="control-label col-sm-4 col-form-label text-right">Regions</label>
-                                                        <div class="col-sm-8">
+                                                               class="control-label col-lg-2 col-form-label">Regions</label>
+                                                        <div class="col-lg-10">
                                                             {!! Form::text('region',null,['class'=>'form-control']) !!}
                                                         </div>
                                                     </div>
@@ -407,8 +406,8 @@
                                                 <div class="form-group ">
                                                     <div class="row">
                                                         <label for="text"
-                                                               class="control-label col-sm-4 col-form-label text-right">City</label>
-                                                        <div class="col-sm-8">
+                                                               class="control-label col-lg-2 col-form-label">City</label>
+                                                        <div class="col-lg-10">
                                                             {!! Form::text('city',null,['class'=>'form-control']) !!}
                                                         </div>
                                                     </div>
@@ -416,9 +415,9 @@
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <label for="text"
-                                                               class="control-label col-sm-4 col-form-label text-right">Post
+                                                               class="control-label col-lg-2 col-form-label">Post
                                                             Code</label>
-                                                        <div class="col-sm-8">
+                                                        <div class="col-lg-10">
                                                             {!! Form::text('post_code',null,['class'=>'form-control']) !!}
                                                         </div>
                                                     </div>
@@ -426,7 +425,7 @@
                                                 {!! Form::hidden('type','billing_address') !!}
                                                 {!! Form::hidden('id') !!}
                                                 <div class="form-group row">
-                                                    <div class="offset-sm-4 col-sm-8">
+                                                    <div class="">
                                                         <button type="submit" class="btn btn-primary">Submit</button>
                                                     </div>
                                                 </div>
@@ -434,21 +433,16 @@
                                             </div>
                                             <div class="tab-pane fade" id="addressBook" role="tabpanel"
                                                  aria-labelledby="addressBook-tab">
-                                                <div class="card panel panel-default">
-
-                                                    <div class="card-body panel-body">
-                                                        <div>
-                                                            <div>
-
+                                                            <div class="mt-3">
                                                                 <div class="form-group row mb-5">
-                                                                    <div class="col-md-5">
+                                                                    <div class="col-lg-5">
                                                                         <h5>
                                                                             <label for="selectAddress"
                                                                                    class="control-label text-muted">Select
                                                                                 your address</label>
                                                                         </h5>
                                                                     </div>
-                                                                    <div class="col-md-7 row flex-nowrap">
+                                                                    <div class="col-lg-7 d-flex flex-nowrap">
                                                                         {!! Form::select('address_book',$address,($default_shipping)?$default_shipping->id:null,['class' => 'form-control edit-address']) !!}
                                                                         <button type="button"
                                                                                 class="nav-link nav-link--new-address btn btn-info btn-sm address-book-new flex--none">
@@ -462,25 +456,21 @@
                                                                     </div>
                                                                     {{--<button type="submit" class="btn btn-primary edit-address">Edit</button>--}}
                                                                     <button type="button"
-                                                                            class="btn btn-danger edit-address">Delete
+                                                                            class="btn btn-danger edit-address mt-2">Delete
                                                                     </button>
                                                                 </div>
-
                                                             </div>
-                                                        </div>
                                                         {{--Inner Tab Content--}}
-                                                    </div>
-                                                </div>
-
                                             </div>
                                         </div>
-
-                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div id="users_tickets" class="tab-pane fade">
                             <div class="card panel panel-default mb-0">
+                                <div class="card-header">
+                                    Tickets
+                                </div>
                                 <div class="card-body panel-body">
 
                                 </div>
@@ -488,6 +478,7 @@
                         </div>
                         <div id="users_referrals" class="tab-pane fade">
                             <div class="card panel panel-default mb-0">
+                                <div class="card-header">Referrals</div>
                                 <div class="card-body panel-body">
 
                                 </div>
@@ -495,6 +486,7 @@
                         </div>
                         <div id="users_offer" class="tab-pane fade">
                             <div class="card panel panel-default mb-0">
+                                <div class="card-header">Special Offer</div>
                                 <div class="card-body panel-body">
 
                                 </div>
@@ -502,6 +494,7 @@
                         </div>
                         <div id="users_special-note" class="tab-pane fade">
                             <div class="card panel panel-default mb-0">
+                                <div class="card-header">Special Note</div>
                                 <div class="card-body panel-body ">
                                     <div class="special-note-wall-box">
                                         @include('admin.users._partials.user_notes')
@@ -781,10 +774,13 @@
 
             $('#users-table').DataTable({
                 ajax: "{!! route('datatable_user_activity',$user->id) !!}",
-                dom: 'Bfrtip',
+                dom: 'Bflrtip',
+                displayLength: 10,
+                lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
                 buttons: [
                     'csv', 'excel', 'pdf', 'print'
                 ],
+                "scrollX": true,
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'url', name: 'url'},
@@ -804,7 +800,10 @@
 
             $('#orders-table').DataTable({
                 ajax: "{!! route('datatable_user_orders',$user->id) !!}",
-                dom: 'Bfrtip',
+                dom: 'Bflrtip',
+                displayLength: 10,
+                lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+                "scrollX": true,
                 buttons: [
                     'csv', 'excel', 'pdf', 'print'
                 ],

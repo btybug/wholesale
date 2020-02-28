@@ -10,7 +10,7 @@
                                ref="javascript:void(0);">
                                 <span class="font-sec-reg text-main-clr num">1</span>
                                 <span
-                                    class="name text-uppercase font-main-bold font-16 text-truncate">SHOPPING CART</span>
+                                    class="name text-uppercase font-main-bold font-16 text-truncate">{!! __('shopping_cart') !!}</span>
                                 <span class="icon">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +26,7 @@
                             <a class="item visited d-flex align-items-center justify-content-between"
                                href="javascript:void(0);">
                                 <span class="font-sec-reg text-main-clr num">2</span>
-                                <span class="name text-uppercase font-main-bold font-16 text-truncate">CHECKOUT</span>
+                                <span class="name text-uppercase font-main-bold font-16 text-truncate">{!! __('checkout') !!}</span>
                                 <span class="icon">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +42,7 @@
                             <a class="item visited d-flex align-items-center justify-content-between"
                                href="javascript:void(0);">
                                 <span class="font-sec-reg text-main-clr num">3</span>
-                                <span class="name text-uppercase font-main-bold font-16 text-truncate">Payment</span>
+                                <span class="name text-uppercase font-main-bold font-16 text-truncate">{!! __('payment') !!}</span>
                                 <span class="icon">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +59,7 @@
                                href="javascript:void(0);">
                                 <span class="font-sec-reg text-main-clr num">4</span>
                                 <span
-                                    class="name text-uppercase font-main-bold font-16 text-truncate">Confirmation</span>
+                                    class="name text-uppercase font-main-bold font-16 text-truncate">{!! __('confirmation') !!}</span>
                                 <span class="icon">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -82,8 +82,8 @@
                             <div class="col-lg-10 pl-0">
                             {{--                confirm tab start--}}
                                 <div class="shopping__cart-confirm w-100">
-                                <h1 class="font-40 title">Thank you for your order!</h1>
-                                <p class="font-20 sec-title">We have already started preparing your order</p>
+                                <h1 class="font-40 title">{!! __('shop_confirm_title') !!}</h1>
+                                <p class="font-20 sec-title">{!! __('shop_confirm_desc') !!}</p>
                                 <div class="row list-shipping">
                                     <div class="left-col">
                                         <ul class="row">
@@ -93,13 +93,13 @@
                                                         <img src="/public/img/confirm-box.png" class="box-img"
                                                              alt="item"/>
                                                     </div>
-                                                    <h3 class="font-sec-reg font-24 item-title">Order Number</h3>
+                                                    <h3 class="font-sec-reg font-24 item-title">{!! __('order_number') !!}</h3>
                                                     <p class="font-sec-reg font-24 text-red-clr lh-1 item-info">
                                                         {!! $order->order_number !!}
                                                     </p>
                                                     <a href="{{ route('my_account_order_invoice',$order->id) }}"
-                                                       class="d-flex align-items-center justify-content-center font-18 text-sec-clr bg-blue-clr item-order-btn">Track
-                                                        your order</a>
+                                                       class="d-flex align-items-center justify-content-center font-18 text-sec-clr bg-blue-clr item-order-btn">
+                                                        {!! __('track_your_order') !!}</a>
                                                 </div>
                                             </li>
                                             <li class="col-md-4 col-sm-6">
@@ -108,7 +108,7 @@
                                                         <img src="/public/img/confirm-home.png" class="home-img"
                                                              alt="item"/>
                                                     </div>
-                                                    <h3 class="font-sec-reg font-24 item-title">Shipping Address</h3>
+                                                    <h3 class="font-sec-reg font-24 item-title">{!! __('shipping_address') !!}</h3>
                                                     <div class="d-inline-block text-left">
                                                         <p class="font-main-light font-17 text-wrap">{{ $order->shippingAddress->company }}</p>
                                                         <p class="font-main-light font-17 text-wrap">
@@ -126,11 +126,11 @@
                                                              alt="item"/>
                                                     </div>
                                                     <h3 class="font-sec-reg font-24 item-title">
-                                                        Expected <br>
-                                                        Date of delivery
+                                                        {!! __('expected') !!} <br>
+                                                        {!! __('date_delivery') !!}
                                                     </h3>
                                                     <p class="font-sec-reg font-24 text-tert-clr lh-1 date-info">
-                                                        Friday</p>
+                                                        {!! __('friday') !!}</p>
                                                     <p class="font-sec-reg font-24 text-tert-clr lh-1 date-info mb-0">
                                                         10/08/2019</p>
                                                 </div>
@@ -145,17 +145,17 @@
                                                          alt="item"/>
                                                 </div>
                                                 <a href="{{ route('my_account') }}"
-                                                   class="d-flex align-items-center justify-content-center font-18 text-sec-clr bg-blue-clr item-order-btn">View
-                                                    My Profile</a>
+                                                   class="d-flex align-items-center justify-content-center font-18 text-sec-clr bg-blue-clr item-order-btn">
+                                                    {!! __('view_profile') !!}</a>
                                             </div>
                                             <div class="d-flex flex-wrap align-items-center sipping-item-wrap ">
                                                 <div class="item-photo">
                                                     <img src="/public/img/confirm-gift.png" class="gift-img"
                                                          alt="item"/>
                                                 </div>
-                                                <a href="{{ route('home') }}"
-                                                   class="d-flex align-items-center justify-content-center font-18 text-sec-clr bg-red item-order-btn">Continue
-                                                    Shopping</a>
+                                                <a href="{{ route('wholesaler') }}"
+                                                   class="d-flex align-items-center justify-content-center font-18 text-sec-clr bg-red item-order-btn">
+                                                    {!! __('continue_shopping') !!}</a>
                                             </div>
                                         </div>
                                     </div>
@@ -163,7 +163,7 @@
 
                                 <div class="block-ads">
                                 </div>
-                                <h2 class="font-40 lh-1 title">Your order</h2>
+                                <h2 class="font-40 lh-1 title">{!! __('your_order') !!}</h2>
                                 <ul class="row list-order">
                                     @foreach($order->items as $item)
                                         {{--{!! dd($item->options) !!}--}}
@@ -187,7 +187,7 @@
                                                         class="d-flex flex-wrap align-items-center justify-content-between qty-price-inner">
                                                         <div class="d-flex align-items-center qty-col">
                                                             <span
-                                                                class="font-sec-light font-24 lh-1 qty-text">QTY</span>
+                                                                class="font-sec-light font-24 lh-1 qty-text">{!! __('qty') !!}</span>
                                                             <div class="product__single-item-inp-num">
                                                                 <div class="quantity">
                                                                     <input type="number" readonly min="1" max="9"
@@ -220,13 +220,13 @@
                                     </div>
                                     <div class="card order-summary">
                                         <div class="card-header text-tert-clr font-26">
-                                            ORDER SUMMARY
+                                            {!! __('order_summary') !!}
                                         </div>
                                         <div class="card-body border-top-0">
                                             <div
                                                 class="single-row font-24 d-flex flex-wrap justify-content-between align-items-center">
                                                 <div class="name">
-                                                    Sub Total
+                                                    {!! __('sub_total') !!}
                                                 </div>
                                                 <div
                                                     class="price font-main-bold">
@@ -236,7 +236,7 @@
                                             <div
                                                 class="single-row font-24 d-flex flex-wrap justify-content-between align-items-center">
                                                 <div class="name">
-                                                    Tax
+                                                    {!! __('tax') !!}
                                                 </div>
                                                 <div
                                                     class="price font-main-bold">{!! convert_price(0,$order->currency) !!}
@@ -245,7 +245,7 @@
                                             <div
                                                 class="single-row font-24 d-flex flex-wrap justify-content-between align-items-center">
                                                 <div class="name">
-                                                    Shipping
+                                                    {!! __('shipping') !!}
                                                 </div>
                                                 <div
                                                     class="w-100 font-18 d-flex flex-wrap justify-content-between align-items-center shipping-wall">
@@ -269,7 +269,7 @@
                                                 <div
                                                     class="w-100 d-flex flex-wrap justify-content-between align-items-center">
                                                     <div class="name">
-                                                        Coupon Discount
+                                                        {!! __('coupon_discount') !!}
                                                     </div>
                                                     <div
                                                         class="price font-main-bold">{!! convert_price(0,$order->currency) !!}
@@ -279,7 +279,7 @@
                                             <div
                                                 class="single-row font-21 d-flex flex-wrap justify-content-between align-items-center border-bottom-0 mb-0 pb-0">
                                                 <div class="name">
-                                                    Total
+                                                    {!! __('total') !!}
                                                 </div>
                                                 <div
                                                     class="price text-tert-clr font-main-bold">

@@ -19,7 +19,7 @@ if(!isset($role))$role=null;
                 <td>{!! $item['description'] !!}</td>
                 <td>
                     <input name="permission[]" value="{!! $key !!}"
-                           type="checkbox"
+                           type="checkbox" class="widget_checkbox_js"
                            @if(has_permission($role,$key))checked @endif>
                 </td>
             </tr>

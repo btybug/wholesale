@@ -8,9 +8,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="google-recaptcha-key" content="{!!env('GOOGLE_RECAPTCHA_KEY')!!}">
     <meta name="google-site-verification" content="bYambdrAC-nymmiVMr-A2jiKeKW8gEsCcCRozCLDp4o" />
-{!! main_pages_seo(isset($page_name)?$page_name:null) !!}
+    {!! main_pages_seo(isset($page_name)?$page_name:null) !!}
 
-@yield('meta')
+    @yield('meta')
 
 
 
@@ -70,7 +70,7 @@
     <script src={{asset("public/plugins/crossbrowserjs/ofi.min.js")}}></script>
     <script src={{asset("public/plugins/crossbrowserjs/customFit.js")}}></script>
     <!--<![endif]-->
-    {{--    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5d00a4864351e90012650424&product=inline-share-buttons"></script>--}}
+{{--    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5d00a4864351e90012650424&product=inline-share-buttons"></script>--}}
     <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5d00a4864351e90012650424&product=custom-share-buttons"></script>
     <script src={{asset("public/plugins/autocomplete/jquery.autocomplete.min.js")}}></script>
     @if(!Auth::check())
@@ -117,7 +117,7 @@
 <img src="/public/images/loader.gif" class="loader-img d-none" style="width:100px;position: absolute;top:50%;left:50%"/>
 @include("frontend.products._partials.extra_modal")
 @if(is_enabled_filter_modal())
-    {!! filter_modal_html() !!}
+  {!! filter_modal_html() !!}
 @endif
 @include('frontend._partials.footer')
 

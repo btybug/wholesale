@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('content-header')
 @stop
+
 @section('content')
     <div class="admin-find-wrapper">
         <div class="form-group row border-bottom pb-2">
@@ -13,7 +14,18 @@
 
         </div>
         <div class="find-wrapper-results mt-5">
-            <h3 class="border-bottom pb-2">Results</h3>
+            <div class="find-wrapper-results-head">
+                <h3>Results</h3>
+                <div class="find-wrapper-results-head-right">
+                    <button class="btn btn-warning btn-edit mr-3">Edit</button>
+                    <select class="form-control">
+                        <option value="">Action</option>
+                        <option value="">Print Barcode</option>
+                        <option value="">Print Qr Code</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="find-wrapper-results-content row">
 
             </div>
@@ -32,7 +44,16 @@
             AjaxCall("/admin/find/call-find", {key: option}, function (res) {
                 if (!res.error) {
                     $(".find-form").html(res.form);
+switch (option) {
+    case 'products':
+        date_column();
+        call_products();
+        break;
+    case 'items':
 
+        break;
+    case 'orders':   break;
+}
                     if(option == 'products'){
                         date_column();
                         call_products();
@@ -69,6 +90,7 @@
         function call_products() {
             $("body").find(".categories").select2();
             $("body").find(".brands").select2();
+            $("body").find(".barcodes").select2();
 
             // for date rang
             (function (w, d, s, g, js, fs) {
@@ -107,6 +129,7 @@ function date_column() {
     });
 }
         function doSubmitForm() {
+            
             $('.find-wrapper-results-content').html('<div id="loading" class="justify-content-center align-items-center my-5 d-flex">\n' +
                 '            <div class="lds-dual-ring"></div>\n' +
                 '        </div>');

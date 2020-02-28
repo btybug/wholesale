@@ -1,6 +1,6 @@
 <header class="main-header">
     <!-- Logo -->
-    <a href="{{route('admin_dashboard')}}" class="logo">
+    <a href="{{route('admin_dashboard')}}" class="logo logo-admin-main">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>E-</b>CIGAR</span>
         <!-- logo for regular state and mobile devices -->
@@ -12,22 +12,38 @@
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
             <span class="sr-only">Toggle navigation</span>
         </a>
+{{--        <a href="{{route('admin_dashboard')}}" class="logo-admin-mobile">--}}
+{{--            <!-- logo for regular state and mobile devices -->--}}
+{{--            <span class="d-block"><img src="{!! get_site_logo() !!}" alt="{{ get_site_name() }}" class="logo-img"></span>--}}
+{{--        </a>--}}
         <div class="main-header_nav-middle">
+            @inject('findService','App\Services\FindService')
+
             <ul class="d-flex flex-wrap list-unstyled main-header_nav-middle-list">
-                <li class="find-link"><a href="{{ route('admin_find') }}" class="btn btn-primary text-white">
-                        <span class="mr-1">Find</span>
-                        <i class="fa fa-search"></i></a>
+                <li class="find-link align-self-stretch">
+
+                        {!! Form::select('find',$findService->getOptions(),'@yield("find")',['class' => 'form-control btn btn-primary h-100','id' => 'admin_find','placeholder'=>'Find']) !!}
+
+                        <i class="fa fa-search icon-search-mobile-none icon-search-mobile-js"></i>
+                    {{--                        <span class="mr-1 mobile-none">Find</span>--}}
+
                 </li>
-                <li class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus mr-10"></i>Create new</button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a href="{!! route('admin_staff_new') !!}" class="dropdown-item">Staff</a>
-                        <a href="#" class="dropdown-item">Customer</a>
-                        <a href="{!! route('admin_stock_new') !!}" class="dropdown-item">Product</a>
-                        <a href="http://e-cigar.com/admin/tools/attributes/new" class="dropdown-item">Item</a>
-                        <a href="{!! route('admin_blog_create') !!}" class="dropdown-item">Post</a>
-                    </div>
+                <li class="find-link align-self-stretch">
+                    {!! Form::select('find',$findService->getOptions(),'@yield("find")',['class' => 'form-control btn btn-primary h-100','id' => 'admin_find','placeholder'=>'Create new']) !!}
+
+                    <i class="fa fa-plus icon-search-mobile-none icon-plus-mobile-js"></i>
+
                 </li>
+{{--                <li class="dropdown">--}}
+{{--                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus mr-10"></i><span class="mobile-none">Create new</span></button>--}}
+{{--                    <div class="dropdown-menu dropdown-menu-right">--}}
+{{--                        <a href="{!! route('admin_staff_new') !!}" class="dropdown-item">Staff</a>--}}
+{{--                        <a href="#" class="dropdown-item">Customer</a>--}}
+{{--                        <a href="{!! route('admin_stock_new') !!}" class="dropdown-item">Product</a>--}}
+{{--                        <a href="http://e-cigar.com/admin/tools/attributes/new" class="dropdown-item">Item</a>--}}
+{{--                        <a href="{!! route('admin_blog_create') !!}" class="dropdown-item">Post</a>--}}
+{{--                    </div>--}}
+{{--                </li>--}}
             </ul>
         </div>
 
@@ -266,19 +282,25 @@
                             {{--<!-- /.row -->--}}
                         {{--</li>--}}
                         <!-- Menu Footer-->
-                        <li class="user-footer">
-                            <div class="pull-left">
-                                <a href="{{ route('admin_staff') }}" class="btn btn-default btn-flat">Staff</a>
+                        <li class="user-footer d-flex flex-wrap justify-content-between">
+                            <div>
+                                <a href="{{ route('admin_staff') }}" class="btn btn-primary btn-flat">Staff</a>
                             </div>
-                            <div class="pull-right">
+                            <div>
+                                <a href="#" class="btn btn-primary btn-flat">Profile</a>
+                            </div>
+
+                        </li>
+                        <li>
+                            <div>
                                 {!! Form::open(['url'=>route('logout')]) !!}
-                                <button type="submit" class="btn btn-default btn-flat">Sign out</button>
+                                <button type="submit" class="btn btn-danger btn-block btn-flat"><i class="fas fa-sign-out-alt"></i> Sign out</button>
                                 {!! Form::close() !!}
                             </div>
                         </li>
-                        <li id="userDropdownSkins">
-                            {{--here comes skins dynamicly--}}
-                        </li>
+{{--                        <li id="userDropdownSkins">--}}
+{{--                            --}}{{--here comes skins dynamicly--}}
+{{--                        </li>--}}
                     </ul>
                 </li>
                 <!-- Control Sidebar Toggle Button -->

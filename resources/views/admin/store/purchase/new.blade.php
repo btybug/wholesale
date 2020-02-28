@@ -9,7 +9,7 @@
         </div>
         <div class="card-body panel-body">
 
-            <div class="col-md-8">
+            <div class="col-xl-8">
                 {!! Form::model($model,['url' => route('admin_inventory_purchase_save'),'id' => 'form-coupon','class' => '']) !!}
                 {!! Form::hidden('id') !!}
                 <div class="form-group row required">
@@ -20,37 +20,39 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <table class="table table--store-settings">
-                        <thead>
-                        <tr class="bg-my-light-pink">
-                            <th>Warehouse</th>
-                            <th>Rack</th>
-                            <th>Shelve</th>
-                            <th>QTY</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
+                    <div class="table-responsive">
+                        <table class="table table--store-settings">
+                            <thead>
+                            <tr class="bg-my-light-pink">
+                                <th>Warehouse</th>
+                                <th>Rack</th>
+                                <th>Shelve</th>
+                                <th>QTY</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
 
-                        <tbody class="v-options-list-locations">
+                            <tbody class="v-options-list-locations">
                             @include('admin.store.purchase.locations')
-                        </tbody>
+                            </tbody>
 
-                        <tfoot>
-                        <tr class="add-new-ship-filed-container">
-                            <td colspan="5" class="text-right">
-                                <button type="button" class="btn btn-primary add-location"><i
-                                        class="fa fa-plus-circle "></i>
-                                </button>
-                            </td>
-                        </tr>
-                        </tfoot>
-                    </table>
+                            <tfoot>
+                            <tr class="add-new-ship-filed-container">
+                                <td colspan="5" class="text-right">
+                                    <button type="button" class="btn btn-primary add-location"><i
+                                            class="fa fa-plus-circle "></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
                 
                 <div class="form-group row">
                     <label class="col-sm-2 control-label" for="input-discount">Price</label>
                     <div class="col-sm-10">
-                        {!! Form::number('price',null,['placeholder' => 'Purchase price','class'=> 'form-control']) !!}
+                        {!! Form::number('price',null,['placeholder' => 'Purchase price','class'=> 'form-control','step' => 'any']) !!}
                     </div>
                 </div>
 
@@ -89,7 +91,7 @@
                 </div>
                 {!! Form::close() !!}
             </div>
-            <div class="col-md-4 product-box">
+            <div class="col-xl-4 product-box">
 
             </div>
         </div>
@@ -99,11 +101,18 @@
     <link rel="stylesheet" href="{{asset('public/css/custom.css?v='.rand(111,999))}}">
     <link rel="stylesheet" href="https://phppot.com/demo/bootstrap-tags-input-with-autocomplete/bootstrap-tagsinput.css">
     <link rel="stylesheet" href="https://phppot.com/demo/bootstrap-tags-input-with-autocomplete/typeahead.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
+
 @stop
 @section('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
     <script src="https://phppot.com/demo/bootstrap-tags-input-with-autocomplete/typeahead.js"></script>
     <script src="https://phppot.com/demo/bootstrap-tags-input-with-autocomplete/bootstrap-tagsinput.js"></script>
     <script>
+
+        $(".select-item").select2({width: '100%'});
+
         $('#input-date-start').daterangepicker({
             singleDatePicker: true,
             showDropdowns: true,

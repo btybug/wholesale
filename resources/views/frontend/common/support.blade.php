@@ -1,55 +1,78 @@
 @extends('layouts.frontend')
 @section('content')
-   <main class="main-content">
-       <div class="container">
-           <section class="qcbox_section">
-               <div class="product-introduce">
-                   <h1 class="mb-5 text-uppercase text-my-yellow">Support</h1>
-                   <div class="row">
-                       <div class="col-sm-3">
-                           <a href="{!! route('faq_page') !!}"
-                              class="text-center mb-4 px-5 py-4 d-flex flex-column d-block shadow-sm bg-white">
-                            <span class="d-inline-block mb-3"><i class="fa fa-5x fa-file-text"
-                                                                 aria-hidden="true"></i></span>
-                               <strong>FAQ</strong>
-                               <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, sequi..</span>
-                           </a>
-                       </div>
+    <main class="main-content">
+        <section class="support__page-wrapper">
+            <div class="container main-max-width">
+                <div class="logo-wrap">
+                    <img src="{!! get_site_logo() !!}" alt="{{ get_site_name() }}" title="{{ get_site_name() }}">
+                </div>
+                <div class="support-lists-wrap">
+                    <ul class="support-lists row">
+                        @if(LaravelGmail::check())
+                            <li class="col-md-4 col-sm-6">
+                                <a href="{!! route('support_contact_us') !!}" class="d-flex align-items-center item-link">
+                                    <div class="item-photo">
+                                        <img src="/public/img/message-icon.png" alt="contact" title="contact">
+                                    </div>
+                                    <div class="item-name font-20">{!! __('contact_us') !!}</div>
+                                </a>
+                            </li>
+                        @endif
+                        <li class="col-md-4 col-sm-6">
+                            <a href="{!! route('terms_conditions') !!}" class="d-flex align-items-center item-link">
+                                <div class="item-photo">
+                                    <img src="/public/img/paper-icon.png" alt="Terms Conditions" title="Terms & Conditions">
+                                </div>
+                                <div class="item-name font-20">{!! __('terms_and_conditions') !!}</div>
+                            </a>
+                        </li>
+                        <li class="col-md-4 col-sm-6">
+                            <a href="{!! route('delivery') !!}" class="d-flex align-items-center item-link">
+                                <div class="item-photo">
+                                    <img src="/public/img/delivery-icon.png" alt="Delivery" title="Delivery">
+                                </div>
+                                <div class="item-name font-20">{!! __('delivery') !!}</div>
+                            </a>
+                        </li>
+                        <li class="col-md-4 col-sm-6">
+                            <a href="{!! route('faq_page') !!}" class="d-flex align-items-center item-link">
+                                <div class="item-photo">
+                                    <img src="/public/img/faq-icon.png" alt="FAQ" title="FAQ">
+                                </div>
+                                <div class="item-name font-20">{!! __('faq') !!}</div>
+                            </a>
+                        </li>
 
+                        <li class="col-md-4 col-sm-6">
+                            <a href="{!! route('about_us') !!}" class="d-flex align-items-center item-link">
+                                <div class="item-photo">
+                                    <img src="/public/img/faq-icon.png" alt="FAQ" title="FAQ">
+                                </div>
+                                <div class="item-name font-20">{!! __('About us') !!}</div>
+                            </a>
+                        </li>
 
-                       <div class="col-sm-3">
-                           <a href="{!! route('terms_conditions') !!}"
-                              class="text-center mb-4 px-5 py-4 d-flex flex-column d-block shadow-sm bg-white">
-                               <span class="d-inline-block mb-3"><i class="fa fa-5x fa-list" aria-hidden="true"></i></span>
-                               <strong>Terms & conditions</strong>
-                               <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, sequi..</span>
-                           </a>
-                       </div>
+                        <li class="col-md-4 col-sm-6">
+                            <a href="{!! route('privacy') !!}" class="d-flex align-items-center item-link">
+                                <div class="item-photo">
+                                    <img src="/public/img/faq-icon.png" alt="privacy" title="privacy">
+                                </div>
+                                <div class="item-name font-20">{!! __('privacy') !!}</div>
+                            </a>
+                        </li>
+                        <li class="col-md-4 col-sm-6">
+                            <a href="{!! route('cookies') !!}" class="d-flex align-items-center item-link">
+                                <div class="item-photo">
+                                    <img src="/public/img/faq-icon.png" alt="cookies" title="cookies">
+                                </div>
+                                <div class="item-name font-20">{!! __('cookies') !!}</div>
+                            </a>
+                        </li>
 
-                       <div class="col-sm-3">
-                           <a href="{!! route('delivery') !!}"
-                              class="text-center mb-4 px-5 py-4 d-flex flex-column d-block shadow-sm bg-white">
-                               <span class="d-inline-block mb-3"><i class="fa fa-5x fa-paper-plane" aria-hidden="true"></i></span>
-                               <strong>Delivery</strong>
-                               <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, sequi..</span>
-                           </a>
-                       </div>
+                    </ul>
+                </div>
 
-
-                       @if(LaravelGmail::check())
-                           <div class="col-sm-3">
-                               <a href="{!! route('support_contact_us') !!}"
-                                  class="text-center mb-4 px-5 py-4 d-flex flex-column d-block shadow-sm bg-white">
-                                   <span class="d-inline-block mb-3"><i class="fas fa-5x fa-file-contract"></i></span>
-                                   <strong>Contact us</strong>
-                                   <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, sequi..</span>
-                               </a>
-                           </div>
-                       @endif
-
-                   </div>
-               </div>
-           </section>
-       </div>
-   </main>
+            </div>
+        </section>
+    </main>
 @stop

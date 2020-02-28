@@ -11,12 +11,12 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-7">
+                            <div class="col-xl-7 col-lg-10">
                                 {!! Form::model($model,['class' => 'form-validate','url' => route('admin_settings_languages_new_post')]) !!}
                                 {!! Form::hidden('id',null) !!}
                                 <div class="form-group row">
-                                    <label for="code" class="col-md-2 control-label">Name</label>
-                                    <div class="col-md-10">
+                                    <label for="code" class="col-sm-2 control-label">Name</label>
+                                    <div class="col-sm-10">
                                         {!! Form::select('code',['' => 'Select'] + $countries,null,['class' => 'form-control','id' => 'code']) !!}
                                         <span class="help-block">Language name such as &quot;English&quot;</span>
                                         {!! Form::hidden('name',null,['id' => 'lang-name']) !!}
@@ -24,8 +24,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="original_name" class="col-md-2 control-label">Original Name</label>
-                                    <div class="col-md-10">
+                                    <label for="original_name" class="col-sm-2 control-label">Original Name</label>
+                                    <div class="col-sm-10">
                                         <div class="form-control original_name">{!! @$model->original_name !!}</div>
                                         <span class="help-block">Language name such as &quot;España&quot;</span>
                                     </div>
@@ -33,8 +33,8 @@
 
                                 <div class="form-group row">
                                     <label for="direction"
-                                           class="col-md-2 control-label">Direction</label>
-                                    <div class="col-md-10">
+                                           class="col-sm-2 control-label">Direction</label>
+                                    <div class="col-sm-10">
                                         {!! Form::select('direction',[
                                             'ltr' => 'Left To Right',
                                             'rtl' => 'Right To Left'
@@ -44,8 +44,8 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="name" class="col-md-2 control-label">Icon</label>
-                                    <div class="col-md-10">
+                                    <label for="name" class="col-sm-2 control-label">Icon</label>
+                                    <div class="col-sm-10">
                                         <div class="form-control lang-place">
                                             @if($model)
                                                 <span class="flag-icon flag-icon-{{ strtolower($model->code) }}"></span>
@@ -57,8 +57,8 @@
 
                                 <div class="form-group row">
                                     <label for="is_default"
-                                           class="col-md-2 control-label">Default</label>
-                                    <div class="col-md-10">
+                                           class="col-sm-2 control-label">Default</label>
+                                    <div class="col-sm-10">
                                         {!! Form::select('default',[
                                             '0' => 'No',
                                             '1' => 'Yes'
@@ -68,8 +68,8 @@
                                 </div>
                                 <div class="form-group row">
                                     <label for="shared"
-                                           class="col-md-2 control-label">Share to Front</label>
-                                    <div class="col-md-10">
+                                           class="col-sm-2 control-label">Share to Front</label>
+                                    <div class="col-sm-10">
                                         {!! Form::select('shared',[
                                             '0' => 'No',
                                             '1' => 'Yes'

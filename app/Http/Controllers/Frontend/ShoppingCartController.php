@@ -122,7 +122,7 @@ class ShoppingCartController extends Controller
         $product = Stock::where('status', true)->find($request->product_id);
         if ($product) {
             $error = $this->cartService->validateProduct($product, $request->variations);
-
+//            dd($this->cartService->variations,$this->cartService->price);
             if (!$error) {
                 $cart_id = uniqid();
                 Cart::add($cart_id, $product->id, $this->cartService->price, $request->product_qty, ['variations' => $this->cartService->variations, 'product' => $product]);
@@ -152,9 +152,10 @@ class ShoppingCartController extends Controller
 //                }
 
                 $headerhtml = \View('frontend._partials.shopping_cart_options')->render();
-                $popuphtml = \View('frontend.products._partials.offer_popup',['vape' => $product,'key' => $cart_id,'price' => $this->cartService->price,'qty' => $request->product_qty])->render();
+                $popuphtml = \View('frontend.products._partials.offer_popup',['vape' => $product,'key' => $cart_id,
+                    'price' => $this->cartService->price,'qty' => $request->product_qty])->render();
 
-                return \Response::json(['error' => false, 'message' => 'added', 'key' => $cart_id,'product_id' => $product->id,
+                return \Response::json(['error' => false,'show_popup' => (count($product->special_offers) > 0)?true:false, 'message' => 'added', 'key' => $cart_id,'product_id' => $product->id,
                     'count' => $this->cartService->getCount(), 'headerHtml' => $headerhtml,'specialHtml' => $popuphtml]);
             }
 

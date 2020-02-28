@@ -10,7 +10,8 @@ class CreateCommentsTable extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('post_id')->unsigned();
+            $table->integer('section_id')->unsigned();
+            $table->string('section');
             $table->integer('parent_id')->nullable()->unsigned();
             $table->integer('author_id')->nullable()->unsigned();
             $table->longText('comment');
@@ -18,11 +19,6 @@ class CreateCommentsTable extends Migration
             $table->string('guest_name')->nullable();
             $table->string('guest_email')->nullable();
             $table->timestamps();
-
-            $table->foreign('post_id')
-                ->references('id')
-                ->on('posts')
-                ->onDelete('CASCADE');
 
             $table->foreign('parent_id')
                 ->references('id')

@@ -1,5 +1,5 @@
 <div class="del-save--btn">
-    @if($model)
+    @if($model && ! $model->is_core)
         <div class="form-group m-r-5">
             <a class="btn btn-danger delete-button text-white" data-key="{{ $model->id }}" data-href="{{ route('admin_store_categories_delete',$type) }}">Delete</a>
         </div>
@@ -28,16 +28,16 @@
         @foreach(get_languages() as $language)
             <div id="{{ strtolower($language->code) }}" class="tab-pane fade  @if($loop->first) in active show @endif">
                 <div class="form-group row mt-10">
-                    <label class="col-md-2 col-xs-12">Category Name</label>
-                    <div class="col-md-10">
+                    <label class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">Category Name</label>
+                    <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
                         {!! Form::text('translatable['.strtolower($language->code).'][name]',get_translated($model,strtolower($language->code),'name'),['class'=>'form-control','required'=>true]) !!}
                     </div>
 
                 </div>
                 @if($type!='filter')
                 <div class="form-group row">
-                    <label class="col-md-2 col-xs-12">Description</label>
-                    <div class="col-md-10 col-xs-12">
+                    <label class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">Description</label>
+                    <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
                         {!! Form::textarea('translatable['.strtolower($language->code).'][description]',get_translated($model,strtolower($language->code),'description'),['class'=>'form-control','required'=>true]) !!}
                     </div>
                 </div>
@@ -47,36 +47,57 @@
     @endif
 </div>
 @if($type!='filter')
+
+@if($model)
+    @if(! $model->is_core)
 <div class="form-group row">
-    <label class="col-md-2 col-xs-12">Slug</label>
-    <div class="col-md-10 col-xs-12">
+    <label class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">Slug</label>
+    <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
         {!! Form::text('slug',null,['class'=>'form-control','required'=>true]) !!}
+    </div>
+</div>
+    @else
+        {!! Form::hidden('slug',null) !!}
+    @endif
+@else
+    <div class="form-group row">
+        <label class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">Slug</label>
+        <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
+            {!! Form::text('slug',null,['class'=>'form-control','required'=>true]) !!}
+        </div>
+    </div>
+@endif
+
+<div class="form-group row">
+    <label class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">Status</label>
+    <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
+        {!! Form::select('status',[0=>'Draft',1=>'Published'],null,['class'=>'form-control']) !!}
     </div>
 </div>
 
 <div class="form-group row">
-    <label class="col-md-2 col-xs-12">Custom classes</label>
-    <div class="col-md-10 col-xs-12">
+    <label class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">Custom classes</label>
+    <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
         {!! Form::text('classes',null,['class'=>'form-control']) !!}
     </div>
 </div>
 @if($type !='brand')
 <div class="form-group row">
-    <label class="col-md-2 col-xs-12">Parent</label>
-    <div class="col-md-10 col-xs-12">
+    <label class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">Parent</label>
+    <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
         {!! Form::select('parent_id',[''=>'No Parent'] + get_pluck($allCategories,'id','name'),null,['class'=>'form-control']) !!}
     </div>
 </div>
 @endif
 <div class="form-group row">
-    <label class="col-md-2 col-xs-12">Select stickers</label>
-    <div class="col-md-10 col-xs-12">
+    <label class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">Select stickers</label>
+    <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
         {!! Form::select('stickers[]',$stickers,null,['class'=>'form-control','id' => 'select-stickers','multiple' => true]) !!}
     </div>
 </div>
 <div class="form-group row">
-    <label class="col-md-2 col-xs-12">Icon</label>
-        <div class="col-md-10 col-xs-12">
+    <label class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">Icon</label>
+        <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
             <div class="row">
                 <div class="col-md-10 col-xs-12">
                     {!! Form::text('icon',null,['class'=>'form-control icon-picker','required'=>true]) !!}
@@ -89,8 +110,8 @@
 </div>
 
 <div class="form-group row">
-    <label class="col-md-2 col-xs-12">Image</label>
-    <div class="col-md-10 col-xs-12">
+    <label class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">Image</label>
+    <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
         {!! media_button('image',$model) !!}
     </div>
 </div>

@@ -31,7 +31,10 @@
         $(function () {
             $('#orders-table').DataTable({
                 ajax: "{!! route('datatable_all_transactions') !!}",
-                dom: 'Bfrtip',
+                dom: 'Bflrtip',
+                displayLength: 10,
+                lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+                "scrollX": true,
                 buttons: [
                     'csv', 'excel', 'pdf', 'print'
                 ],

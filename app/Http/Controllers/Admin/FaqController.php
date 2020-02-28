@@ -36,6 +36,12 @@ class FaqController extends Controller
 
     public function index()
     {
+//        $stocks = Faq::all();
+//        foreach ($stocks as $stock){
+//            $stock->translate('gb')->slug = strtolower(str_replace(' ','-',str_replace('?','',$stock->question)));
+//            $stock->save();
+//        }
+//        dd('fsyo');
         return $this->view('index');
     }
 
@@ -51,6 +57,14 @@ class FaqController extends Controller
         $robot = $this->settings->getEditableData('seo_robot_faq');
 
         return $this->view('new', compact('model', 'general', 'twitterSeo', 'fbSeo', 'robot', 'data'));
+    }
+
+    public function settings()
+    {
+        $categories = Category::whereNull('parent_id')->where('type', 'faq')->get();
+        $allCategories = Category::where('type', 'faq')->get();
+        enableMedia('drive');
+        return $this->view('settings', compact('categories','allCategories'));
     }
 
     public function newPost(FaqRequest $request, $locale = null)

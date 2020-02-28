@@ -640,7 +640,7 @@ function commentRender($comments, $i = 0, $parent = false)
                 }
             }
 
-            echo '</div>';
+           echo '</div>';
         }
 
         echo '</div>';
@@ -1346,11 +1346,11 @@ function user_can_claim($user)
 
 function checkImage($img,$type=null)
 {
-    switch ($type){
-        case 'stock':$img= (File::exists(base_path().$img)) ? $img : stock_default_image();break;
-        case 'item':$img= (File::exists(base_path().$img)) ? $img : item_default_image();break;
-    }
-    return $img;
+        switch ($type){
+            case 'stock':$img= (File::exists(base_path().$img)) ? $img : stock_default_image();break;
+            case 'item':$img= (File::exists(base_path().$img)) ? $img : item_default_image();break;
+        }
+        return $img;
 
 }
 function stock_default_image(){
@@ -1584,17 +1584,17 @@ function getGoogleAlians()
 function main_pages_seo($main_page=null){
     $HTML=' ';
     if($main_page){
-        $seo= \App\Models\MainPagesSeo::where('page_name',$main_page)->first();
-        if($seo){
-            $HTML .= '<title>'.$seo->title.'</title>' . "\n\r";
-            $HTML .= '<meta property="og:image" content="'.$seo->image.'">' . "\n\r";
-            $HTML .= '<meta property="og:image:type" content="image/jpeg" />' . "\n\r";
-            $HTML .= '<meta property="og:image:width" content="400" />' . "\n\r";
-            $HTML .= '<meta property="og:image:height" content="300" />' . "\n\r";
-            $HTML .= '<meta property="og:title" content="'.$seo->title.'">' . "\n\r";
-            $HTML .= '<meta property="og:description" content="'.$seo->description.'">' . "\n\r";
-            $HTML .= '<meta property="og:keywords" content="'.$seo->keywords.'">' . "\n\r";
-        }
+       $seo= \App\Models\MainPagesSeo::where('page_name',$main_page)->first();
+       if($seo){
+           $HTML .= '<title>'.$seo->title.'</title>' . "\n\r";
+           $HTML .= '<meta property="og:image" content="'.$seo->image.'">' . "\n\r";
+           $HTML .= '<meta property="og:image:type" content="image/jpeg" />' . "\n\r";
+           $HTML .= '<meta property="og:image:width" content="400" />' . "\n\r";
+           $HTML .= '<meta property="og:image:height" content="300" />' . "\n\r";
+           $HTML .= '<meta property="og:title" content="'.$seo->title.'">' . "\n\r";
+           $HTML .= '<meta property="og:description" content="'.$seo->description.'">' . "\n\r";
+           $HTML .= '<meta property="og:keywords" content="'.$seo->keywords.'">' . "\n\r";
+       }
 
     }
     return $HTML;

@@ -6,8 +6,12 @@ use App\Http\Requests\ContactUsRequest;
 use App\Models\Category;
 use App\Models\Common;
 use App\Models\ContactUs;
+use App\Models\Faq;
 use App\Models\GeoZones;
+use App\Models\Items;
+use App\Models\Landing;
 use App\Models\Settings;
+use App\Models\Stock;
 use App\Models\ZoneCountries;
 use App\Services\ShortCodes;
 use Illuminate\Http\Request;
@@ -41,9 +45,29 @@ class GuestController extends Controller
     public function getFaq()
     {
         $categories = Category::with('faqs')->where('type', 'faq')->whereNull('parent_id')->get();
+        $categoriesCount = Category::with('faqs')->where('type', 'faq')->count();
         $category = $categories->first();
 
-        return $this->view('faq', compact(['categories', 'category']));
+        return $this->view('faq', compact(['categories', 'category','categoriesCount']));
+    }
+
+    public function getFaqSingle($slug)
+    {
+        $faq  = Faq::whereTranslation('slug', $slug,'gb')->first();
+
+        if(! $faq) abort(404);
+
+        $left_faq_ads = $this->settings->getEditableData('lef_faq_ads');
+        if($left_faq_ads && isset($left_faq_ads['data'])){
+            $left_faq_ads = json_decode($left_faq_ads['data'],true);
+        }
+
+        $right_faq_ads = $this->settings->getEditableData('right_faq_ads');
+        if($right_faq_ads && isset($right_faq_ads['data'])){
+            $right_faq_ads = json_decode($right_faq_ads['data'],true);
+        }
+
+        return $this->view('faq_single', compact(['faq','left_faq_ads','right_faq_ads']));
     }
 
     public function getFaqByCategory(Request $request)
@@ -82,11 +106,11 @@ class GuestController extends Controller
 
     public function getDelivery(GeoZones $geoZones)
     {
-
         $countries = [null => 'Select Country'] + $geoZones
                 ->join('zone_countries', 'geo_zones.id', '=', 'zone_countries.geo_zone_id')
-                ->select('zone_countries.*', 'zone_countries.name as country')
+                ->select('zone_countries.*', 'zone_countries.name as country','geo_zones.id as g_id')
                 ->groupBy('country')->pluck('country', 'country')->toArray();
+
         return $this->view('delivery', compact('countries'));
     }
 
@@ -97,10 +121,34 @@ class GuestController extends Controller
 
     public function getCities(Request $request)
     {
-        $zones = GeoZones::join('zone_countries', 'geo_zones.id', '=', 'zone_countries.geo_zone_id')
-            ->select('zone_countries.*', 'zone_countries.name as country')
-            ->orderBy('name');
-        return ['error' => false, 'html' => \View::make($this->view . '._partials,regions')];
+        $regions = [];
+        $deliveries = [];
+        $geoZones = GeoZones::join('zone_countries', 'geo_zones.id', '=', 'zone_countries.geo_zone_id')
+            ->select('zone_countries.*', 'zone_countries.name as country','geo_zones.id as g_id')->get();
+
+        if($geoZones){
+            foreach ($geoZones as $geoZone){
+                $countries = $geoZone->countries()->where('name',$request->value)->get();
+                if(count($countries)){
+                    if(count($geoZone->deliveries)){
+                        foreach ($geoZone->deliveries as $delivery){
+                            $deliveries[] = $delivery;
+                        }
+                    }
+
+                    foreach ($countries as $country){
+                        if(count($country->regions)){
+                            $regions = array_merge($regions,$country->regions()->pluck('name','name')->all());
+                        }
+                    }
+                }
+            }
+        }
+
+        $rHtml = \View::make($this->view . '._partials.regions',compact(['regions']))->render();
+        $sHtml = \View::make($this->view . '._partials.shipping_methods',compact(['deliveries']))->render();
+
+         return ['error' => false, 'html' => $rHtml,'sHtml' => $sHtml];
     }
 
     public function getDeliveryPrices(Request $request)
@@ -133,7 +181,7 @@ class GuestController extends Controller
         return $this->view('contact_us',compact(['settings']));
     }
 
-    public function postContactUs(ContactUsRequest $request)
+    public function postContactUs(Request $request)
     {
 
         $data = $request->all();
@@ -141,9 +189,10 @@ class GuestController extends Controller
         $result = [
             'name' => trim(htmlspecialchars($data['name'])),
             'phone' => isset($data['phone']) ? trim(htmlspecialchars($data['phone'])) : null,
-            'category' => trim(htmlspecialchars($data['category'])),
+            'category' => 'contact_us',
+//            'category' => trim(htmlspecialchars($data['category'])),
             'email' => $data['email'],
-            'uniq_id' => uniqid($data['category'] . "_"),
+            'uniq_id' => uniqid( "contact_us_"),
             'message' => trim(htmlspecialchars($data['message'])),
         ];
 //            $mail=Gmail::message()->subject('about_team_5c4ef6c1e44b1')->preload()->all();
@@ -162,5 +211,19 @@ class GuestController extends Controller
 //        }
 
         return redirect()->back();
+    }
+
+    public function landings($barcode)
+    {
+
+        $items = Items::leftJoin('barcodes','items.barcode_id','barcodes.id')
+            ->select('items.*')
+            ->where('barcodes.code',$barcode)
+            ->where('items.landing',true)
+            ->get();
+        if(! $items || count($items) == 0) abort(404);
+
+//        dd($items);
+        return $this->view('landings',compact(['items']));
     }
 }

@@ -10,7 +10,7 @@
                     <div class="text-center">
                         <button type="submit"
                                 class="profile-sidebar_logout-btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-white pointer">
-                            Logout
+                            {!! __('logout') !!}
                         </button>
                     </div>
                     {!! Form::close() !!}
@@ -33,7 +33,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($order->items as $item)
+                                    @foreach($order->items()->where("is_refunded",false)->get() as $item)
                                         <tr>
                                             <td class="text-left">
                                                 <a class="font-20 text-tert-clr main-transition"
@@ -53,7 +53,7 @@
                                                                 <div class="col-md-8">
                                                                     @foreach($option['options'] as $op)
                                                                         <p>
-                                                                            {{ @$op['name'] }}
+                                                                            {{ @$op['variation']['item']['short_name'] }}
                                                                         </p>
                                                                     @endforeach
                                                                 </div>
@@ -75,7 +75,7 @@
                                                                     <div class="col-md-8">
                                                 @foreach($option['options'] as $op)
                                                     <p>
-                                                        {{ $op['name'] }}
+                                                        {{ $op['variation']['item']['short_name'] }}
                                                     </p>
                                     @endforeach
 

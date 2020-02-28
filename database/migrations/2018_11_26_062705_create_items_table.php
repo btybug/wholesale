@@ -16,18 +16,22 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->increments('id');
             $table->string('sku')->nullable();
-            $table->unsignedInteger('barcode_id')->unique();
+            $table->unsignedInteger('barcode_id');
             $table->string('type',50);
             $table->string('alert',191)->nullable();
             $table->integer('quantity')->default(0);
             $table->text('image');
-
-            $table->integer('default_price')->default(0);
+            $table->decimal('default_price',6,2)->default(0);
             $table->tinyInteger('status')->default(0);
             $table->decimal('length')->nullable();
             $table->decimal('width')->nullable();
             $table->decimal('height')->nullable();
             $table->decimal('weight')->nullable();
+
+            $table->decimal('item_length')->nullable();
+            $table->decimal('item_width')->nullable();
+            $table->decimal('item_height')->nullable();
+            $table->decimal('item_weight')->nullable();
             $table->timestamps();
         });
 

@@ -4,11 +4,7 @@
             <a href="#" class="products__item-top">
                     <span class="d-block products__item-photo-brand-name">
                         <span class="font-sec-reg text-uppercase d-block text-center text-truncate products__item-brand-name font-16 text-sec-clr lh-1">
-                            @if($item->barcode)
                             {{ $item->barcode->code }}
-                            @else
-                             No Barcode
-                            @endif
                         </span>
                         <span class="position-relative products__item-photo d-block">
                             <img src="{{ (media_image_tmb($item->image)) }}" alt="product">
@@ -54,7 +50,7 @@
             <div  class="flex-wrap justify-content-between align-items-center products__item-bottom">
                 <a href="javascript:void(0)" data-id="{{ $item->id }}"
                    class="d-flex align-items-center justify-content-center font-15 text-tert-clr text-uppercase products__item-view-more add-to-cart">
-                    Add to cart
+                    {!! __('add_to_cart') !!}
                 </a>
             </div>
         </div>

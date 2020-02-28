@@ -19,6 +19,7 @@ class CreateStockTranslationsTable extends Migration
             $table->string('locale')->index();
 
             $table->string('name');
+            $table->string('slug');
             $table->text('short_description')->nullable();
             $table->text('long_description')->nullable();
             $table->text('what_is_content')->nullable();

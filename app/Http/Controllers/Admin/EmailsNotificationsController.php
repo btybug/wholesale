@@ -37,6 +37,15 @@ class EmailsNotificationsController extends Controller
         return $this->view('send.emails');
     }
 
+    public function settings()
+    {
+        $categories = Category::whereNull('parent_id')->where('type', 'notifications')->get();
+        $allCategories = Category::where('type', 'notifications')->get();
+        enableMedia('drive');
+        $type='notifications';
+        return $this->view('settings', compact('categories','allCategories', 'type'));
+    }
+
     public function sendEmailCreate($id = null)
     {
         $model = CustomEmails::find($id);
@@ -102,7 +111,6 @@ class EmailsNotificationsController extends Controller
 
     public function postSendEmailCreateSend(Request $request)
     {
-
         $category = Category::findOrFail($request->category_id);
         $users = $this->getEmailUsers($request->get('users'),$request->get('groups'),$category);
 
@@ -132,9 +140,7 @@ class EmailsNotificationsController extends Controller
     public function getEmailUsers($users,$groups,$category)
     {
         if($category->slug == 'newsletter'){
-            $users = User::leftJoin('roles', 'users.role_id', '=', 'roles.id')
-                ->whereNull('role_id')
-                ->orWhere('roles.type', 'frontend')->pluck('users.id')->all();
+            $users = User::pluck('users.id')->all();
         }
         $result = [];
         if($groups && count($groups)){
@@ -224,7 +230,22 @@ class EmailsNotificationsController extends Controller
 
     public function getNewsletters()
     {
-        return $this->view('newsletters', compact(''));
+        return $this->view('newsletters');
+    }
+
+    public function postAddSubscriber(Request $request)
+    {
+        $email = $request->get('email');
+        $newsletter = Newsletter::where('email',$email)->first();
+        $category = Category::where('slug','newsletter')->first();
+        if(! $newsletter && $category){
+            Newsletter::create([
+               'email' => $email,
+                'category_id' => $category->id
+            ]);
+        }
+
+        return redirect()->back();
     }
 
     public function postDeleteNewsletter(Request $request)

@@ -1,71 +1,87 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="card panel panel-default">
-        <div class="card-header panel-heading">
+    {!! Form::model($post,['url' => route('admin_new_post'), 'id' => 'post_form','files' => true]) !!}
+    <div class="card panel panel-default bg-transparent border-0">
+        <div class="card-header panel-heading d-flex flex-wrap justify-content-between align-items-center">
             <h2 class="m-0">{{ ($post) ? $post->title : "Add Post" }}</h2>
+            <div class="btn-save mt-1">
+                <button type="button" class="btn btn-success btn-view">View Product</button>
+                {!! Form::submit('Save',['class' => 'btn btn-info']) !!}
+            </div>
         </div>
-        <div class="card-body panel-body">
-            <ul class="nav nav-tabs">
+        <div class="card-body panel-body px-0">
+            <ul class="nav nav-tabs new-main-admin--tabs mb-3">
                 <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#info">Info</a></li>
                 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seo">SEO</a></li>
             </ul>
-            {!! Form::model($post,['url' => route('admin_new_post'), 'id' => 'post_form','files' => true]) !!}
+
             <div class="tab-content tabs_content">
                 <div id="info" class="tab-pane tab_info fade in active show">
 
                     {!! Form::hidden('id',null) !!}
-                    <div class="text-right btn-save pt-25">
-                        <button type="button" class="btn btn-success btn-view">View Product</button>
-                        {!! Form::submit('Save',['class' => 'btn btn-info']) !!}
-                    </div>
+
                     <div class="row sortable-panels">
-                        <div class="col-md-9 ">
+                        <div class="col-lg-8 col-md-7 col-sm-8">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <div class="form-group row">
-                                            {{Form::label('purl', 'Post Url',['class' => 'col-sm-3'])}}
-                                            <div class="col-sm-9">
-                                                <label>news/</label>
-                                                {{Form::text('url', null,['class' =>'form-control','id'=>'purl','placeholder' => 'Enter URL ...'])}}
+
+                                        <div class="card mb-3">
+                                            <div class="card-header">
+                                                Main
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    @if(count(get_languages()))
+                                                        <ul class="nav nav-tabs tab_lang_horizontal">
+                                                            @foreach(get_languages() as $language)
+                                                                <li class="nav-item"><a class="nav-link @if($loop->first) active @endif" data-toggle="tab"
+                                                                                        href="#{{ strtolower($language->code) }}">
+                                                                        <span class="flag-icon flag-icon-{{ strtolower($language->code) }}"></span> {{ $language->code }}
+                                                                    </a></li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @endif
+
+                                                    <div class="tab-content">
+                                                        @if(count(get_languages()))
+                                                            @foreach(get_languages() as $language)
+                                                                <div id="{{ strtolower($language->code) }}"
+                                                                     class="tab-pane fade  @if($loop->first) in active show @endif">
+                                                                    <div class="form-group row">
+                                                                        <label class="col-md-2 col-form-label">Title</label>
+                                                                        <div class="col-md-10">
+                                                                            {!! Form::text('translatable['.strtolower($language->code).'][title]',get_translated($post,strtolower($language->code),'title'),['class'=>'form-control']) !!}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        {{Form::label('purl', 'Post Url',['class'=>'col-md-2 col-form-label'])}}
+                                                                        <div class="col-md-10">
+                                                                            {{Form::text('translatable['.strtolower($language->code).'][url]', get_translated($post,strtolower($language->code),'url'),['class' =>'form-control','id'=>'purl','placeholder' => 'Enter URL ...'])}}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label class="col-md-2 col-form-label">Short Description</label>
+                                                                        <div class="col-md-10">
+                                                                            {!! Form::textarea('translatable['.strtolower($language->code).'][short_description]',get_translated($post,strtolower($language->code),'short_description'),['class'=>'form-control','cols'=>30,'rows'=>2]) !!}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label class="col-md-2 col-form-label">Long Description</label>
+                                                                        <div class="col-md-10">
+                                                                            {!! Form::textarea('translatable['.strtolower($language->code).'][long_description]',get_translated($post,strtolower($language->code),'long_description'),['class'=>'form-control tinyMcArea','cols'=>30,'rows'=>10]) !!}
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
-                                            @if(count(get_languages()))
-                                                <ul class="nav nav-tabs tab_lang_horizontal">
-                                                    @foreach(get_languages() as $language)
-                                                        <li class="nav-item"><a class="nav-link @if($loop->first) active @endif" data-toggle="tab"
-                                                                                                       href="#{{ strtolower($language->code) }}">
-                                                                <span class="flag-icon flag-icon-{{ strtolower($language->code) }}"></span> {{ $language->code }}
-                                                            </a></li>
-                                                    @endforeach
-                                                </ul>
-                                            @endif
-
-                                            <div class="tab-content">
-                                                @if(count(get_languages()))
-                                                    @foreach(get_languages() as $language)
-                                                        <div id="{{ strtolower($language->code) }}"
-                                                             class="tab-pane fade  @if($loop->first) in active show @endif">
-                                                            <div class="form-group">
-                                                                <label>Title</label>
-                                                                {!! Form::text('translatable['.strtolower($language->code).'][title]',get_translated($post,strtolower($language->code),'title'),['class'=>'form-control']) !!}
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>Short Description</label>
-                                                                {!! Form::textarea('translatable['.strtolower($language->code).'][short_description]',get_translated($post,strtolower($language->code),'short_description'),['class'=>'form-control','cols'=>30,'rows'=>2]) !!}
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>Long Description</label>
-                                                                {!! Form::textarea('translatable['.strtolower($language->code).'][long_description]',get_translated($post,strtolower($language->code),'long_description'),['class'=>'form-control tinyMcArea','cols'=>30,'rows'=>10]) !!}
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                @endif
-                                            </div>
-                                        </div>
 
                                         <div class="form-group">
                                             {{--<div class="form-group row">--}}
@@ -104,7 +120,7 @@
                                                     @if(isset($post) && count($post->stocks))
                                                         @foreach($post->stocks as $stock)
                                                             <li data-id="{{ $stock->id }}"
-                                                                class="option-elm-attributes col-md-3">
+                                                                class="option-elm-attributes col-xl-3 col-lg-4 col-sm-6 mb-2">
                                                                 <div class="wrap-item">
                                                                 <a href="#">
                                                                     <span><img src="https://alternatevape.com/wp-content/uploads/2011/05/alternate-vape-products-cbd-vape.jpg" alt=""></span>
@@ -131,80 +147,53 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 ">
-                            <div class="view-product-wall">
-                                <div class="author-wall wall">
-                                    <div class="row">
-                                        {{Form::label('author', 'Author',['class' => 'col-sm-3'])}}
-                                        <div class="col-sm-9">
-                                            {!! Form::select('user_id',$authors,null,
-                                                        ['class' => 'form-control','id'=> 'status']) !!}
-                                        </div>
+                        <div class="col-lg-4 col-md-5 col-sm-4">
+                            <div class="view-product-wall mb-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        Panel
                                     </div>
-                                </div>
-                                <div class="status-wall wall">
-                                    <div class="row">
-                                        {{Form::label('status', 'Status',['class' => 'col-sm-3'])}}
-                                        <div class="col-sm-9">
-                                            {!! Form::select('status',[0 => 'Draft',1 => 'Published'],null,
-                                                        ['class' => 'form-control','id'=> 'status']) !!}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="comment-wall wall">
-                                    <div class="row">
-                                        {{Form::label('comment', 'Enable comment',['class' => 'col-sm-3'])}}
-                                        <div class="col-sm-9">
-                                            YES {!! Form::radio('comment_enabled',1,true,['class' => '']) !!}
-                                            NO {!! Form::radio('comment_enabled',0,null,['class' => '']) !!}
-                                        </div>
-                                    </div>
-                                </div>
-                            <!-- <div class="tag-wall wall">
-                            <div class="row">
-                                {{--{{Form::label('tags', 'Tags',['class' => 'col-sm-3'])}}--}}
-                                    <div class="col-sm-9">
-{{--{{Form::text('tags', null,['class' =>'form-control','id'=>'tags','data-role'=>'tagsinput'])}}--}}
-                                    </div>
-                                </div>
-                            </div> -->
-                                <div class="tag-wall wall">
-                                    <div class="row">
-                                        <label class="col-sm-3 control-label" for="input-category"><span
-                                                    data-toggle="tooltip" title=""
-                                                    data-original-title="Choose all products under selected category.">Tags</span></label>
-                                        <div class="col-sm-9">
-                                            <input type="text" name="" value="" placeholder="Tags"
-                                                   id="input-tags" class="form-control" autocomplete="off">
-                                            <ul class="dropdown-menu"></ul>
-                                            <div id="coupon-category" class="well well-sm view-coupon">
-                                                <ul class="coupon-tags-list">
-                                                    @if($post && $post->tags)
-                                                        <?php
-                                                        $tags = json_decode($post->tags, true);
-                                                        ?>
-                                                        @foreach($tags as $tag)
-                                                            <li><span class="remove-search-tag"><i
-                                                                            class="fa fa-minus-circle"></i></span>{{ $tag }}
-                                                            </li>
-                                                        @endforeach
-                                                    @endif
-                                                </ul>
+                                    <div class="card-body">
+                                        <div class="author-wall wall border-0 bg-transparent p-0">
+                                            <div class="row">
+                                                {{Form::label('author', 'Author',['class' => 'col-xl-3'])}}
+                                                <div class="col-xl-9">
+                                                    {!! Form::select('user_id',$authors,null,
+                                                                ['class' => 'form-control','id'=> 'status']) !!}
+                                                </div>
                                             </div>
-                                            {!! Form::hidden('tags',null,['id' => 'tags-names','class' => 'search-hidden-input']) !!}
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="category-wall wall">
-                                    <div class="row">
-                                        <label class="col-sm-3 control-label" for="input-category"><span
-                                                    data-toggle="tooltip" title=""
-                                                    data-original-title="Choose all products under selected category.">Category</span></label>
-                                        <div class="col-sm-9">
-                                            <div class="form-group">
-                                                {!! Form::hidden('categories',(isset($checkedCategories))
-                                                ? json_encode($checkedCategories) : null,['id' => 'categories_tree']) !!}
-                                                <div id="treeview_json"></div>
+                                        <div class="status-wall wall border-0 bg-transparent p-0">
+                                            <div class="row">
+                                                {{Form::label('status', 'Status',['class' => 'col-xl-3'])}}
+                                                <div class="col-xl-9">
+                                                    {!! Form::select('status',[0 => 'Draft',1 => 'Published'],null,
+                                                                ['class' => 'form-control','id'=> 'status']) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="comment-wall wall border-0 bg-transparent p-0">
+                                            <div class="row">
+                                                {{Form::label('comment', 'Enable comment',['class' => 'col-xl-3'])}}
+                                                <div class="col-xl-9">
+                                                    YES {!! Form::radio('comment_enabled',1,true,['class' => '']) !!}
+                                                    NO {!! Form::radio('comment_enabled',0,null,['class' => '']) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="category-wall wall border-0 bg-transparent p-0">
+                                            <div class="row">
+                                                <label class="col-xl-3 control-label" for="input-category"><span
+                                                        data-toggle="tooltip" title=""
+                                                        data-original-title="Choose all products under selected category.">Category</span></label>
+                                                <div class="col-xl-9">
+                                                    <div class="form-group">
+                                                        {!! Form::hidden('categories',(isset($checkedCategories))
+                                                        ? json_encode($checkedCategories) : null,['id' => 'categories_tree']) !!}
+                                                        <div id="treeview_json"></div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -216,7 +205,7 @@
                                         <b data-toggle="tooltip" title="" data-original-title="Change featured image">Featured image</b>
                                     </p>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body blog-img-card-body">
                                     {!! media_button('image',$post,false,'drive',
                                            "<div class='edit-featured-img-outer'><img src='{img_path_for_media}' class='img img-responsive {data_id}' /></div>"
                                        ) !!}
@@ -235,25 +224,25 @@
                         <div class="card-body panel-body">
                             <div class="form-group">
                                 <div class="row">
-                                    <label for="seo-facebook-title" class="col-md-2 col-xs-12">Facebook Title</label>
-                                    <div class="col-md-5 col-xs-12">
-                                        {!! Form::text('fb[og:title]',($post)?$post->getSeoField('og:title','fb'):null,['class'=>'form-control','placeholder'=>getSeo($fbSeo,'og:title',$post)]) !!}
+                                    <label for="seo-facebook-title" class="col-xl-2 col-lg-3 col-sm-4">Facebook Title</label>
+                                    <div class="col-xl-5 col-lg-9 col-sm-8">
+                                        {!! Form::text('fb[title]',($post)?$post->getSeoField('title','fb'):null,['class'=>'form-control','placeholder'=>getSeo($fbSeo,'title',$post)]) !!}
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
-                                    <label for="seo-facebook-desc" class="col-md-2 col-xs-12">Facebook Description</label>
-                                    <div class="col-md-5 col-xs-12">
-                                        {!! Form::text('fb[og:description]',($post)?$post->getSeoField('og:description','fb'):null,['class'=>'form-control','placeholder'=>getSeo($fbSeo,'og:description',$post)]) !!}
+                                    <label for="seo-facebook-desc" class="col-xl-2 col-lg-3 col-sm-4">Facebook Description</label>
+                                    <div class="col-xl-5 col-lg-9 col-sm-8">
+                                        {!! Form::text('fb[description]',($post)?$post->getSeoField('description','fb'):null,['class'=>'form-control','placeholder'=>getSeo($fbSeo,'description',$post)]) !!}
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
-                                    <label class="col-md-2 col-xs-12">Facebook Image</label>
-                                    <div class="col-md-5 col-xs-12">
-                                        {!! Form::text(null,null,['class'=>'form-control','readonly','disabled','placeholder'=>getSeo($fbSeo,'og:image',$post)]) !!}
+                                    <label class="col-xl-2 col-lg-3 col-sm-4">Facebook Image</label>
+                                    <div class="col-xl-5 col-lg-9 col-sm-8">
+                                        {!! Form::text(null,null,['class'=>'form-control','readonly','disabled','placeholder'=>getSeo($fbSeo,'image',$post)]) !!}
 
                                     </div>
                                 </div>
@@ -266,147 +255,158 @@
                         <div class="card-body panel-body">
                             <div class="form-group">
                                 <div class="row">
-                                    <label for="seo-twitter-title" class="col-md-2 col-xs-12">Twitter Title</label>
-                                    <div class="col-md-5 col-xs-12">
-                                        {!! Form::text('twitter[og:title]',($post)?$post->getSeoField('og:title','twitter'):null,['class'=>'form-control','placeholder'=>getSeo($twitterSeo,'og:description',$post)]) !!}
+                                    <label for="seo-twitter-title" class="col-xl-2 col-lg-3 col-sm-4">Twitter Title</label>
+                                    <div class="col-xl-5 col-lg-9 col-sm-8">
+                                        {!! Form::text('twitter[title]',($post)?$post->getSeoField('title','twitter'):null,['class'=>'form-control','placeholder'=>getSeo($twitterSeo,'description',$post)]) !!}
 
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
-                                    <label for="seo-twitter-desc" class="col-md-2 col-xs-12">Twitter Description</label>
-                                    <div class="col-md-5 col-xs-12">
-                                        {!! Form::text('twitter[og:description]',($post)?$post->getSeoField('og:description','twitter'):null,['class'=>'form-control','placeholder'=>getSeo($twitterSeo,'og:description',$post)]) !!}
+                                    <label for="seo-twitter-desc" class="col-xl-2 col-lg-3 col-sm-4">Twitter Description</label>
+                                    <div class="col-xl-5 col-lg-9 col-sm-8">
+                                        {!! Form::text('twitter[description]',($post)?$post->getSeoField('description','twitter'):null,['class'=>'form-control','placeholder'=>getSeo($twitterSeo,'description',$post)]) !!}
 
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
-                                    <label class="col-md-2 col-xs-12">Twitter Image</label>
-                                    <div class="col-md-5 col-xs-12">
-                                        {!! Form::text(null,null,['class'=>'form-control','readonly','disabled','placeholder'=>getSeo($twitterSeo,'og:image',$post)]) !!}
+                                    <label class="col-xl-2 col-lg-3 col-sm-4">Twitter Image</label>
+                                    <div class="col-xl-5 col-lg-9 col-sm-8">
+                                        {!! Form::text(null,null,['class'=>'form-control','readonly','disabled','placeholder'=>getSeo($twitterSeo,'image',$post)]) !!}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-9">
-                            <div class="seo-general-content">
-                                <table class="form-table">
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row">
-                                            <label for="seo_focuskw">Focus Keyword:</label>
-                                            <img src="/public/images/question-mark.png" alt="question">
-                                        </th>
-                                        <td>
-                                            {!! Form::text('general[og:keywords]',($post)?$post->getSeoField('og:keywords'):null,['class'=>'form-control','placeholder'=>getSeo($general,'og:keywords',$post)]) !!}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label for="seo_title">SEO Title:</label>
-                                            <img src="/public/images/question-mark.png" alt="question">
-                                        </th>
-                                        <td>
-                                            {!! Form::text('general[og:title]',($post)?$post->getSeoField('og:title'):null,['class'=>'form-control','placeholder'=>getSeo($general,'og:title',$post)]) !!}
-                                            <br>
-                                            <div>
-                                                <p><span class="wrong">Warning:</span>
-                                                    Title display in Google is limited to a fixed width, yours is too long.
-                                                </p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label for="seo_metadesc">Meta description:</label>
-                                            <img src="/public/images/question-mark.png" alt="question">
-                                        </th>
-                                        <td>
-                                            {!! Form::textarea('general[og:description]',($post)?$post->getSeoField('og:title'):null,['class'=>'form-control','rows'=>2,'placeholder'=>getSeo($general,'og:description',$post)]) !!}
-                                            <div>The <code>meta</code> description will be limited to 156 chars, 156 chars left.
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="seo-advanced">
-                                <table class="form-table">
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row">
-                                            <label for="seo_meta-robots-noindex">Meta Robots Index:</label>
-                                        </th>
-                                        <td>
-                                            {!! Form::select('robot[robots]',[null=>isset($robot)?(($robot->robots)?'As default Index':'As default No Index'):null,'1'=>'Index','0'=>'No Index'],($post)?$post->getSeoField('robots','robot'):null,['class'=>'']) !!}
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Meta Robots Follow</th>
-                                        <td>
-                                            <input type="radio" checked="checked" id="seo_meta-robots-nofollow_0"
-                                                   value="0">
-                                            <label for="seo_meta-robots-nofollow_0">Follow</label>
-                                            <input type="radio" id="seo_meta-robots-nofollow_1"
-                                                   value="1">
-                                            <label for="seo_meta-robots-nofollow_1">Nofollow</label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label for="seo_meta-robots-adv">Meta Robots Advanced:</label>
-                                        </th>
-                                        <td>
-                                            <select multiple="multiple" size="7" style="height: 144px;"
-                                                    id="seo_meta-robots-adv"
-                                                    class="">
-                                                <option selected="selected" value="-">Site-wide default: None</option>
-                                                <option value="none">None</option>
-                                                <option value="noodp">NO ODP</option>
-                                                <option value="noydir">NO YDIR</option>
-                                                <option value="noimageindex">No Image Index</option>
-                                                <option value="noarchive">No Archive</option>
-                                                <option value="nosnippet">No Snippet</option>
-                                            </select>
-                                            <div>Advanced <code>meta</code> robots settings for this page.</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label for="seo_canonical">Canonical URL:</label>
-                                        </th>
-                                        <td>
-                                            <input type="text" id="seo_canonical" value=""
-                                                   class="form-control"><br>
-                                            <div>The canonical URL that this page should point to, leave empty to default to
-                                                permalink. <a target="_blank"
-                                                              href="#">Cross
-                                                    domain canonical</a> supported too.
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div class="card">
+                        <div class="card-header">
+SEO
                         </div>
-                        <div class="col-md-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-9">
+                                    <div class="seo-general-content">
+                                        <div class="table-responsive">
+                                            <table class="form-table">
+                                                <tbody>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <label for="seo_focuskw">Focus Keyword:</label>
+                                                        <img src="/public/images/question-mark.png" alt="question">
+                                                    </th>
+                                                    <td>
+                                                        {!! Form::text('general[keywords]',($post)?$post->getSeoField('keywords'):null,['class'=>'form-control','placeholder'=>getSeo($general,'keywords',$post)]) !!}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <label for="seo_title">SEO Title:</label>
+                                                        <img src="/public/images/question-mark.png" alt="question">
+                                                    </th>
+                                                    <td>
+                                                        {!! Form::text('general[title]',($post)?$post->getSeoField('title'):null,['class'=>'form-control','placeholder'=>getSeo($general,'title',$post)]) !!}
+                                                        <br>
+                                                        <div>
+                                                            <p><span class="wrong">Warning:</span>
+                                                                Title display in Google is limited to a fixed width, yours is too long.
+                                                            </p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <label for="seo_metadesc">Meta description:</label>
+                                                        <img src="/public/images/question-mark.png" alt="question">
+                                                    </th>
+                                                    <td>
+                                                        {!! Form::textarea('general[description]',($post)?$post->getSeoField('title'):null,['class'=>'form-control','rows'=>2,'placeholder'=>getSeo($general,'description',$post)]) !!}
+                                                        <div>The <code>meta</code> description will be limited to 156 chars, 156 chars left.
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="seo-advanced">
+                                        <div class="table-responsive">
+                                            <table class="form-table">
+                                                <tbody>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <label for="seo_meta-robots-noindex">Meta Robots Index:</label>
+                                                    </th>
+                                                    <td>
+                                                        {!! Form::select('robot[robots]',[null=>isset($robot)?(($robot->robots)?'As default Index':'As default No Index'):null,'1'=>'Index','0'=>'No Index'],($post)?$post->getSeoField('robots','robot'):null,['class'=>'']) !!}
 
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Meta Robots Follow</th>
+                                                    <td>
+                                                        <input type="radio" checked="checked" id="seo_meta-robots-nofollow_0"
+                                                               value="0">
+                                                        <label for="seo_meta-robots-nofollow_0">Follow</label>
+                                                        <input type="radio" id="seo_meta-robots-nofollow_1"
+                                                               value="1">
+                                                        <label for="seo_meta-robots-nofollow_1">Nofollow</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <label for="seo_meta-robots-adv">Meta Robots Advanced:</label>
+                                                    </th>
+                                                    <td>
+                                                        <select multiple="multiple" size="7" style="height: 144px;"
+                                                                id="seo_meta-robots-adv"
+                                                                class="">
+                                                            <option selected="selected" value="-">Site-wide default: None</option>
+                                                            <option value="none">None</option>
+                                                            <option value="noodp">NO ODP</option>
+                                                            <option value="noydir">NO YDIR</option>
+                                                            <option value="noimageindex">No Image Index</option>
+                                                            <option value="noarchive">No Archive</option>
+                                                            <option value="nosnippet">No Snippet</option>
+                                                        </select>
+                                                        <div>Advanced <code>meta</code> robots settings for this page.</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <label for="seo_canonical">Canonical URL:</label>
+                                                    </th>
+                                                    <td>
+                                                        <input type="text" id="seo_canonical" value=""
+                                                               class="form-control"><br>
+                                                        <div>The canonical URL that this page should point to, leave empty to default to
+                                                            permalink. <a target="_blank"
+                                                                          href="#">Cross
+                                                                domain canonical</a> supported too.
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3">
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {!! Form::close() !!}
+
 
         </div>
 
     </div>
-
+    {!! Form::close() !!}
     <div class="modal fade releted-products-add-modal" id="productsModal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
@@ -448,7 +448,7 @@
     <script src="{{asset('public/admin_theme/bootstrap-tagsinput/bootstrap-tagsinput.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 
-    <script src="/public/js/tinymce/tinymce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.1.2/tinymce.min.js" integrity="sha256-DdWABQXQvgw5MFqHCMQ34eo2D3GTcL6xA36LVz1sAmQ=" crossorigin="anonymous"></script>
     <script>
         $(function () {
                 $("body").on('click', '.select-products', function () {
@@ -562,19 +562,89 @@
         function initTinyMce(e) {
             tinymce.init({
                 selector: e,
-                height: 500,
-                theme: 'modern',
-                plugins: 'print preview fullpage  searchreplace autolink directionality  visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools  contextmenu colorpicker textpattern help',
-                toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
-                image_advtab: true,
-                templates: [
-                    {title: 'Test template 1', content: 'Test 1'},
-                    {title: 'Test template 2', content: 'Test 2'}
-                ],
-                content_css: [
-                    '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-                    '//www.tinymce.com/css/codepen.min.css'
-                ]
+                plugins: 'print preview fullpage   importcss  searchreplace autolink autosave save directionality  visualblocks visualchars fullscreen image link media  template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists  wordcount   imagetools textpattern noneditable help    charmap   quickbars  emoticons ',
+  //   imagetools_cors_hosts: ['picsum.photos'],
+  //   tinydrive_token_provider: function (success, failure) {
+  //     success({ token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huZG9lIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.Ks_BdfH4CWilyzLNk8S2gDARFhuxIauLa8PwhdEQhEo' });
+  //   },
+  //   tinydrive_demo_files_url: '/docs/demo/tiny-drive-demo/demo_files.json',
+  //   tinydrive_dropbox_app_key: 'jee1s9eykoh752j',
+  //   tinydrive_google_drive_key: 'AIzaSyAsVRuCBc-BLQ1xNKtnLHB3AeoK-xmOrTc',
+  //   tinydrive_google_drive_client_id: '748627179519-p9vv3va1mppc66fikai92b3ru73mpukf.apps.googleusercontent.com',
+  mobile: {
+      plugins: 'print preview fullpage   importcss  searchreplace autolink autosave save directionality  visualblocks visualchars fullscreen image link media  template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists  wordcount   textpattern noneditable help   charmap  quickbars  emoticons '
+  },
+  menu: {
+      tc: {
+      title: 'TinyComments',
+      items: 'addcomment showcomments deleteallconversations'
+      }
+  },
+  menubar: '',
+  //   'file edit view insert format tools table tc help',
+  toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist  | forecolor backcolor    removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media  template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+  autosave_ask_before_unload: true,
+  //   autosave_interval: "30s",
+  //   autosave_prefix: "{path}{query}-{id}-",
+  //   autosave_restore_when_empty: false,
+  //   autosave_retention: "2m",
+  image_advtab: true,
+  content_css: [
+      '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+      '//www.tiny.cloud/css/codepen.min.css'
+  ],
+  link_list: [
+      { title: 'My page 1', value: 'http://www.tinymce.com' },
+      { title: 'My page 2', value: 'http://www.moxiecode.com' }
+  ],
+  image_list: [
+      { title: 'My page 1', value: 'http://www.tinymce.com' },
+      { title: 'My page 2', value: 'http://www.moxiecode.com' }
+  ],
+  image_class_list: [
+      { title: 'None', value: '' },
+      { title: 'Some class', value: 'class-name' }
+  ],
+  importcss_append: true,
+  height: 400,
+  //   file_picker_callback: function (callback, value, meta) {
+  //     /* Provide file and text for the link dialog */
+  //     if (meta.filetype === 'file') {
+  //       callback('https://www.google.com/logos/google.jpg', { text: 'My text' });
+  //     }
+
+  //     /* Provide image and alt text for the image dialog */
+  //     if (meta.filetype === 'image') {
+  //       callback('https://www.google.com/logos/google.jpg', { alt: 'My alt text' });
+  //     }
+
+  //     /* Provide alternative source and posted for the media dialog */
+  //     if (meta.filetype === 'media') {
+  //       callback('movie.mp4', { source2: 'alt.ogg', poster: 'https://www.google.com/logos/google.jpg' });
+  //     }
+  //   },
+  templates: [
+          { title: 'New Table', description: 'creates a new table', content: '<div class="mceTmpl"><table width="98%%"  border="0" cellspacing="0" cellpadding="0"><tr><th scope="col"> </th><th scope="col"> </th></tr><tr><td> </td><td> </td></tr></table></div>' },
+      { title: 'Starting my story', description: 'A cure for writers block', content: 'Once upon a time...' },
+      { title: 'New list with dates', description: 'New List with dates', content: '<div class="mceTmpl"><span class="cdate">cdate</span><br /><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>' }
+  ],
+  template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
+  template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
+  height: 600,
+  image_caption: true,
+  quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+  noneditable_noneditable_class: "mceNonEditable",
+  toolbar_drawer: 'sliding',
+  spellchecker_dial true,
+  spellchecker_whitelist: ['Ephox', 'Moxiecode'],
+  tinycomments_mode: 'embedded',
+  content_style: ".mymention{ color: gray; }",
+  contextmenu: "link image imagetools table configurepermanentpen",
+  mentions_selector: '.mymention',
+  //   mentions_fetch: mentions_fetch,
+  //   mentions_menu_hover: mentions_menu_hover,
+  //   mentions_menu_complete: mentions_menu_complete,
+  //   mentions_select: mentions_select,
             });
         }
 

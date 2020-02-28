@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Settings;
 use App\Models\Stickers;
 use App\Models\Stock;
 use App\Models\StockCategories;
@@ -16,10 +17,10 @@ class StickersController extends Controller
 
     protected $view = 'frontend.stickers';
 
-    public function index($id = null)
+    public function index($slug = null)
     {
         $stickers = Stickers::get();
-        $current = ($id) ? Stickers::findOrFail($id) : $stickers->first();
+        $current = ($slug) ? Stickers::where('slug',$slug)->first() : $stickers->first();
         $products=($current)?$current->products():collect([]);
         $stockCategories = StockCategories::
         leftJoin('categories', 'stock_categories.categories_id', '=', 'categories.id')
@@ -31,13 +32,15 @@ class StickersController extends Controller
         $products = $products->leftJoin('stock_categories', 'stock_categories.stock_id', '=', 'stocks.id')
             ->leftJoin('categories', 'stock_categories.categories_id', '=', 'categories.id')
             ->where('categories.slug', $f)->select('stocks.*')->groupBy('stocks.id')->get();
+        $settings = new Settings();
+        $sliders = $settings->getEditableData('stickers');
 
-        return $this->view('index', compact('stickers', 'slug', 'current','products','stockCategories','f'));
+        return $this->view('index', compact('stickers', 'slug', 'current','products','stockCategories','f','sliders'));
     }
 
     public function postSticker(Request $request)
     {
-        $current = Stickers::findOrFail($request->id);
+        $current = Stickers::where('slug',$request->id)->first();
         if($current){
             $products=$current->products();
             $stockCategories = StockCategories::
@@ -47,9 +50,11 @@ class StickersController extends Controller
                 ->whereIn('stock_categories.stock_id', $products->pluck('id'))
                 ->groupBy('stock_categories.categories_id')->select('categories.slug', 'categories_translations.name')->pluck('name', 'slug');
             $f = ($stockCategories->count())?(array_keys($stockCategories->toArray())[0]):false;
+
             $products = ($f)?$products->leftJoin('stock_categories', 'stock_categories.stock_id', '=', 'stocks.id')
                 ->leftJoin('categories', 'stock_categories.categories_id', '=', 'categories.id')
                 ->where('categories.slug', $f)->select('stocks.*')->groupBy('stocks.id')->get():$products->get();
+
             $html = view("frontend.stickers._partials.current",compact('current','products','stockCategories','f'))->render();
             return response()->json(['error' => false,'html' => $html]);
         }

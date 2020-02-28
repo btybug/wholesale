@@ -36,16 +36,16 @@
         @foreach(get_languages() as $language)
             <div id="{{ strtolower($language->code) }}" class="tab-pane fade  @if($loop->first) in active show @endif">
                 <div class="form-group row mt-10">
-                    <label class="col-md-2 col-xs-12">Filter Name</label>
-                    <div class="col-md-10">
+                    <label class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">Filter Name</label>
+                    <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
                         {!! Form::text('translatable['.strtolower($language->code).'][name]',($child)?get_translated($child,strtolower($language->code),'name'):null,['class'=>'form-control','required'=>true]) !!}
                     </div>
 
                 </div>
                 <div class="form-group row mt-10">
-                    <label class="col-md-2 col-xs-12">First child label</label>
+                    <label class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">First child label</label>
 
-                    <div class="col-md-10">
+                    <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
                         {!! Form::text('translatable['.strtolower($language->code).'][first_child_label]',($child)?get_translated($child,strtolower($language->code),'first_child_label'):null,['class'=>'form-control']) !!}
                     </div>
 
@@ -55,9 +55,9 @@
     @endif
 </div>
 <div class="form-group row mt-10">
-    <label class="col-md-2 col-xs-12">Parent</label>
+    <label class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">Parent</label>
 
-    <div class="col-md-10">
+    <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
         {!! Form::select('parent_id',[(($parent)?$parent->id:null)=>'Current Filter']+$parents,(($parent)?$parent->id:null),['class'=>'form-control','required'=>true]) !!}
     </div>
 
@@ -66,8 +66,8 @@
 <div class="form-group">
     <div class="row">
         <label for="feature_image"
-               class="control-label col-sm-4">image</label>
-        <div class="col-sm-8">
+               class="col-xl-2 col-lg-4 col-md-12 col-sm-3 col-form-label">image</label>
+        <div class="col-xl-10 col-lg-8 col-md-12 col-sm-9">
             {!! media_button('image',(($child)?$child:null)) !!}
         </div>
     </div>

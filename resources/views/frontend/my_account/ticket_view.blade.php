@@ -6,15 +6,15 @@
                 <select id="accounts--selects"
                         class="select-2 select-2--no-search main-select main-select-2arrows not-selected arrow-dark"
                         style="width: 100%">
-                    <option value="{!! route('my_account') !!}">Account</option>
-                    <option value="{!! route('messages') !!}">Notifications</option>
-                    <option value="{!! route('my_account_favourites') !!}">Favorites</option>
-                    <option value="{!! route('my_account_orders') !!}">Orders</option>
-                    <option value="{!! route('my_account_address') !!}">Address</option>
-                    <option value="{!! route('my_account_tickets') !!}">Tickets</option>
-                    <option value="{!! route('my_account_referrals') !!}">Referals</option>
-                    <option value="{!! route('my_account_special_offers') !!}">Special Offers</option>
-                    <option value="">Address</option>
+                    <option value="{!! route('my_account') !!}">{!! __('account') !!}</option>
+                    <option value="{!! route('messages') !!}">{!! __('notifications') !!}</option>
+                    <option value="{!! route('my_account_favourites') !!}">{!! __('favorites') !!}</option>
+                    <option value="{!! route('my_account_orders') !!}">{!! __('orders') !!}</option>
+                    <option value="{!! route('my_account_address') !!}">{!! __('address') !!}</option>
+                    <option value="{!! route('my_account_tickets') !!}">{!! __('tickets') !!}</option>
+                    <option value="{!! route('my_account_referrals') !!}">{!! __('referrals') !!}</option>
+                    <option value="{!! route('my_account_special_offers') !!}">{!! __('special_offer') !!}</option>
+                    <option value="">{!! __('address') !!}</option>
                 </select>
                 {{--<select id="accounts"--}}
                 {{--class="select-2 select-2--no-search main-select main-select-2arrows products-filter-wrap_select not-selected arrow-dark" style="width: 100%">--}}
@@ -35,7 +35,7 @@
                     <div class="text-center">
                         <button type="submit"
                                 class="profile-sidebar_logout-btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-white pointer">
-                            Logout
+                            {!! __('logout') !!}
                         </button>
                     </div>
                     {!! Form::close() !!}
@@ -74,7 +74,7 @@
                                                 <img src="{{ user_avatar($ticket->user_id) }}" alt="user"
                                                      class="ticket__tab-top-left-user-photo">
                                                 <div class="text-center ticket__tab-top-left-user-info">
-                                                    <p class="font-16 ticket__tab-top-left-user-by">Submitted by</p>
+                                                    <p class="font-16 ticket__tab-top-left-user-by">{!! __('submitted_by') !!}</p>
                                                     <h3 class="font-main-bold font-20 lh-1 ticket__tab-top-left-user-title">
                                                     {{ $ticket->author->name .' '.$ticket->author->last_name }}
                                                     </h3>
@@ -123,7 +123,7 @@
                                             <div class="panel-body card-body">
                                                 <div class="form-group row">
                                                     <div class="col-sm-6 pr-0">
-                                                        <span>Category:</span>
+                                                        <span>{!! __('category') !!}:</span>
                                                     </div>
                                                     <div class="col-sm-6 ">
                                                     <span
@@ -133,7 +133,7 @@
                                                 @if($ticket->category && $ticket->category->slug == 'order' && $ticket->order)
                                                     <div class="form-group row">
                                                         <div class="col-sm-6 pr-0">
-                                                            <span>Order Number:</span>
+                                                            <span>{!! __('order_number') !!}:</span>
                                                         </div>
                                                         <div class="col-sm-6 ">
                                                         <span
@@ -143,7 +143,7 @@
                                                 @elseif($ticket->category && $ticket->category->slug == 'product')
                                                     <div class="form-group row">
                                                         <div class="col-sm-6 pr-0">
-                                                            <span>Product</span>
+                                                            <span>{!! __('product') !!}</span>
                                                         </div>
                                                         <div class="col-sm-6 ">
                                                         <span
@@ -153,7 +153,7 @@
                                                 @endif
                                                 <div class="form-group row">
                                                     <div class="col-sm-6 pr-0">
-                                                        <span>Status:</span>
+                                                        <span>{!! __('status') !!}:</span>
                                                     </div>
                                                     <div class="col-sm-6 ">
                                                     <span
@@ -162,7 +162,7 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-sm-6 pr-0">
-                                                        <span>Responsible:</span>
+                                                        <span>{!! __('responsible') !!}:</span>
                                                     </div>
                                                     <div class="col-sm-6 ">
                                                     <span
@@ -171,7 +171,7 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-sm-6 pr-0">
-                                                        <span>Created:</span>
+                                                        <span>{!! __('created') !!}:</span>
                                                     </div>
                                                     <div class="col-sm-6 ">
                                                     <span
@@ -180,7 +180,7 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-sm-6 pr-0">
-                                                        <span>Last Update:</span>
+                                                        <span>{!! __('last_update') !!}:</span>
                                                     </div>
                                                     <div class="col-sm-6 ">
                                                     <span
@@ -205,7 +205,7 @@
                                         </div>
                                         <div class="area-wrap">
                                         <textarea name="reply" id="" rows="0"
-                                                  placeholder="Your reply"
+                                                  placeholder="{!! __('placeholder_your_reply') !!}
                                                   class="add-comment_field form-control w-100"></textarea>
                                             <span class="icon">
                                                 <input type="file" name="attachments[]" id="attach-file" multiple="true" class="inputfile">
@@ -226,7 +226,7 @@
 
                                         <button type="submit"
                                                 class="btn font-18 text-uppercase ntfs-btn add-comment-btn rounded-0">
-                                            Send
+                                            {!! __('send') !!}
                                         </button>
 
                                         {!! Form::close() !!}

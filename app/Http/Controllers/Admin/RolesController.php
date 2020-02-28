@@ -25,7 +25,8 @@ class RolesController extends Controller
 
     public function edit(Request $request)
     {
-        $role = Roles::where('id', $request->id)->with('permissions')->first();
+        $role = Roles::where('id', $request->id)->with('permissions')->firstOrFail();
+        if($role->slug=='superadmin' || $role->slug=='admin') abort(403);
         return $this->view('edit', compact('role'));
     }
 

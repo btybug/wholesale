@@ -8,7 +8,7 @@
         <div class="card-body">
             <!-- Multiple Checkboxes -->
             <div class="form-group row">
-                <label class="col-md-4 control-label text-right" for="checkboxes">Columns</label>
+                <label class="col-md-4 control-label text-md-right" for="checkboxes">Columns</label>
                 <div class="col-md-4">
                     <div class="checkbox">
                         <label for="name">

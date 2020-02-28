@@ -12,6 +12,24 @@ namespace App\Models;
 use Actuallymab\LaravelComment\Commentable;
 use App\User;
 
+/**
+ * App\Models\Commentddd
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Commentddd[] $childrens
+ * @property-read int|null $childrens_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Commentddd[] $commentTree
+ * @property-read int|null $comment_tree_count
+ * @property-read \App\Models\Commentddd $commentable
+ * @property-read \App\Models\Commentddd $commented
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Actuallymab\LaravelComment\Models\Comment[] $comments
+ * @property-read int|null $comments_count
+ * @property-read \App\Models\Commentddd $parent
+ * @property-read \App\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Commentddd newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Commentddd newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Commentddd query()
+ * @mixin \Eloquent
+ */
 class Commentddd extends \Actuallymab\LaravelComment\Models\Comment
 {
     use Commentable;

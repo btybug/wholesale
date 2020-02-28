@@ -282,3 +282,132 @@
 
 
 </div>
+
+
+{{--                payment tab start--}}
+{{--<div class="shopping-cart-payment shopping__cart-payment-wrapper">--}}
+{{--<div class="head-wrap">--}}
+{{--<h1 class="font-sec-reg font-24 lh-1 title">Payment Methode</h1>--}}
+{{--<p class="font-18 desc lh-1 m-0">Select a payment methode</p>--}}
+{{--</div>--}}
+{{--<div class="row">--}}
+{{--<div class="col-md-4">--}}
+{{--<div class="left-wrapper">--}}
+{{--<div class="method-lists">--}}
+{{--<div class="method">--}}
+{{--<div class="custom-control custom-radio">--}}
+{{--<input type="radio" class="custom-control-input select-shipping-method"--}}
+{{--checked id="deliveryRadios1" name="method" value="">--}}
+{{--<label class="custom-control-label" for="deliveryRadios1">--}}
+{{--<span class="d-flex method-wrap pointer">--}}
+{{--<span class="method-payment-photo">--}}
+{{--<img--}}
+{{--src="/public/img/temp/method-cart-logos.png"--}}
+{{--alt="brand"/>--}}
+{{--</span>--}}
+{{--</span>--}}
+{{--<span class="check-line"></span>--}}
+{{--</label>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--<div class="method">--}}
+{{--<div class="custom-control custom-radio">--}}
+{{--<input type="radio" class="custom-control-input select-shipping-method"--}}
+{{--id="deliveryRadios2" name="method" value="">--}}
+{{--<label class="custom-control-label" for="deliveryRadios2">--}}
+{{--<span class="d-flex method-wrap pointer">--}}
+{{--<span class="method-payment-photo">--}}
+{{--<img--}}
+{{--src="/public/img/temp/method-cart-paypal-logo.png"--}}
+{{--alt="brand"/>--}}
+{{--</span>--}}
+{{--</span>--}}
+{{--<span class="check-line"></span>--}}
+{{--</label>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--<div class="method">--}}
+{{--<div class="custom-control custom-radio">--}}
+{{--<input type="radio" class="custom-control-input select-shipping-method"--}}
+{{--id="deliveryRadios3" name="method" value="">--}}
+{{--<label class="custom-control-label" for="deliveryRadios3">--}}
+{{--<span class="d-flex method-wrap pointer">--}}
+{{--<span class="method-payment-photo">--}}
+{{--<img--}}
+{{--src="/public/img/temp/method-cart-maestro-logo.png"--}}
+{{--alt="brand"/>--}}
+{{--</span>--}}
+{{--</span>--}}
+{{--<span class="check-line"></span>--}}
+{{--</label>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--<div class="col-md-8">--}}
+{{--<div class="payment-method">--}}
+{{--<div class="pay-credit-card mt-0">--}}
+{{--<form>--}}
+{{--<div class="form-group row item-wrap card-number">--}}
+{{--<label for="cardNumber"--}}
+{{--class="col-xl-2 col-sm-4 pr-sm-0 col-form-label text-tert-clr d-flex flex-nowrap">Card--}}
+{{--Number <span class="sup">*</span></label>--}}
+{{--<div class="col-xl-6 col-sm-8 p-xl-0 center-col align-self-center">--}}
+{{--<input type="text" class="form-control place-light" id="cardNumber"--}}
+{{--placeholder="1234 1234 1234 1234">--}}
+{{--<span class="cards-icon d-inline-flex align-items-center"><img--}}
+{{--src="/public/img/visa-logo.png" alt="visa"></span>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--<div class="form-group row item-wrap">--}}
+{{--<label for="cardName"--}}
+{{--class="col-xl-2 col-sm-4 pr-sm-0 col-form-label text-tert-clr d-flex flex-nowrap">Name--}}
+{{--on Card <span class="sup">*</span></label>--}}
+{{--<div class="col-xl-6 col-sm-8 p-xl-0 center-col">--}}
+{{--<input type="text" class="form-control" id="cardName"--}}
+{{--placeholder="Connor Silva">--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--<div class="form-group row item-wrap expiry-date">--}}
+{{--<label--}}
+{{--class="col-xl-2 col-sm-4 pr-sm-0 col-form-label text-tert-clr d-flex flex-nowrap">Expiry--}}
+{{--Date <span class="sup">*</span></label>--}}
+{{--<div class="col-xl-10 col-sm-8 p-xl-0 center-col">--}}
+{{--<div class="d-flex flex-wrap">--}}
+{{--<div class="col-sm-2 p-0 d-flex">--}}
+{{--<input type="text" class="form-control place-light"--}}
+{{--placeholder="MM/YY">--}}
+{{--</div>--}}
+{{--<div class="col-sm-8 p-0 d-flex flex-wrap secure-code">--}}
+{{--<label for="secureCode"--}}
+{{--class="col-sm-3 pr-0 col-form-label text-tert-clr text-sm-right d-flex flex-nowrap">Security--}}
+{{--Code <span class="sup">*</span></label>--}}
+{{--<div class="col-sm-8 pr-0 ">--}}
+{{--<input type="text" class="form-control place-light"--}}
+{{--id="secureCode" placeholder="CVC">--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--<div class="form-group row item-wrap checked-payment">--}}
+{{--<div class="col-sm-8 pr-0">--}}
+{{--<div class="d-flex flex-wrap justify-content-between align-self-center">--}}
+{{--<div--}}
+{{--class="custom-control custom-checkbox custom-control-inline align-items-center">--}}
+{{--<input type="checkbox" class="custom-control-input"--}}
+{{--id="customCheck1" name="example1">--}}
+{{--<label class="custom-control-label font-18 text-main-clr"--}}
+{{--for="customCheck1">Accept terms and condition</label>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</form>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--                payment tab end--}}

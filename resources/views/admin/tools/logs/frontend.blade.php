@@ -1,55 +1,69 @@
 @extends('layouts.admin')
 @section('content')
 <div class="container-fluid">
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link " id="info-tab" href="{!! route('admin_staff') !!}" role="tab"
-               aria-controls="general" aria-selected="true" aria-expanded="true">Staff</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" id="shipping-tab" href="{!! route('admin_tools_logs') !!}" role="tab"
-               aria-controls="shipping" aria-selected="false">Activity Log Frontend</a>
-        </li>
+    <div class="d-flex flex-wrap justify-content-between w-100 admin-general--tabs-wrapper">
+        <ul class="nav nav-tabs new-main-admin--tabs mb-3 admin-general--tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link " id="info-tab" href="{!! route('admin_staff') !!}" role="tab"
+                   aria-controls="general" aria-selected="true" aria-expanded="true">Staff</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" id="shipping-tab" href="{!! route('admin_tools_logs') !!}" role="tab"
+                   aria-controls="shipping" aria-selected="false">Activity Log Frontend</a>
+            </li>
 
-        <li class="nav-item ">
-            <a class="nav-link" id="payment_gateways" href="{!! route('admin_tools_logs_backend') !!}" role="tab"
-               aria-controls="shipping" aria-selected="false">Activity Log Backend</a>
-        </li>
-    </ul>
-    <div class="" id="myTabContent">
-        <select name="table_head" id="table_head_id" class="selectpicker" multiple>
-            <option value="User" data-column="0" data-name="user">User</option>
-            <option value="Url" data-column="1" data-name="url">Url</option>
-            <option value="Method" data-column="2" data-name="method">Method</option>
-            <option value="Ip" data-column="3" data-name="ip">Ip</option>
-            <option value="Iso Code" data-column="4" data-name="iso_code">Iso Code</option>
-            <option value="Country" data-column="5" data-name="country">Country</option>
-            <option value="City" data-column="6" data-name="city">City</option>
-            <option value="State" data-column="7" data-name="state">State</option>
-            <option value="State Name" data-column="8" data-name="state_name">State Name</option>
-            <option value="Timezone" data-column="9" data-name="timezone">Timezone</option>
-            <option value="Agent" data-column="10" data-name="agent">Agent</option>
-            <option value="Date" data-column="11" data-name="created_at">Date</option>
-        </select>
-        <table id="users-table" class="table table-style table-bordered" cellspacing="0" width="100%">
-            <thead>
-            <tr>
-                <th>User</th>
-                <th>Url</th>
-                <th>Method</th>
-                <th>Ip</th>
-                <th>Iso Code</th>
-                <th>Country</th>
-                <th>City</th>
-                <th>State</th>
-                <th>State Name</th>
-                <th>Timezone</th>
-                <th>Agent</th>
-                <th>Date</th>
-            </tr>
-            </thead>
-        </table>
+            <li class="nav-item ">
+                <a class="nav-link" id="payment_gateways" href="{!! route('admin_tools_logs_backend') !!}" role="tab"
+                   aria-controls="shipping" aria-selected="false">Activity Log Backend</a>
+            </li>
+        </ul>
     </div>
+
+            <div class="" id="myTabContent">
+                    <div class="card">
+                        <div class="d-flex justify-content-between px-4 mt-2">
+                            <div>
+                                <select name="table_head" id="table_head_id" class="selectpicker" multiple>
+                                    <option value="User" data-column="0" data-name="user">User</option>
+                                    <option value="Url" data-column="1" data-name="url">Url</option>
+                                    <option value="Method" data-column="2" data-name="method">Method</option>
+                                    <option value="Ip" data-column="3" data-name="ip">Ip</option>
+                                    <option value="Iso Code" data-column="4" data-name="iso_code">Iso Code</option>
+                                    <option value="Country" data-column="5" data-name="country">Country</option>
+                                    <option value="City" data-column="6" data-name="city">City</option>
+                                    <option value="State" data-column="7" data-name="state">State</option>
+                                    <option value="State Name" data-column="8" data-name="state_name">State Name</option>
+                                    <option value="Timezone" data-column="9" data-name="timezone">Timezone</option>
+                                    <option value="Agent" data-column="10" data-name="agent">Agent</option>
+                                    <option value="Date" data-column="11" data-name="created_at">Date</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body pt-0">
+                            <table id="users-table" class="table table-style table-bordered" cellspacing="0" width="100%">
+                                <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Url</th>
+                                    <th>Method</th>
+                                    <th>Ip</th>
+                                    <th>Iso Code</th>
+                                    <th>Country</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                    <th>State Name</th>
+                                    <th>Timezone</th>
+                                    <th>Agent</th>
+                                    <th>Date</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+            </div>
+
+
 </div>
     @stop
 
@@ -136,7 +150,10 @@
             $(function () {
                 $('#users-table').DataTable({
                     ajax:  "{!! route('datatable_frontend_activity') !!}",
-                    dom: 'Bfrtip',
+                    dom: '<"d-flex justify-content-between align-items-baseline"lfB><rtip>',
+                    displayLength: 10,
+                    lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+                    "scrollX": true,
                     buttons: [
                         'csv', 'excel', 'pdf', 'print'
                     ],

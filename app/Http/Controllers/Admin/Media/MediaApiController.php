@@ -2,9 +2,8 @@
 
 
 use App\Http\Controllers\Controller;
-use  App\Models\Media\Folders;
-use App\Models\Media\Settings;
-//use Chumper\Zipper\Zipper;
+use App\Models\Media\Folders;
+use App\Models\Media\Items;
 use Illuminate\Http\Request;
 
 class MediaApiController extends Controller
@@ -63,7 +62,7 @@ class MediaApiController extends Controller
         $validator = \Validator::make($data, [
             'folder_id' => 'exists:drive_folders,id',
             'slug' => 'required_without_all:folder_id|alpha_dash',
-            'folder_name' => 'required|alpha_dash',
+            'folder_name' => 'required',
         ]);
         if ($validator->fails()) {
             return \Response::json(['error' => true, 'message' => $validator->messages()]);
@@ -99,7 +98,7 @@ class MediaApiController extends Controller
         if (!$folder) {
             return \Response::json(['error' => true, 'message' => [0 => 'undefined folder!!!']]);
         }
-        return \Response::json(['error' => false, 'data' => $folder->rename($data)]);
+        return \Response::json(['error' => false, 'data' => $folder->editFolder($data)]);
 
     }
 
@@ -125,8 +124,8 @@ class MediaApiController extends Controller
     {
         $data = $request->all();
         $validator = \Validator::make($data, [
-            'folder_id' => 'required|integer|exists:drive_folders,id',
-            'parent_id' => 'required|integer|exists:drive_folders,id|not_in:' . $data['folder_id']
+            'folder_id.*' => 'required|integer|exists:drive_folders,id',
+            'parent_id' => 'required|integer|exists:drive_folders,id'
         ]);
         if ($validator->fails()) {
             return \Response::json(['error' => true, 'message' => $validator->messages()]);
@@ -138,7 +137,7 @@ class MediaApiController extends Controller
     {
         $data = $request->all();
         $validator = \Validator::make($data, [
-            'folder_id' => 'required|integer|exists:drive_folders,id',
+            'folder_id.*' => 'required|integer|exists:drive_folders,id',
             'trash' => 'required|boolean'
         ]);
         if ($validator->fails()) {
@@ -190,7 +189,14 @@ class MediaApiController extends Controller
         $zipFile->close();
         if (\File::exists($path)) {
             return response()->json(['url' => '/public/' . $folder->name . '.zip']);
-            return response()->download($path)->deleteFileAfterSend(true);
+//            return response()->download($path)->deleteFileAfterSend(true);
         }
+    }
+
+    public function emptuTrash()
+    {
+        $folders = Folders::emptyTrash();
+        $items = Items::emptyTrash();
+        return \Response::json(['error' => false, 'folders' => $folders, 'items' => $items]);
     }
 }

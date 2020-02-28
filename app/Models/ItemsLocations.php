@@ -11,6 +11,35 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\ItemsLocations
+ *
+ * @property int $id
+ * @property int|null $item_id
+ * @property int|null $warehouse_id
+ * @property int|null $rack_id
+ * @property int|null $shelve_id
+ * @property int|null $qty
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $transfer_location
+ * @property-read \App\Models\Items|null $item
+ * @property-read \App\Models\WarehouseRacks $rack
+ * @property-read \App\Models\WarehouseRacks $shelve
+ * @property-read \App\Models\Warehouse $warehouse
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ItemsLocations newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ItemsLocations newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ItemsLocations query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ItemsLocations whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ItemsLocations whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ItemsLocations whereItemId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ItemsLocations whereQty($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ItemsLocations whereRackId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ItemsLocations whereShelveId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ItemsLocations whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ItemsLocations whereWarehouseId($value)
+ * @mixin \Eloquent
+ */
 class ItemsLocations extends Model
 {
     protected $table = 'item_locations';

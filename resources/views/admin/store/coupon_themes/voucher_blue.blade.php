@@ -25,7 +25,7 @@
                     soluta, tempora voluptate voluptatum?</p>
                 <div class="voucher-card_footer">
                     <p><strong>Lorem ipsum dolor sit amet.</strong></p>
-                    <ul class="voucher-card_footer-list d-flex">
+                    <ul class="voucher-card_footer-list d-flex flex-wrap">
                         <li><a href="#">example@mail.ifo</a></li>
                         <li><a href="#">77 88588556</a></li>
                         <li><a href="#">sitename.com</a></li>

@@ -11,6 +11,29 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\StockAds
+ *
+ * @property int $id
+ * @property int $stock_id
+ * @property string $image
+ * @property string $url
+ * @property string $tags
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Stock $stock
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\StockAds newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\StockAds newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\StockAds query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\StockAds whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\StockAds whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\StockAds whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\StockAds whereStockId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\StockAds whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\StockAds whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\StockAds whereUrl($value)
+ * @mixin \Eloquent
+ */
 class StockAds extends Model
 {
     /**

@@ -10,6 +10,7 @@ use App\Http\Controllers\Frontend\Requests\MyAccountContactRequest;
 use App\Http\Controllers\Frontend\Requests\MyAccountRequest;
 use App\Http\Controllers\Frontend\Requests\VerificationRequest;
 use App\Http\Requests\AddressesRequest;
+use App\Http\Requests\ReviewRequest;
 use App\Models\Addresses;
 use App\Models\Category;
 use App\Models\GeoZones;
@@ -20,6 +21,7 @@ use App\Models\Newsletter;
 use App\Models\Notifications\CustomEmails;
 use App\Models\Notifications\CustomEmailUser;
 use App\Models\Orders;
+use App\Models\Review;
 use App\Models\Statuses;
 use App\Models\Ticket;
 use App\Models\Settings;
@@ -67,14 +69,17 @@ class UserController extends Controller
         $user = \Auth::user();
         $categories = Category::where('type', 'notifications')->get();
         $newsletters = Newsletter::where('user_id', \Auth::id())->pluck('category_id', 'category_id')->all();
+        $countriesShipping = [null => 'Select Country'] + $this->geoZones
+                ->join('zone_countries', 'geo_zones.id', '=', 'zone_countries.geo_zone_id')
+                ->select('zone_countries.*', 'zone_countries.name as country')
+                ->groupBy('country')->pluck('country', 'id')->toArray();
 
-        return $this->view('index', compact('user', 'categories', 'newsletters'));
+        return $this->view('index', compact('user', 'categories', 'newsletters','countriesShipping'));
     }
 
     public function getFavourites()
     {
         $user = \Auth::user();
-
         return $this->view('favourites', compact('user'));
     }
 
@@ -183,11 +188,57 @@ class UserController extends Controller
     public function getOrderInvoice($id)
     {
         $order = Orders::where('id', $id)
+            ->where('user_id',\Auth::id())
             ->with('items')
             ->with('user')->first();
         if (!$order) abort(404);
 
         return $this->view('order_invoice', compact('order'));
+    }
+
+    public function getOrderReviews($id)
+    {
+        $order = Orders::where('id', $id)
+            ->where('user_id',\Auth::id())
+            ->with('items')
+            ->with('user')->first();
+        if (!$order) abort(404);
+
+        $itemsID = [];
+        foreach ($order->items as $item){
+            if($item->options && count($item->options)){
+                if(isset($item->options['options'])){
+                    foreach ($item->options['options'] as $options){
+                        if($options && isset($options['options'])){
+                            foreach ($options['options'] as $option){
+                                if(isset($option['variation'])){
+                                    $itemsID[$option['variation']['item_id']] = $option['variation']['item_id'];
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if(isset($item->options['extras'])){
+                    //TODO
+                }
+            }
+
+        }
+
+        $items = \App\Models\Items::findMany($itemsID);
+
+        return $this->view('order_review', compact('order','items'));
+    }
+
+    public function postOrderReviews(ReviewRequest $request,$id)
+    {
+        $data = $request->except(['_token','id']);
+        $data['user_id'] = \Auth::id();
+        $data['order_id'] = $id;
+        $review = Review::updateOrCreate($request->id,$data);
+
+        return redirect()->back();
     }
 
     public function getTickets()
@@ -315,24 +366,28 @@ class UserController extends Controller
     public function getNotifications()
     {
         $user = \Auth::getUser();
-        $messages = CustomEmails::leftJoin('categories', 'custom_emails.category_id', '=', 'categories.id')
+
+       $messages =   CustomEmails::leftJoin('categories', 'custom_emails.category_id', '=', 'categories.id')
             ->leftJoin('categories_translations', 'categories_translations.category_id', '=', 'categories.id')
             ->leftJoin('custom_email_user', 'custom_emails.id', '=', 'custom_email_user.custom_email_id')
             ->leftJoin('users', 'custom_email_user.user_id', '=', 'users.id')
             ->where('custom_email_user.user_id', $user->id)
             ->where('custom_emails.status', '>=', 1)
+             ->where('categories_translations.locale', app()->getLocale())
             ->select('custom_emails.*', 'categories_translations.name as category', 'custom_email_user.is_read')
-            ->get()->toArray();
+            ->get();
 
-        $mailJob = MailJob::leftJoin('mail_templates', 'mail_job.template_id', '=', 'mail_templates.id')
-            ->leftJoin('mail_templates_translations', 'mail_templates.id', '=', 'mail_templates_translations.mail_templates_id')
-            ->leftJoin('categories', 'mail_templates.category_id', '=', 'categories.id')
-            ->leftJoin('categories_translations', 'categories.id', '=', 'categories_translations.category_id')
-            ->where('mail_job.to', $user->email)
-            ->where('mail_job.must_be_done', '<', Carbon::now())
-            ->select('mail_job.*', 'mail_templates_translations.subject', 'categories_translations.name as category')
-            ->get()->toArray();
-        $messages = collect(array_merge($messages, $mailJob))->sortBy('created_at');
+//        $mailJob = MailJob::leftJoin('mail_templates', 'mail_job.template_id', '=', 'mail_templates.id')
+//            ->leftJoin('mail_templates_translations', 'mail_templates.id', '=', 'mail_templates_translations.mail_templates_id')
+//            ->leftJoin('categories', 'mail_templates.category_id', '=', 'categories.id')
+//            ->leftJoin('categories_translations', 'categories.id', '=', 'categories_translations.category_id')
+//            ->where('mail_job.to', $user->email)
+//            ->where('mail_job.must_be_done', '<', Carbon::now())
+//            ->select('mail_job.*', 'mail_templates_translations.subject', 'categories_translations.name as category')
+//            ->get()->toArray();
+
+//        $messages = collect(array_merge($messages, $mailJob))->sortBy('created_at');
+
         return $this->view('notifications', compact('messages'));
     }
 

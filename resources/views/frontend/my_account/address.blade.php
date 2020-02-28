@@ -6,15 +6,15 @@
                 <select id="accounts--selects"
                         class="select-2 select-2--no-search main-select main-select-2arrows not-selected arrow-dark"
                         style="width: 100%">
-                    <option value="{!! route('my_account') !!}">Account</option>
-                    <option value="{!! route('messages') !!}">Notifications</option>
-                    <option value="{!! route('my_account_favourites') !!}">Favorites</option>
-                    <option value="{!! route('my_account_orders') !!}">Orders</option>
-                    <option value="{!! route('my_account_address') !!}">Address</option>
-                    <option value="{!! route('my_account_tickets') !!}">Tickets</option>
-                    <option value="{!! route('my_account_referrals') !!}">Referals</option>
-                    <option value="{!! route('my_account_special_offers') !!}">Special Offers</option>
-                    <option value="">Address</option>
+                    <option value="{!! route('my_account') !!}">{!! __('account') !!}</option>
+                    <option value="{!! route('messages') !!}">{!! __('notifications') !!}</option>
+                    <option value="{!! route('my_account_favourites') !!}">{!! __('favorites') !!}</option>
+                    <option value="{!! route('my_account_orders') !!}">{!! __('orders') !!}</option>
+                    <option value="{!! route('my_account_address') !!}">{!! __('address') !!}</option>
+                    <option value="{!! route('my_account_tickets') !!}">{!! __('tickets') !!}</option>
+                    <option value="{!! route('my_account_referrals') !!}">{!! __('referrals') !!}</option>
+                    <option value="{!! route('my_account_special_offers') !!}">{!! __('special_offer') !!}</option>
+                    <option value="">{!! __('address') !!}</option>
                 </select>
                 {{--<select id="accounts"--}}
                 {{--class="select-2 select-2--no-search main-select main-select-2arrows products-filter-wrap_select not-selected arrow-dark" style="width: 100%">--}}
@@ -44,7 +44,7 @@
                     <div class="mt-auto">
                         {!! Form::open(['url'=>route('logout')]) !!}
                         <div class="text-center">
-                            <button type="submit" class="profile-sidebar_logout-btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-white pointer">Logout</button>
+                            <button type="submit" class="profile-sidebar_logout-btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-white pointer">{!! __('logout') !!}</button>
                         </div>
                         {!! Form::close() !!}
                     </div>
@@ -156,13 +156,13 @@
                                        <div>
 
                                            <div class="form-group mb-5">
-                                               <label for="selectAddress" class="control-label text-muted font-22">Default Shipping Address</label>
+                                               <label for="selectAddress" class="control-label text-muted font-22">{!! __('default_shipping_address') !!}</label>
                                                <div class="row">
                                                    <div class="col-md-5 d-flex">
                                                        {!! Form::select('address_book',$address,($default_shipping)?$default_shipping->id:null,['class' => 'form-control select-2 select-2--no-search main-select main-select-2arrows checkout-form_select edit-address']) !!}
                                                        <button type="button"
                                                                class="nav-link nav-link--new-address btn ntfs-btn address-book-new rounded-0 ml-4">
-                                                           + Add New
+                                                           + {!! __('add_new') !!}
                                                        </button>
                                                    </div>
                                                </div>
@@ -173,7 +173,7 @@
                                                </div>
                                                {{--<button type="submit" class="btn btn-primary edit-address">Edit</button>--}}
                                                <div class="col-md-9 offset-md-3 text-right">
-                                                   <button type="button" class="btn btn-transp edit-address rounded-0">Delete</button>
+                                                   <button type="button" class="btn btn-transp edit-address rounded-0">{!! __('delete') !!}</button>
                                                </div>
                                            </div>
 
@@ -198,7 +198,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Address Book</h5>
+                    <h5 class="modal-title">{!! __('address_book') !!}</h5>
                     <button type="button" class="close" data-dismiss="modal"
                             aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -285,7 +285,7 @@
                 )
                 {
                     $(".address-form").html(res.html);
-                    $("#geo_country_book").select2();
+                    $("body").find(".geo_region_book").select2();
                     $("#newAddressModal").modal();
                 }
             }
@@ -304,8 +304,9 @@
                         )
                         {
                             $(".selected-form").html(res.html);
-                            $("#geo_country_book").select2();
-        //                    $("#newAddressModal").modal();
+                            $("body").find(".address-book-form .geo_region_book").select2();
+
+                            // $("#newAddressModal").modal();
                         }
                     }
                 )
@@ -318,7 +319,7 @@
                     "/get-regions-by-geozone",
                     {country: value},
                     res => {
-                    let select = document.getElementById('geo_region');
+                    let select = $("body").find('#geo_region');
                 select.innerText = null;
                 if (!res.error) {
                     var opt = document.createElement('option');

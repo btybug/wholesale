@@ -48,24 +48,25 @@ class PaymentService
             $geoZone = ($zone) ? $zone->geoZone : null;
         }
         return \DB::transaction(function () use ($billingId, $shippingId, $geoZone, $shippingAddress, $zone, $region) {
-            Cart::removeConditionsByType('shipping');
-            if (count($geoZone->deliveries)) {
-                $subtotal = Cart::getSubTotal();
-                $delivery = $geoZone->deliveries()->where('min', '<=', $subtotal)->where('max', '>=', $subtotal)->first();
-                if ($delivery && count($delivery->options)) {
-                    $shippingDefaultOption = $delivery->options->first();
-                    $condition2 = new \Darryldecode\Cart\CartCondition(array(
-                        'name' => $geoZone->name,
-                        'type' => 'shipping',
-                        'target' => 'total',
-                        'value' => $shippingDefaultOption->cost,
-                        'order' => 1,
-                        'attributes' => $shippingDefaultOption
-                    ));
-
-                    Cart::condition($condition2);
-                }
-            }
+//            Cart::removeConditionsByType('shipping');
+//            if (count($geoZone->deliveries)) {
+//                $subtotal = Cart::getSubTotal();
+//                $delivery = $geoZone->deliveries()->where('min', '<=', $subtotal)->where('max', '>=', $subtotal)->first();
+//
+//                if ($delivery && count($delivery->options)) {
+//                    $shippingDefaultOption = $delivery->options->first();
+//                    $condition2 = new \Darryldecode\Cart\CartCondition(array(
+//                        'name' => $geoZone->name,
+//                        'type' => 'shipping',
+//                        'target' => 'total',
+//                        'value' => $shippingDefaultOption->cost,
+//                        'order' => 1,
+//                        'attributes' => $shippingDefaultOption
+//                    ));
+//
+//                    Cart::condition($condition2);
+//                }
+//            }
 
             $shipping = Cart::getCondition($geoZone->name);
             $items = Cart::getContent();
@@ -116,11 +117,12 @@ class PaymentService
                         $discount = null;;
                         if($option['option']->price_type == 'discount'){
                             if($option['option']->discount_type =='fixed'){
-                                $discount = \App\Models\StockVariationDiscount::find($option['discount_id']);
+                                $discount = \App\Models\StockVariationDiscount::where("variation_id",$option['option']->id)->first();
                             }else{
                                 $discount = $option['option']->discounts()->where('from','<=',$option['qty'])->where('to','>=',$option['qty'])->first();
                             }
                         }
+
                         $dataV['options'][] = [
                             'qty' => $option['qty'],
                             'name' => $option['option']->name,
@@ -151,7 +153,7 @@ class PaymentService
                             $discount = null;;
                             if($option['option']->price_type == 'discount'){
                                 if($option['option']->discount_type =='fixed'){
-                                    $discount = \App\Models\StockVariationDiscount::find($option['discount_id']);
+                                    $discount = \App\Models\StockVariationDiscount::where("variation_id",$option['option']->id)->first();
                                 }else{
                                     $discount = $option['option']->discounts()->where('from','<=',$option['qty'])->where('to','>=',$option['qty'])->first();
                                 }
@@ -173,22 +175,23 @@ class PaymentService
                 }
 
 
-                if (count($sales)) {
-                    foreach ($sales as $item_id => $sale) {
-                        Others::create([
-                            'item_id' => $item_id,
-                            'user_id' => \Auth::id(),
-                            'qty' => (int)$sale,
-                            'reason' => 'sold',
-                            'grouped' => $order->id,
-                        ]);
-                    }
-                }
+//                if (count($sales)) {
+//                    foreach ($sales as $item_id => $sale) {
+//                        Others::create([
+//                            'item_id' => $item_id,
+//                            'user_id' => \Auth::id(),
+//                            'qty' => (int)$sale * $item->quantity,
+//                            'reason' => 'sold',
+//                            'grouped' => $order->id,
+//                        ]);
+//                    }
+//                }
 
                 OrderItem::create([
                     'order_id' => $order->id,
                     'name' => $item->attributes->product->name,
                     'sku' => '',
+                    'stock_id' => $item->attributes->product->id,
                     'variation_id' => $variation_id,
                     'price' => $item->price,
                     'qty' => $item->quantity,

@@ -27,14 +27,14 @@
                         </div>
 
                         <div class="sort-by_select d-flex align-items-center position-relative">
-                            <label for="sortByLimit" class="text-main-clr mb-0 text-uppercase">LIMIT: </label>
+                            <label for="sortByLimit" class="text-main-clr mb-0 text-uppercase">{!! __('limit') !!}: </label>
                             <div class="select-wall">
                                 {!! Form::select('per-page',[
-                                    '8' => "Select",
-                                    '5' =>'5 per page',
-                                    '10' =>'10 per page',
-                                    '15' =>'15 per page',
-                                    '30' =>'30 per page'
+                                    '8' => __('select'),
+                                    '5' => '5 '. __('per_page'),
+                                    '10' =>'10 '. __('per_page'),
+                                    '15' =>'15 '. __('per_page'),
+                                    '30' =>'30 '. __('per_page'),
                                 ], null,[
                                     'class' =>'select-filter select-2 select-2--no-search main-select main-select-2arrows products-filter-wrap_select not-selected arrow-dark',
                                     'style' => 'width: 250px'
@@ -43,12 +43,12 @@
                         </div>
 
                         <div class="sort-by_select d-flex align-items-center position-relative">
-                            <label for="sortBy" class="text-main-clr mb-0 text-uppercase">SORT BY: </label>
+                            <label for="sortBy" class="text-main-clr mb-0 text-uppercase">{!! __('sort_by') !!}: </label>
                             <div class="select-wall">
                                 {!! Form::select('sort',[
-                                    '' => "Select",
-                                    'desc' => "NEWEST",
-                                    'asc' => "OLDEST",
+                                    '' => __('select'),
+                                    'desc' => __('newest'),
+                                    'asc' => __('oldest'),
                                 ],null,[
                                     'class' => 'select-filter select-2 select-2--no-search main-select main-select-2arrows products-filter-wrap_select not-selected arrow-dark',
                                     'style' => 'width: 250px'
@@ -71,7 +71,7 @@
                             <span class="news-card main-transition position-relative">
                                 <span class="news-card_view d-block position-relative">
                                     <!--news main image-->
-                                        <img class="card-img-top"  src="{!! ($post->image)?$post->image:'http://demo.laravelcommerce.com/resources/assets/images/news_images/1504015363.about_contact_pages.svg' !!}" alt="{!! ($post->image && getImage($post->image))? getImage($post->image)->seo_alt:'' !!}">
+                                        <img class="card-img-top"  src="{!! ($post->image)?$post->image:'http://demo.laravelcommerce.com/resources/assets/images/news_images/1504015363.about_contact_pages.svg' !!}" alt="{!! $post->title !!}" title="{!! $post->title !!}">
                                     <!--share icon-->
                                     <span class="like-icon news-card_share-icon d-inline-block pointer main-transition position-absolute">
                                     <svg iewBox="0 0 20 21" width="20px" height="21px">
@@ -96,7 +96,7 @@
                                                 </svg>
                                                 <span class="d-inline-block text-main-clr ml-2">123</span>
                                                 <!--views tooltip-->
-                                                <span class="news-card_views-tooltip d-inline-flex align-items-center justify-content-center font-12 font-main-light main-transition position-absolute">view</span>
+                                                <span class="news-card_views-tooltip d-inline-flex align-items-center justify-content-center font-12 font-main-light main-transition position-absolute">{!! __('view') !!}</span>
                                             </span>
                                             <span class="d-inline-flex align-items-center">
                                                 <svg viewBox="0 0 15 12" ="15px" height="12px">

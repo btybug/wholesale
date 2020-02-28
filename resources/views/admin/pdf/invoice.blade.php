@@ -88,7 +88,7 @@
                     </thead>
                     <tbody>
 
-                    @foreach($order->items as $item)
+                    @foreach($order->items()->where('is_refunded',false)->get() as $item)
                         <tr>
                             <td class="product-td">
                                 {{ $item->name }}
@@ -105,26 +105,20 @@
                                     @if(count($item->options['options']))
                                     @foreach($item->options['options'] as $option)
                                         @foreach($option['options'] as $op)
-                                            @php
-                                                if($op['discount']){
-                                                    if($op['variation']['discount_type'] =='fixed'){
-                                                        $price = $op['discount']['price'];
-                                                    }else{
-                                                        $price = $op['discount']['price']* $op['qty'];
-                                                    }
-                                                }else{
-                                                    $price = $op['variation']['price'] * $op['qty'];
-                                                }
-                                            @endphp
+
                                             <div class="single-item">
                                                 <span class="single-item-name">
-                                                     {{ $op['title'] ." - ". $op['name'] }}
+                                                    {{ $op['title'] }}
+                                                    @if(isset($op['variation']['item']))
+                                                        {{ " - " .$op['variation']['item']['short_name'] }}
+                                                    @endif
+
                                                     @if($op['discount'] && $op['variation']['discount_type'] == 'fixed')
                                                         ({{ "Pack of ".$op['discount']['qty'] }})
                                                     @endif
                                                 </span>
 
-                                                <span class="single-item-price">{!! convert_price($price,$order->currency) !!}</span>
+                                                <span class="single-item-price">{!! convert_price($option['price'],$order->currency) !!}</span>
                                             </div>
                                         @endforeach
                                     @endforeach
@@ -146,7 +140,11 @@
                                                 @endphp
                                                 <div class="single-item">
                                                     <span class="single-item-name">
-                                                         {{ $ext['title'] ." - ". $ext['name'] }}
+                                                        {{ $ext['title'] }}
+                                                        @if(isset($ext['variation']['item']))
+                                                            {{ " - " .$ext['variation']['item']['short_name'] }}
+                                                        @endif
+
                                                         @if($ext['discount'] && $ext['variation']['discount_type'] == 'fixed')
                                                             ({{ "Pack of ".$ext['discount']['qty'] }})
                                                         @endif
@@ -187,7 +185,7 @@
             <div class="invoice__content-price">
                 <div class="invoice__content-price-item clearfix">
                     <span class="name">Sub Total</span>
-                    <span class="price">{{ convert_price($order->items()->sum('amount'),$order->currency) }}</span>
+                    <span class="price">{{ convert_price($order->items()->where('is_refunded',false)->sum('amount'),$order->currency) }}</span>
                 </div>
                 <div class="invoice__content-price-item clearfix">
                     <span class="name">Total VAT</span>

@@ -4,11 +4,14 @@
 @stop
 @section('content')
     <div class="card panel panel-default">
-        <div class="card-header panel-heading clearfix">
-            <h2 class="m-0 pull-left">Filters</h2>
-            @ok('admin_tools_filters_manage') <div class="pull-right"><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-filter">Add new</button></div>@endok
+{{--        <div class="card-header panel-heading clearfix">--}}
+{{--            <h2 class="m-0 pull-left">Filters</h2>--}}
+{{--        </div>--}}
+        <div class="d-flex justify-content-end px-4 mt-2">
+            @ok('admin_tools_filters_manage') <div><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-filter">Add new</button></div>@endok
+
         </div>
-        <div class="card-body panel-body">
+        <div class="card-body panel-body pt-0">
             <table id="posts-table" class="table table-style table-bordered" cellspacing="0" width="100%">
                 <thead>
                 <tr>
@@ -76,7 +79,10 @@
                 "processing": true,
                 "serverSide": true,
                 "bPaginate": true,
-                dom: 'Bfrtip',
+                "scrollX": true,
+                dom: '<"d-flex justify-content-between align-items-baseline"lfB><rtip>',
+                displayLength: 10,
+                lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
                 buttons: [
                     'csv', 'excel', 'pdf', 'print'
                 ],

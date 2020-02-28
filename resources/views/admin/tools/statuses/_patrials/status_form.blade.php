@@ -8,8 +8,8 @@
             <div class="head-space-between">
                 <ul class="nav nav-tabs">
                     @foreach(get_languages() as $language)
-                        <li class="@if($loop->first) active @endif"><a data-toggle="tab"
-                                                                       href="#{{ strtolower($language->code) }}">
+                        <li class="nav-item">
+                            <a data-toggle="tab" href="#{{ strtolower($language->code) }}" class="nav-link @if($loop->first) active @endif">
                                 <span class="flag-icon flag-icon-{{ strtolower($language->code) }}"></span> {{ $language->code }}
                             </a></li>
                     @endforeach
@@ -25,17 +25,17 @@
                          class="tab-pane @if($loop->first) in active @endif">
                         <div class="form-group">
                             <div class="row">
-                                <div class="col-md-10">
+                                <div class="col-md-12">
                                     <label>Status Name</label>
-                                    {!! Form::text('translatable['.strtolower($language->code).'][name]',get_translated($model,strtolower($language->code),'name'),['class'=>'form-control','required'=>true]) !!}
+                                    {!! Form::text('translatable['.strtolower($language->code).'][name]',get_translated($model,strtolower($language->code),'name'),['class'=>'form-control','required'=>(($loop->first)?true:false)]) !!}
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="row">
-                                <div class="col-md-10">
+                                <div class="col-md-12">
                                     <label>Description</label>
-                                    {!! Form::textarea('translatable['.strtolower($language->code).'][description]',get_translated($model,strtolower($language->code),'description'),['class'=>'form-control','required'=>true,'rows'=>5]) !!}
+                                    {!! Form::textarea('translatable['.strtolower($language->code).'][description]',get_translated($model,strtolower($language->code),'description'),['class'=>'form-control','required'=>(($loop->first)?true:false),'rows'=>5]) !!}
                                 </div>
                             </div>
                         </div>

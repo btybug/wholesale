@@ -11,13 +11,37 @@ return [
         'media' => [
             'name' => 'Media',
             'routes' => [
-                'admin_media'
+                'admin_media',
             ],
             'description' => 'Able to see media',
             'children' => [
+                'create' => [
+                    'name' => 'Create media',
+                    'routes' => [
+                        'media_upload',
+                        'media_create_folder',
+                        'media_copy_item',
+                    ],
+                    'description' => '',
+                ],
                 'edit' => [
-                    'name' => 'Create Post',
-                    'routes' => ['admin_media_settinds', 'post_admin_media_settings'],
+                    'name' => 'edit media',
+                    'routes' => [
+                        'admin_media_settinds',
+                        'post_admin_media_settings',
+                        'media_upload',
+                        'media_rename_item',
+                        'media_sort_folder',
+                        'media_edit_folder',
+                        'media_transfer_item',
+                        'media_edit_folder_settings',
+                        'media_get_uploader_settings',
+                    ],
+                    'description' => '',
+                ],
+                'delete' => [
+                    'name' => 'Delete',
+                    'routes' => ['media_remove_folder','media_remove_item','media_empty_trash'],
                     'description' => '',
                 ],
             ],
@@ -38,7 +62,7 @@ return [
                 ],
                 'edit' => [
                     'name' => 'Edit staff member details',
-                    'routes' => ['admin_staff_edit','datatable_user_activity'],
+                    'routes' => ['admin_staff_edit','post_admin_staff_edit','datatable_user_activity','datatable_user_activity','change.password','post_admin_users_reset_pass'],
                     'description' => 'Edit staff member details',
                 ]
             ]
@@ -50,26 +74,21 @@ return [
             'children' => [
                 'edit' => [
                     'name' => 'Edit Customer  details',
-                    'routes' => ['admin_users_edit','datatable_user_orders'],
+                    'routes' => [
+                        'admin_users_edit',
+                        'datatable_user_orders',
+                        'admin_users_reject',
+                        'admin_users_approve',
+                        'post_admin_users_edit',
+                    ],
                     'description' => 'Edit Customer details',
                 ],
-            ]
-        ],
-        'roles_mebership' => [
-            'name' => 'Roles/Mebership',
-            'routes' => ['admin_role_membership', 'datatable_all_roles'],
-            'description' => 'Able to see roles',
-            'children' => [
-
-                'create' => [
-                    'name' => 'Create role',
-                    'routes' => ['admin_create_role', 'post_admin_create_role'],
-                    'description' => 'Create Role',
-                ],
-                'edit' => [
-                    'name' => 'Edit roles',
-                    'routes' => ['admin_edit_role', 'post_admin_edit_role'],
-                    'description' => 'Edit roles',
+                'delete' => [
+                    'name' => 'Delete Customer',
+                    'routes' => [
+                        'admin_users_delete'
+                    ],
+                    'description' => 'Delete Customer',
                 ],
             ]
         ],
@@ -85,78 +104,148 @@ return [
                 ],
                 'create' => [
                     'name' => 'Create campaign  details',
-                    'routes' => ['admin_campaign_create', 'admin_campaign_create_post'],
+                    'routes' => ['admin_campaign_create', 'admin_campaign_create_post','datatable_all_channel_customers','admin_search'],
                     'description' => 'Create campaign details',
                 ],
+                'delete' => [
+                    'name' => 'delete campaign ',
+                    'routes' => ['admin_campaign_delete'],
+                    'description' => 'delete campaign',
+                ],
+            ]
+        ],
+        'activity' => [
+            'name' => 'User Activity',
+            'routes' => ['admin_users_activity','admin_tools_logs','admin_tools_logs_backend'],
+            'description' => 'Able to see all user activity logs',
+            'children' => [
+
             ]
         ],
     ],
     'inventory' => [
-        'inventory' => [
-            'name' => 'Inventory',
-            'routes' => ['admin_inventory'],
-            'description' => 'Able inventory',
-            'children' =>
-                [
-                    'create' => [
-                        'name' => 'Create inventory item',
-                        'routes' => ['admin_items_new', 'post_admin_items_new'],
-                        'description' => 'Able to Create post',
-                    ]
-                ],
-        ],
         'items' => [
             'name' => 'Items ',
-            'routes' => ['admin_items'],
+            'routes' => [
+                'admin_items',
+                'admin_items_archives',
+                'datatable_all_items',
+                'datatable_all_items_in_modal',
+                'datatable_all_items_archive',
+                'find_items_barcodes',
+                'find_items_qrcodes',
+            ],
             'description' => 'Able inventory items',
             'children' =>
                 [
+
                     'create' => [
                         'name' => 'Create inventory item',
-                        'routes' => ['admin_items_new', 'post_admin_items_new','datatable_all_items','admin_items_purchase','datatable_item_purchases'],
+                        'routes' => [
+                            'admin_items_new',
+                            'post_admin_items_new',
+                            'admin_items_purchase',
+                        ],
                         'description' => 'Able to Create post',
-                    ]
+                    ],
+                    'edit' => [
+                        'name' => 'Edit inventory item',
+                        'routes' => [
+                            'admin_items_edit',
+                            'post_admin_items_edit_row_save',
+                            'post_admin_items_edit_row_many_save',
+                            'post_admin_items_edit_row_many',
+                            'post_admin_items_edit_row',
+                            'post_admin_suppliers_list',
+                            'admin_items_download_code',
+                            'admin_stock_specif_by_category',
+                            'admin_items_get_specification_by_category',
+                            'post_admin_items_new',
+                            'admin_items_download_html'
+                        ],
+                        'description' => 'Able to Create post',
+                    ],
+                    'delete' => [
+                        'name' => 'Create inventory item',
+                        'routes' => ['admin_items_archive','post_admin_items_multi_delete'],
+                        'description' => 'Able to archive item',
+                    ],
                 ],
         ],
         'warehouses' => [
             'name' => 'Warehouses',
-            'routes' => ['admin_warehouses','datatable_all_others'],
+            'routes' => ['admin_warehouses','datatable_all_warehouses'],
             'description' => 'Able inventory',
             'children' =>
                 [
                     'create' => [
                         'name' => 'Create Warehouses',
-                        'routes' => ['admin_warehouses_new', 'admin_warehouses_new_post'],
+                        'routes' => ['admin_warehouses_new', 'admin_warehouses_save'],
                         'description' => 'Able to Create Warehouses',
-                    ]
+                    ],
+                    'edit' => [
+                        'name' => 'Edit Warehouses',
+                        'routes' => [
+                            'admin_warehouses_edit',
+                            'admin_warehouses_manage',
+                            'admin_warehouses_categories_form',
+                            'admin_warehouses_save',
+                            'admin_warehouses_categories_new_or_update',
+                            'admin_warehouses_categories_update_parent',
+
+                        ],
+                        'description' => 'Able to edit Warehouses',
+                    ],
+                    'delete' => [
+                        'name' => 'Delete Warehouses',
+                        'routes' => ['admin_warehouses_delete','admin_warehouses_categories_delete'],
+                        'description' => 'Able to delete Warehouses',
+                    ],
                 ],
         ],
         'purchase' => [
             'name' => 'Purchase',
-            'routes' => ['admin_inventory_purchase','datatable_all_purchases'],
+            'routes' => ['admin_inventory_purchase','admin_items_purchase','datatable_all_purchases'],
             'description' => 'Able inventory',
             'children' => [
                 'create' => [
                     'name' => 'Create Purchase',
-                    'routes' => ['admin_inventory_purchase_new', 'admin_inventory_purchase_get_stock_by_sku', 'admin_inventory_purchase_save'],
-                    'description' => 'Able to Create Warehouses',
+                    'routes' => ['admin_inventory_purchase_new', 'admin_inventory_purchase_get_stock_by_sku', 'admin_inventory_purchase_save','admin_item_locations'],
+                    'description' => 'Able to Create purchase',
                 ],
                 'edit' => [
                     'name' => 'Edit Purchase',
-                    'routes' => ['admin_inventory_purchase_edit', 'admin_inventory_purchase_get_stock_by_sku', 'admin_inventory_purchase_save'],
-                    'description' => 'Able to Create Warehouses',
+                    'routes' => [
+                        'admin_inventory_purchase_edit',
+                        'admin_inventory_purchase_get_stock_by_sku',
+                        'admin_inventory_purchase_save',
+                        'admin_item_locations'
+                    ],
+                    'description' => 'Able to edit purchase',
                 ],
                 'delete' => [
                     'name' => 'Delete Purchase',
                     'routes' => ['admin_inventory_purchase_delete'],
-                    'description' => 'Able to Create Warehouses',
+                    'description' => 'Able to delete purchase',
+                ]
+            ],
+        ],
+        'transfer' => [
+            'name' => 'Transfer items',
+            'routes' => ['admin_items_transfer','datatable_all_transfers'],
+            'description' => 'Able to see transfers',
+            'children' => [
+                'create' => [
+                    'name' => 'Able to make  transfer',
+                    'routes' => ['admin_items_new_transfer', 'admin_transfer_post','admin_items_transfer_locations'],
+                    'description' => 'Able to Create suppliers',
                 ]
             ],
         ],
         'suppliers' => [
             'name' => 'Suppliers',
             'routes' => ['admin_suppliers','datatable_all_suppliers'],
-            'description' => 'Able inventory',
+            'description' => 'Able to see suppliers',
             'children' => [
                 'create' => [
                     'name' => 'Create Suppliers',
@@ -165,37 +254,61 @@ return [
                 ],
                 'edit' => [
                     'name' => 'Edit Purchase',
-                    'routes' => ['admin_suppliers_edit', 'post_admin_suppliers_list', 'post_admin_suppliers_sync'],
-                    'description' => 'Able to Create Warehouses',
+                    'routes' => ['admin_suppliers_edit', 'post_admin_suppliers_list', 'post_admin_suppliers_sync','post_admin_suppliers'],
+                    'description' => 'Able to edit suppliers',
                 ],
                 'delete' => [
                     'name' => 'Delete suppliers',
                     'routes' => ['post_admin_suppliers_item_delete'],
-                    'description' => 'Able to Create suppliers',
+                    'description' => 'Able to delete suppliers',
                 ]
             ],
         ],
         'other' => [
             'name' => 'other',
-            'routes' => ['admin_inventory_other'],
+            'routes' => ['admin_inventory_other','datatable_all_others'],
             'description' => 'Able to see others',
             'children' => [
                 'create' => [
                     'name' => 'Create other',
                     'routes' => ['post_admin_inventory_others_new', 'admin_inventory_others_new'],
-                    'description' => 'Able to Create suppliers',
+                    'description' => 'Able to Create other',
                 ],
                 'edit' => [
                     'name' => 'Edit other',
-                    'routes' => ['admin_inventory_others_new', 'post_admin_inventory_others_new'],
-                    'description' => 'Able to Create Warehouses',
+                    'routes' => ['admin_inventory_others_edit', 'post_admin_inventory_others_new'],
+                    'description' => 'Able to edit other',
+                ]
+            ],
+        ],
+        'barcodes' => [
+            'name' => 'Barcodes',
+            'routes' => ['admin_inventory_barcodes','datatable_all_barcodes','admin_inventory_barcode_view'],
+            'description' => 'Able to see Barcodes',
+            'children' => [
+                'create' => [
+                    'name' => 'Create barcode',
+                    'routes' => ['admin_inventory_barcodes_new', 'post_admin_inventory_barcodes_new'],
+                    'description' => 'Able to Create barcode',
+                ],
+                'edit' => [
+                    'name' => 'Edit barcode',
+                    'routes' => [
+                        'admin_inventory_barcodes_settings',
+                    ],
+                    'description' => 'Able to edit barcode',
+                ],
+                'delete' => [
+                    'name' => 'Delete barcode',
+                    'routes' => ['admin_inventory_barcode_delete'],
+                    'description' => 'Able to delete barcode',
                 ]
             ],
         ],
     ],
     'store' => [
         'stock' => [
-            'name' => 'Stock',
+            'name' => 'Products',
             'routes' => ['admin_stock','datatable_all_stocks'],
             'description' => 'Able to see stock',
             'children' =>
@@ -206,7 +319,6 @@ return [
                             'admin_stock_new',
                             'admin_stock_save',
                             'admin_stock_link_all',
-                            'admin_stock_promotion_edit',
                             'admin_stock_variation_form',
                             'admin_stock_variation_add',
                             'admin_stock_package_variation_add',
@@ -233,6 +345,7 @@ return [
                             'admin_stock_variation_add',
                             'admin_stock_package_variation_add',
                             'admin_stock_variation_add',
+                            'admin_stock_variation_edit',
                             'admin_stock_variation_get_option',
                             'admin_stock_variation_get_specification',
                             'admin_stock_variation_render_new_option',
@@ -244,10 +357,34 @@ return [
                         ],
                         'description' => 'Able to Create post',
                     ],
+                    'delete' => [
+                        'name' => 'Delete Stock',
+                        'routes' => ['admin_stock_delete'],
+                        'description' => 'Able to delete Stock',
+                    ]
                 ],
         ],
+        'offers' => [
+            'name' => 'offers',
+            'routes' => ['admin_stock_offers','datatable_all_stocks_offers'],
+            'description' => 'Able to see offers',
+            'children' => [
+                'create' => [
+                    'name' => 'Create offer',
+                    'routes' => ['admin_stock_edit_offer'],
+                    'description' => 'Able ',
+                ],
+                'edit' => [
+                    'name' => 'Edit ',
+                    'routes' => ['admin_stock_new_offer'],
+                    'description' => 'Able to Edit status',
+                ],
+
+            ],
+
+        ],
         'orders' => [
-            'name' => 'Orders',
+            'name' => 'All Orders',
             'routes' => ['admin_orders','datatable_all_orders'],
             'description' => 'Able to see  Orders',
             'children' =>
@@ -267,7 +404,7 @@ return [
                         'admin_orders_apply_coupon',
                         'admin_orders_apply_customer_notes',
                         'admin_orders_new_cash',
-                        'admin_orders_new_cash'
+                        'admin_orders_new_stripe',
                     ],
                     'description' => 'Able to Create Order',
                 ],
@@ -288,11 +425,47 @@ return [
                         'admin_orders_apply_coupon',
                         'admin_orders_apply_customer_notes',
                         'admin_orders_new_cash',
-                        'admin_orders_new_cash'
+                        'admin_orders_new_stripe'
                     ],
                     'description' => 'Edit order',
                 ]
             ],
+        ],
+        'invoices' => [
+            'name' => 'All Invoices',
+            'routes' => ['admin_orders_invoice','datatable_all_orders_invoice'],
+            'description' => 'Able to see  Orders',
+            'children' =>
+                [
+                    'edit' => [
+                        'name' => 'Edit ',
+                        'routes' => [
+                            'admin_stock_new_offer',
+                            'admin_orders_invoice_edit_post',
+                            'admin_orders_invoice_add_note',
+                            'admin_orders_invoice_settings',
+                            'admin_orders_invoice_settings_save',
+                            'admin_orders_invoice_get_product',
+                            'admin_orders_invoice_collecting',
+                            'admin_orders_invoice_items_by_id',
+                            'admin_orders_invoice_get_user',
+                            'admin_orders_invoice_add_user',
+                            'shop_add_to_cart_admin_orders_invoice',
+                            'shop_update_cart_admin_orders_invoice',
+                            'shop_remove_from_cart_admin_orders_invoice',
+                            'admin_orders_invoice_apply_coupon',
+                            'admin_orders_invoice_apply_customer_notes',
+                            'admin_orders_invoice_new_cash',
+                            'admin_orders_invoice_new_cash',
+                        ],
+                        'description' => 'Able to Edit status',
+                    ],
+                    'create' => [
+                        'name' => 'Create invoice',
+                        'routes' => ['admin_orders_invoice_new'],
+                        'description' => 'Able ',
+                    ],
+                ],
         ],
         'transactions' => [
             'name' => 'Transactions',
@@ -334,12 +507,69 @@ return [
                 ]
             ],
         ],
+        'promotions' => [
+            'name' => 'Promotions',
+            'routes' => ['admin_stock_promotions','datatable_all_promotions'],
+            'description' => 'Able to see promotions',
+            'children' => [
 
+                'create' => [
+                    'name' => 'Create  promotion',
+                    'routes' => [
+                        'admin_stock_promotions_new',
+                        'admin_stock_sales_save',
+                    ],
+                    'description' => 'Able to Create promotion',
+                ]
+            ],
+        ],
+        'categories' => [
+            'name' => 'Categories',
+            'routes' => ['admin_categories_list', 'admin_store_categories'],
+            'description' => 'Able to categories',
+            'children' => [
+                'create' => [
+                    'name' => 'Create category',
+                    'routes' => ['admin_store_categories_form', 'admin_store_categories_update_parent', 'admin_store_categories_new_or_update'],
+                    'description' => 'Able to Create SEO',
+                ],
+                'edit' => [
+                    'name' => 'Edit category',
+                    'routes' => ['admin_store_categories_form', 'admin_store_categories_update_parent', 'admin_store_categories_new_or_update'],
+                    'description' => 'Able to Edit category',
+                ],
+                'delete' => [
+                    'name' => 'Delete category',
+                    'routes' => ['admin_store_categories_delete'],
+                    'description' => 'Able category',
+                ],
+            ],
+
+        ],
+        'statuses' => [
+            'name' => 'Statuses',
+            'routes' => ['admin_stock_statuses'],
+            'description' => 'Able to statuses',
+            'children' => [
+                'edit' => [
+                    'name' => 'Edit Status',
+                    'routes' => ['admin_stock_statuses_manage', 'post_admin_stock_statuses_manage', 'post_admin_stock_statuses_manage_form'],
+                    'description' => 'Able to Edit status',
+                ],
+                'delete' => [
+                    'name' => 'Delete status',
+                    'routes' => ['post_admin_stock_statuses_delete'],
+                    'description' => 'Able status',
+                ],
+            ],
+
+        ],
 
     ],
-    'blog' => [
+
+    'front_pages' => [
         'posts' => [
-            'name' => 'Posts',
+            'name' => 'Front Posts',
             'routes' => ['admin_blog','datatable_all_posts'],
             'description' => 'Able to see blog page',
             'children' => [
@@ -350,7 +580,7 @@ return [
                 ],
                 'edit' => [
                     'name' => 'Edit Post',
-                    'routes' => ['admin_post_edit'],
+                    'routes' => ['admin_post_edit','admin_inventary_get_stocks'],
                     'description' => 'Edit any post',
                 ],
                 'delete' => [
@@ -361,6 +591,25 @@ return [
             ],
 
         ],
+        'brands' => [
+            'name' => 'Brands',
+            'routes' => ['admin_blog_brands','datatable_all_brands'],
+            'description' => 'Able to see Brands page',
+            'children' => [
+                'create' => [
+                    'name' => 'Edit Post Comment',
+                    'routes' => ['admin_blog_brands_create', 'admin_blog_brands_create_or_edit'],
+                    'description' => 'Approve or cancel pending Comment ',
+                ],
+                'edit' => [
+                    'name' => 'Edit brand',
+                    'routes' => ['admin_blog_brands_edit', 'admin_blog_brands_create_or_edit','admin_blog_brands_fix'],
+                    'description' => 'Edit brand',
+                ],
+
+            ],
+
+        ],
         'comments' => [
             'name' => 'Comments',
             'routes' => ['show_comments','datatable_all_post_comments'],
@@ -368,7 +617,7 @@ return [
             'children' => [
                 'edit' => [
                     'name' => 'Edit Post Comment',
-                    'routes' => ['approve_comments', 'unapprove_comments', 'edit_comment', 'reply_comment', 'reply_comment_post', 'edit_comment_post'],
+                    'routes' => ['approve_comments','admin_blog_comments_settings','admin_blog_comments_settings_post','unapprove_comments', 'edit_comment', 'reply_comment', 'reply_comment_post', 'edit_comment_post'],
                     'description' => 'Approve or cancel pending Comment ',
                 ],
                 'delete' => [
@@ -398,6 +647,75 @@ return [
                     'name' => 'Edit FAQ',
                     'routes' => ['admin_faq_edit', 'admin_faq_new'],
                     'description' => 'Edit FAQ',
+                ],
+            ],
+
+        ],
+        'attributes' => [
+            'name' => 'Attributes',
+            'routes' => ['admin_store_attributes','datatable_all_attributes'],
+            'description' => 'Able to see  Attributes',
+            'children' => [
+
+                'create' => [
+                    'name' => 'Create  Attribute',
+                    'routes' => [
+                        'admin_store_attributes_new',
+                        'admin_store_attributes_options_form',
+                        'admin_store_attributes_option_delete',
+                        'admin_store_attributes_options',
+                        'admin_store_attributes_options_by_id',
+                        'admin_store_attributes_options_by_id_autocomplate',
+                        'admin_store_attributes_by_id',
+                        'admin_store_attributes_all_post',
+                        'admin_store_attributes_variations_table',
+                    ],
+                    'description' => 'Able to Create Attribute',
+                ],
+                'edit' => [
+                    'name' => 'View inventory item purchases',
+                    'routes' => [
+                        'admin_store_attributes_edit',
+                        'admin_store_attributes_post_edit',
+                        'admin_store_attributes_options_form',
+                        'admin_store_attributes_option_delete',
+                        'admin_store_attributes_options',
+                        'admin_store_attributes_options_by_id',
+                        'admin_store_attributes_options_by_id_autocomplate',
+                        'admin_store_attributes_by_id',
+                        'admin_store_attributes_all_post',
+                        'admin_store_attributes_variations_table',
+                        'admin_tools_stickers_all_post'
+                    ],
+                    'description' => 'View orders related to items',
+                ],'delete' => [
+                    'name' => 'View inventory item purchases',
+                    'routes' => [
+                        'admin_store_attributes_delete'
+                    ],
+                    'description' => 'delete',
+                ]
+            ],
+        ],
+        'stickers' => [
+            'name' => 'Stickers',
+            'routes' => ['admin_tools_stickers','admin_tools_stickers_manage_form', 'admin_tools_stickers_all_post'],
+            'description' => 'Able to see/edit stickers',
+            'children' => [
+                'create' => [
+                    'name' => 'Create  sticker',
+                    'routes' => [
+                        'admin_tools_stickers_new_form',
+                    ],
+                    'description' => 'Able to Create stickers',
+                ],
+                'edit' => [
+                    'name' => 'Edit  sticker',
+                    'routes' => [
+                        'admin_tools_stickers_manage_form',
+                        'admin_tools_stickers_manage',
+                    ],
+                    'description' => 'Able to Edit stickers',
                 ],
             ],
 
@@ -433,6 +751,20 @@ return [
             ],
 
         ],
+        'reviews' => [
+            'name' => 'Reviews',
+            'routes' => ['admin_reviews','datatable_reviews'],
+            'description' => 'Able to see Tickets',
+            'children' => [
+                'edit'=>[
+                    'name' => 'Edit reviews',
+                    'routes' => ['admin_users_approve_review', 'admin_users_disable_review','admin_users_allow_edit_review'],
+                    'description' => 'Able to edit Ticket',
+                ],
+
+            ],
+
+        ],
     ],
     'seo' => [
         'general' => [
@@ -457,206 +789,6 @@ return [
                     'name' => 'Create Post',
                     'routes' => ['admin_seo_bulk_edit_post', 'post_admin_seo_bulk_edit_post', 'admin_seo_bulk_edit_stock', 'post_admin_seo_bulk_edit_stock'],
                     'description' => 'Able to Create SEO',
-                ],
-            ],
-
-        ],
-
-    ],
-    'tools' => [
-        'tools' => [
-            'name' => 'Tools',
-            'routes' => ['admin_tools'],
-            'description' => 'Able to see blog page',
-            'children' => [],
-
-        ],
-        'categories' => [
-            'name' => 'Categories',
-            'routes' => ['admin_categories_list', 'admin_store_categories'],
-            'description' => 'Able to categories',
-            'children' => [
-                'create' => [
-                    'name' => 'Create category',
-                    'routes' => ['admin_store_categories_form', 'admin_store_categories_update_parent', 'admin_store_categories_new_or_update'],
-                    'description' => 'Able to Create SEO',
-                ],
-                'edit' => [
-                    'name' => 'Edit category',
-                    'routes' => ['admin_store_categories_form', 'admin_store_categories_update_parent', 'admin_store_categories_new_or_update'],
-                    'description' => 'Able to Edit category',
-                ],
-                'delete' => [
-                    'name' => 'Delete category',
-                    'routes' => ['admin_store_categories_delete'],
-                    'description' => 'Able category',
-                ],
-            ],
-
-        ],
-        'tags' => [
-            'name' => 'Tags',
-            'routes' => ['admin_stock_tags'],
-            'description' => 'Able to see tag',
-            'children' => [
-                'create' => [
-                    'name' => 'Create tag',
-                    'routes' => ['admin_stock_tags_save'],
-                    'description' => 'Able to Create Tag',
-                ],
-                'delete' => [
-                    'name' => 'Delete tag',
-                    'routes' => ['admin_stock_tags_delete'],
-                    'description' => 'Able tag',
-                ],
-            ],
-
-        ],
-        'statuses' => [
-            'name' => 'Statuses',
-            'routes' => ['admin_stock_statuses'],
-            'description' => 'Able to statuses',
-            'children' => [
-                'edit' => [
-                    'name' => 'Edit Status',
-                    'routes' => ['admin_stock_statuses_manage', 'post_admin_stock_statuses_manage', 'post_admin_stock_statuses_manage_form'],
-                    'description' => 'Able to Edit status',
-                ],
-                'delete' => [
-                    'name' => 'Delete status',
-                    'routes' => ['post_admin_stock_statuses_delete'],
-                    'description' => 'Able status',
-                ],
-            ],
-
-        ],
-        'attributes' => [
-            'name' => 'Attributes',
-            'routes' => ['admin_store_attributes','datatable_all_attributes'],
-            'description' => 'Able to see  Attributes',
-            'children' => [
-
-                'create' => [
-                    'name' => 'Create  Attribute',
-                    'routes' => [
-                        'admin_store_attributes_new',
-                        'admin_store_attributes_options_form',
-                        'admin_store_attributes_option_delete',
-                        'admin_store_attributes_options',
-                        'admin_store_attributes_options_by_id',
-                        'admin_store_attributes_options_by_id_autocomplate',
-                        'admin_store_attributes_by_id',
-                        'admin_store_attributes_all_post',
-                        'admin_store_attributes_delete',
-                        'admin_store_attributes_variations_table',
-                    ],
-                    'description' => 'Able to Create Attribute',
-                ],
-                'edit' => [
-                    'name' => 'View inventory item purchases',
-                    'routes' => [
-                        'admin_store_attributes_edit',
-                        'admin_store_attributes_post_edit',
-                        'admin_store_attributes_options_form',
-                        'admin_store_attributes_option_delete',
-                        'admin_store_attributes_options',
-                        'admin_store_attributes_options_by_id',
-                        'admin_store_attributes_options_by_id_autocomplate',
-                        'admin_store_attributes_by_id',
-                        'admin_store_attributes_all_post',
-                        'admin_store_attributes_delete',
-                        'admin_store_attributes_variations_table',
-                    ],
-                    'description' => 'View orders related to items',
-                ]
-            ],
-        ],
-        'stickers' =>
-            [
-                'name' => 'Statuses',
-                'routes' => ['admin_tools_stickers','admin_tools_stickers_manage_form', 'admin_tools_stickers_all_post'],
-                'description' => 'Able to see/edit stickers',
-                'children' => [
-                    'create' => [
-                        'name' => 'Create  sticker',
-                        'routes' => [
-                            'admin_tools_stickers_new_form',
-                        ],
-                        'description' => 'Able to Create stickers',
-                    ],
-                    'edit' => [
-                        'name' => 'Edit  sticker',
-                        'routes' => [
-                            'admin_tools_stickers_manage_form',
-                            'admin_tools_stickers_manage',
-                        ],
-                        'description' => 'Able to Edit stickers',
-                    ],
-                ],
-
-            ],
-
-    ],
-    'emails_notifications' => [
-        'emails' => [
-            'name' => 'Email Templates',
-            'routes' => ['admin_emails_notifications_emails','datatable_all_emails'],
-            'description' => 'Able to see blog page',
-            'children' => [
-                'edit' => [
-                    'name' => 'Edit Email Template',
-                    'routes' => ['admin_mail_create_templates', 'post_admin_mail_create_templates'],
-                    'description' => 'Able to Edit status',
-                ],
-            ],
-
-        ],
-        'newsletters' => [
-            'name' => 'Newsletters',
-            'routes' => ['admin_emails_newsletters','datatable_all_newsletters'],
-            'description' => 'Able to see blog page',
-            'children' => [
-                'delete' => [
-                    'name' => 'Delete newsletters',
-                    'routes' => ['admin_emails_newsletter_delete'],
-                    'description' => 'Delete newsletters',
-                ],
-            ],
-
-        ],
-        'notification' => [
-            'name' => 'Notification',
-            'routes' => ['admin_emails_notifications_send_email','datatable_all_custom_emails'],
-            'description' => 'Notification',
-            'children' => [
-                'create' => [
-                    'name' => 'Create notification',
-                    'routes' => [
-                        'create_admin_emails_notifications_send_email',
-                        'post_create_admin_emails_notifications_send_email',
-                        'post_create_send_admin_emails_notifications_send_email',
-                        'post_create_send_admin_check_category',
-                        'view_admin_emails_notifications_send_email',
-                        'admin_emails_notifications_send_now',
-                    ],
-                    'description' => 'Delete notification',
-                ],
-                'edit' => [
-                    'name' => 'Edit notification',
-                    'routes' => [
-                        'edit_admin_emails_notifications_send_email',
-                        'post_create_admin_emails_notifications_send_email',
-                        'post_create_send_admin_emails_notifications_send_email',
-                        'post_create_send_admin_check_category',
-                        'view_admin_emails_notifications_send_email',
-                        'admin_emails_notifications_send_now',
-                    ],
-                    'description' => 'Delete notification',
-                ],
-                'delete' => [
-                    'name' => 'Delete notification',
-                    'routes' => [],
-                    'description' => 'Delete notification',
                 ],
             ],
 
@@ -790,6 +922,115 @@ return [
             'children' => [],
 
         ],
+        'emails' => [
+            'name' => 'Email Templates',
+            'routes' => ['admin_emails_notifications_emails','datatable_all_emails'],
+            'description' => 'Able to see blog page',
+            'children' => [
+                'edit' => [
+                    'name' => 'Edit Email Template',
+                    'routes' => ['admin_mail_create_templates', 'post_admin_mail_create_templates'],
+                    'description' => 'Able to Edit status',
+                ],
+            ],
+
+        ],
+        'newsletters' => [
+            'name' => 'Newsletters',
+            'routes' => ['admin_emails_newsletters','datatable_all_newsletters'],
+            'description' => 'Able to see blog page',
+            'children' => [
+                'delete' => [
+                    'name' => 'Delete newsletters',
+                    'routes' => ['admin_emails_newsletter_delete'],
+                    'description' => 'Delete newsletters',
+                ],
+            ],
+
+        ],
+        'notification' => [
+            'name' => 'Notification',
+            'routes' => ['admin_emails_notifications_send_email','datatable_all_custom_emails'],
+            'description' => 'Notification',
+            'children' => [
+                'create' => [
+                    'name' => 'Create notification',
+                    'routes' => [
+                        'create_admin_emails_notifications_send_email',
+                        'post_create_admin_emails_notifications_send_email',
+                        'post_create_send_admin_emails_notifications_send_email',
+                        'post_create_send_admin_check_category',
+                        'view_admin_emails_notifications_send_email',
+                        'admin_emails_notifications_send_now',
+                    ],
+                    'description' => 'Delete notification',
+                ],
+                'edit' => [
+                    'name' => 'Edit notification',
+                    'routes' => [
+                        'edit_admin_emails_notifications_send_email',
+                        'post_create_admin_emails_notifications_send_email',
+                        'post_create_send_admin_emails_notifications_send_email',
+                        'post_create_send_admin_check_category',
+                        'view_admin_emails_notifications_send_email',
+                        'admin_emails_notifications_send_now',
+                    ],
+                    'description' => 'Delete notification',
+                ],
+                'delete' => [
+                    'name' => 'Delete notification',
+                    'routes' => [],
+                    'description' => 'Delete notification',
+                ],
+            ],
+
+        ],
+
+    ],
+    'reports' => [
+        'reports' => [
+            'name' => 'Reports',
+            'routes' => [
+                'admin_reports'
+            ],
+            'description' => 'Able to see reports',
+            'children' => [
+                'create' => [
+                    'name' => 'Create reports',
+                    'routes' => ['admin_reports_new'],
+                    'description' => 'Able to Edit status',
+                ],
+            ],
+
+        ]
+
+    ],
+    'landings' => [
+        'landings' => [
+            'name' => 'Landings',
+            'routes' => [
+                'admin_landings','datatable_all_landings'
+            ],
+            'description' => 'Able to see landings',
+            'children' => [
+                'create' => [
+                    'name' => 'Create reports',
+                    'routes' => ['admin_landings_create','admin_landings_new'],
+                    'description' => 'Able to create landings',
+                ],
+                'edit' => [
+                    'name' => 'Create reports',
+                    'routes' => ['admin_landings_edit','admin_landings_edit_post'],
+                    'description' => 'Able to Edit landings',
+                ],
+                'delete' => [
+                    'name' => 'Create reports',
+                    'routes' => ['admin_landings_delete'],
+                    'description' => 'Able to delete landings',
+                ],
+            ],
+
+        ]
 
     ],
     'manage_api' => [
@@ -831,17 +1072,6 @@ return [
             'children' => [
             ],
 
-        ],
-
-    ],
-    'import_index' => [
-        'import_index' => [
-            'name' => 'Import index',
-            'routes' => [
-
-            ],
-            'description' => 'Able to see media',
-            'children' => [],
         ],
 
     ],

@@ -12,6 +12,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ContactUs;
 use App\Models\Gmail;
+use App\Models\MailTemplates;
+use App\Services\ShortCodes;
 use Dacastro4\LaravelGmail\Services\Message\Mail;
 use Illuminate\Http\Request;
 
@@ -44,7 +46,11 @@ class ContactUsController extends Controller
 //            echo "key=$key <br> name=" . $email->getFrom()['name'] . "<br> email=" . $email->getFrom()['email'] . "<br>";
 //        };
 //        die;
+        $mailTemplate = MailTemplates::where('slug', 'new_contact_us')
+            ->where('is_active', '1')
+            ->first();
         $last_message = $mail->children->last();
+        $last_message=($last_message)??$mail;
         $data = [
             'name' => $mail->name,
             'phone' => $mail->phone,
@@ -52,7 +58,8 @@ class ContactUsController extends Controller
             'email' => $mail->email,
             'message' => $request->get('reply'),
         ];
-        $message = \View::make('email.contact', compact('data'))->render();
+        $Shortcodes=new ShortCodes();
+        $message = \View::make('email.contact', compact('data','Shortcodes','mail','mailTemplate'))->render();
         $gmail = Gmail::message()
             ->get($last_message->gmail_id)
             ->from($mail->email, $mail->name)

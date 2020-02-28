@@ -22,13 +22,13 @@
                     </div>
                 </div>
                 <div class="row align-items-center">
-                    <div class="col-5">
-                        <div class="form-group mb-0">
-                            <label class="cart-product-qty-label text-white font-main-light" for="cartProductqQty-1">QTY&nbsp;:&nbsp;</label>
-                            {!! Form::number('',$item->quantity,['class' => 'cart-product-qty-select qty-input','min' => '1','data-uid' => $item->id]) !!}
-                        </div>
-                    </div>
-                    <div class="col-7">
+                    {{--<div class="col-5">--}}
+                        {{--<div class="form-group mb-0">--}}
+                            {{--<label class="cart-product-qty-label text-white font-main-light" for="cartProductqQty-1">QTY&nbsp;:&nbsp;</label>--}}
+                            {{--{!! Form::number('',$item->quantity,['class' => 'cart-product-qty-select qty-input','min' => '1','data-uid' => $item->id]) !!}--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    <div class="col-12">
                         <span class="d-block cart-product-price font-24 font-sec-bold cart-product-price">
                             {{ convert_price(\App\Services\CartService::getPriceSum($item->id),@$currency, false) }}
                         </span>
@@ -49,14 +49,14 @@
 <!--Subtotal-->
 <div class="mt-auto w-100 p-3">
     <div class="d-flex align-items-center justify-content-end w-100 mb-4">
-        <span class="d-inline-block font-18 text-sec-clr mr-3">Subtotal:</span>
+        <span class="d-inline-block font-18 text-sec-clr mr-3">{!! __('subtotal') !!}:</span>
         <span class="d-block cart-product-price font-24 font-sec-reg text-sec-clr">{{  convert_price(\App\Services\CartService::getTotalPriceSum()+\Cart::getSubTotal(),@$currency, false) }}</span>
     </div>
     <!--cart btn-s-->
     <div class="d-flex justify-content-between w-100">
-        <a href="{!! route('shop_my_cart') !!}" class="cart-sidebar_view-btn btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-sec-clr rounded-0 pointer">View Cart</a>
+        <a href="{!! route('shop_my_cart') !!}" class="cart-sidebar_view-btn btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-sec-clr rounded-0 pointer">{!! __('view_cart') !!}</a>
         @if(! \Cart::isEmpty())
-            <a href="{!! route('shop_check_out') !!}" class="cart-sidebar_check-btn btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase rounded-0 text-tert-clr pointer">Checkout</a>
+            <a href="{!! route('shop_check_out') !!}" class="cart-sidebar_check-btn btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase rounded-0 text-tert-clr pointer">{!! __('checkout') !!}</a>
         @endif
     </div>
 

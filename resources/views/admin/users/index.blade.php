@@ -5,13 +5,18 @@
 @section('content')
     <div class="card panel panel-default">
 
-        <div class="card-header panel-heading clearfix">
-            <div class="pull-left">
-                <h2 class="m-0">Users</h2>
-            </div>
+{{--        <div class="card-header panel-heading clearfix">--}}
+{{--            <div class="pull-left">--}}
+{{--                <h2 class="m-0">Users</h2>--}}
+{{--            </div>--}}
+{{--            --}}
+{{--        </div>--}}
+        @ok('admin_customers_new')
+        <div class="d-flex justify-content-end px-4 mt-2">
             <div class="pull-right"><a href="{!! route('admin_customers_new') !!}" class="btn btn-info">Create new customer</a></div>
         </div>
-        <div class="card-body panel-body">
+        @endok
+        <div class="card-body panel-body pt-0">
             <div class="table-responsive">
             <table id="users-table" class="table table-style table-bordered" cellspacing="0" width="100%">
                 <thead>
@@ -44,7 +49,10 @@
                 "processing": true,
                 "serverSide": true,
                 "bPaginate": true,
-                dom: 'Bfrtip',
+                "scrollX": true,
+                dom: '<"d-flex justify-content-between align-items-baseline"lfB><rtip>',
+                displayLength: 10,
+                lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
                 buttons: [
                     'csv', 'excel', 'pdf', 'print'
                 ],

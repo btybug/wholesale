@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Attributes;
 use App\Models\Stickers;
 use Illuminate\Http\Request;
 
@@ -25,13 +26,25 @@ class ToolsController extends Controller
     public function stickers()
     {
         $stickers = Stickers::all();
-        return $this->view('stickers',compact(['stickers']));
+        $attributes = Attributes::get()->pluck('name','id')->all();
+        return $this->view('stickers',compact(['stickers','attributes']));
     }
 
     public function postStickersManage(Request $request)
     {
-        $data=$request->except(['_token','translatable'],[]);
-        Stickers::updateOrCreate($request->id,$data);
+        $data=$request->except(['_token','translatable','attributes'],[]);
+        $sticker = Stickers::updateOrCreate($request->id,$data);
+        $attributes = $request->get('attributes',[]);
+
+        if(count($attributes)){
+            foreach ($attributes as $attribute){
+                $attr = Attributes::find($attribute);
+                if($attr && ! $attr->stickers->contains($sticker->id)){
+                    $attr->stickers()->attach($sticker->id);
+                }
+            }
+        }
+
         return redirect()->back();
     }
 
@@ -39,14 +52,18 @@ class ToolsController extends Controller
     {
         $model=Stickers::findOrFail($request->get('id'));
         $path=$this->view.'.stickers_form';
-        $html=\View::make($path)->with(['model'=>$model])->render();
+        $attributes = Attributes::get()->pluck('name','id')->all();
+
+        $html=\View::make($path)->with(['model'=>$model,'attributes' => $attributes])->render();
         return \Response::json(['error'=>false,'html'=>$html]);
     }
 
     public function postStickersNewForm(Request $request)
     {
         $path=$this->view.'.stickers_form';
-        $html=\View::make($path)->with(['model'=>null])->render();
+        $attributes = Attributes::get()->pluck('name','id')->all();
+
+        $html=\View::make($path)->with(['model'=>null,'attributes' => $attributes])->render();
         return \Response::json(['error'=>false,'html'=>$html]);
     }
 

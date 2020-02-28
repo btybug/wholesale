@@ -2,6 +2,7 @@
 
 namespace App\UserSearch;
 
+use App\Models\Orders;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,6 +17,15 @@ class UserSearch
             );
 
         return static::getResults($query, $sql);
+    }
+
+    public static function applyQuery(Request $filters, $category = null, $sql = false)
+    {
+        $query = static::applyDecoratorsFromRequest(
+            $filters, static::createObject($category, $filters)
+        );
+
+        return $query;
     }
 
     private static function applyDecoratorsFromRequest(Request $request, Builder $query)
@@ -67,6 +77,12 @@ class UserSearch
             }
         }
         return $sql;
+    }
+
+    private static function createObject($category = null, $request)
+    {
+        $query =User::query();
+        return $query;
     }
 
 }

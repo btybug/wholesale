@@ -12,38 +12,64 @@
                                        class="d-flex align-items-center item-link">
                                         <span class="line"></span>
                                         <div class="item-photo">
-                                            <img src="/public/img/message-icon.png" alt="contact">
+                                            <img src="/public/img/message-icon.png" alt="contact" title="contact">
                                         </div>
-                                        <div class="item-name font-20">Contact Us</div>
+                                        <div class="item-name font-20">{!! __('contact_us') !!}</div>
                                     </a>
                                 </li>
                             @endif
                             <li class="item-wrap">
                                 <a href="{!! route('delivery') !!}" class="d-flex align-items-center item-link active">
                                     <div class="item-photo">
-                                        <img src="/public/img/delivery-icon.png" alt="Delivery">
+                                        <img src="/public/img/delivery-icon.png" alt="Delivery" title="Delivery">
                                     </div>
-                                    <div class="item-name font-20">Delivery</div>
+                                    <div class="item-name font-20">{!! __('delivery') !!}</div>
                                 </a>
                             </li>
                             <li class="item-wrap">
                                 <a href="{!! route('terms_conditions') !!}"
                                    class="d-flex align-items-center item-link ">
                                     <div class="item-photo">
-                                        <img src="/public/img/paper-icon.png" alt="Terms Conditions">
+                                        <img src="/public/img/paper-icon.png" alt="Terms Conditions" title="Terms & Conditions">
                                     </div>
-                                    <div class="item-name font-20">Terms & Conditions</div>
+                                    <div class="item-name font-20">{!! __('terms_and_conditions') !!}</div>
                                 </a>
                             </li>
 
                             <li class="item-wrap">
                                 <a href="{!! route('faq_page') !!}" class="d-flex align-items-center item-link">
                                     <div class="item-photo">
-                                        <img src="/public/img/faq-icon.png" alt="FAQ">
+                                        <img src="/public/img/faq-icon.png" alt="FAQ" title="FAQ">
                                     </div>
-                                    <div class="item-name font-20">FAQ</div>
+                                    <div class="item-name font-20">{!! __('faq') !!}</div>
                                 </a>
                             </li>
+
+                                <li class="item-wrap">
+                                    <a href="{!! route('about_us') !!}" class="d-flex align-items-center item-link">
+                                        <div class="item-photo">
+                                            <img src="/public/img/faq-icon.png" alt="about_us" title="about_us">
+                                        </div>
+                                        <div class="item-name font-20">{!! __('About us') !!}</div>
+                                    </a>
+                                </li>
+
+                                <li class="item-wrap">
+                                    <a href="{!! route('privacy') !!}" class="d-flex align-items-center item-link">
+                                        <div class="item-photo">
+                                            <img src="/public/img/faq-icon.png" alt="privacy" title="privacy">
+                                        </div>
+                                        <div class="item-name font-20">{!! __('privacy') !!}</div>
+                                    </a>
+                                </li>
+                                <li class="item-wrap">
+                                    <a href="{!! route('cookies') !!}" class="d-flex align-items-center item-link ">
+                                        <div class="item-photo">
+                                            <img src="/public/img/faq-icon.png" alt="cookies" title="cookies">
+                                        </div>
+                                        <div class="item-name font-20">{!! __('cookies') !!}</div>
+                                    </a>
+                                </li>
                         </ul>
                     </div>
                     <div class="col-md-9">
@@ -51,17 +77,17 @@
                             <div class="row justify-content-center mb-5">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="country">Select Country</label>
+                                        <label for="country">{!! __('select_country') !!}</label>
                                         {!! Form::select('country',$countries,null,['class'=>'form-control','id'=>'country']) !!}
                                     </div>
                                 </div>
 
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="city">Select City</label>
+                                        <label for="city">{!! __('select_city') !!}</label>
                                         <div class="city-choser">
                                             <select id="city" disabled readonly="true" class="form-control">
-                                                <option selected>Choose...</option>
+                                                <option selected>{!! __('choose') !!}...</option>
                                             </select>
                                         </div>
                                     </div>
@@ -70,44 +96,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12 shipping-methods">
-                                    <h4 class="text-center mb-5">Shipping method based on order amount</h4>
 
-                                    {{--first condition--}}
-                                    <ul class="row justify-content-center mb-5 pl-0 bg-light py-4">
-                                        <li class="col-md-4">
-                                            <h5>If order is 1-50</h5>
-                                        </li>
-                                        <li class="col-md-4">
-                                            <table class="table table-bordered">
-                                                <tr>
-                                                    <td>Local Mail</td>
-                                                    <td>1-3 days</td>
-                                                    <td>10USD</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>DHL</td>
-                                                    <td>1 Day</td>
-                                                    <td>15USD</td>
-                                                </tr>
-                                            </table>
-                                        </li>
-                                    </ul>
-
-                                    {{--second condition--}}
-                                    <ul class="row justify-content-center mb-5 pl-0 bg-light py-4">
-                                        <li class="col-md-4">
-                                            <h5>If order is more than 50</h5>
-                                        </li>
-                                        <li class="col-md-4">
-                                            <table class="table table-bordered">
-                                                <tr>
-                                                    <td>DHL</td>
-                                                    <td>1 day</td>
-                                                    <td>free</td>
-                                                </tr>
-                                            </table>
-                                        </li>
-                                    </ul>
                                 </div>
 
                             </div>
@@ -152,19 +141,10 @@
             postSendAjax("{!! route('delivery_get_countries') !!}", {value}, function (res) {
                 if (!res.error) {
                     $(".city-choser").empty().append(res.html)
+                    $(".shipping-methods").empty().append(res.sHtml)
                 }
             })
         })
-
-        $("body").on("change", "#city", function () {
-            let value = $(this).val()
-            postSendAjax("/url", {value}, function (res) {
-                if (!res.error) {
-                    $(".shipping-methods").empty().append(res.html)
-                }
-            })
-        })
-
 
     </script>
 

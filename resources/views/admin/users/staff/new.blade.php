@@ -18,7 +18,7 @@
        <div class="card-body panel-body">
 
            <div class="row">
-               <div class="col-md-9">
+               <div class="col-xl-9">
                    <div class="tab-content">
                            <div id="users_profile" class="tab-pane fade in active show">
                                {!! Form::open(['class'=>'']) !!}
@@ -75,7 +75,19 @@
 
                                    </div>
                                </div>
-
+                               <div class="form-group row">
+                                   <label for="inputExperience"
+                                          class="col-lg-2 control-label">Password</label>
+                                   <div class="col-lg-10">
+                                       <div class="input-group">
+                                           <input type="text" name="password" class="form-control" rel="gp"
+                                                  data-size="8" data-character-set="a-z,A-Z,0-9,#">
+                                           <span class="input-group-btn"><button type="button"
+                                                                                 class="btn btn-default getNewPass"><span
+                                                       class="fa fa-ad"></span></button></span>
+                                       </div>
+                                   </div>
+                               </div>
 
                                <div class="form-group row">
                                    <div class="col-sm-12 text-right">
@@ -105,4 +117,43 @@
     <link rel="stylesheet" href="{{asset('public/css/custom.css?v='.rand(111,999))}}">
 @stop
 @section('js')
+    <script>
+        $(function () {
+
+            // Generate a password string
+            function randString(id) {
+                var dataSet = $(id).attr('data-character-set').split(',');
+                var possible = '';
+                if ($.inArray('a-z', dataSet) >= 0) {
+                    possible += 'abcdefghijklmnopqrstuvwxyz';
+                }
+                if ($.inArray('A-Z', dataSet) >= 0) {
+                    possible += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                }
+                if ($.inArray('0-9', dataSet) >= 0) {
+                    possible += '0123456789';
+                }
+                if ($.inArray('#', dataSet) >= 0) {
+                    possible += '![]{}()%&*$#^<>~@|';
+                }
+                var text = '';
+                for (var i = 0; i < $(id).attr('data-size'); i++) {
+                    text += possible.charAt(Math.floor(Math.random() * possible.length));
+                }
+                return text;
+            }
+
+
+// Create a new password
+            $(".getNewPass").click(function () {
+                var field = $(this).closest('div').find('input[rel="gp"]');
+                field.val(randString(field));
+            });
+
+// Auto Select Pass On Focus
+            $('input[rel="gp"]').on("click", function () {
+                $(this).select();
+            });
+        })
+    </script>
 @stop

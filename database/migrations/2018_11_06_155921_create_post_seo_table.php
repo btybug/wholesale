@@ -16,9 +16,10 @@ class CreatePostSeoTable extends Migration
         Schema::create('post_seo', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('post_id');
-            $table->string('name');
-            $table->string('type');
-            $table->text('content');
+            $table->tinyInteger('robots')->nullable();
+            $table->tinyInteger('robots_follow')->nullable();
+            $table->text('meta_robots_advanced')->nullable();
+            $table->text('canonical_url')->nullable();
             $table->timestamps();
             $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
 

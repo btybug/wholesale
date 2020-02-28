@@ -50,14 +50,6 @@
                 </aside>
                 <button class="btn btn-primary open_dashboard_widget pull-right">Add new Widget</button>
             </div>
-            <div class="clearfix mt-5">
-                <aside class="Header-auth main-header-auth pull-left" id="header-auth">
-                    <div class="Header-embedApi" id="embed-api-auth-container" ga-on="click" ga-event-category="User"
-                         ga-event-label="auth" ga-event-action="signin">
-                    </div>
-                </aside>
-                <a class="btn btn-primary  pull-right" href="{!! route('admin_wholesallers_synch') !!}">Synch</a>
-            </div>
         </div>
 
     </div>
@@ -76,16 +68,16 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-3  connectedSortable" data-placement="small_left">
+        <div class="col-xl-3 col-lg-6 connectedSortable" data-placement="small_left">
             {!! render_widgets('small_left') !!}
         </div>
-        <div class="col-md-3  connectedSortable" data-placement="small_middle_left">
+        <div class="col-xl-3 col-lg-6 connectedSortable" data-placement="small_middle_left">
             {!! render_widgets('small_middle_left') !!}
         </div>
-        <div class="col-md-3  connectedSortable" data-placement="small_middle_right">
+        <div class="col-xl-3 col-lg-6 connectedSortable" data-placement="small_middle_right">
             {!! render_widgets('small_middle_right') !!}
         </div>
-        <div class="col-md-3  connectedSortable" data-placement="small_right">
+        <div class="col-xl-3 col-lg-6 connectedSortable" data-placement="small_right">
             {!! render_widgets('small_right') !!}
         </div>
     </div>

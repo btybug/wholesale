@@ -1,6 +1,6 @@
 @if (count($breadcrumbs))
     <div class="page-back">
-        <a href="/">
+        <a href="{{ get_breadcrumb_previous_url($breadcrumbs) }}">
         <span class="back-icon"><svg
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"

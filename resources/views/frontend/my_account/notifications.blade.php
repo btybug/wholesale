@@ -35,7 +35,7 @@
                     <div class="text-center">
                         <button type="submit"
                                 class="profile-sidebar_logout-btn d-inline-flex align-items-center justify-content-center font-14 text-uppercase text-white pointer">
-                            Logout
+                            {!! __('logout') !!}
                         </button>
                     </div>
                     {!! Form::close() !!}
@@ -48,9 +48,9 @@
                     <div class="col-lg-9">
                         <div class="notification-actions-bar mb-3 d-none">
                             <a href="javascript:void(0)"
-                               class="btn btn-transp delete-selected-notifications  text-uppercase rounded-0 mr-3">Delete</a>
-                            <a href="javascript:void(0)" class="btn btn-transp mark-us-unread rounded-0 mr-3">Mark us <span class="text-uppercase">Unread</span></a>
-                            <a href="javascript:void(0)" class="btn btn-transp mark-us-read rounded-0">Mark us <span class="text-uppercase">Read</span></a>
+                               class="btn btn-transp delete-selected-notifications  text-uppercase rounded-0 mr-3">{!! __('delete') !!}</a>
+                            <a href="javascript:void(0)" class="btn btn-transp mark-us-unread rounded-0 mr-3">{!! __('mark_us') !!} <span class="text-uppercase">Unread</span></a>
+                            <a href="javascript:void(0)" class="btn btn-transp mark-us-read rounded-0">{!! __('mark_us') !!}<span class="text-uppercase">Read</span></a>
                         </div>
                         <div class="table-responsive">
                             <table class="table table-striped table-ntfs">
@@ -59,10 +59,10 @@
                                     <th scope="col">
                                         <input name="notifications-all" id="message-checkbox-all" type="checkbox">
                                     </th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Notification</th>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col">{!! __('date') !!}</th>
+                                    <th scope="col">{!! __('notification') !!}</th>
+                                    <th scope="col">{!! __('type') !!}</th>
+                                    <th scope="col">{!! __('actions') !!}</th>
                                 </tr>
                                 </thead>
                                 <tbody id="notification-list">
@@ -87,13 +87,13 @@
                     </div>
                     <div class="col-md-8">
                       <div class="modal-body h-100 d-flex flex-column">
-                          <h2 class="text-uppercase text-main-clr font-20 modal-title mb-2">Message</h2>
+                          <h2 class="text-uppercase text-main-clr font-20 modal-title mb-2">{!! __('message') !!}</h2>
 
 
                           <p class="text-gray-clr modal-body-info">  </p>
 
                           <div class="text-right mt-auto">
-                              <button type="button" class="ntfs-btn btn rounded-0 font-14" data-dismiss="modal">Close</button>
+                              <button type="button" class="ntfs-btn btn rounded-0 font-14" data-dismiss="modal">{!! __('close') !!}</button>
                           </div>
                       </div>
                     </div>

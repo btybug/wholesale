@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\Requests\OtherRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Items;
 use App\Models\Others;
+use App\Models\Warehouse;
 
 class OtherController extends Controller
 {
@@ -28,7 +29,9 @@ class OtherController extends Controller
 
         $items = Items::where('type', 'simple')->get()->pluck('name', 'id');
         $model = Others::find($id);
-        return $this->view('new', compact('model', 'items'));
+        $warehouses = Warehouse::all()->pluck('name','id')->all();
+
+        return $this->view('new', compact('model', 'items','warehouses'));
     }
 
     public function postOthers(OtherRequest $request)
@@ -42,8 +45,39 @@ class OtherController extends Controller
         }
         $data['parent_id'] = $id;
         $data['user_id'] = \Auth::id();
-        Others::create($data);
+        $other = Others::create($data);
+
+        $item = Items::find($request->get('item_id'));
+
+        if($item){
+            $qty = $this->saveLocations($item, $request->get('locations', []));
+            if($qty > 0){
+                $other->qty = $qty;
+                $other->save();
+            }
+        }
+
         return redirect()->route('admin_inventory_other');
+    }
+
+    private function saveLocations($item, array $data = [])
+    {
+        $qty = 0;
+        $deletableArray = [];
+        if (count($data)) {
+            foreach ($data as $datum) {
+                $existing = $item->locations()->where('warehouse_id', $datum['warehouse_id'])
+                    ->where('rack_id', $datum['rack_id'])
+                    ->where('shelve_id', $datum['shelve_id'])->first();
+                if ($existing) {
+                    $qty += $datum['qty'];
+                    $datum['qty'] = $existing->qty - $qty;
+                    $existing->update($datum);
+                }
+            }
+        }
+
+        return $qty;
     }
 
 }

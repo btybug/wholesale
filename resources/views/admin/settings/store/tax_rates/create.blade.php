@@ -2,9 +2,9 @@
 @section('content')
     <div class="inventory_attributes container-fluid">
         <div class="card panel panel-default">
-            <div class="card-header panel-heading clearfix">
-                <h2 class="m-0 pull-left">Attribute</h2>
-                <a class="btn btn-default pull-right"
+            <div class="card-header panel-heading d-flex flex-wrap justify-content-between">
+                <h2 class="m-0 mr-1">Attribute</h2>
+                <a class="btn btn-default"
                    href="{!! route('admin_settings_tax_rates') !!}">Back</a>
             </div>
             @if ($errors->any())
@@ -19,7 +19,7 @@
 
             <div class="card-body panel-body">
                 <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-xl-9">
                         {!! Form::model($model,['class'=>'','url'=>route('post_admin_settings_tax_create_or_update',($model)?$model->id:null)]) !!}
                         @if(count(get_languages()))
                             <ul class="nav nav-tabs">

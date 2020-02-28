@@ -8,8 +8,8 @@
                 <div class="row">
                     <div class="col-lg-8 col-12 col-sm-10 offset-lg-2 offset-sm-1">
                         <h1 class="m-0">404</h1>
-                        <h6>Page not found - ItSolutionStuff.com</h6>
-                        <p>Lorem ipsum dolor sit <span class="text-info">amet</span>, consectetur <span class="text-info">adipisicing</span> elit, sed do eiusmod.</p>
+                        <h6>{!! __('not_found_title') !!} - ItSolutionStuff.com</h6>
+                        <p>{!! __('not_found_desc') !!}</p>
                     </div>
                 </div>
             </div>

@@ -31,11 +31,6 @@ class InventoryController extends Controller
         $this->settings = $settings;
     }
 
-    public function inventory()
-    {
-
-    }
-
     private function createOrUpdateSeo($request, $stock_id)
     {
         $types = $request->only(['fb', 'general', 'twitter', 'robot']);

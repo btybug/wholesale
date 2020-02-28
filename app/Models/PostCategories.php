@@ -10,6 +10,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\PostCategories
+ *
+ * @property int $post_id
+ * @property int $categories_post_id
+ * @property int|null $parent_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PostCategories[] $children
+ * @property-read int|null $children_count
+ * @property-read \App\Models\PostCategories|null $parent
+ * @property-read \App\Models\Posts $post
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostCategories newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostCategories newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostCategories query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostCategories whereCategoriesPostId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostCategories whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostCategories whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostCategories wherePostId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostCategories whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class PostCategories extends Model
 {
     protected $table = 'post_categories';

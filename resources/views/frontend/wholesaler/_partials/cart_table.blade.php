@@ -91,7 +91,7 @@
                 <div class="right-content order-summary">
                     {{--                        SUMMARY</h3>--}}
                     @include("frontend.wholesaler._partials.order_summary",['submit_route' => route("wholesaler_check_out"),
-                    "back_route" => route("home")])
+                    "back_route" => route("wholesaler")])
                 </div>
             </div>
         </div>

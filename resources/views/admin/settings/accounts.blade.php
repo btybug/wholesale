@@ -17,66 +17,68 @@
             </div>
             <div class="card-body panel-body">
                 <div class="row">
-                    <div class="col-md-9">
-                        <table class="table froms-table">
-                            @if($froms->count())
-                                @foreach($froms as $key=>$from)
+                    <div class="col-xl-9">
+                        <div class="table-responsive">
+                            <table class="table froms-table">
+                                @if($froms->count())
+                                    @foreach($froms as $key=>$from)
+                                        <tr>
+                                            <td>
+                                                <label for="sendingEmail">E-Mail Address</label>
+
+                                            </td>
+                                            <td style="min-width: 150px">
+                                                {!! Form::hidden('old['.$from->id.'][type]','from') !!}
+                                                {!! Form::text("old[".$from->id."][email]",$from->email,['class'=>'form-control','aria-describedby'=>'sendingEmail']) !!}
+
+                                            </td>
+                                            <td>
+                                                <label for="sendingEmailDesc">Description</label>
+
+                                            </td>
+                                            <td style="min-width: 150px">
+                        <textarea rows="5" class="form-control" name="old[{!!$from->id!!}][description]"
+                                  aria-describedby="sendingEmailDesc"
+                                  placeholder="Enter Description">{!!$from->description!!}</textarea>
+                                            </td>
+                                            <td>
+                                                @if(count($froms)!=$key+1)
+                                                    <button type="button" class="btn pull-right remove-line btn-danger delete"><i class="fa fa-minus"></i></button>
+                                                @else
+                                                    <button type="button" class="btn btn-primary pull-right add-more-from"><i
+                                                            class="fa fa-plus"></i></button>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                     <tr>
                                         <td>
                                             <label for="sendingEmail">E-Mail Address</label>
 
                                         </td>
                                         <td>
-                                            {!! Form::hidden('old['.$from->id.'][type]','from') !!}
-                                            {!! Form::text("old[".$from->id."][email]",$from->email,['class'=>'form-control','aria-describedby'=>'sendingEmail']) !!}
-
+                                            {!! Form::hidden('new[0][type]','from') !!}
+                                            <input name="new[0][email]" type="text" class="form-control" id="sendingEmail"
+                                                   aria-describedby="sendingEmail" placeholder="Enter E-Mail Address">
                                         </td>
                                         <td>
                                             <label for="sendingEmailDesc">Description</label>
 
                                         </td>
                                         <td>
-                        <textarea rows="5" class="form-control" name="old[{!!$from->id!!}][description]"
-                                  aria-describedby="sendingEmailDesc"
-                                  placeholder="Enter Description">{!!$from->description!!}</textarea>
-                                        </td>
-                                        <td>
-                                            @if(count($froms)!=$key+1)
-                                                <button type="button" class="btn pull-right remove-line btn-danger delete"><i class="fa fa-minus"></i></button>
-                                            @else
-                                                <button type="button" class="btn btn-primary pull-right add-more-from"><i
-                                                            class="fa fa-plus"></i></button>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td>
-                                        <label for="sendingEmail">E-Mail Address</label>
-
-                                    </td>
-                                    <td>
-                                        {!! Form::hidden('new[0][type]','from') !!}
-                                        <input name="new[0][email]" type="text" class="form-control" id="sendingEmail"
-                                               aria-describedby="sendingEmail" placeholder="Enter E-Mail Address">
-                                    </td>
-                                    <td>
-                                        <label for="sendingEmailDesc">Description</label>
-
-                                    </td>
-                                    <td>
                         <textarea rows="5" class="form-control" name="new[0][description]"
                                   aria-describedby="sendingEmailDesc"
                                   placeholder="Enter Description"></textarea>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary pull-right add-more-from"><i
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary pull-right add-more-from"><i
                                                     class="fa fa-plus"></i></button>
-                                    </td>
-                                </tr>
-                            @endif
-                        </table>
+                                        </td>
+                                    </tr>
+                                @endif
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

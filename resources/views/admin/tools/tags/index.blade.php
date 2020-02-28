@@ -13,7 +13,7 @@
                    @endok
                    <div class="card-body panel-body">
                        <div class="row">
-                           <div class="col-md-7">
+                           <div class="col-xl-7">
                                @ok('admin_stock_tags_save')
                                <div class="form-group">
                                    <input type="text" id="add-new-tags" class="form-control " placeholder="Add new tags" required>

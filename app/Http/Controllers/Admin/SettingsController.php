@@ -22,14 +22,17 @@ use App\Models\FooterLinks;
 use App\Models\GeoZones;
 use App\Models\GetForexData;
 use App\Models\Gmail;
+use App\Models\Items;
 use App\Models\Languages;
 use App\Models\MailTemplates;
+use App\Models\MainPagesSeo;
 use App\Models\Products;
 use App\Models\Settings;
 use App\Models\ShippingZones;
 use App\Models\SiteCurrencies;
 use App\Models\SiteLanguages;
 use App\Models\Statuses;
+use App\Models\Stock;
 use App\Models\TaxRates;
 use App\Models\Translations\FooterLinkTranslation;
 use App\Services\ShortCodes;
@@ -139,10 +142,21 @@ class SettingsController extends Controller
         $countries = [null => 'Select Country'] + $countries->all()->pluck('name.common', 'name.common')->toArray();
         return $this->view('general', compact('model', 'countries'));
     }
-
     public function saveGeneral(Request $request, Settings $settings)
     {
         $settings->updateOrCreateSettings('admin_general_settings', $request->except('_token'));
+        return redirect()->back();
+    }
+
+    public function getDefaults(Settings $settings)
+    {
+        $model = $settings->getEditableData('admin_defaults_settings');
+        return $this->view('defaults', compact('model'));
+    }
+
+    public function saveDefaults(Request $request, Settings $settings)
+    {
+        $settings->updateOrCreateSettings('admin_defaults_settings', $request->except('_token'));
         return redirect()->back();
     }
 
@@ -400,6 +414,23 @@ class SettingsController extends Controller
         return redirect()->back();
     }
 
+    public function getStorePrinting(Settings $settings)
+    {
+        $model = $settings->getEditableData('printing');
+        $printers = collect([]);
+
+        if($model && $model->printers){
+            $printers = collect(json_decode($model->printers,true));
+        }
+        return $this->view('store.print', compact('model','printers'));
+    }
+
+    public function postStorePrinting(Request $request, Settings $settings)
+    {
+        $settings->updateOrCreateSettings('printing', $request->except('_token'));
+        return redirect()->back();
+    }
+
     public function postStorePaymentsGatewaysEnable(Request $request, Settings $settings)
     {
         $data[$request->get('key')] = ($request->get('onOff') == 'true') ? 1 : 0;
@@ -576,13 +607,36 @@ class SettingsController extends Controller
     public function getMainPages(Settings $settings, Request $request)
     {
         $p = $request->get('p', 'banners');
-        if ($p == 'banners' || $p == "single_product" || $p == "single_post" || $p == "my_account") {
+        $top=null;
+        $bottom=null;
+        $model=null;
+        $models = [];
+        if($p == 'ads'){
+            $models = [];
+            $models['single_product'] = $settings->getEditableData('single_product');
+            $models['single_post'] = $settings->getEditableData('single_post');
+            $models['my_account'] = $settings->getEditableData('my_account');
+            $models['confirmation_page'] = $settings->getEditableData('confirmation_page');
+            $models['lef_faq_ads'] = $settings->getEditableData('lef_faq_ads');
+            $models['right_faq_ads'] = $settings->getEditableData('right_faq_ads');
+
+        } else if ($p == 'banners' || $p == "single_product" || $p == "single_post" || $p == "my_account"||$p == "stickers" || $p == "brands") {
             $model = $settings->getEditableData($p);
+            $top = $settings->getEditableData('top');
+            $bottom = $settings->getEditableData('bottom_banner');
+
         } else {
             $model = Common::where('type', $p)->first();
         }
-        return $this->view('main_pages', compact(['model', 'p']));
+        $items=[];
+        if ($p == 'banners'){
+            $items=Stock::all()->pluck('name','id');
+        }
+
+        return $this->view('main_pages', compact(['model', 'p','items','top','models','bottom']));
     }
+
+
 
     public function postHomePage(Request $request, Settings $settings)
     {
@@ -595,12 +649,21 @@ class SettingsController extends Controller
     public function postMainPages(Request $request, Settings $settings)
     {
         $p = $request->get('p', 'banners');
-        if ($p == "banners" || $p == "single_product" || $p == "single_post" || $p == "my_account") {
+
+        if ($p == "banners" || $p == "single_product" || $p == "single_post"
+            || $p == "my_account"|| $p == "stickers" || $p == 'confirmation_page'  || $p == "brands"|| $p == "lef_faq_ads"|| $p == "right_faq_ads") {
             $banners = array_filter($request->get($p, []));
             $settings->updateOrCreateSettings($p, ['data' => $banners]);
         } else {
-            $data = $request->except('_token', 'translatable');
-            Common::updateOrCreate($request->id, $data);
+
+            $data = $request->except('_token', 'translatable','p');
+            Common::updateOrCreate($request->id, $data,$request->get('translatable'));
+        }
+        if ($request->exists('top')){
+            $settings->updateOrCreateSettings('top', ['data'=>$request->get('top')]);
+        }
+        if ($request->exists('bottom_banner')){
+            $settings->updateOrCreateSettings('bottom_banner', ['data'=>$request->get('bottom_banner')]);
         }
         return redirect()->back();
     }
