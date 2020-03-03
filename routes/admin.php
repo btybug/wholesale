@@ -37,7 +37,10 @@ Route::group(['prefix' => 'find'], function () {
     Route::post('items/save', 'Find\ItemsController@postSave');
 
 });
-
+Route::group(['prefix' => 'purchases'], function () {
+    Route::get('/', 'Admin\PurchasesController@index')->name('admin_purchases');
+    Route::get('/import/{id}', 'Admin\PurchasesController@import')->name('admin_purchases_import');
+});
 Route::get('/profile', 'Admin\AdminController@getProfile')->name('admin_dashboard_profile');
 Route::post('/profile', 'Admin\AdminController@postProfile')->name('admin_dashboard_profile_post');
 Route::post('/profile-image', 'Admin\AdminController@postProfileImageUpload')->name('user_profile_image_upload');

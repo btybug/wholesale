@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Barcodes;
 use App\Models\Category;
 use App\Models\Items;
 use App\Models\OrderItem;
@@ -62,7 +63,9 @@ class ApiController extends Controller
     public function postAllItems(Request $request)
     {
         $items = Items::with('barcode')->with('categories')->get();
-        return response()->json(['items' => $items, 'error' => false], 200);
+        $barcodes=Barcodes::all();
+        $categories=Category::where('type', 'stocks')->get();
+        return response()->json(['items' => $items,'barcodes'=>$barcodes,'categories'=>$categories, 'error' => false], 200);
     }
 
     public function postItem(Request $request)
