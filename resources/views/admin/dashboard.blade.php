@@ -50,6 +50,14 @@
                 </aside>
                 <button class="btn btn-primary open_dashboard_widget pull-right">Add new Widget</button>
             </div>
+            <div class="clearfix mt-5">
+                <aside class="Header-auth main-header-auth pull-left" id="header-auth">
+                    <div class="Header-embedApi" id="embed-api-auth-container" ga-on="click" ga-event-category="User"
+                         ga-event-label="auth" ga-event-action="signin">
+                    </div>
+                </aside>
+                <a class="btn btn-primary  pull-right" href="{!! route('admin_wholesallers_synch') !!}">Synch</a>
+            </div>
         </div>
 
     </div>
