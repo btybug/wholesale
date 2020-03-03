@@ -67,6 +67,7 @@ Route::group(['prefix'=>'datatables'],function(){
     Route::get('/get-landings','Admin\DatatableController@getAllLandings')->name('datatable_all_landings');
     Route::get('/get-app-staff','Admin\DatatableController@getAllAppStaff')->name('datatable_all_app_staff');
     Route::get('/get-app-orders','Admin\DatatableController@getAllAppOrders')->name('datatable_all_app_orders');
+    Route::get('/purchase/get-items', 'Customers\DatatableController@getAllPurchase')->name('datatable_all_purchase');
 
 });
 
