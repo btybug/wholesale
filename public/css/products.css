@@ -3018,6 +3018,16 @@ outline: none;
     height: 100%;
     top: 0;
 }
+.discount_modal_qty_minus{
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.discount_modal_qty_plus{
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
 .selected-item_popup-wrapper .continue-shp-wrapp_qty{
     height: 45px;
 }
@@ -3038,6 +3048,12 @@ outline: none;
 .popup-modal-footer .continue-shp-wrapp_qty{
     padding: 3px 20px;
     width: 80px;
+}
+.discount_modal_wrapp_qty{
+    padding: 3px 20px;
+    width: 80px;
+    height: 45px;
+    border: 1px solid #d7d7d7;
 }
 #extraModal .modal-footer .product-card_edit{
     opacity: .5;

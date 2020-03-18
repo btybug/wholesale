@@ -150,6 +150,7 @@ class StockController extends Controller
             'stickers', 'fb', 'twitter', 'general', 'robot', 'type_attributes', 'type_attributes_options', 'ads', 'banners', 'special_filters');
         $data['user_id'] = \Auth::id();
         $data['videos'] = $request->get('videos',[]);
+
         $translatable=$request->get('translatable');
         foreach ($translatable as $key=>$value){
            $translatable[$key]['slug']=strtolower(str_replace(' ','-',$value['slug']));
@@ -602,6 +603,8 @@ class StockController extends Controller
             $html = \view("admin.stock._partials.package_item", compact(['stockItems', 'main_unique', 'main']))->render();
         } elseif ($request->type == 'filter') {
             $html = \view("admin.stock._partials.filter_item", compact(['stockItems', 'main_unique', 'main']))->render();
+        }elseif ($request->type == 'filter_discount') {
+            $html = \view("admin.stock._partials.filter_discount", compact(['stockItems', 'main_unique', 'main']))->render();
         }
 
 

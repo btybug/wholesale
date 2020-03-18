@@ -157,6 +157,7 @@ class StockService
 //            dd($data);
             foreach ($data as $variation_id => $datum) {
                 $newData = [];
+//                dd($datum);
                 $newData['ordering'] = ($datum['ordering']) ?? 0;
                 $newData['count_limit'] = ($datum['count_limit']) ?? 0;
                 $newData['min_count_limit'] = ($datum['min_count_limit']) ?? 0;
@@ -189,8 +190,14 @@ class StockService
                             $variation = $stock->variations()->create($newData);
                         }
                         $discountDeletable = [];
-                        if(isset($item['discount']) && count($item['discount'])){
-                            foreach ($item['discount'] as $discount){
+                        if($datum['price_per'] == 'discount'){
+                            $discounts = (isset($datum['discount']))?$datum['discount']:[];;
+                        }else{
+                            $discounts = (isset($item['discount']))?$item['discount']:[];
+                        }
+
+                        if(count($discounts)){
+                            foreach ($discounts as $discount){
                                 if (isset($discount['id'])) {
                                     $d = StockVariationDiscount::find($discount['id']);
                                     $d->update($discount);
@@ -201,8 +208,10 @@ class StockService
                                 $discountDeletable[] = $d->id;
                             }
                         }
+
                         $variation->discounts()->whereNotIn('id', $discountDeletable)->delete();
                         $deletableArray[] = $variation->id;
+
                     }
                 }
             }

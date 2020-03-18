@@ -20,6 +20,7 @@ class CreateStocksTable extends Migration
             $table->tinyInteger('status')->default(0);
             $table->tinyInteger('is_promotion')->default(0);
             $table->tinyInteger('type')->default(0);
+            $table->tinyInteger('section_type')->default(0);
             $table->string('image')->nullable();
             $table->text('other_images')->nullable();
             $table->string('what_is_image')->nullable();

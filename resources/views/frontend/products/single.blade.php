@@ -185,9 +185,47 @@
                                                     <a href="#"
                                                        class="product__single-delivery-details font-20 text-tert-clr lh-1">{!! __('more_detail') !!}</a>
                                                 </div>
-                                                <div class="product__single-item">
-                                                    @include("admin.inventory._partials.render_price_form",['model' => $vape])
-                                                </div>
+                                                @if($vape->section_type == 1)
+                                                    <div class="product__single-item-info mb-3">
+                                                        <div
+                                                            class="d-flex flex-wrap align-items-center lh-1 product__single-item-info-top">
+                                                            <div class="col-md-9 pl-0">
+                                                                <span class="font-sec-light font-26">Select section</span>
+                                                            </div>
+                                                            <div class="col-md-3 d-flex justify-content-end pr-0">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex flex-wrap align-items-end mb-2 product__single-item-info-bottom">
+                                                            <div class="col-xl-7 col-lg-6 col-md-7 pl-0 pr-md-3 pr-0">
+                                                                @php
+                                                                    $variations = $vape->variations()->orderBy('ordering','asc')->required()->groupBy('variation_id')->get();
+                                                                @endphp
+                                                                <select name="product_section"
+                                                                        id="select_section"
+                                                                        style="width: 100%"
+                                                                        class="select-2 select-2--no-search main-select not-selected arrow-dark select2-hidden-accessible single-product-select">
+
+                                                                    @foreach($variations as $item)
+                                                                        <option value="{{ $item->variation_id }}">
+                                                                            {{ $item->title }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @php
+                                                        $variations = collect($vape->variations()->orderBy('ordering','asc')->required()->get())->groupBy('variation_id');
+                                                    @endphp
+                                                    <div class="product__single-item single-section">
+                                                        @include("admin.inventory._partials.render_price_form_single",['model' => $vape,'variation' => $variations->first()])
+                                                    </div>
+                                                @else
+                                                    <div class="product__single-item">
+                                                        @include("admin.inventory._partials.render_price_form",['model' => $vape])
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -862,19 +900,40 @@ max-width: 100%;
             })
 
 
-            $("body").on('change', '.select-variation-option', function () {
-                get_price();
-                call_subtotal();
-            });
+            {{--$("body").on('change', '#select_section', function () {--}}
+                {{--let variation_id = $(this).val();--}}
+                {{--$.ajax({--}}
+                    {{--type: "post",--}}
+                    {{--url: "{!! route('product_get_section') !!}",--}}
+                    {{--cache: false,--}}
+                    {{--datatype: "json",--}}
+                    {{--data: {variation_id: variation_id},--}}
+                    {{--headers: {--}}
+                        {{--"X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")--}}
+                    {{--},--}}
+                    {{--success: function (data) {--}}
+                        {{--if (!data.error) {--}}
+                            {{--$(".single-section").html(data.html);--}}
+                            {{--// get_price();--}}
+                            {{--// call_subtotal();--}}
+                        {{--}--}}
+                    {{--}--}}
+                {{--});--}}
+            {{--});--}}
 
-            $("body").on('change', '.select-variation-radio-option', function () {
-                get_price();
-                call_subtotal();
-            });
-
-            $("body").on('click', '.optional_checkbox', function () {
-                get_subTotalPrice();
-            });
+            // $("body").on('change', '.select-variation-option', function () {
+            //     get_price();
+            //     call_subtotal();
+            // });
+            //
+            // $("body").on('change', '.select-variation-radio-option', function () {
+            //     get_price();
+            //     call_subtotal();
+            // });
+            //
+            // $("body").on('click', '.optional_checkbox', function () {
+            //     get_subTotalPrice();
+            // });
 
             $("body").on('click', '.add-to-cart', function () {
 
@@ -963,6 +1022,7 @@ max-width: 100%;
 
                         } else {
                             $(".price-place").html('<span class="d-inline-block font-16">' + data.message + '</span>');
+                            $(".price-place-summary").html('<span class="d-inline-block font-16">' + data.message + '</span>');
                             $("#variation_uid").val('');
                             $(".add-fav-variation").addClass('d-none').data('id', '').removeClass('active');
                         }
@@ -1072,21 +1132,21 @@ max-width: 100%;
                 });
             }
 
-            async function getP() {
-                await get_price();
-                await call_extra_products();
-            }
+            // async function getP() {
+            //     await get_price();
+            //     await call_extra_products();
+            // }
+            //
+            // // getP();
+            //
+            // function call_subtotal(time = 300) {
+            //     setTimeout(
+            //         function () {
+            //             get_subTotalPrice();
+            //         }, time);
+            // }
 
-            getP();
-
-            function call_subtotal(time = 300) {
-                setTimeout(
-                    function () {
-                        get_subTotalPrice();
-                    }, time);
-            }
-
-            call_subtotal(500);
+            // call_subtotal(500);
 
             $("body").on('click', '.product-card_like-icon', function () {
 

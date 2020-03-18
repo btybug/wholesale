@@ -9,6 +9,8 @@ $variations = collect($model->variations()->orderBy('ordering','asc')->required(
         @endphp
         @if($vSettings->type == 'filter')
             @include("frontend.products._partials.variation_types.filter_popup")
+        @elseif($vSettings->type == 'filter_discount')
+            @include("frontend.products._partials.variation_types.discount_filter_popup")
         @elseif($vSettings->type == 'single')
             @if(\View::exists("frontend.products._partials.single.$vSettings->display_as"))
                 @include("frontend.products._partials.single.$vSettings->display_as")

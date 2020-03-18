@@ -94,7 +94,7 @@ class ShoppingCartController extends Controller
                 if (count($geoZone->deliveries)) {
                     $subtotal = Cart::getSubTotal();
                     $delivery = $geoZone->deliveries()->where('min', '<=', $subtotal)->where('max', '>=', $subtotal)->first();
-                    if(! $shipping) {
+                    if (!$shipping) {
                         Cart::removeConditionsByType('shipping');
                         if ($delivery && count($delivery->options)) {
                             $shippingDefaultOption = $delivery->options->first();
@@ -120,6 +120,7 @@ class ShoppingCartController extends Controller
     public function postAddToCart(Request $request)
     {
         $product = Stock::where('status', true)->find($request->product_id);
+//        dd($request->all());
         if ($product) {
             $error = $this->cartService->validateProduct($product, $request->variations);
 //            dd($this->cartService->variations,$this->cartService->price);
@@ -152,11 +153,11 @@ class ShoppingCartController extends Controller
 //                }
 
                 $headerhtml = \View('frontend._partials.shopping_cart_options')->render();
-                $popuphtml = \View('frontend.products._partials.offer_popup',['vape' => $product,'key' => $cart_id,
-                    'price' => $this->cartService->price,'qty' => $request->product_qty])->render();
+                $popuphtml = \View('frontend.products._partials.offer_popup', ['vape' => $product, 'key' => $cart_id,
+                    'price' => $this->cartService->price, 'qty' => $request->product_qty])->render();
 
-                return \Response::json(['error' => false,'show_popup' => (count($product->special_offers) > 0)?true:false, 'message' => 'added', 'key' => $cart_id,'product_id' => $product->id,
-                    'count' => $this->cartService->getCount(), 'headerHtml' => $headerhtml,'specialHtml' => $popuphtml]);
+                return \Response::json(['error' => false, 'show_popup' => (count($product->special_offers) > 0) ? true : false, 'message' => 'added', 'key' => $cart_id, 'product_id' => $product->id,
+                    'count' => $this->cartService->getCount(), 'headerHtml' => $headerhtml, 'specialHtml' => $popuphtml]);
             }
 
             return \Response::json(['error' => true, 'message' => $error]);
@@ -167,38 +168,35 @@ class ShoppingCartController extends Controller
 
     public function postAddExtraToCart(Request $request)
     {
-        if(! Cart::isEmpty()){
+        if (!Cart::isEmpty()) {
             $key = $request->key;
             $product = Stock::where('status', true)->find($request->product_id);
-            if($product){
+            if ($product) {
                 $error = $this->cartService->validateExtra($product, $request->variations);
-                if(! $error) {
+                if (!$error) {
                     $parent = Cart::get($key);
-                    if($parent){
+                    if ($parent) {
                         $attrs = $parent->attributes;
                         $newAttr = [];
-                        if( $parent->attributes->has('extra') && isset($parent->attributes->extra['data']))
-                        {
+                        if ($parent->attributes->has('extra') && isset($parent->attributes->extra['data'])) {
                             $data = $parent->attributes->extra['data'];
                             $price = $parent->attributes->extra['price'];
                             $x = [];
-                            foreach ($data as $datum){
+                            foreach ($data as $datum) {
                                 $x[] = $datum;
                             }
 
                             $newData = $this->cartService->extras['data'];
                             $price = $price + $this->cartService->extras['price'];
 
-                            foreach ($newData as $datum){
+                            foreach ($newData as $datum) {
                                 $x[] = $datum;
                             }
 
 
-                            $newAttr = ['data' => $x,'price' => $price];
+                            $newAttr = ['data' => $x, 'price' => $price];
                             $attrs['extra'] = $newAttr;
-                        }
-                        else
-                        {
+                        } else {
                             $attrs['extra'] = $this->cartService->extras;
                         }
 
@@ -210,7 +208,7 @@ class ShoppingCartController extends Controller
                         $default_shipping = $data['default_shipping'];
                         $shipping = $data['shipping'];
                         $geoZone = $data['geoZone'];
-                        $html = \View("frontend.shop._partials.cart_table",compact(['default_shipping','shipping','geoZone']))->render();
+                        $html = \View("frontend.shop._partials.cart_table", compact(['default_shipping', 'shipping', 'geoZone']))->render();
 
                         return \Response::json(['error' => false, 'message' => 'Extra Product added',
                             'html' => $html]);
@@ -219,10 +217,10 @@ class ShoppingCartController extends Controller
                 }
 
 
-              return \Response::json(['error' => true, 'message' => $error]);
+                return \Response::json(['error' => true, 'message' => $error]);
             }
 
-          return \Response::json(['error' => true, 'message' => "product not found"]);
+            return \Response::json(['error' => true, 'message' => "product not found"]);
         }
 
         return \Response::json(['error' => true, 'message' => 'Cart is empty, you can\'t add extra']);
@@ -234,13 +232,13 @@ class ShoppingCartController extends Controller
         $default_shipping = null;
         $shipping = null;
         $geoZone = null;
-        if($request->condition == 'inner'){
+        if ($request->condition == 'inner') {
             Cart::update($request->uid, array(
                 'quantity' => array(
                     'relative' => false,
                     'value' => $request->value
                 )));
-        }else{
+        } else {
             Cart::update($request->uid, array(
                 'quantity' => $qty
             ));
@@ -256,7 +254,7 @@ class ShoppingCartController extends Controller
                 $shipping = Cart::getCondition($geoZone->name);
                 $delivery = $geoZone->deliveries()->where('min', '<=', $subtotal)->where('max', '>=', $subtotal)->first();
 
-                if(! $shipping){
+                if (!$shipping) {
                     Cart::removeConditionsByType('shipping');
 
                     if ($delivery && count($delivery->options)) {
@@ -290,9 +288,9 @@ class ShoppingCartController extends Controller
         $shipping = null;
         $geoZone = null;
 
-        if($request->section_id){
-             $this->cartService->removeExtra($request->uid,$request->section_id);
-        }else{
+        if ($request->section_id) {
+            $this->cartService->removeExtra($request->uid, $request->section_id);
+        } else {
             $this->cartService->remove($request->uid);
         }
 
@@ -305,7 +303,7 @@ class ShoppingCartController extends Controller
                 $delivery = $geoZone->deliveries()->where('min', '<=', $subtotal)->where('max', '>=', $subtotal)->first();
                 $shipping = Cart::getCondition($geoZone->name);
 
-                if(!$shipping){
+                if (!$shipping) {
                     Cart::removeConditionsByType('shipping');
                     if ($delivery && count($delivery->options)) {
                         $shippingDefaultOption = $delivery->options->first();
@@ -457,7 +455,7 @@ class ShoppingCartController extends Controller
                     $delivery = $geoZone->deliveries()->where('min', '<=', $subtotal)->where('max', '>=', $subtotal)->first();
                     $shipping = Cart::getCondition($geoZone->name);
 
-                    if(! $shipping){
+                    if (!$shipping) {
                         Cart::removeConditionsByType('shipping');
                         if ($delivery && count($delivery->options)) {
                             $shippingDefaultOption = $delivery->options->first();
@@ -561,14 +559,14 @@ class ShoppingCartController extends Controller
     {
         $cart_id = $request->item_id;
         $item = Cart::get($cart_id);
-        if($item){
+        if ($item) {
             $product = Stock::find($item->attributes->product->id);
             $price = $item->price;
             $qty = $item->quantity;
             $extras = ($item->attributes->has('extra')) ? $item->attributes->extra['data'] : [];
 
-            $popuphtml = \View('frontend.products._partials.offer_popup',['vape' => $product,'key' => $cart_id,'price' => $price,'qty' => $qty,'extras' => $extras])->render();
-            return response()->json(['error' => false,'html' => $popuphtml]);
+            $popuphtml = \View('frontend.products._partials.offer_popup', ['vape' => $product, 'key' => $cart_id, 'price' => $price, 'qty' => $qty, 'extras' => $extras])->render();
+            return response()->json(['error' => false, 'html' => $popuphtml]);
         }
 
         return response()->json(['error' => true]);

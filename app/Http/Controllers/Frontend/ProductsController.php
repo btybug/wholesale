@@ -164,6 +164,15 @@ class ProductsController extends Controller
         return \Response::json(['message' => 'See available options', 'error' => true]);
     }
 
+    public function getSection(Request $request)
+    {
+        $variation_id = $request->get('variation_id');
+        $variation = StockVariation::where('variation_id',$variation_id)->get();
+
+        $html = View('admin.inventory._partials.render_price_form_single',compact(['variation']))->render();
+        return response()->json(['error' => false, 'html' => $html]);
+    }
+
     public function getPackageTypeLimit(Request $request)
     {
         $variation = StockVariation::findOrFail($request->id);
