@@ -34,7 +34,6 @@ class CartService
         }
 
         self::$cartItems = $items;
-
         return $items;
     }
 
