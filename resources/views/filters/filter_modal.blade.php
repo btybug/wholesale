@@ -10,7 +10,7 @@
                 </button>
             </div>
             <div class="modal-body">
-              
+
             </div>
             <div class="modal-footer bord-top d-flex justify-content-between popup-modal-footer py-0">
 
@@ -43,7 +43,8 @@
                     </ul>
                 </div>
                 <div class="d-flex align-items-center footer--right">
-                    <span class="font-weight-bold text-danger message_place_js font-16" >Lorem ipsum dolor sit amet.</span>
+                    <span
+                        class="font-weight-bold text-danger message_place_js font-16">Lorem ipsum dolor sit amet.</span>
                     <button type="button" class="btn btn-primary b_save ml-2" data-section-id="">
                         Add selected
                     </button>
