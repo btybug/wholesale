@@ -252,6 +252,7 @@ class CartService
     public function validateProduct($product, $vdata)
     {
         $error = false;
+        
         $mainVariation = null;
         if (count($vdata) == 1) {
             $fData = array_first($vdata);
