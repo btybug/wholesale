@@ -10,6 +10,7 @@ namespace App\Models;
 
 use App\Models\Common\Translatable;
 use App\Models\Translations\StockTranslation;
+use App\Traits\RelationsManager;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
