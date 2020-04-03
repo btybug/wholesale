@@ -30,6 +30,7 @@ use App\Models\ZoneCountries;
 use App\Models\ZoneCountryRegions;
 use App\Services\CartService;
 use App\Services\OrderExportService;
+use App\Services\OrderImportService;
 use App\Services\OrdersService;
 use App\Services\PrinterService;
 use App\User;
@@ -76,7 +77,11 @@ class OrdersController extends Controller
     public function getManage($id, Settings $settings)
     {
         $orderExportService = new OrderExportService($id);
-        $orderExportService->run();
+        $data = $orderExportService->run();
+
+        $orderImportService = new OrderImportService($data);
+        $orderImportService->run();
+        dd(555);
 
         $order = Orders::where('id', $id)
             ->with('shippingAddress')
